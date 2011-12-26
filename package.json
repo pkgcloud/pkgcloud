@@ -1,0 +1,27 @@
+{
+  "name": "pkgcloud",
+  "description": "A client implementation for Rackspace CloudServers in node.js",
+  "version": "0.2.7",
+  "author": "Nodejitsu Inc <info@nodejitsu.com",
+  "contributors": [
+    { "name": "Charlie Robbins", "email": "charlie@nodejitsu.com" }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/nodejitsu/pkgcloud.git" 
+  },
+  "keywords": ["cloud computing", "api", "rackspace", "joyent", "aws"],
+  "dependencies": {
+    "eventemitter2": "0.4.x",
+    "http-signature": "0.9.x",
+    "pkginfo": "0.2.x",
+    "request": "2.x.x",
+    "utile": "0.x.x"
+  },
+  "devDependencies": {
+    "vows": "0.6.x"
+  },
+  "main": "./lib/pkgcloud",
+  "scripts": { "test": "vows test/*-test.js --spec" },
+  "engines": { "node": "0.4.x || 0.6.x" }
+}
