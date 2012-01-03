@@ -13,10 +13,10 @@ var fs = require('fs'),
     cloudservers = require('../lib/cloudservers'),
     helpers = require('./helpers');
 
-var testData = {}, 
-    testContext = {}, 
+var testData = {},
+    testContext = {},
     client = helpers.createClient();
-    
+
 vows.describe('node-cloudservers/flavors').addBatch({
   "The node-cloudservers client": {
     "the getFlavors() method": {

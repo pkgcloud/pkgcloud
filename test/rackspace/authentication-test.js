@@ -12,17 +12,17 @@ var fs = require('fs'),
     assert = require('assert'),
     cloudservers = require('../lib/cloudservers'),
     helpers = require('./helpers');
-    
-var testData = {}, 
+
+var testData = {},
     client = helpers.createClient();
-    
+
 vows.describe('node-cloudservers/authentication').addBatch({
   "The node-cloudservers client": {
     "should have core methods defined": function () {
       assert.isObject(client.config.auth);
       assert.include(client.config.auth, 'username');
       assert.include(client.config.auth, 'apiKey');
-      
+
       assert.isFunction(client.setAuth);
       assert.isFunction(client.getServer);
       assert.isFunction(client.getServers);
@@ -42,7 +42,7 @@ vows.describe('node-cloudservers/authentication').addBatch({
         client.setAuth(this.callback);
       },
       "should respond with 204 and appropriate headers": function (err, res) {
-        assert.equal(res.statusCode, 204); 
+        assert.equal(res.statusCode, 204);
         assert.isObject(res.headers);
         assert.include(res.headers, 'x-server-management-url');
         assert.include(res.headers, 'x-storage-url');
@@ -59,13 +59,13 @@ vows.describe('node-cloudservers/authentication').addBatch({
     },
     "with an invalid username and api key": {
       topic: function () {
-        var badClient = cloudservers.createClient({ 
+        var badClient = cloudservers.createClient({
           "auth": {
             "username": "fake",
             "apiKey": "data"
           }
         });
-        
+
         badClient.setAuth(this.callback);
       },
       "should respond with 401": function (err, res) {
@@ -77,7 +77,7 @@ vows.describe('node-cloudservers/authentication').addBatch({
   "The node-cloudservers client": {
     "the getLimits() method": {
       topic: function () {
-        client.getLimits(this.callback); 
+        client.getLimits(this.callback);
       },
       "should return the proper limits": function (limits) {
         assert.isNotNull(limits);

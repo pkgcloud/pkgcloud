@@ -11,9 +11,9 @@ var assert = require('assert'),
     path = require('path'),
     vows = require('vows'),
     cloudservers = require('../lib/cloudservers'),
-    helpers = require('./helpers');    
+    helpers = require('./helpers');
 
-var testData = {}, 
+var testData = {},
     testContext = { servers: [] },
     client = helpers.createClient();
 
@@ -233,7 +233,7 @@ vows.describe('node-cloudservers/servers').addBatch({
             "weekly": "THURSDAY",
             "daily": "H_0400_0600"
           };
-          
+
           var that3 = this;
           that3.server = testContext.servers[2];
           that3.server.setWait({ status: 'ACTIVE' }, 5000, function () {
@@ -276,7 +276,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should respond with 202": function (err, res) {
           assert.isNull(err);
-          assert.equal(res.statusCode, 202); 
+          assert.equal(res.statusCode, 202);
         }
       },
       "the destroy() method with the second server": {
@@ -289,7 +289,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should respond with 202": function (err, res) {
           assert.isNull(err);
-          assert.equal(res.statusCode, 202); 
+          assert.equal(res.statusCode, 202);
         }
       },
       "the destroy() method with the third server": {
@@ -304,7 +304,7 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           assert.isNull(err);
           if (!err) {
-            assert.equal(res.statusCode, 202); 
+            assert.equal(res.statusCode, 202);
           }
         }
       }

@@ -13,7 +13,7 @@ var path = require('path'),
     cloudfiles = require('../lib/cloudfiles'),
     helpers = require('./helpers');
 
-var testData = {}, 
+var testData = {},
     container = 'test_container',
     client = helpers.createClient(),
     sampleData = new Buffer(3 * 1024 * 1024),
@@ -31,7 +31,7 @@ vows.describe('node-cloudfiles/storage-object/large').addBatch(
           remote: 'bigfile.raw',
           local: sampleFile
         }, function () { });
-        
+
         ustream.on('end', this.callback);
       },
       "should raise the `end` event": function () {

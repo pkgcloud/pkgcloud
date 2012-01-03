@@ -75,7 +75,7 @@ vows.describe('node-cloudservers/images').addBatch({
           client.createImage('test-image-id', testContext.images[0].id, this.callback);
         },
         "should create a new image": function (image) {
-          
+
         }
       },
       "with a server instance": {
@@ -83,7 +83,7 @@ vows.describe('node-cloudservers/images').addBatch({
           //cloudservers.createImage
         },
         "should create a new image": function (image) {
-          
+
         }
       }
     }*/

@@ -13,7 +13,7 @@ var path = require('path'),
     cloudfiles = require('../lib/cloudfiles'),
     helpers = require('./helpers');
 
-var testData = {}, client = helpers.createClient(), 
+var testData = {}, client = helpers.createClient(),
     sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
 
 vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(client)).addBatch({
@@ -24,7 +24,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
           remote: 'file1.txt',
           local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
         }, function () { });
-        
+
         ustream.on('end', this.callback);
       },
       "should raise the `end` event": function () {
@@ -40,7 +40,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
           remote: 'file2.txt',
           local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
         }, function () { });
-        
+
         ustream.on('end', this.callback)
       },
       "should raise the `end` event": function () {
@@ -56,13 +56,13 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
             readStream = fs.createReadStream(fileName),
             headers = { 'content-length': fs.statSync(fileName).size },
             ustream;
-            
+
         ustream = client.addFile('test_container', {
           remote: 'file3.txt',
           stream: readStream,
           headers: headers
         }, this.callback);
-        
+
         ustream.on('end', this.callback);
       },
       "should raise the `end` event": function () {
@@ -107,7 +107,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
             if (err) {
               return self.callback(err);
             }
-            
+
             fs.stat(filename, self.callback)
           });
         },

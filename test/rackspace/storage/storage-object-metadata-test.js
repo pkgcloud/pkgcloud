@@ -13,8 +13,8 @@ var path = require('path'),
     cloudfiles = require('../lib/cloudfiles'),
     helpers = require('./helpers');
 
-var testData = {}, 
-    client = helpers.createClient(), 
+var testData = {},
+    client = helpers.createClient(),
     sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
 
 vows.describe('node-cloudfiles/storage-object').addBatch({
@@ -26,7 +26,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
             remote: 'file1.txt',
             local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
           }, function () { });
-          
+
           ustream.on('end', this.callback)
         },
         "should raise the `end` event": function () {
@@ -53,7 +53,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
   "The node-cloudfiles client": {
     "the addMetadata() method": {
       topic: function () {
-        testData.file.addMetadata({ "ninja": "true" }, this.callback); 
+        testData.file.addMetadata({ "ninja": "true" }, this.callback);
       },
       "should response with true": function (err, added) {
         assert.isTrue(added);
@@ -64,7 +64,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
   "The node-cloudfiles client": {
     "the getMetadata() method": {
       topic: function () {
-        testData.file.getMetadata(this.callback); 
+        testData.file.getMetadata(this.callback);
       },
       "should response with true": function (err, added) {
         assert.isTrue(added);

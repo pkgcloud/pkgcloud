@@ -13,7 +13,7 @@ var path = require('path'),
     cloudfiles = require('../lib/cloudfiles'),
     helpers = require('./helpers');
 
-var testData = {}, 
+var testData = {},
     client = helpers.createClient(),
     sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
 
@@ -56,7 +56,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
     "the getContainers() method": {
       "when requesting non-CDN containers": {
         topic: function () {
-          client.getContainers(this.callback); 
+          client.getContainers(this.callback);
         },
         "should return a list of containers": function (err, containers) {
           assert.isArray(containers);
@@ -68,7 +68,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
       },
       "when requesting CDN containers": {
         topic: function () {
-          client.getContainers(true, this.callback); 
+          client.getContainers(true, this.callback);
         },
         "should return a list of cdn containers": function (err, containers) {
           assert.isArray(containers);
@@ -82,7 +82,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
     "the getContainer() method": {
       "when requesting non-CDN container": {
         topic: function () {
-          client.getContainer('test_container', this.callback); 
+          client.getContainer('test_container', this.callback);
         },
         "should return a valid container": function (err, container) {
           helpers.assertContainer(container);
@@ -92,7 +92,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
       "when requesting CDN container": {
         "with a valid CDN container": {
           topic: function () {
-            client.getContainer('test_cdn_container', true, this.callback); 
+            client.getContainer('test_cdn_container', true, this.callback);
           },
           "should return a valid cdn container": function (err, container) {
             helpers.assertCdnContainer(container);
@@ -100,7 +100,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
         },
         "with an invalid CDN container": {
           topic: function () {
-            client.getContainer('test_container', true, this.callback); 
+            client.getContainer('test_container', true, this.callback);
           },
           "should respond with an error": function (err, container) {
             assert.isNotNull(err);
@@ -118,7 +118,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
             remote: 'file1.txt',
             local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
           }, function () { });
-          
+
           ustream.on('end', this.callback)
         },
         "should raise the `end` event": function () {
@@ -220,7 +220,7 @@ vows.describe('node-cloudfiles/containers').addBatch({
         "should response with a error": function (err, files) {
           assert.isArray(err);
           assert.lengthOf(err, 1);
-          assert.instanceOf(err[0], Error);          
+          assert.instanceOf(err[0], Error);
         }
       }
     }
