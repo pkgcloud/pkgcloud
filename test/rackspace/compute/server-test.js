@@ -10,12 +10,11 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    cloudservers = require('../lib/cloudservers'),
-    helpers = require('./helpers');
+    fixtures = require('../../fixtures');
 
-var testData = {},
-    testContext = { servers: [] },
-    client = helpers.createClient();
+var testData = {};
+    testContext = {},
+    client = fixtures.createClient('rackspace', 'compute');
 
 var findImage = function (name) {
   for (var i = 0; i < testContext.images.length; i++) {
@@ -44,7 +43,7 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           testContext.images = images;
           images.forEach(function (image) {
-            helpers.assertImageDetails(image);
+            fixtures.assertImageDetails(image);
           });
         }
       }
@@ -58,7 +57,7 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           testContext.flavors = flavors;
           flavors.forEach(function (flavor) {
-            helpers.assertFlavorDetails(flavor);
+            fixtures.assertFlavorDetails(flavor);
           });
         }
       }
@@ -77,7 +76,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
-          helpers.assertServerDetails(server);
+          fixtures.assertServerDetails(server);
         }
       },
       "with image and flavor ids a second time": {
@@ -90,7 +89,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
-          helpers.assertServerDetails(server);
+          fixtures.assertServerDetails(server);
         }
       },
       "with image and flavor instances": {
@@ -106,7 +105,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
-          helpers.assertServerDetails(server);
+          fixtures.assertServerDetails(server);
         }
       }
     }
@@ -122,7 +121,7 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           testContext.servers = servers;
           servers.forEach(function (server) {
-            helpers.assertServer(server);
+            fixtures.assertServer(server);
           });
         }
       },
@@ -133,7 +132,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         "should return the list of servers": function (err, servers) {
           assert.isNull(err);
           servers.forEach(function (server) {
-            helpers.assertServerDetails(server);
+            fixtures.assertServerDetails(server);
           });
         }
       }
@@ -147,7 +146,7 @@ vows.describe('node-cloudservers/servers').addBatch({
       },
       "should return a valid server": function (err, server) {
         assert.isNull(err);
-        helpers.assertServerDetails(server);
+        fixtures.assertServerDetails(server);
       }
     }
   }

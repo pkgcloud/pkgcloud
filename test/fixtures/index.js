@@ -34,6 +34,10 @@ fixtures.assertServer = function assertServer(instance) {
   assert.equal(instance.constructor.name, 'Server');
 };
 
+fixtures.assertServerDetails = function assertServerDetails(instance) {
+  assert.equal(instance.constructor.name, 'Server');
+};
+
 fixtures.assertImage = function assertImage(instance) {
   assert.equal(instance.constructor.name, 'Image');
 };
