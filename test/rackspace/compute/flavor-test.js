@@ -10,12 +10,11 @@ var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    cloudservers = require('../lib/cloudservers'),
-    helpers = require('./helpers');
+    fixtures = require('../../fixtures');
 
 var testData = {},
     testContext = {},
-    client = helpers.createClient();
+    client = fixtures.createClient('rackspace', 'compute');
 
 vows.describe('node-cloudservers/flavors').addBatch({
   "The node-cloudservers client": {
@@ -27,7 +26,7 @@ vows.describe('node-cloudservers/flavors').addBatch({
         "should return the list of flavors": function (err, flavors) {
           testContext.flavors = flavors;
           flavors.forEach(function (flavor) {
-            helpers.assertFlavor(flavor);
+            fixtures.assertFlavor(flavor);
           });
         }
       },
@@ -37,7 +36,7 @@ vows.describe('node-cloudservers/flavors').addBatch({
         },
         "should return the list of flavors": function (err, flavors) {
           flavors.forEach(function (flavor) {
-            helpers.assertFlavorDetails(flavor);
+            fixtures.assertFlavorDetails(flavor);
           });
         }
       }
@@ -50,7 +49,7 @@ vows.describe('node-cloudservers/flavors').addBatch({
         client.getFlavor(testContext.flavors[0].id, this.callback);
       },
       "should return a valid flavor": function (err, flavor) {
-        helpers.assertFlavorDetails(flavor);
+        fixtures.assertFlavorDetails(flavor);
       }
     }
   }
