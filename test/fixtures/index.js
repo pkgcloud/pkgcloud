@@ -29,3 +29,15 @@ fixtures.assertFlavor = function assertFlavor(instance) {
 fixtures.assertFlavorDetails = function assertFlavorDetails(instance) {
   assert.equal(instance.constructor.name, 'Flavor');
 };
+
+fixtures.assertServer = function assertServer(instance) {
+  assert.equal(instance.constructor.name, 'Server');
+};
+
+fixtures.assertImage = function assertImage(instance) {
+  assert.equal(instance.constructor.name, 'Image');
+};
+
+fixtures.assertImageDetails = function assertImageDetails(instance) {
+  assert.equal(instance.constructor.name, 'Image');
+};
