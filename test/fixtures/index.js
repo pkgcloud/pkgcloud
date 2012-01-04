@@ -1,4 +1,5 @@
 var fixtures = exports,
+    assert = require('assert'),
     pkgcloud = require('../../lib/pkgcloud');
 
 var fs = require('fs'),
@@ -19,4 +20,12 @@ fixtures.loadConfig = function loadConfig(provider) {
   ));
 
   return JSON.parse(content.toString());
+};
+
+fixtures.assertFlavor = function assertFlavor(instance) {
+  assert.equal(instance.constructor.name, 'Flavor');
+};
+
+fixtures.assertFlavorDetails = function assertFlavorDetails(instance) {
+  assert.equal(instance.constructor.name, 'Flavor');
 };
