@@ -6,15 +6,15 @@
  *
  */
 
-var assert = require('assert'),
-    fs = require('fs'),
+var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    fixtures = require('../../fixtures');
+    assert = require('../../helpers/assert'),
+    helpers = require('../../helpers');
 
 var testData = {};
     testContext = {},
-    client = fixtures.createClient('rackspace', 'compute');
+    client = helpers.createClient('rackspace', 'compute');
 
 var findImage = function (name) {
   for (var i = 0; i < testContext.images.length; i++) {
@@ -32,8 +32,8 @@ var findFlavor = function (name) {
   }
 }
 
-vows.describe('node-cloudservers/servers').addBatch({
-  "The node-cloudservers client": {
+vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
+  "The pkgcloud Rackspace compute client": {
     "the getImages() method": {
       "with details": {
         topic: function () {
@@ -43,7 +43,7 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           testContext.images = images;
           images.forEach(function (image) {
-            fixtures.assertImageDetails(image);
+            assert.assertImageDetails(image);
           });
         }
       }
@@ -57,14 +57,14 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           testContext.flavors = flavors;
           flavors.forEach(function (flavor) {
-            fixtures.assertFlavorDetails(flavor);
+            assert.assertFlavorDetails(flavor);
           });
         }
       }
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "the create() method": {
       "with image and flavor ids": {
         topic: function () {
@@ -76,7 +76,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
-          fixtures.assertServerDetails(server);
+          assert.assertServerDetails(server);
         }
       },
       "with image and flavor ids a second time": {
@@ -89,7 +89,7 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
-          fixtures.assertServerDetails(server);
+          assert.assertServerDetails(server);
         }
       },
       "with image and flavor instances": {
@@ -105,13 +105,13 @@ vows.describe('node-cloudservers/servers').addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
-          fixtures.assertServerDetails(server);
+          assert.assertServerDetails(server);
         }
       }
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "the getServers() method": {
       "with no details": {
         topic: function () {
@@ -121,7 +121,7 @@ vows.describe('node-cloudservers/servers').addBatch({
           assert.isNull(err);
           testContext.servers = servers;
           servers.forEach(function (server) {
-            fixtures.assertServer(server);
+            assert.assertServer(server);
           });
         }
       },
@@ -132,26 +132,26 @@ vows.describe('node-cloudservers/servers').addBatch({
         "should return the list of servers": function (err, servers) {
           assert.isNull(err);
           servers.forEach(function (server) {
-            fixtures.assertServerDetails(server);
+            assert.assertServerDetails(server);
           });
         }
       }
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "the getServer() method": {
       topic: function () {
         client.getServer(testContext.servers[0].id, this.callback);
       },
       "should return a valid server": function (err, server) {
         assert.isNull(err);
-        fixtures.assertServerDetails(server);
+        assert.assertServerDetails(server);
       }
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "an instance of a CloudServer": {
       "the getAddresses() method": {
         "when requesting all addresses": {
@@ -197,7 +197,7 @@ vows.describe('node-cloudservers/servers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "an instance of a CloudServer": {
       "the getBackup() method": {
         topic: function () {
@@ -247,7 +247,7 @@ vows.describe('node-cloudservers/servers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "with an instance of a Server": {
       "the reboot() method": {
         topic: function () {
@@ -264,7 +264,7 @@ vows.describe('node-cloudservers/servers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "with an instance of a Server": {
       "the destroy() method with the first server": {
         topic: function () {
@@ -310,7 +310,7 @@ vows.describe('node-cloudservers/servers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudservers client": {
+  "The pkgcloud Rackspace compute client": {
     "the reboot() method": {
       topic: function () {
         //testContext.servers[0].reboot(this.callback);
