@@ -1,5 +1,5 @@
 /*
- * server-test.js: Tests for rackspace cloudservers server requests
+ * server-test.js: Tests for pkgcloud Rackspace compute server requests
  *
  * (C) 2010 Nodejitsu Inc.
  * MIT LICENSE
@@ -16,7 +16,7 @@ var testData = {};
     testContext = {},
     client = helpers.createClient('rackspace', 'compute');
 
-var findImage = function (name) {
+function findImage(name) {
   for (var i = 0; i < testContext.images.length; i++) {
     if (testContext.images[i].name === name) {
       return testContext.images[i];
@@ -24,7 +24,7 @@ var findImage = function (name) {
   }
 }
 
-var findFlavor = function (name) {
+function findFlavor(name) {
   for (var i = 0; i < testContext.flavors.length; i++) {
     if (testContext.flavors[i].name === name) {
       return testContext.flavors[i];
@@ -94,7 +94,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
       },
       "with image and flavor instances": {
         topic: function () {
-          var image = findImage('Ubuntu 10.04 LTS (lucid)'),
+          var image = findImage('Ubuntu 10.04 LTS'),
               flavor = findFlavor('256 server');
 
           client.createServer({
@@ -113,28 +113,26 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
 }).addBatch({
   "The pkgcloud Rackspace compute client": {
     "the getServers() method": {
-      "with no details": {
-        topic: function () {
-          client.getServers(this.callback);
-        },
-        "should return the list of servers": function (err, servers) {
-          assert.isNull(err);
-          testContext.servers = servers;
-          servers.forEach(function (server) {
-            assert.assertServer(server);
-          });
-        }
+      topic: function () {
+        client.getServers(this.callback);
       },
-      "with details": {
-        topic: function () {
-          client.getServers(true, this.callback);
-        },
-        "should return the list of servers": function (err, servers) {
-          assert.isNull(err);
-          servers.forEach(function (server) {
-            assert.assertServerDetails(server);
-          });
-        }
+      "should return the list of servers": function (err, servers) {
+        assert.isNull(err);
+        testContext.servers = servers;
+        servers.forEach(function (server) {
+          assert.assertServer(server);
+        });
+      }
+    },
+    "the getServerDetails() method": {
+      topic: function () {
+        client.getServerDetails(this.callback);
+      },
+      "should return the list of servers": function (err, servers) {
+        assert.isNull(err);
+        servers.forEach(function (server) {
+          assert.assertServerDetails(server);
+        });
       }
     }
   }
@@ -152,7 +150,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
   }
 }).addBatch({
   "The pkgcloud Rackspace compute client": {
-    "an instance of a CloudServer": {
+    "an instance of a Server": {
       "the getAddresses() method": {
         "when requesting all addresses": {
           topic: function () {
@@ -198,7 +196,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
   }
 }).addBatch({
   "The pkgcloud Rackspace compute client": {
-    "an instance of a CloudServer": {
+    "an instance of a Server": {
       "the getBackup() method": {
         topic: function () {
           this.server0 = testContext.servers[0];
@@ -307,17 +305,6 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           }
         }
       }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace compute client": {
-    "the reboot() method": {
-      topic: function () {
-        //testContext.servers[0].reboot(this.callback);
-      },
-      //"should return a valid server": function () {
-      //  assertServerDetails(server);
-      //}
     }
   }
 }).export(module);
