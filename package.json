@@ -1,6 +1,6 @@
 {
   "name": "pkgcloud",
-  "description": "A client implementation for Rackspace CloudServers in node.js",
+  "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
   "version": "0.2.7",
   "author": "Nodejitsu Inc <info@nodejitsu.com",
   "contributors": [
