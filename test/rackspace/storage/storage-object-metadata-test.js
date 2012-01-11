@@ -10,15 +10,15 @@ var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
     assert = require('assert'),
-    cloudfiles = require('../lib/cloudfiles'),
-    helpers = require('./helpers');
+    pkgcloud = require('../../../lib/pkgcloud'),
+    helpers = require('../../helpers');
 
 var testData = {},
     client = helpers.createClient(),
     sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
 
-vows.describe('node-cloudfiles/storage-object').addBatch({
-  "The node-cloudfiles client": {
+vows.describe('pkgcloud/rackspace/storage/file/metadata').addBatch({
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the addFile() method": {
         topic: function () {
@@ -36,7 +36,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the getFile() method": {
       "for a file that exists": {
         topic: function () {
@@ -50,7 +50,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
     }
   }
 })/*.addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the addMetadata() method": {
       topic: function () {
         testData.file.addMetadata({ "ninja": "true" }, this.callback);
@@ -61,7 +61,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the getMetadata() method": {
       topic: function () {
         testData.file.getMetadata(this.callback);
@@ -72,7 +72,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch({
     }
   }
 })*/.addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the destroyFile() method": {
       "for a file that exists": {
         topic: function () {
