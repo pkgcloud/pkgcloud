@@ -12,6 +12,7 @@
   },
   "keywords": ["cloud computing", "api", "rackspace", "joyent", "aws"],
   "dependencies": {
+    "async": "0.1.x",
     "eventemitter2": "0.4.x",
     "filed": "0.0.x",
     "http-signature": "0.9.x",

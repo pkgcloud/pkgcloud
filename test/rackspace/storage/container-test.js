@@ -9,107 +9,53 @@
 var path = require('path'),
     fs = require('fs'),
     vows = require('vows'),
-    assert = require('assert'),
-    cloudfiles = require('../lib/cloudfiles'),
-    helpers = require('./helpers');
+    pkgcloud = require('../../../lib/pkgcloud'),
+    macros = require('../macros'),
+    assert = require('../../helpers/assert'),
+    helpers = require('../../helpers');
 
 var testData = {},
-    client = helpers.createClient(),
-    sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
+    client = helpers.createClient('rackspace', 'storage'),
+    fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
+    sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8');
 
-vows.describe('node-cloudfiles/containers').addBatch({
-  "The node-cloudfiles client": {
+vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
+  "The pkgcloud Rackspace storage client": {
     "the createContainer() method": {
-      "when creating a container": {
-        topic: function () {
-          client.createContainer(new (cloudfiles.Container)(client, { name: 'test_container'}), this.callback);
-        },
-        "should return a valid container": function (err, container) {
-          helpers.assertContainer(container);
-        }
-      },
-      "when creating a CDN-enabled container": {
-        topic: function () {
-          client.createContainer(new (cloudfiles.Container)(client, {
-            name: 'test_cdn_container',
-            cdnEnabled: true
-          }), this.callback);
-        },
-        "should return a valid cdn container": function (err, container) {
-          helpers.assertCdnContainer(container);
-        }
-      }
+      "when creating a container": macros.shouldCreateContainer(client, 'test_container')
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the createContainer() method": {
-      "when creating a container that already exists": {
-        topic: function () {
-          client.createContainer(new (cloudfiles.Container)(client, { name: 'test_container' }), this.callback);
-        },
-        "should return a valid container": function (err, container) {
-          helpers.assertContainer(container);
-        }
-      },
+      "when creating a container that already exists": macros.shouldCreateContainer(client, 'test_container')
     },
     "the getContainers() method": {
-      "when requesting non-CDN containers": {
-        topic: function () {
-          client.getContainers(this.callback);
-        },
-        "should return a list of containers": function (err, containers) {
-          assert.isArray(containers);
-          assert.equal(helpers.countTestContainers(containers),2);
-          containers.forEach(function (container) {
-            helpers.assertContainer(container);
-          });
-        }
+      topic: function () {
+        client.getContainers(this.callback);
       },
-      "when requesting CDN containers": {
-        topic: function () {
-          client.getContainers(true, this.callback);
-        },
-        "should return a list of cdn containers": function (err, containers) {
-          assert.isArray(containers);
-          assert.equal(helpers.countTestContainers(containers), 1);
-          containers.forEach(function (container) {
-            helpers.assertCdnContainer(container);
-          });
-        }
+      "should return a list of containers": function (err, containers) {
+        assert.isArray(containers);
+        assert.equal(containers.filter(function (container) {
+          return /test_container/.test(container.name);
+        }).length, 1);
+        
+        containers.forEach(function (container) {
+          assert.assertContainer(container);
+        });
       }
     },
     "the getContainer() method": {
-      "when requesting non-CDN container": {
-        topic: function () {
-          client.getContainer('test_container', this.callback);
-        },
-        "should return a valid container": function (err, container) {
-          helpers.assertContainer(container);
-          testData.container = container;
-        }
+      topic: function () {
+        client.getContainer('test_container', this.callback);
       },
-      "when requesting CDN container": {
-        "with a valid CDN container": {
-          topic: function () {
-            client.getContainer('test_cdn_container', true, this.callback);
-          },
-          "should return a valid cdn container": function (err, container) {
-            helpers.assertCdnContainer(container);
-          }
-        },
-        "with an invalid CDN container": {
-          topic: function () {
-            client.getContainer('test_container', true, this.callback);
-          },
-          "should respond with an error": function (err, container) {
-            assert.isNotNull(err);
-          }
-        }
+      "should return a valid container": function (err, container) {
+        assert.assertContainer(container);
+        testData.container = container;
       }
     }
   }
-}).addBatch({
+})/*.addBatch({
   "The node-cloudfiles client": {
     "an instance of a Container object": {
       "the addFile() method": {
@@ -237,5 +183,9 @@ vows.describe('node-cloudfiles/containers').addBatch({
         }
       }
     }
+  }
+})*/.addBatch({
+  "The pkgcloud Rackspace storage client": {
+    "the destroyContainer() method": macros.shouldDestroyContainer(client, 'test_container')
   }
 }).export(module);
