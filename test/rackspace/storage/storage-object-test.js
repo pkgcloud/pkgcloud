@@ -10,14 +10,14 @@ var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
     assert = require('assert'),
-    cloudfiles = require('../lib/cloudfiles'),
-    helpers = require('./helpers');
+    pkgcloud = require('../../../lib/pkgcloud'),
+    helpers = require('../../helpers');
 
 var testData = {}, client = helpers.createClient(),
     sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
 
-vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(client)).addBatch({
-  "The node-cloudfiles client": {
+vows.describe('pkgcloud/rackspace/storage/file').addBatch({
+  "The pkgcloud Rackspace storage client": {
     "the addFile() method": {
       topic: function () {
         var ustream = client.addFile('test_container', {
@@ -33,7 +33,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the addFile() method called a second time": {
       topic: function () {
         var ustream = client.addFile('test_container', {
@@ -49,7 +49,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the addFile() method with a pre-provided read stream": {
       topic: function () {
         var fileName = path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt'),
@@ -71,7 +71,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the getFiles() method": {
       topic: function () {
         client.getFiles('test_container', this.callback);
@@ -84,7 +84,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the getFile() method": {
       "for a file that exists": {
         topic: function () {
@@ -98,7 +98,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of StorageObject": {
       "the save() method": {
         topic: function () {
@@ -119,7 +119,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "the destroyFile() method": {
       "for a file that exists": {
         topic: function () {
@@ -132,7 +132,7 @@ vows.describe('node-cloudfiles/storage-object').addBatch(helpers.requireAuth(cli
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a StorageObject": {
       "the destroy() method": {
         "for a file that exists": {

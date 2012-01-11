@@ -56,7 +56,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 })/*.addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the addFile() method": {
         topic: function () {
@@ -74,7 +74,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the getFiles() method": {
         topic: function () {
@@ -90,7 +90,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the getFiles(true) method": {
         topic: function () {
@@ -107,7 +107,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the getFiles(new RegExp(...)) method": {
         topic: function () {
@@ -124,7 +124,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the getFiles(new RegExp(...) with no matches) method": {
         topic: function () {
@@ -140,7 +140,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the getFiles([filenames]) method": {
         topic: function () {
@@ -157,7 +157,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the getFiles([not-existing-filenames]) method": {
         topic: function () {
@@ -172,7 +172,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
     }
   }
 }).addBatch({
-  "The node-cloudfiles client": {
+  "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
       "the removeFile() method": {
         topic: function () {
