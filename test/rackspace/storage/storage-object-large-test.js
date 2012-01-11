@@ -13,11 +13,11 @@ var path = require('path'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
 
-var testData = {},
-    container = 'test_container',
-    client = helpers.createClient(),
+var container = 'test_container',
+    client = helpers.createClient('rackspace', 'storage'),
     sampleData = new Buffer(3 * 1024 * 1024),
-    sampleFile = path.join(__dirname, '..', '..', 'fixtures', 'bigfile.raw');
+    sampleFile = path.join(__dirname, '..', '..', 'fixtures', 'bigfile.raw'),
+    testData = {};
 
 fs.writeFileSync(sampleFile, sampleData);
 

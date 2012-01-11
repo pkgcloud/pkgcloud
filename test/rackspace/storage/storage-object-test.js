@@ -9,68 +9,68 @@
 var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
-    assert = require('assert'),
+    filed = require('filed'),
+    assert = require('../../helpers/assert'),
+    macros = require('../macros'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
 
-var testData = {}, client = helpers.createClient(),
-    sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
+var client = helpers.createClient('rackspace', 'storage'),
+    fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
+    sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8'),
+    testData = {};
 
 vows.describe('pkgcloud/rackspace/storage/file').addBatch({
   "The pkgcloud Rackspace storage client": {
     "the addFile() method": {
-      topic: function () {
-        var ustream = client.addFile('test_container', {
-          remote: 'file1.txt',
-          local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
-        }, function () { });
+      "with a filepath": {
+        topic: function () {
+          var ustream = client.addFile('test_container', {
+            remote: 'file1.txt',
+            local: path.join(fixturesDir, 'fillerama.txt')
+          }, function () { });
 
-        ustream.on('end', this.callback);
+          ustream.on('end', this.callback);
+        },
+        "should raise the `end` event": function () {
+          assert.isTrue(true);
+        }
       },
-      "should raise the `end` event": function () {
-        assert.isTrue(true);
+      "with a ReadStream instance": {
+        topic: function () {
+          var fileName = path.join(__dirname, '..', '..', 'fixtures', 'fillerama.txt'),
+              readStream = fs.createReadStream(fileName),
+              headers = { 'content-length': fs.statSync(fileName).size },
+              ustream;
+
+          ustream = client.addFile('test_container', {
+            remote: 'file3.txt',
+            stream: readStream,
+            headers: headers
+          }, function () { });
+
+          ustream.on('end', this.callback);
+        },
+        "should raise the `end` event": function () {
+          assert.isTrue(true);
+        }
+      },
+      "when piped to": {
+        topic: function () {
+          var ustream = client.addFile('test_container', {
+            remote: 'file2.txt'
+          }, function () { });
+
+          filed(path.join(fixturesDir, 'fillerama.txt')).pipe(ustream);
+          ustream.on('end', this.callback)
+        },
+        "should raise the `end` event": function () {
+          assert.isTrue(true);
+        }
       }
     }
   }
-}).addBatch({
-  "The pkgcloud Rackspace storage client": {
-    "the addFile() method called a second time": {
-      topic: function () {
-        var ustream = client.addFile('test_container', {
-          remote: 'file2.txt',
-          local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
-        }, function () { });
-
-        ustream.on('end', this.callback)
-      },
-      "should raise the `end` event": function () {
-        assert.isTrue(true);
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace storage client": {
-    "the addFile() method with a pre-provided read stream": {
-      topic: function () {
-        var fileName = path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt'),
-            readStream = fs.createReadStream(fileName),
-            headers = { 'content-length': fs.statSync(fileName).size },
-            ustream;
-
-        ustream = client.addFile('test_container', {
-          remote: 'file3.txt',
-          stream: readStream,
-          headers: headers
-        }, this.callback);
-
-        ustream.on('end', this.callback);
-      },
-      "should raise the `end` event": function () {
-        assert.isTrue(true);
-      }
-    }
-  }
-}).addBatch({
+})/*.addBatch({
   "The pkgcloud Rackspace storage client": {
     "the getFiles() method": {
       topic: function () {
@@ -146,4 +146,4 @@ vows.describe('pkgcloud/rackspace/storage/file').addBatch({
       }
     }
   }
-}).export(module);
+})*/.export(module);
