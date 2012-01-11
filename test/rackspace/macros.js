@@ -58,3 +58,26 @@ exports.shouldNotAuthenticate = function (service) {
     }
   }
 };
+
+exports.shouldCreateContainer = function (client, name) {
+  return {
+    topic: function () {
+      client.createContainer(name, this.callback);
+    },
+    "should return a valid container": function (err, container) {
+      assert.isNull(err);
+      assert.assertContainer(container);
+    }
+  };
+};
+
+exports.shouldDestroyContainer = function (client, name) {
+  return {
+    topic: function () {
+      client.destroyContainer(name, this.callback)
+    },
+    "should return true": function (err, success) {
+      assert.isTrue(success);
+    }
+  };
+};
