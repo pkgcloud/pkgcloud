@@ -13,9 +13,10 @@ var path = require('path'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
 
-var testData = {},
-    client = helpers.createClient(),
-    sampleData = fs.readFileSync(path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')).toString();
+var client = helpers.createClient('rackspace', 'storage'),
+    fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
+    sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8'),
+    testData = {};
 
 vows.describe('pkgcloud/rackspace/storage/file/metadata').addBatch({
   "The pkgcloud Rackspace storage client": {
@@ -53,7 +54,7 @@ vows.describe('pkgcloud/rackspace/storage/file/metadata').addBatch({
   "The pkgcloud Rackspace storage client": {
     "the addMetadata() method": {
       topic: function () {
-        testData.file.addMetadata({ "ninja": "true" }, this.callback);
+        testData.file.addMetadata({ "ninja": 'true' }, this.callback);
       },
       "should response with true": function (err, added) {
         assert.isTrue(added);
