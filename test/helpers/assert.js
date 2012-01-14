@@ -27,3 +27,7 @@ assert.assertImageDetails = function assertImageDetails(instance) {
 assert.assertContainer = function assertContainer(instance) {
   assert.equal(instance.constructor.name, 'Container');
 };
+
+assert.assertFile = function assertFile(instance) {
+  assert.equal(instance.constructor.name, 'File');
+};

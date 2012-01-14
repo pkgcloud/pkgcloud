@@ -21,7 +21,7 @@ var client = helpers.createClient('rackspace', 'storage'),
 vows.describe('pkgcloud/rackspace/storage/file/metadata').addBatch({
   "The pkgcloud Rackspace storage client": {
     "an instance of a Container object": {
-      "the addFile() method": {
+      "the upload() method": {
         topic: function () {
           var ustream = client.addFile('test_container', {
             remote: 'file1.txt',
