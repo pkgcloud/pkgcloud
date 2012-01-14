@@ -19,17 +19,20 @@ var testData = {},
     fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
     sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8');
 
-vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
+
+vows.describe('pkgcloud/rackspace/storage/containers').addBatch(
+  macros.shouldCreateContainer(
+    client, 
+    'test_container'
+  )
+).addBatch(
+  macros.shouldCreateContainer(
+    client, 
+    'test_container', 
+    'when creating a container that already exists'
+  )
+).addBatch({
   "The pkgcloud Rackspace storage client": {
-    "the createContainer() method": {
-      "when creating a container": macros.shouldCreateContainer(client, 'test_container')
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace storage client": {
-    "the createContainer() method": {
-      "when creating a container that already exists": macros.shouldCreateContainer(client, 'test_container')
-    },
     "the getContainers() method": {
       topic: function () {
         client.getContainers(this.callback);
@@ -184,8 +187,9 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch({
       }
     }
   }
-})*/.addBatch({
-  "The pkgcloud Rackspace storage client": {
-    "the destroyContainer() method": macros.shouldDestroyContainer(client, 'test_container')
-  }
-}).export(module);
+})*/.addBatch(
+  macros.shouldDestroyContainer(
+    client,
+    'test_container'
+  )
+).export(module);
