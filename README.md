@@ -148,7 +148,7 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 * **new pkgcloud.storage.Client(options, callback)**
 
 #### Using Storage Clients
-Most of this can be modelled off of the [node.js core 'fs' module](http://nodejs.org/docs/v0.4.12/api/fs.html) API although there needs to be some improvements for copying files and creating root directories (i.e. containers)
+Most of this can be modeled off of the [node.js core 'fs' module](http://nodejs.org/docs/v0.4.12/api/fs.html) API although there needs to be some improvements for copying files and creating root directories (i.e. containers)
 
 <a name="dns"></a>
 ### DNS
