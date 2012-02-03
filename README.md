@@ -108,12 +108,12 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 * **new pkgcloud.compute.Client(options, callback)**
 
 #### Using Compute Clients
-Most of this can be modelled off of the [node-cloudservers](https://github.com/nodejitsu/node-cloudservers) API although some of the Rackspace specific nomenclature (e.g. flavors) will have be updated. 
+Most of this can be modeled off of the [node-cloudservers](https://github.com/nodejitsu/node-cloudservers) API although some of the Rackspace specific nomenclature (e.g. flavors) will have be updated. 
 
 * client.createServer(options, callback)
 * client.getServers(callback)
 * client.listServers(callback)
-* client.destoryServer(callback)
+* client.destroyServer(callback)
 * client.createImage(options, callback)
 * client.listImages(callback)
 * client.destroyImage(options, callback)
