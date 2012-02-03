@@ -1,6 +1,6 @@
 # pkgcloud 
 
-A loose port of libcloud (python) or fog (ruby) for communicating across multiple cloud providers in an agnostic manner.
+Communicate across multiple cloud providers in an platform agnostic manner.
 
 * [Motivation](#motivation)
 * [Reviewing Libraries](#reviewing-libraries)
@@ -27,14 +27,16 @@ There are also some other decent libraries out there:
 
 * [knox](https://github.com/learnboost/knox)
 
-The main problem is that these libraries **are not consistent in anyway.** This is a problem we are going to have to address head on in [Conservatory](https://github.com/nodejitsu/conservatory) and this is the library to do it in.
+The main problem is that these libraries **are not consistent in anyway.**
 
 With consistency in mind the one design decision I am sure of is using [request](https://github.com/mikeal/request) and [filed](https://github.com/mikeal/filed).
 
 <a name="reviewing-libraries"></a>
 ## Reviewing Libraries
 
-Overall, the consistency and semantics in the API design of [fog][0] is preferable (imho) as opposed to [libcloud][1]. [libcloud][1] is more complete in terms of the number of APIs it supports, but the syntax is a little kludgy. 
+Overall, the consistency and semantics in the API design of [fog][0] is preferable (imho) as opposed to [libcloud][1]. [libcloud][1] is more complete in terms of the number of APIs it supports, but the syntax is a little kludgy.
+
+Another important decision in this process was not to use natively supported drivers such as Joyent [smartdc]. All the clients are written and maintained by us for maximum assurances and you can find the code in the `client` subdirectory of each provider.
 
 <a name="Unified Vocabulary"></a>
 ## Unified Vocabulary
@@ -173,3 +175,4 @@ Most of this can be modeled off of the [node.js core 'fs' module](http://nodejs.
 [1]: http://libcloud.apache.org/index.html
 [2]: http://vowsjs.org
 [3]: http://npmjs.org
+[smartdc]: https://github.com/joyent/node-smartdc
