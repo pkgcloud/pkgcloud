@@ -20,7 +20,8 @@
     "morestreams": "0.1.x",
     "pkginfo": "0.2.x",
     "request": "2.x.x",
-    "utile": "0.x.x"
+    "utile": "0.x.x",
+    "smartdc": "6.5.2"
   },
   "devDependencies": {
     "vows": "0.6.x"
