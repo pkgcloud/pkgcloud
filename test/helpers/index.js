@@ -7,7 +7,6 @@ var helpers = exports;
 helpers.createClient = function createClient(provider, service, config) {
   config = config || helpers.loadConfig(provider);
   config.provider = provider;
-
   return pkgcloud[service].createClient(config);
 };
 
