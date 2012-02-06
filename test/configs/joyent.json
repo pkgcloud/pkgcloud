@@ -1,6 +1,4 @@
 {
-  "auth": {
-    "username": "nodejitsu",
-    "password": "notyet"
-  }
+  "username": "nodejitsu",
+  "password": "notyet"
 }
