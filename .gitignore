@@ -3,3 +3,4 @@ node_modules
 npm-debug.log
 test/fixtures/testkey*
 test/fixtures/test-download*
+test/configs/joyent.json
