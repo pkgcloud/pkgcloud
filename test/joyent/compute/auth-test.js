@@ -13,7 +13,7 @@ var vows    = require('vows'),
 var testData = {},
     client   = helpers.createClient('joyent', 'compute');
 
-vows.describe('pkgcloud/joyent/compute/auth').addBatch({
+/*vows.describe('pkgcloud/joyent/compute/auth').addBatch({
   "The pkgcloud Joyent compute client": {
     "should have core methods defined": macros.shouldHaveCreds(client),
     "the getVersion() method": {
@@ -24,13 +24,13 @@ vows.describe('pkgcloud/joyent/compute/auth').addBatch({
         assert.isArray(versions);
         assert.isFalse(versions.length === 0);
       }
-    }/*,
+    },
     "the auth() method": {
       "with a valid username and api key": macros.shouldAuthenticate(client),
       "with an invalid username and api key": macros.shouldNotAuthenticate('compute')
-    }*/
+    }
   }
-})/*.addBatch({
+}).addBatch({
   "The pkgcloud Rackspace compute client": {
     "the getLimits() method": {
       topic: function () {
@@ -44,4 +44,4 @@ vows.describe('pkgcloud/joyent/compute/auth').addBatch({
       }
     }
   }
-})*/["export"](module);
+})["export"](module);*/
