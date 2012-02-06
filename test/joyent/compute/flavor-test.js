@@ -20,11 +20,9 @@ vows.describe('pkgcloud/joyent/compute/flavors').addBatch({
     "the getFlavors() method": {
       "with no details": {
         topic: function () {
-          console.log(client)
           client.getFlavors(this.callback);
         },
         "should return the list of flavors": function (err, flavors) {
-          console.log(err,flavors)
           testContext.flavors = flavors;
           flavors.forEach(function (flavor) {
             assert.assertFlavor(flavor);
