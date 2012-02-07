@@ -70,10 +70,9 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
   "The pkgcloud Joyent compute client": {
     "the getImage() method": {
       topic: function () {
-        client.getImage(testContext.images[0], this.callback);
+        client.getImage(testContext.images[0].id, this.callback);
       },
       "should return a valid image": function (err, image) {
-        console.dir(image,err)
         assert.assertImageDetails(image);
       }
     }
