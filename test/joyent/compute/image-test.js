@@ -40,7 +40,7 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
       }
     }
   }
-})/*.addBatch({
+}).addBatch({
   "The pkgcloud Joyent compute client": {
     "the getImages() method": {
       "with no details": {
@@ -70,29 +70,12 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
   "The pkgcloud Joyent compute client": {
     "the getImage() method": {
       topic: function () {
-        client.getImage(testContext.images[0].id, this.callback);
+        client.getImage(testContext.images[0], this.callback);
       },
       "should return a valid image": function (err, image) {
+        console.dir(image,err)
         assert.assertImageDetails(image);
-      }
-    },
-    "the createImage() method": {
-      "with a server id": {
-        topic: function () {
-          client.createImage('test-image-id', testContext.images[0].id, this.callback);
-        },
-        "should create a new image": function (image) {
-
-        }
-      },
-      "with a server instance": {
-        topic: function () {
-          //cloudservers.createImage
-        },
-        "should create a new image": function (image) {
-
-        }
       }
     }
   }
-})*/["export"](module);
+})["export"](module);
