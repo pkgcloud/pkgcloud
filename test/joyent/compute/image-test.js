@@ -12,7 +12,7 @@ var fs = require('fs'),
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers');
 
-var testData = {};
+var testData = {},
     testContext = {},
     client = helpers.createClient('joyent', 'compute');
 
@@ -29,10 +29,18 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
             assert.assertServer(server);
           });
         }
+      },
+      "with limit one": {
+        topic: function () {
+          client.getServers({limit: 1}, this.callback);
+        },
+        "should return one server": function (err, servers) {
+          assert.equal(servers.length, 1);
+        }
       }
     }
   }
-}).addBatch({
+})/*.addBatch({
   "The pkgcloud Joyent compute client": {
     "the getImages() method": {
       "with no details": {
@@ -68,7 +76,7 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
         assert.assertImageDetails(image);
       }
     },
-    /*"the createImage() method": {
+    "the createImage() method": {
       "with a server id": {
         topic: function () {
           client.createImage('test-image-id', testContext.images[0].id, this.callback);
@@ -85,6 +93,6 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
 
         }
       }
-    }*/
+    }
   }
-}).export(module);
+})*/["export"](module);
