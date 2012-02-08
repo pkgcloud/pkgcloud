@@ -31,7 +31,7 @@ function findFlavor(name) {
   }
 }
 
-vows.describe('pkgcloud/joyent/compute/servers').addBatch({
+vows.describe('pkgcloud/joyent/compute/servers')/*.addBatch({
   "The pkgcloud Joyent compute client": {
     "the getImages() method": {
       "with details": {
@@ -62,17 +62,17 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
       }
     }
   }
-}).addBatch({
+})*/.addBatch({
   "The pkgcloud Joyent compute client": {
     "the create() method": {
       "without image and flavor ids": {
         topic: function () {
-          client.createServer({}, this.callback);
+          client.createServer({name: 'create-test-ids'},this.callback);
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
           assert.assertServerDetails(server);
-          client.deleteServer({name: 'create-test-ids'}, function (err,d) {
+          client.destroyServer({name: 'create-test-ids'}, function (err,d) {
             console.log(e,d)
           });
         }
