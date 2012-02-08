@@ -15,13 +15,11 @@
     "async": "0.1.x",
     "eventemitter2": "0.4.x",
     "filed": "0.0.x",
-    "http-signature": "0.9.x",
     "mime": "1.2.x",
     "morestreams": "0.1.x",
     "pkginfo": "0.2.x",
     "request": "2.x.x",
-    "utile": "0.x.x",
-    "smartdc": "6.5.2"
+    "utile": "0.x.x"
   },
   "devDependencies": {
     "vows": "0.6.x"
