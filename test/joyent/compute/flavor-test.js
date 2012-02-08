@@ -38,15 +38,6 @@ vows.describe('pkgcloud/joyent/compute/flavors').addBatch({
             assert.assertFlavorDetails(flavor);
           });
         }
-      },
-      "but should fail when requesting an account we do not own": {
-        topic: function () {
-          client.getFlavors('joyent', this.callback);
-        },
-        "returns an unauthorized access error": function (err, flavors) {
-          assert.ok(err);
-          assert.ok(err.httpCode === 403);
-        }
       }
     }
   }
