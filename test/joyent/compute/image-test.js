@@ -31,10 +31,10 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
       },
       "with limit one": {
         topic: function () {
-          client.getServers({limit: 1}, this.callback);
+          client.getServers({limit: 2}, this.callback);
         },
         "should return one server": function (err, servers) {
-          assert.equal(servers.length, 1);
+          assert.equal(servers.length, 2);
         }
       }
     }

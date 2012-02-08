@@ -72,9 +72,9 @@ vows.describe('pkgcloud/joyent/compute/servers')/*.addBatch({
         "should return a valid server": function (err, server) {
           assert.isNull(err);
           assert.assertServerDetails(server);
-          client.destroyServer({name: 'create-test-ids'}, function (err,d) {
-            console.log(e,d)
-          });
+          //client.destroyServer({name: 'create-test-ids'}, function (err,d) {
+          //  console.log(e,d)
+          //});
         }
       }/*,
       "with image and flavor ids a second time": {
