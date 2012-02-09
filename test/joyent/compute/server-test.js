@@ -31,7 +31,7 @@ function findFlavor(name) {
   }
 }
 
-vows.describe('pkgcloud/joyent/compute/servers')/*.addBatch({
+vows.describe('pkgcloud/joyent/compute/servers').addBatch({
   "The pkgcloud Joyent compute client": {
     "the getImages() method": {
       "with details": {
@@ -62,19 +62,28 @@ vows.describe('pkgcloud/joyent/compute/servers')/*.addBatch({
       }
     }
   }
-})*/.addBatch({
+}).addBatch({
   "The pkgcloud Joyent compute client": {
     "the create() method": {
+      "not specifying any opts": {
+        topic: function () {
+          client.createServer({}, this.callback);
+        },
+        "should return a valid server": function (err, server) {
+          assert.isNull(err);
+          assert.assertServerDetails(server);
+        }
+      },
       "without image and flavor ids": {
         topic: function () {
           client.createServer({name: 'create-test-ids'},this.callback);
         },
-        "should return a valid server": function (err, server) {
+        "should return a valid named server": function (err, server) {
           assert.isNull(err);
           assert.equal(server.name, 'create-test-ids');
           assert.assertServerDetails(server);
         }
-      }/*,
+      },
       "with image and flavor ids a second time": {
         topic: function () {
           client.createServer({
@@ -85,6 +94,8 @@ vows.describe('pkgcloud/joyent/compute/servers')/*.addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
+          assert.equal(server.name, 'create-test-ids2');
+          assert.equal(server.imageId, testContext.images[0].id);
           assert.assertServerDetails(server);
         }
       },
@@ -101,9 +112,11 @@ vows.describe('pkgcloud/joyent/compute/servers')/*.addBatch({
         },
         "should return a valid server": function (err, server) {
           assert.isNull(err);
+          assert.equal(server.imageId, testContext.images[0].id);
+          assert.equal(server.name, 'create-test-objects');
           assert.assertServerDetails(server);
         }
-      }*/
+      }
     }
   }
 })/*.addBatch({
