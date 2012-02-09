@@ -25,6 +25,6 @@
     "vows": "0.6.x"
   },
   "main": "./lib/pkgcloud",
-  "scripts": { "test": "vows test/*/*-test.js --spec" },
+  "scripts": { "test": "vows test/*/*/*-test.js --spec" },
   "engines": { "node": "0.4.x || 0.6.x" }
 }
