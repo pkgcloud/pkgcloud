@@ -119,7 +119,7 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
       }
     }
   }
-})/*.addBatch({
+}).addBatch({
   "The pkgcloud Joyent compute client": {
     "the getServers() method": {
       topic: function () {
@@ -130,17 +130,6 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
         testContext.servers = servers;
         servers.forEach(function (server) {
           assert.assertServer(server);
-        });
-      }
-    },
-    "the getServerDetails() method": {
-      topic: function () {
-        client.getServerDetails(this.callback);
-      },
-      "should return the list of servers": function (err, servers) {
-        assert.isNull(err);
-        servers.forEach(function (server) {
-          assert.assertServerDetails(server);
         });
       }
     }
@@ -316,4 +305,4 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
       }
     }
   }
-})*/["export"](module);
+})["export"](module);
