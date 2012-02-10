@@ -22,7 +22,7 @@ vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
       },
       "should return the proper version": function (versions) {
         assert.isArray(versions);
-        assert.isFalse(versions.length == 0);
+        assert.isFalse(versions.length === 0);
       }
     },
     "the auth() method": {
@@ -44,4 +44,4 @@ vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
       }
     }
   }
-}).export(module);
+})["export"](module);

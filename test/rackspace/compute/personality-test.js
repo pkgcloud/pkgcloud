@@ -55,13 +55,13 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
           '-q',
           '-o',
           'StrictHostKeyChecking no',
-          'root@' + testServer.addresses.public[0],
+          'root@' + testServer.addresses["public"][0],
           'cat /root/.ssh/authorized_keys'
         ]);
         
         function onError(err) {
           //console.log(err);
-        };
+        }
         
         ssh.stderr.on('error', onError);
         ssh.stderr.on('data', function (chunk) {});
@@ -92,4 +92,4 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
       assert.equal(res.statusCode, 202); 
     }
   } 
-}).export(module);
+})["export"](module);

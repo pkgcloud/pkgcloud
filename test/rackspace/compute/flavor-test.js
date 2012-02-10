@@ -31,7 +31,7 @@ vows.describe('pkgcloud/rackspace/compute/flavors').addBatch({
       },
       "with details": {
         topic: function () {
-          client.getFlavors(true, this.callback);
+          client.getFlavors(this.callback);
         },
         "should return the list of flavors": function (err, flavors) {
           flavors.forEach(function (flavor) {
@@ -52,4 +52,4 @@ vows.describe('pkgcloud/rackspace/compute/flavors').addBatch({
       }
     }
   }
-}).export(module);
+})["export"](module);

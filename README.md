@@ -3,21 +3,22 @@
 Communicate across multiple cloud providers in an platform agnostic manner.
 
 * [Motivation](#motivation)
-* [Reviewing Libraries](#reviewing-libraries)
 * [System Breakdown](#system-breakdown)
 * [Unified Vocabulary](#unified-vocabulary)
 * [Components](#components)
   * [Compute](#compute)
+    *[Creating Compute Components](#creating-computer-components)
+    *[Image](#image)
   * [Storage](#storage)
   * [DNS](#dns)
   * [CDN](#cdn)
   * [Load Balancers](#load-balancers)
 * [Next Steps](#next-steps)
 
-<a name="motiviation"></a>
+<a name="motivation"></a>
 ## Motivation
 
-Currently Nodejitsu maintains several API libraries for communicating with Cloud environments:
+Currently `Nodejitsu` maintains several API libraries for communicating with Cloud environments:
 
 * [node-cloudfiles](https://github.com/nodejitsu/node-cloudfiles)
 * [node-cloudservers](https://github.com/nodejitsu/node-cloudservers)
@@ -29,14 +30,7 @@ There are also some other decent libraries out there:
 
 The main problem is that these libraries **are not consistent in anyway.**
 
-With consistency in mind the one design decision I am sure of is using [request](https://github.com/mikeal/request) and [filed](https://github.com/mikeal/filed).
-
-<a name="reviewing-libraries"></a>
-## Reviewing Libraries
-
-Overall, the consistency and semantics in the API design of [fog][0] is preferable (imho) as opposed to [libcloud][1]. [libcloud][1] is more complete in terms of the number of APIs it supports, but the syntax is a little kludgy.
-
-Another important decision in this process was not to use natively supported drivers such as Joyent [smartdc]. All the clients are written and maintained by us for maximum assurances and you can find the code in the `client` subdirectory of each provider.
+`pkgcloud` is a consistent layer across multiple cloud providers.
 
 <a name="Unified Vocabulary"></a>
 ## Unified Vocabulary
@@ -83,6 +77,7 @@ In order of priority the components and providers we need to implement are:
 <a name="compute"></a>
 ### Compute
 
+<a name="creating-computer-components"></a>
 #### Creating Compute Clients
 The options to be passed to the `pkgcloud.compute.Client` object should be:
 
@@ -90,9 +85,9 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 
 ``` js
   {
-    provider: 'rackspace',
-    username: 'nodejitsu',
-    apiKey: 'foobar'
+    provider : 'rackspace',
+    username : 'nodejitsu',
+    apiKey   : 'foobar'
   }
 ```
 
@@ -100,25 +95,35 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 
 ``` js
   {
-    provider: 'amazon', // 'aws', 'ec2'
-    accessKey: 'asdfkjas;dkj43498aj3n',
-    accessKeyId: '98kja34lkj'
+    provider    : 'amazon',
+    accessKey   : 'asdfkjas;dkj43498aj3n',
+    accessKeyId : '98kja34lkj'
+  }
+```
+
+**Joyent**
+
+``` js
+  // joyent needs a username/password or key/keyId combo.
+  // key/keyId should be registered in Joyents servers.
+  // check `test/helpers/index.js` for details on key/keyId works.
+  {
+    provider : 'joyent',
+    username : 'nodejitsu',
+    password : 'mypassword'
   }
 ```
 
 * **pkgcloud.compute.create(options, callback)**
 * **new pkgcloud.compute.Client(options, callback)**
 
-#### Using Compute Clients
-Most of this can be modeled off of the [node-cloudservers](https://github.com/nodejitsu/node-cloudservers) API although some of the Rackspace specific nomenclature (e.g. flavors) will have be updated. 
+<a name="image"></a>
+#### Image
 
-* client.createServer(options, callback)
-* client.getServers(callback)
-* client.listServers(callback)
-* client.destroyServer(callback)
-* client.createImage(options, callback)
-* client.listImages(callback)
-* client.destroyImage(options, callback)
+* `client.getImages(callback)` with the `first argument of the callback` being an `error`, and the `second argument of the callback` being an `array of Image`.
+* `client.getImage(image, callback)` with `image` being either an `Image or a String` that represents an Image id, with the `first argument of the callback` being an `error`, and the `second argument of the callback` being the `image` that was returned.
+* `client.destroyImage(image, callback)` with `image` being either an `Image or a String` that represents an Image id, with the `first argument of the callback` being an `error`, and the `second argument of the callback` being a json object in the form of `{"ok": deletedId}`.
+* `createImage(options, callback)` with `options` an json object in the form `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`, with the `first argument of the callback` being an `error`, and the `second argument of the callback` being the `image` that was returned.
 
 <a name="storage"></a>
 ### Storage
