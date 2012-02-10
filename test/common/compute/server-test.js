@@ -41,7 +41,7 @@ function batchOne (providerClient, providerName) {
       "the getImages() method": {
         "with details": {
           topic: function () {
-            client.getImages(true, this.callback);
+            client.getImages(this.callback);
           },
           "should return the list of images": function (err, images) {
             assert.isNull(err);
@@ -55,7 +55,7 @@ function batchOne (providerClient, providerName) {
       "the getFlavors() method": {
         "with details": {
           topic: function () {
-            client.getFlavors(true, this.callback);
+            client.getFlavors(this.callback);
           },
           "should return the list of flavors": function (err, flavors) {
             assert.isNull(err);

@@ -12,7 +12,7 @@ var fs = require('fs'),
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers');
 
-var testData = {};
+var testData = {},
     testContext = {},
     client = helpers.createClient('rackspace', 'compute');
 
@@ -37,7 +37,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
     "the getImages() method": {
       "with details": {
         topic: function () {
-          client.getImages(true, this.callback);
+          client.getImages(this.callback);
         },
         "should return the list of images": function (err, images) {
           assert.isNull(err);
@@ -51,7 +51,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
     "the getFlavors() method": {
       "with details": {
         topic: function () {
-          client.getFlavors(true, this.callback);
+          client.getFlavors(this.callback);
         },
         "should return the list of flavors": function (err, flavors) {
           assert.isNull(err);
@@ -71,7 +71,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           client.createServer({
             name: 'create-test-ids',
             image: 49, // Ubuntu Lucid
-            flavor: 1, // 256 server
+            flavor: 1 // 256 server
           }, this.callback);
         },
         "should return a valid server": function (err, server) {
@@ -84,7 +84,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           client.createServer({
             name: 'create-test-ids2',
             image: 49, // Ubuntu Lucid
-            flavor: 1, // 256 server
+            flavor: 1 // 256 server
           }, this.callback);
         },
         "should return a valid server": function (err, server) {
@@ -100,7 +100,7 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           client.createServer({
             name: 'create-test-objects',
             image: image,
-            flavor: flavor,
+            flavor: flavor
           }, this.callback);
         },
         "should return a valid server": function (err, server) {
@@ -173,9 +173,9 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           "should return all valid addresses": function (err, addresses) {
             assert.isNull(err);
             assert.include(addresses, 'public');
-            assert.isUndefined(addresses.private);
+            assert.isUndefined(addresses["private"]);
             assert.include(this.server1.addresses, 'public');
-            assert.isUndefined(this.server1.addresses.private);
+            assert.isUndefined(this.server1.addresses["private"]);
           }
         },
         "when requesting private addresses": {
@@ -186,9 +186,9 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           "should return all valid addresses": function (err, addresses) {
             assert.isNull(err);
             assert.include(addresses, 'private');
-            assert.isUndefined(addresses.public);
+            assert.isUndefined(addresses["public"]);
             assert.include(this.server2.addresses, 'private');
-            assert.isUndefined(this.server2.addresses.public);
+            assert.isUndefined(this.server2.addresses["public"]);
           }
         }
       }
@@ -307,4 +307,4 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
       }
     }
   }
-}).export(module);
+})["export"](module);
