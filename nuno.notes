@@ -1,10 +1,16 @@
 --
-
+// creates a server
 require('http').ClientRequest = function (opts,cb) { console.log(this,opts,cb); console.log(opts.body.toString('ascii')); throw new Error("Bringing you down taking names"); };
 
 helpers = require('./test/helpers')
 client = helpers.createClient('joyent', 'compute')
 client.createServer({ "image": "sdc:sdc:nodejs:1.3.3", "name": "nuno5", "flavor": "Small 1GB" }, function(a,b,c) { if(a) { console.log(a); } console.log(b,c) })
+
+--
+// creates and deletes server
+helpers = require('./test/helpers')
+client = helpers.createClient('joyent', 'compute')
+client.createServer(function(a,b) { console.log('+'); if(a) { return console.log(a); } console.log(b); client.destroyServer(b, function(a,b){ console.log('-'); if(a) { return console.log(a); } console.log(b); }) })
 
 ---
 
