@@ -12,27 +12,11 @@ var fs = require('fs'),
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers');
 
-var testData = {};
+var testData = {},
     testContext = {},
     client = helpers.createClient('rackspace', 'compute');
 
 vows.describe('pkgcloud/rackspace/compute/images').addBatch({
-  "The pkgcloud Rackspace compute client": {
-    "the getServers() method": {
-      "with no details": {
-        topic: function () {
-          client.getServers(this.callback);
-        },
-        "should return the list of servers": function (err, servers) {
-          testContext.servers = servers;
-          servers.forEach(function (server) {
-            assert.assertServer(server);
-          });
-        }
-      }
-    }
-  }
-}).addBatch({
   "The pkgcloud Rackspace compute client": {
     "the getImages() method": {
       "with no details": {
@@ -43,16 +27,6 @@ vows.describe('pkgcloud/rackspace/compute/images').addBatch({
           testContext.images = images;
           images.forEach(function (image) {
             assert.assertImage(image);
-          });
-        }
-      },
-      "with details": {
-        topic: function () {
-          client.getImages(true, this.callback);
-        },
-        "should return the list of images": function (err, images) {
-          images.forEach(function (image) {
-            assert.assertImageDetails(image);
           });
         }
       }
@@ -67,8 +41,8 @@ vows.describe('pkgcloud/rackspace/compute/images').addBatch({
       "should return a valid image": function (err, image) {
         assert.assertImageDetails(image);
       }
-    },
-    /*"the createImage() method": {
+    }
+    /*, "the createImage() method": {
       "with a server id": {
         topic: function () {
           client.createImage('test-image-id', testContext.images[0].id, this.callback);
@@ -87,4 +61,4 @@ vows.describe('pkgcloud/rackspace/compute/images').addBatch({
       }
     }*/
   }
-}).export(module);
+})["export"](module);
