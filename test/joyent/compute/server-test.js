@@ -145,9 +145,10 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
         client.createServer(this.callback);
       },
       "should return a valid server": function (err, server) {
-        client.getServer(server,function (err,server) {
+        client.getServer(server,function (err,response) {
           client.destroyServer(server, function(){});
           assert.isNull(err);
+          assert.equal(response.id,server.id);
           assert.assertServerDetails(server);
         });
       }
