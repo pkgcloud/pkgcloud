@@ -46,4 +46,4 @@ r = request(req, function (err,resp,body) { if(err) { return console.log(err,res
 
 var request = require('request');
 
-request({ method: 'GET', headers: {  'x-auth-token': '800cb06d-1fb0-4800-a259-ce4e68de88e3' }, url: 'https://servers.api.rackspacecloud.com/v1.0/537645/servers.json'}, function(err,body,r) { console.log(err,body,r.headers)} );
+request({ method: 'GET', headers: { 'transfer-encoding': 'chunked', 'x-auth-token': '800cb06d-1fb0-4800-a259-ce4e68de88e3' }, url: 'https://servers.api.rackspacecloud.com/v1.0/537645/servers.json'}, function(err,body,r) { console.log(err,body,r.headers)} );

@@ -13,9 +13,7 @@ var fs = require('fs'),
 
 var testData    = {},
     testContext = {},
-    clients     = { joyent   : helpers.createClient('joyent',    'compute'),
-                    rackspace: helpers.createClient('rackspace', 'compute')
-                  };
+    clients     = {};
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
@@ -60,16 +58,6 @@ function batchTwo (providerClient, providerName) {
               assert.assertImage(image);
             });
           }
-        },
-        "with details": {
-          topic: function () {
-            client.getImages(true, this.callback);
-          },
-          "should return the list of images": function (err, images) {
-            images.forEach(function (image) {
-              assert.assertImageDetails(image);
-            });
-          }
         }
       }
     };
@@ -84,9 +72,17 @@ function batchThree (providerClient, providerName) {
 
   test["The pkgcloud " + name + " compute client"] =
     {
-      "the getImage() method": {
+      "the getImage() method providing an id": {
         topic: function () {
           client.getImage(testContext.images[0].id, this.callback);
+        },
+        "should return a valid image": function (err, image) {
+          assert.assertImageDetails(image);
+        }
+      },
+      "the getImage() method providing an image": {
+        topic: function () {
+          client.getImage(testContext.images[0], this.callback);
         },
         "should return a valid image": function (err, image) {
           assert.assertImageDetails(image);
@@ -97,11 +93,13 @@ function batchThree (providerClient, providerName) {
   return test;
 }
 
-['joyent', 'rackspace'].forEach(function(provider) {
-  vows
-    .describe('pkgcloud/' + provider + '/compute/images')
-    .addBatch(batchOne(clients[provider], provider))
-    .addBatch(batchTwo(clients[provider], provider))
-    .addBatch(batchThree(clients[provider], provider))
-     ["export"](module);
-});
+JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
+  .forEach(function(provider) {
+    clients[provider] = helpers.createClient(provider, 'compute');
+    vows
+      .describe('pkgcloud/common/compute/image [' + provider + ']')
+      .addBatch(batchOne(clients[provider], provider))
+      .addBatch(batchTwo(clients[provider], provider))
+      .addBatch(batchThree(clients[provider], provider))
+       ["export"](module);
+  });
