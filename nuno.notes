@@ -1,0 +1,32 @@
+--
+
+require('http').ClientRequest = function (opts,cb) { console.log(this,opts,cb); console.log(opts.body.toString('ascii')); throw new Error("Bringing you down taking names"); };
+
+helpers = require('./test/helpers')
+client = helpers.createClient('joyent', 'compute')
+client.createServer({ "image": "sdc:sdc:nodejs:1.3.3", "name": "nuno5", "flavor": "Small 1GB" }, function(a,b,c) { if(a) { console.log(a); } console.log(b,c) })
+
+---
+
+http-console --ssl --json us-sw-1.api.joyentcloud.com -f
+/nodejitsu1
+/machines
+x-api-version: ~6.5
+date: ...
+Authorization: Signature keyId="/nodejitsu1/keys/id_rsa",algorithm="rsa-sha256",headers="date" ...
+POST
+{ "image": "sdc:sdc:nodejs:1.3.3", "name": "nuno3", "flavor": "Small 1GB" }
+
+---
+
+request = require('request');
+sign    = require('./http-signature');
+fs      = require('fs');
+keys    = {key: fs.readFileSync('/Users/dscape/.ssh/id_rsa', 'ascii'), keyId: "/nodejitsu1/keys/id_rsa"}
+
+var req = {method: 'POST', url: 'https://us-sw-1.api.joyentcloud.com/nodejitsu1/machines', headers: {"x-api-version": "~6.5", "Content-Type": "application/json", "Accept": "application/json"}, json: { "image": "sdc:sdc:nodejs:1.3.3", "name": "nuno2", "flavor": "Small 1GB" }};
+
+sign.sign(req, keys);
+
+console.log(req);
+r = request(req, function (err,resp,body) { if(err) { return console.log(err,resp); } console.log(body); });

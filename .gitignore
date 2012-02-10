@@ -3,4 +3,3 @@ node_modules
 npm-debug.log
 test/fixtures/testkey*
 test/fixtures/test-download*
-nuno.notes
