@@ -70,6 +70,7 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
           client.createServer({}, this.callback);
         },
         "should return a valid server": function (err, server) {
+          client.destroyServer(server, function(){});
           assert.isNull(err);
           assert.assertServerDetails(server);
         }
@@ -79,6 +80,7 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
           client.createServer({name: 'create-test-ids'},this.callback);
         },
         "should return a valid named server": function (err, server) {
+          client.destroyServer(server, function(){});
           assert.isNull(err);
           assert.equal(server.name, 'create-test-ids');
           assert.assertServerDetails(server);
@@ -93,6 +95,7 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
           }, this.callback);
         },
         "should return a valid server": function (err, server) {
+          client.destroyServer(server, function(){});
           assert.isNull(err);
           assert.equal(server.name, 'create-test-ids2');
           assert.equal(server.imageId, testContext.images[0].id);
@@ -111,6 +114,7 @@ vows.describe('pkgcloud/joyent/compute/servers').addBatch({
           }, this.callback);
         },
         "should return a valid server": function (err, server) {
+          client.destroyServer(server, function(){});
           assert.isNull(err);
           assert.equal(server.imageId, testContext.images[0].id);
           assert.equal(server.name, 'create-test-objects');
