@@ -41,3 +41,9 @@ sign.sign(req, keys);
 
 console.log(req);
 r = request(req, function (err,resp,body) { if(err) { return console.log(err,resp); } console.log(body); });
+
+---
+
+var request = require('request');
+
+request({ method: 'GET', headers: {  'x-auth-token': '800cb06d-1fb0-4800-a259-ce4e68de88e3' }, url: 'https://servers.api.rackspacecloud.com/v1.0/537645/servers.json'}, function(err,body,r) { console.log(err,body,r.headers)} );
