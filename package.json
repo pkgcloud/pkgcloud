@@ -1,16 +1,16 @@
 {
-  "name": "pkgcloud",
-  "description": 
+  "name"        : "pkgcloud",
+  "description" : 
     "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version": "0.3.0",
-  "author": "Nodejitsu Inc <info@nodejitsu.com",
+  "version"     : "0.3.0",
+  "author"      : "Nodejitsu Inc <info@nodejitsu.com",
   "contributors": [
     { "name": "Charlie Robbins", "email": "charlie@nodejitsu.com" },
-    { "name": "Nuno Job", "email": "nunojobpinto@gmail.com" }
+    { "name": "Nuno Job",        "email": "nunojobpinto@gmail.com" }
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/nodejitsu/pkgcloud.git" 
+    "url" : "http://github.com/nodejitsu/pkgcloud.git" 
   },
   "keywords": [
     "cloud",
@@ -23,19 +23,20 @@
     "iaas"
   ],
   "dependencies": {
-    "async": "0.1.x",
-    "eventemitter2": "0.4.x",
-    "filed": "0.0.x",
-    "mime": "1.2.x",
-    "morestreams": "0.1.x",
-    "request": "2.x.x",
-    "utile": "0.x.x",
-    "pkginfo": "0.2.x"
+    "async"         : "0.1.x",
+    "eventemitter2" : "0.4.x",
+    "filed"         : "0.0.x",
+    "mime"          : "1.2.x",
+    "morestreams"   : "0.1.x",
+    "request"       : "2.x.x",
+    "utile"         : "0.x.x",
+    "pkginfo"       : "0.2.x"
   },
   "devDependencies": {
-    "vows": "0.6.x"
+    "vows" : "0.6.x",
+    "nock" : "0.9.x"
   },
-  "main": "./lib/pkgcloud",
-  "scripts": { "test": "vows test/*/*/*-test.js --spec" },
-  "engines": { "node": "0.4.x || 0.6.x" }
+  "main"    : "./lib/pkgcloud",
+  "scripts" : { "test": "vows test/*/*/*-test.js --spec" },
+  "engines" : { "node": "0.4.x || 0.6.x" }
 }
