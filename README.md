@@ -153,7 +153,7 @@ var joyent = pkgcloud.compute.createClient(
   `image`: `Image|String`<br/>
   `err`: `Error`<br/>
   `ok`: `Object` `{"ok": deletedId}`
-* `createImage(options, function (err, image) { })`<br/>
+* `client.createImage(options, function (err, image) { })`<br/>
   `options`: `Object` `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`<br/>
   `err`: `Error`<br/>
   `image`: `Image`
