@@ -107,7 +107,7 @@ var rackspace = pkgcloud.compute.createClient(
 );
 ```
 
-**AWS**
+**Amazon**
 
 ``` js
 var amazon = pkgcloud.compute.createClient(
