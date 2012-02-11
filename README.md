@@ -39,18 +39,32 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
 
 **Compute**
 
-```
-+-----------------------------------------------+
-| pkgcloud | OpenStack | Joyent  | Amazon       |
-+-----------------------------------------------+
-| Server   | Server    | Machine | Instance     |
-+-----------------------------------------------+
-| Image    | Image     | Dataset | AMI          | 
-+-----------------------------------------------+
-| Flavor   | Flavor    | Package | InstanceType |
-+-----------------------------------------------+
-```
-
+<table>
+  <tr>
+    <th>pkgcloud</th>
+    <th>OpenStack</th>
+    <th>Joyent</th>
+    <th>Amazon</th>
+  </tr>
+  <tr>
+    <td>Server</td>
+    <td>Server</td>
+    <td>Machine</td>
+    <td>Instance</td>
+  </tr>
+  <tr>
+    <td>Image</td>
+    <td>Image</td>
+    <td>Dataset</td>
+    <td>AMI</td>
+  </tr>
+  <tr>
+    <td>Flavor</td>
+    <td>Flavor</td>
+    <td>Package</td>
+    <td>InstanceType</td>
+  </tr>
+</table>
 
 <a name="system-breakdown"></a>
 ## System Breakdown
