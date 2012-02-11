@@ -18,6 +18,9 @@ Communicate across multiple cloud providers in an platform agnostic manner.
 <a name="motivation"></a>
 ## Motivation
 
+<a name="motivation"></a>
+## Motivation
+
 Currently `Nodejitsu` maintains several API libraries for communicating with Cloud environments:
 
 * [node-cloudfiles](https://github.com/nodejitsu/node-cloudfiles)
