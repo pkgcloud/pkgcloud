@@ -5,13 +5,12 @@
  *
  */
 
-var fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    assert = require('../../helpers/assert'),
-    helpers = require('../../helpers');
-
-var testData    = {},
+var fs          = require('fs'),
+    path        = require('path'),
+    vows        = require('vows'),
+    assert      = require('../../helpers/assert'),
+    helpers     = require('../../helpers'),
+    testData    = {},
     testContext = {},
     clients     = {};
 
@@ -96,10 +95,39 @@ function batchThree (providerClient, providerName) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function(provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
+    var client = clients[provider];
+    if(process.env.NOCK) {
+      nock    = require('nock');
+      if(provider === 'joyent') {
+        nock('https://' + client.config.serversUrl)
+          .get('/' + client.config.account + '/machines')
+          .reply(200, "[]", {});
+        nock('https://' + client.config.serversUrl)
+          .get('/' + client.config.account + '/datasets')
+          .reply(200, helpers.loadFixture('joyent/images.json'), {});
+        nock('https://' + client.config.serversUrl)
+          .get('/' + client.config.account + '/datasets/' +
+            '7a4f84be-df6d-11e0-a504-3f6609d83831')
+          .reply(200, helpers.loadFixture('joyent/image.json'), {});
+      } else if(provider === 'rackspace') {
+        //nock('https://' + client.authUrl)
+        //  .get('/v1.0')
+        //  .reply(204, "", helpers.loadFixture('rackspace/auth.json'));
+        //nock('https://' + client.serversUrl)
+        //  .get('/v1.0')
+        //  .reply(204, helpers.loadFixture('rackspace/servers.json'), {});
+        //nock('https://' + client.serversUrl)
+        //  .get('/v1.0/537645/images/detail.json')
+        //  .reply(200, helpers.loadFixture('rackspace/images.json'), {});
+        //nock('https://' + client.serversUrl)
+        //  .get('/v1.0/537645/images/112')
+        //  .reply(200, helpers.loadFixture('rackspace/image.json'), {});
+      }
+    }
     vows
       .describe('pkgcloud/common/compute/image [' + provider + ']')
-      .addBatch(batchOne(clients[provider], provider))
-      .addBatch(batchTwo(clients[provider], provider))
-      .addBatch(batchThree(clients[provider], provider))
+      .addBatch(batchOne(client, provider))
+      .addBatch(batchTwo(client, provider))
+      .addBatch(batchThree(client, provider))
        ["export"](module);
   });
