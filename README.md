@@ -108,6 +108,9 @@ var amazon = pkgcloud.compute.createServer(
 **Joyent**
 
 ``` js
+var path = require('path'),
+    fs   = require('fs');
+
 // joyent needs a username/password or key/keyId combo.
 // key/keyId should be registered in Joyent servers.
 // check `test/helpers/index.js` for details on key/keyId works.
@@ -116,7 +119,8 @@ var joyent = pkgcloud.compute.createServer(
     provider : 'joyent',
     account  : 'nodejitsu'
     keyId    : '/nodejitsu1/keys/dscape',
-    key      : fs.readFileSync('/Users/dscape/.ssh/id_rsa', 'ascii')
+    key      : 
+      fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
   }
 );
 ```
