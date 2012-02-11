@@ -142,10 +142,10 @@ var joyent = pkgcloud.compute.createClient(
 <a name="image"></a>
 #### Image
 
-* `client.getImages(callback)` with the `first argument of the callback` being an `error`, and the `second argument of the callback` being an `array of Image`.
-* `client.getImage(image, callback)` with `image` being either an `Image or a String` that represents an Image id, with the `first argument of the callback` being an `error`, and the `second argument of the callback` being the `image` that was returned.
-* `client.destroyImage(image, callback)` with `image` being either an `Image or a String` that represents an Image id, with the `first argument of the callback` being an `error`, and the `second argument of the callback` being a json object in the form of `{"ok": deletedId}`.
-* `createImage(options, callback)` with `options` an json object in the form `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`, with the `first argument of the callback` being an `error`, and the `second argument of the callback` being the `image` that was returned.
+* `client.getImages(function (err, images) { })` with `err` being an `error`, and `images` being an `array of Image`.
+* `client.getImage(imageId, function (err, image) { })` with `imageId` being either an `Image|String` that represents an Image ID, with `err` being an `error`, and the `image` being the `Image` that was returned.
+* `client.destroyImage(image, function(err, ok){ })` with `image` being either an `Image|String` that represents an Image id, with `err` being an `error`, and the `ok` being a json object in the form of `{"ok": deletedId}`.
+* `createImage(options, function (err, image) { })` with `options` an json object in the form `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`, with `err` being an `error`, and the `image` being the `Image` that was returned.
 
 <a name="storage"></a>
 ### Storage
