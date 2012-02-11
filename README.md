@@ -84,7 +84,7 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 **Rackspace**
 
 ``` js
-var rackspace = pkgcloud.compute.createServer(
+var rackspace = pkgcloud.compute.createClient(
   {
     provider : 'rackspace',
     username : 'nodejitsu',
@@ -96,7 +96,7 @@ var rackspace = pkgcloud.compute.createServer(
 **AWS**
 
 ``` js
-var amazon = pkgcloud.compute.createServer(
+var amazon = pkgcloud.compute.createClient(
   {
     provider    : 'amazon',
     accessKey   : 'asdfkjas;dkj43498aj3n',
@@ -114,7 +114,7 @@ var path = require('path'),
 // joyent needs a username/password or key/keyId combo.
 // key/keyId should be registered in Joyent servers.
 // check `test/helpers/index.js` for details on key/keyId works.
-var joyent = pkgcloud.compute.createServer(
+var joyent = pkgcloud.compute.createClient(
   {
     provider : 'joyent',
     account  : 'nodejitsu'
