@@ -35,4 +35,17 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       }
     }
   } 
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the create() method": {
+     topic: function () {
+       client.createInstance(this.callback);
+     },
+     "should return a valid instance": function(err, instance) {
+      assert.isNull(err);
+      console.log(instance);
+      assert.isTrue(false);
+     }
+    }
+  }
 }).export(module);
