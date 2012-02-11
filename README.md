@@ -18,9 +18,6 @@ Communicate across multiple cloud providers in an platform agnostic manner.
 <a name="motivation"></a>
 ## Motivation
 
-<a name="motivation"></a>
-## Motivation
-
 Currently `Nodejitsu` maintains several API libraries for communicating with Cloud environments:
 
 * [node-cloudfiles](https://github.com/nodejitsu/node-cloudfiles)
@@ -87,21 +84,25 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 **Rackspace**
 
 ``` js
+var rackspace = pkgcloud.compute.createServer(
   {
     provider : 'rackspace',
     username : 'nodejitsu',
     apiKey   : 'foobar'
   }
+);
 ```
 
 **AWS**
 
 ``` js
+var amazon = pkgcloud.compute.createServer(
   {
     provider    : 'amazon',
     accessKey   : 'asdfkjas;dkj43498aj3n',
     accessKeyId : '98kja34lkj'
   }
+);
 ```
 
 **Joyent**
@@ -110,15 +111,15 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
   // joyent needs a username/password or key/keyId combo.
   // key/keyId should be registered in Joyents servers.
   // check `test/helpers/index.js` for details on key/keyId works.
+var joyent = pkgcloud.compute.createServer(
   {
     provider : 'joyent',
-    username : 'nodejitsu',
-    password : 'mypassword'
+    account  : 'nodejitsu'
+    keyId    : '/nodejitsu1/keys/dscape',
+    identity : '/Users/dscape/.ssh/id_rsa'
   }
+);
 ```
-
-* **pkgcloud.compute.create(options, callback)**
-* **new pkgcloud.compute.Client(options, callback)**
 
 <a name="image"></a>
 #### Image
