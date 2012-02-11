@@ -5,11 +5,14 @@
  *
  */
 
-var fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    assert = require('../../helpers/assert'),
+var fs      = require('fs'),
+    path    = require('path'),
+    vows    = require('vows'),
+    nock    = require('nock'),
+    assert  = require('../../helpers/assert'),
     helpers = require('../../helpers');
+
+nock.recorder.rec();
 
 var testData = {},
     testContext = {},
