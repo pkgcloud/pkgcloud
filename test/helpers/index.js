@@ -50,3 +50,7 @@ helpers.loadConfig = function loadConfig(provider) {
 
   return JSON.parse(content);
 };
+
+helpers.loadFixture = function loadFixture(path) {
+  return fs.readFileSync(__dirname + '/../fixtures/' + path, 'ascii');
+};

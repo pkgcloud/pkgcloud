@@ -5,18 +5,21 @@
  *
  */
 
-var fs      = require('fs'),
-    path    = require('path'),
-    vows    = require('vows'),
-    nock    = require('nock'),
-    assert  = require('../../helpers/assert'),
-    helpers = require('../../helpers');
-
-nock.recorder.rec();
-
-var testData = {},
+var fs          = require('fs'),
+    path        = require('path'),
+    vows        = require('vows'),
+    assert      = require('../../helpers/assert'),
+    helpers     = require('../../helpers'),
+    testData    = {},
     testContext = {},
-    client = helpers.createClient('joyent', 'compute');
+    client      = helpers.createClient('joyent', 'compute');
+
+if(process.env.NOCK) {
+  nock    = require('nock');
+  nock('https://' + client.config.serversUrl)
+    .get('/' + client.config.account + '/machines?limit=0')
+    .reply(200, "[]", {});
+}
 
 vows.describe('pkgcloud/joyent/compute/images').addBatch({
   "The pkgcloud Joyent compute client": {

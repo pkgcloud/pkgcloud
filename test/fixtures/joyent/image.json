@@ -1,0 +1,12 @@
+{
+  "id": "7a4f84be-df6d-11e0-a504-3f6609d83831",
+  "urn": "sdc:admin:windows2008r2:1.5.0",
+  "name": "windows2008r2",
+  "os": "windows",
+  "type": "virtualmachine",
+  "description": "windows2008r2 1.5.0 VM image",
+  "default": false,
+  "requirements": {},
+  "version": "1.5.0",
+  "created": "2011-09-15T08:45:09+00:00"
+}
