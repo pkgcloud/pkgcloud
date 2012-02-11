@@ -142,7 +142,9 @@ var joyent = pkgcloud.compute.createClient(
 <a name="image"></a>
 #### Image
 
-* `client.getImages(function (err, images) { })` with `err` being an `error`, and `images` being an `array of Image`.
+* `client.getImages(function (err, images) { })`<br/> 
+  `err`: `Error` <br/>
+  `images`: `[Image]`
 * `client.getImage(imageId, function (err, image) { })` with `imageId` being either an `Image|String` that represents an Image ID, with `err` being an `error`, and the `image` being the `Image` that was returned.
 * `client.destroyImage(image, function(err, ok){ })` with `image` being either an `Image|String` that represents an Image id, with `err` being an `error`, and the `ok` being a json object in the form of `{"ok": deletedId}`.
 * `createImage(options, function (err, image) { })` with `options` an json object in the form `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`, with `err` being an `error`, and the `image` being the `Image` that was returned.
