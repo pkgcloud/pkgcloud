@@ -15,12 +15,22 @@ var client = helpers.createClient('rackspace', 'database');
 vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
   "The pkgcloud Rackspace database client": {
     "the getInstances() method": {
-      topic: function() {
+      topic: function () {
         client.getInstances(this.callback);
       },
       "should return the list of instances": function (err, instances) {
         assert.isNull(err);
         console.log(instances);
+        assert.isTrue(false);
+      }
+    },
+    "the getInstacesDetails() method": {
+      topic: function () {
+        client.getInstancesDetails(this.callback);
+      },
+      "should return list status and details for all databases": function (err, info) {
+        assert.isNull(err);
+        console.log('La info', info);
         assert.isTrue(false);
       }
     }
