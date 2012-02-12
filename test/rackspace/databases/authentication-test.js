@@ -19,6 +19,7 @@ vows.describe('pkgcloud/rackspace/database/authentication').addBatch({
     "should have core methods defined": macros.shouldHaveCreds(client),
     "the getVersion() method": {
       topic: function () {
+        console.log(client.getVersion);
         client.getVersion(this.callback);
       },
       "should return the proper version": function (versions) {
@@ -28,7 +29,7 @@ vows.describe('pkgcloud/rackspace/database/authentication').addBatch({
     },
     "the auth() method": {
       "with a valid username and api key": macros.shouldAuthenticate(client),
-      "with an invalid username and api key": macros.shouldNotAuthenticate('compute')
+      "with an invalid username and api key": macros.shouldNotAuthenticate('database')
     }
   }
 }).export(module);
