@@ -110,18 +110,15 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             '7a4f84be-df6d-11e0-a504-3f6609d83831')
           .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if(provider === 'rackspace') {
-        //nock('https://' + client.authUrl)
-        //  .get('/v1.0')
-        //  .reply(204, "", helpers.loadFixture('rackspace/auth.json'));
-        //nock('https://' + client.serversUrl)
-        //  .get('/v1.0')
-        //  .reply(204, helpers.loadFixture('rackspace/servers.json'), {});
-        //nock('https://' + client.serversUrl)
-        //  .get('/v1.0/537645/images/detail.json')
-        //  .reply(200, helpers.loadFixture('rackspace/images.json'), {});
-        //nock('https://' + client.serversUrl)
-        //  .get('/v1.0/537645/images/112')
-        //  .reply(200, helpers.loadFixture('rackspace/image.json'), {});
+        nock('https://' + client.serversUrl)
+          .get('/v1.0/537645/servers.json')
+          .reply(204, helpers.loadFixture('rackspace/servers.json'), {});
+        nock('https://' + client.serversUrl)
+          .get('/v1.0/537645/images/detail.json')
+          .reply(200, helpers.loadFixture('rackspace/images.json'), {});
+        nock('https://' + client.serversUrl)
+          .get('/v1.0/537645/images/112')
+          .reply(200, helpers.loadFixture('rackspace/image.json'), {});
       }
     }
     vows
