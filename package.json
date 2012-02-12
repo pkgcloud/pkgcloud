@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "vows" : "0.6.x",
-    "nock" : "0.9.x"
+    "nock" : "0.10.x"
   },
   "main"    : "./lib/pkgcloud",
   "scripts" : { "test": "vows test/*/*/*-test.js --spec" },
