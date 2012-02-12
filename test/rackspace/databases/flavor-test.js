@@ -14,7 +14,7 @@ var client = helpers.createClient('rackspace', 'database');
 vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
   "The pkgcloud Rackspace database client": {
     "the getFlavors() method": {
-      "with now details": {
+      "with no details": {
         topic: function () {
           client.getFlavors(this.callback);
         },
