@@ -1,6 +1,8 @@
 var assert = module.exports = require('assert');
 
 assert.assertFlavor = function assertFlavor(instance) {
+  assert.isNumber(instance.id);
+  assert.isString(instance.name);
   assert.equal(instance.constructor.name, 'Flavor');
 };
 
