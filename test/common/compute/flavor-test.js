@@ -33,16 +33,6 @@ function batchOne (providerClient, providerName) {
               assert.assertFlavor(flavor);
             });
           }
-        },
-        "with details": {
-          topic: function () {
-            client.getFlavors(client.config.username, this.callback);
-          },
-          "should return the list of flavors": function (err, flavors) {
-            flavors.forEach(function (flavor) {
-              assert.assertFlavorDetails(flavor);
-            });
-          }
         }
       }
     };
@@ -74,9 +64,26 @@ function batchTwo (providerClient, providerName) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function(provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
+    var client = clients[provider],
+        nock   = require('nock');
+    if(process.env.NOCK) {
+      if(provider === 'joyent') {
+        nock('https://' + client.config.serversUrl)
+          .get('/' + client.config.account + '/packages')
+            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+          .get('/' + client.config.account + '/packages/Small%201GB')
+            .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
+      } else if(provider === 'rackspace') {
+        nock('https://' + client.serversUrl)
+          .get('/v1.0/537645/flavors/detail.json')
+            .reply(200, helpers.loadFixture('rackspace/flavors.json'), {})
+          .get('/v1.0/537645/flavors/1')
+            .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
+      }
+    }
     vows
       .describe('pkgcloud/common/compute/flavor [' + provider + ']')
-      .addBatch(batchOne(clients[provider], provider))
-      .addBatch(batchTwo(clients[provider], provider))
+      .addBatch(batchOne(clients[provider], provider, nock))
+      .addBatch(batchTwo(clients[provider], provider, nock))
        ["export"](module);
   });
