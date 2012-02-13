@@ -7,6 +7,9 @@ assert.assertFlavor = function assertFlavor(instance) {
 };
 
 assert.assertFlavorDetails = function assertFlavorDetails(instance) {
+  assert.isNumber(instance.id);
+  assert.isString(instance.name);
+  assert.isNumber(instance.ram);
   assert.equal(instance.constructor.name, 'Flavor');
 };
 
