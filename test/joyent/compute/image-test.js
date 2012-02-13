@@ -30,6 +30,7 @@ vows.describe('pkgcloud/joyent/compute/images').addBatch({
         },
         "should return one server": function (err, servers) {
           assert.equal(servers.length, 0);
+          assert.assertNock(nock);
         }
       }
     }

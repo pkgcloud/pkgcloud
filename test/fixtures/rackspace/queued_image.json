@@ -1,0 +1,9 @@
+{
+  "image"     : {
+    "id"      : 18753753,
+    "status"  : "QUEUED",
+    "updated" : "2012-02-13T09:42:23-06:00",
+    "name"    : "test-img-id", 
+    "serverId": 20578901
+  }
+}

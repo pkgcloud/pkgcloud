@@ -14,7 +14,7 @@ var fs          = require('fs'),
     testContext = {},
     clients     = {};
 
-function batchOne (providerClient, providerName) {
+function batchOne (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
       client = providerClient || rackspace,
       test   = {};
@@ -31,6 +31,7 @@ function batchOne (providerClient, providerName) {
             servers.forEach(function (server) {
               assert.assertServer(server);
             });
+            assert.assertNock(nock);
           }
         }
       }
@@ -39,7 +40,7 @@ function batchOne (providerClient, providerName) {
   return test;
 }
 
-function batchTwo (providerClient, providerName) {
+function batchTwo (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
       client = providerClient || rackspace,
       test   = {};
@@ -56,6 +57,7 @@ function batchTwo (providerClient, providerName) {
             images.forEach(function (image) {
               assert.assertImage(image);
             });
+            assert.assertNock(nock);
           }
         }
       }
@@ -64,7 +66,7 @@ function batchTwo (providerClient, providerName) {
   return test;
 }
 
-function batchThree (providerClient, providerName) {
+function batchThree (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
       client = providerClient || rackspace,
       test   = {};
@@ -77,6 +79,7 @@ function batchThree (providerClient, providerName) {
         },
         "should return a valid image": function (err, image) {
           assert.assertImageDetails(image);
+          assert.assertNock(nock);
         }
       },
       "the getImage() method providing an image": {
@@ -85,6 +88,7 @@ function batchThree (providerClient, providerName) {
         },
         "should return a valid image": function (err, image) {
           assert.assertImageDetails(image);
+          assert.assertNock(nock);
         }
       }
     };
@@ -95,36 +99,37 @@ function batchThree (providerClient, providerName) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function(provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
-    var client = clients[provider];
+    var client = clients[provider],
+        nock   = require('nock');
     if(process.env.NOCK) {
-      nock    = require('nock');
       if(provider === 'joyent') {
         nock('https://' + client.config.serversUrl)
           .get('/' + client.config.account + '/machines')
-          .reply(200, "[]", {});
-        nock('https://' + client.config.serversUrl)
+            .reply(200, "[]", {})
           .get('/' + client.config.account + '/datasets')
-          .reply(200, helpers.loadFixture('joyent/images.json'), {});
-        nock('https://' + client.config.serversUrl)
-          .get('/' + client.config.account + '/datasets/' +
-            '7a4f84be-df6d-11e0-a504-3f6609d83831')
-          .reply(200, helpers.loadFixture('joyent/image.json'), {});
+            .reply(200, helpers.loadFixture('joyent/images.json'), {})
+          .get('/' + client.config.account +
+            '/datasets/7a4f84be-df6d-11e0-a504-3f6609d83831')
+            .reply(200, helpers.loadFixture('joyent/image.json'), {})
+          .get('/' + client.config.account +
+            '/datasets/7a4f84be-df6d-11e0-a504-3f6609d83831')
+            .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if(provider === 'rackspace') {
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/servers.json')
-          .reply(204, helpers.loadFixture('rackspace/servers.json'), {});
-        nock('https://' + client.serversUrl)
+            .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
           .get('/v1.0/537645/images/detail.json')
-          .reply(200, helpers.loadFixture('rackspace/images.json'), {});
-        nock('https://' + client.serversUrl)
+            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
           .get('/v1.0/537645/images/112')
-          .reply(200, helpers.loadFixture('rackspace/image.json'), {});
+            .reply(200, helpers.loadFixture('rackspace/image.json'), {})
+          .get('/v1.0/537645/images/112')
+            .reply(200, helpers.loadFixture('rackspace/image.json'), {});
       }
     }
     vows
       .describe('pkgcloud/common/compute/image [' + provider + ']')
-      .addBatch(batchOne(client, provider))
-      .addBatch(batchTwo(client, provider))
-      .addBatch(batchThree(client, provider))
+      .addBatch(batchOne(client, provider, nock))
+      .addBatch(batchTwo(client, provider, nock))
+      .addBatch(batchThree(client, provider, nock))
        ["export"](module);
   });
