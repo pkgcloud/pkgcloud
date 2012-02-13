@@ -27,7 +27,7 @@ function shouldAuthNew (client) {
     "should respond with a token": function (err, res) {
       assert.isObject(res.body.auth);
       assert.isObject(res.body.auth.token);
-      assert.equal(typeof(res.body.auth.token.id), 'string');
+      assert.isString(res.body.auth.token.id);
     },
     "should update the config with appropriate urls": function (err, res) {
       var config = client.config;
@@ -35,6 +35,7 @@ function shouldAuthNew (client) {
       assert.equal(res.headers['x-storage-url'], config.storageUrl);
       assert.equal(res.headers['x-cdn-management-url'], config.cdnUrl);
       assert.equal(res.headers['x-auth-token'], config.authToken);
+      assert.isString(config.accountNumber);
     }
   };
 }
