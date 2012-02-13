@@ -44,7 +44,7 @@ vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
   }
 }).addBatch({
   "The pkgcloud Rackspace database client": {
-    "the getFlavor method": {
+    "the getFlavor() method": {
       topic: function () {
         client.getFlavor(testContext.flavors[0].id, this.callback);
       },
