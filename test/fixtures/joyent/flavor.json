@@ -1,0 +1,7 @@
+{
+    "name": "Small 1GB",
+    "memory": 1024,
+    "disk": 30720,
+    "swap": 2048,
+    "default": true
+}
