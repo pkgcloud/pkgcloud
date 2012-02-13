@@ -9,7 +9,8 @@ var vows = require('vows'),
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers');
 
-var client = helpers.createClient('rackspace', 'database');
+var testContext = {},
+    client = helpers.createClient('rackspace', 'database');
 
 vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
   "The pkgcloud Rackspace database client": {
@@ -19,9 +20,12 @@ vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
           client.getFlavors(this.callback);
         },
         "should return the list of flavors": function (err, flavors) {
+          testContext.flavors = flavors;
           assert.isNull(err);
-          console.log(flavors);
-          assert.isTrue(false);
+          assert.isArray(flavors);
+          flavors.forEach(function (flavor) {
+            assert.assertFlavor(flavor);
+          });
         }
       },
       "with details": {
@@ -30,9 +34,22 @@ vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
         },
         "should return the list of flavors with details": function (err, flavors) {
           assert.isNull(err);
-          console.log(flavors);
-          assert.isTrue(false);
+          assert.isArray(flavors);
+          flavors.forEach(function (flavor) {
+            assert.assertFlavorDetails(flavor);
+          });
         }
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the getFlavor method": {
+      topic: function () {
+        client.getFlavor(testContext.flavors[0].id, this.callback);
+      },
+      "should return a valid flavor": function (err, flavor) {
+        assert.assertFlavorDetails(flavor);
       }
     }
   }
