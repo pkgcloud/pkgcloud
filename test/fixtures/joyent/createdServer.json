@@ -1,0 +1,18 @@
+{
+    "id": "14186c17-0fcd-4bb5-ab42-51b848bda7e9",
+    "name": "create-test-ids2",
+    "type": "virtualmachine",
+    "state": "provisioning",
+    "dataset": "sdc:sdc:nodejitsu:1.0.0",
+    "ips": [
+        "192.168.26.26",
+        "64.30.132.75"
+    ],
+    "memory": 1024,
+    "disk": 30720,
+    "metadata": {
+        "root_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyiWqkB9aKGiD7Z8KaBqZA67oo1Ysb5MV+47rQ1gydEyL3Y01FL3HIZMGvxvXLr1lqy3eiWJgTyt0SawqFTtQVY7kMHHkvu2A97h+LP8wdyXrm+MBuxjbQUVGaBRXyv5rFJP9GNZpig+KDBPo54AREmvduwtFAcWFdOC0BCgQ7MwVWcL9xhO02+Ra3fQ70dUV2kUDv/BZFkJaD3Gqc/4cir6oWF2wmdDs1vFpXrfKDi5rLG7CKOo8+pQk3NvSaNBQwonpML4/M1N0NlIM2io7soq5VNknpiCrPdyz2yXl8KFt3/kWLOLMtoxfbHnuuhmHDqLoVy3h7/2vx8Fgr6PWB Charlie@Charlie-Robbinss-MacBook-Pro.localnssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZe2jje7DAL11/Py4/7mFU8jZY4lkdJg0Ikbaq95nizHOqd23P1ONTlJ4OaLuunJSyoa9C4yWcznRCjgj0ZSZyhC+ySTN2aqudPENUksmzu15CxM8yEcs26OVQKqITG3qeBcKeDmyCAkuAWoehwzHfirVvCbBbIvDvbtjLiifCILxUjRxVz0kSJ6BARqWgdVBSI8c3GTm4q0vXp4M2P3Cyk08ZGj31oEsoYdFfPHG3lDgbmYtSVnwsrMK/ZByL6oufzO84Hk1B5KMMCOnjfsUknFZc5tn085T/A1ngkGOtxdoG/8OMchUcmjJfsVBTpy3shyuFUrOzNxipCin5oR5X dscape@air-2.localnssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEA15sKCPHrYG51vn0lCBVtV4ZJfHxRGoNweb9Rz4KaB8oAEDEGR0pLf63F78Un2d1V/fM3UdYBQbUXiEOfDvWyMtJCdBPdXbpxfDQxDvT9QxM8cPrwItE1rfgfuCZIl/7sh8UX5DU/TFFSwbgT28xGDe1Cfpu5HCBDKwfXEq3x3thBCxCngmBv69KYf45YC3kvmQ4sBym4+/OFS85L1Mltrk811BAoPulYQW1ZeATlOGwB4c52nI7jKeBaIeHqOLLG7ERGXlikCoWL4m5HaomqoHNDk1t1CHPu2izy+1zsw3wWQOoaQzRWTF6ozEEJ6jN2pLj440w4UBnYx4Nzfi0Og/f5T7+LulLE1xfZO7wawTUc9sTCyAs6jCm/QwZmUzks34IjT/l3F0S3ZDkqRV+Bbd/wPXHHW6PrDRnQJEfstHJB+iqPaRxP2vvQMO0dGsX4x/IYiPCTUJQaFXBa0Dy7V5CNYKImtAxcUAB0gJcNzrsyy2v15YXC2iJz1Xwly6sQHxyxu7wMdoTTcSHYca7cIJTqiDWNpn4dFg+nbzr4OP7RlYkvny3jh9sBEGYKXzHB2opQhD8VR65kPwbmIwBuF7t4BYFFvg/TGyJZ4NUfbSvPIp3zgsdHmtY5OVBXve0Bu8lhoFJ3QWSmRTLD1+Tpl6t8MbbaQZ06X+oFMzJ30cE= jwurster@Jasun-Wursters-MacBook-Pro.localn"
+    },
+    "created": "2012-02-14T16:08:38+00:00",
+    "updated": "2012-02-14T16:08:38+00:00"
+}

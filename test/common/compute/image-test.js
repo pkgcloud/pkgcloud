@@ -109,10 +109,10 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .get('/' + client.config.account + '/datasets')
             .reply(200, helpers.loadFixture('joyent/images.json'), {})
           .get('/' + client.config.account +
-            '/datasets/7a4f84be-df6d-11e0-a504-3f6609d83831')
+            '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
             .reply(200, helpers.loadFixture('joyent/image.json'), {})
           .get('/' + client.config.account +
-            '/datasets/7a4f84be-df6d-11e0-a504-3f6609d83831')
+            '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
             .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if(provider === 'rackspace') {
         nock('https://' + client.serversUrl)

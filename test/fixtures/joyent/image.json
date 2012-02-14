@@ -1,12 +1,12 @@
 {
-  "id": "7a4f84be-df6d-11e0-a504-3f6609d83831",
-  "urn": "sdc:admin:windows2008r2:1.5.0",
-  "name": "windows2008r2",
-  "os": "windows",
+  "id": "880c3250-51ff-11e1-b7aa-837f081ac1a9",
+  "urn": "sdc:sdc:nodejitsu:1.0.0",
+  "name": "nodejitsu",
+  "os": "linux",
   "type": "virtualmachine",
-  "description": "windows2008r2 1.5.0 VM image",
-  "default": false,
+  "description": "nodejitsu 1.0.0 VM Image",
+  "default": true,
   "requirements": {},
-  "version": "1.5.0",
-  "created": "2011-09-15T08:45:09+00:00"
+  "version": "1.0.0",
+  "created": "2012-02-08T18:41:41+00:00"
 }
