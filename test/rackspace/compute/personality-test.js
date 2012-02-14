@@ -60,7 +60,7 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
         ]);
         
         function onError(err) {
-          //console.log(err);
+          console.log(err);
         }
         
         ssh.stderr.on('error', onError);

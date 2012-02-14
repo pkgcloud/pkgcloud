@@ -15,22 +15,6 @@ var testData    = {},
     testContext = {},
     clients     = {};
 
-function findImage(name) {
-  for (var i = 0; i < testContext.images.length; i++) {
-    if (testContext.images[i].name === name) {
-      return testContext.images[i];
-    }
-  }
-}
-
-function findFlavor(name) {
-  for (var i = 0; i < testContext.flavors.length; i++) {
-    if (testContext.flavors[i].name === name) {
-      return testContext.flavors[i];
-    }
-  }
-}
-
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || rackspace,
@@ -79,28 +63,7 @@ function batchTwo (providerClient, providerName) {
   test["The pkgcloud " + name + " compute client"] =
     {
       "the create() method": {
-        "not specifying any opts": {
-          topic: function () {
-            client.createServer({}, this.callback);
-          },
-          "should return a valid server": function (err, server) {
-            client.destroyServer(server, function(){});
-            assert.isNull(err);
-            assert.assertServerDetails(server);
-          }
-        },
-        "without image and flavor ids": {
-          topic: function () {
-            client.createServer({name: 'create-test-ids'},this.callback);
-          },
-          "should return a valid named server": function (err, server) {
-            client.destroyServer(server, function(){});
-            assert.isNull(err);
-            assert.equal(server.name, 'create-test-ids');
-            assert.assertServerDetails(server);
-          }
-        },
-        "with image and flavor ids a second time": {
+        "with image and flavor ids": {
           topic: function () {
             client.createServer({
               name: 'create-test-ids2',
@@ -109,29 +72,10 @@ function batchTwo (providerClient, providerName) {
             }, this.callback);
           },
           "should return a valid server": function (err, server) {
-            client.destroyServer(server, function(){});
+            client.destroyServer(server);
             assert.isNull(err);
             assert.equal(server.name, 'create-test-ids2');
-            //assert.equal(server.imageId, testContext.images[0].id);
-            assert.assertServerDetails(server);
-          }
-        },
-        "with image and flavor instances": {
-          topic: function () {
-            var image = findImage(testContext.images[0].id),
-                flavor = findFlavor(testContext.flavors[0].id);
-
-            client.createServer({
-              name: 'create-test-objects',
-              image: image,
-              flavor: flavor
-            }, this.callback);
-          },
-          "should return a valid server": function (err, server) {
-            client.destroyServer(server, function(){});
-            assert.isNull(err);
-            //assert.equal(server.imageId, testContext.images[0].id);
-            assert.equal(server.name, 'create-test-objects');
+            assert.equal(server.imageId, testContext.images[0].id);
             assert.assertServerDetails(server);
           }
         }
@@ -168,10 +112,58 @@ function batchThree (providerClient, providerName) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function(provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
+    var client = clients[provider],
+        nock   = require('nock');
+    testData    = {};
+    testContext = {};
+    if(process.env.NOCK) {
+      if(provider === 'joyent') {
+        nock('https://' + client.config.serversUrl)
+          .get('/' + client.config.account + '/machines')
+            .reply(200, "[]", {})
+          .get('/' + client.config.account + '/datasets')
+            .reply(200, helpers.loadFixture('joyent/images.json'), {})
+          .get('/' + client.config.account + '/packages')
+            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+        .post('/' + client.config.account + '/machines',
+          helpers.loadFixture('joyent/createServer.json'))
+        .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
+        ["delete"]('/' + client.config.account +  
+         '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(204, "", {})
+        .get('/nodejitsu1/machines')
+          .reply(200, helpers.loadFixture('joyent/servers.json'), {});
+      }
+      else if(provider === 'rackspace') {
+        nock('https://' + client.serversUrl)
+          //.log(console.log)
+          .get('/v1.0/537645/flavors/detail.json')
+            .reply(200, helpers.loadFixture('rackspace/flavors.json'), {})
+          .get('/v1.0/537645/flavors/detail.json')
+            .reply(200, helpers.loadFixture('rackspace/flavors.json'), {})
+          .get('/v1.0/537645/images/detail.json')
+            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
+          .get('/v1.0/537645/images/detail.json')
+            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
+          .post('/v1.0/537645/servers',  
+              helpers.loadFixture('rackspace/createServer.json'))
+            .reply(202,  helpers.loadFixture('rackspace/createdServer.json'), 
+              {})
+          .post('/v1.0/537645/servers',  
+              helpers.loadFixture('rackspace/createServer.json'))
+            .reply(202,  helpers.loadFixture('rackspace/createdServer.json'), 
+              {})
+          .get('/v1.0/537645/servers/detail.json')
+            .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
+          ["delete"]('/v1.0/537645/servers/20592449')
+            .reply(200, '{"ok": 20592449}', {})
+          ;
+      }
+    }
     vows
       .describe('pkgcloud/common/compute/server [' + provider + ']')
-      .addBatch(batchOne(clients[provider], provider))
-      .addBatch(batchTwo(clients[provider], provider))
-      .addBatch(batchThree(clients[provider], provider))
+      .addBatch(batchOne(client, provider))
+      .addBatch(batchTwo(client, provider))
+      .addBatch(batchThree(client, provider))
        ["export"](module);
   });

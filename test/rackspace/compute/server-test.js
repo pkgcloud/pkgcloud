@@ -123,17 +123,6 @@ vows.describe('pkgcloud/rackspace/compute/servers').addBatch({
           assert.assertServer(server);
         });
       }
-    },
-    "the getServerDetails() method": {
-      topic: function () {
-        client.getServerDetails(this.callback);
-      },
-      "should return the list of servers": function (err, servers) {
-        assert.isNull(err);
-        servers.forEach(function (server) {
-          assert.assertServerDetails(server);
-        });
-      }
     }
   }
 }).addBatch({

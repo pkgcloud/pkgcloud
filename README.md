@@ -9,6 +9,7 @@ Communicate across multiple cloud providers in an platform agnostic manner.
   * [Compute](#compute)
     * [Creating Compute Components](#creating-computer-components)
     * [Image](#image)
+    * [Flavor](#flavor)
   * [Storage](#storage)
   * [DNS](#dns)
   * [CDN](#cdn)
@@ -157,6 +158,18 @@ var joyent = pkgcloud.compute.createClient(
   `options`: `Object` `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`<br/>
   `err`: `Error`<br/>
   `image`: `Image`
+
+<a name="flavor"></a>
+#### Flavor
+
+* `client.getFlavors(function (err, flavors) { })`<br/> 
+  `err`: `Error` <br/>
+  `flavors`: `[Flavor]`
+* `client.getFlavor(flavorId, function (err, flavor) { })`<br/> 
+  `flavorId`: `Image|String`<br/>
+  `err`: `Error`<br/>
+  `flavor`: `Flavor`
+
 
 <a name="storage"></a>
 ### Storage
