@@ -116,7 +116,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if(provider === 'rackspace') {
         nock('https://' + client.serversUrl)
-          .get('/v1.0/537645/servers.json')
+          .get('/v1.0/537645/servers/detail.json')
             .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
           .get('/v1.0/537645/images/detail.json')
             .reply(200, helpers.loadFixture('rackspace/images.json'), {})
