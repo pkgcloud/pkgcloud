@@ -110,9 +110,10 @@ function batchThree (providerClient, providerName) {
 }
 
 function batchReboot(providerClient, providerName) {
-  var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+  var name    = providerName   || 'rackspace',
+      client  = providerClient || rackspace,
+      timeout = process.env.NOCK ? 1 : 10000,
+      test    = {};
 
   test["The pkgcloud " + name + " compute client"] =
     {
@@ -121,45 +122,39 @@ function batchReboot(providerClient, providerName) {
           var self = this;
           client.createServer({
               name  : "test-reboot", 
-              image : "880c3250-51ff-11e1-b7aa-837f081ac1a9",
-              flavor: "Small 1GB"
+              image : testContext.images[0].id,
+              flavor: testContext.flavors[0].id
             },
             function(err,server,response) {
               if(err) { return self.callback(err); }
-              var i = 1,
-                  j = 1;
 
               function waitForReboot(server) {
                 return setTimeout(function (){
                   server.refresh(function(err,srv){
                     if(err) { return self.callback(err); }
-                    console.log(j++, srv.name, srv.status);
                     if(srv.status === "RUNNING") {
-                      self.callback(null,srv);
-                      return console.log('done');
+                      return self.callback(null,srv);
                     }
                     waitForReboot(srv);
                   });
-                }, 10000);
+                }, timeout);
               }
 
             function keepTrying() { 
               return setTimeout(function () {
                 if(server.status==='RUNNING') {
-                  console.log('now active. lets reboot the bad boy');
                   server.reboot(function(err,ok) {
                     if(err) { return self.callback(err); }
                     waitForReboot(server);
                   });
                 } else {
-                  console.log(i++, server.status);
                   server.refresh(function(err,srv){
                     if(err) { return self.callback(err); }
                     server=srv;
                     keepTrying();
                   });
                 }
-              }, 10000);
+              }, timeout);
             }
             keepTrying();
           });
@@ -183,22 +178,35 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     testContext = {};
     if(process.env.NOCK) {
       if(provider === 'joyent') {
-      //  nock.recorder.rec();
-      //  nock('https://' + client.config.serversUrl)
-      //    .get('/' + client.config.account + '/machines')
-      //      .reply(200, "[]", {})
-      //    .get('/' + client.config.account + '/datasets')
-      //      .reply(200, helpers.loadFixture('joyent/images.json'), {})
-      //    .get('/' + client.config.account + '/packages')
-      //      .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
-      //  .post('/' + client.config.account + '/machines',
-      //    helpers.loadFixture('joyent/createServer.json'))
-      //  .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
-      //  ["delete"]('/' + client.config.account +  
-      //   '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-      //    .reply(204, "", {})
-      //  .get('/nodejitsu1/machines')
-      //    .reply(200, helpers.loadFixture('joyent/servers.json'), {});
+        nock('https://' + client.config.serversUrl)
+          .get('/' + client.config.account + '/machines')
+            .reply(200, "[]", {})
+          .get('/' + client.config.account + '/datasets')
+            .reply(200, helpers.loadFixture('joyent/images.json'), {})
+          .get('/' + client.config.account + '/packages')
+            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+        .post('/' + client.config.account + '/machines',
+          helpers.loadFixture('joyent/createServer.json'))
+        .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
+        ["delete"]('/' + client.config.account +  
+         '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(204, "", {})
+        .get('/nodejitsu1/machines')
+          .reply(200, helpers.loadFixture('joyent/servers.json'), {})
+        .post('/nodejitsu1/machines', 
+            helpers.loadFixture('joyent/rebootServerRequest1.json'))
+          .reply(201, 
+            helpers.loadFixture('joyent/rebootServerResponse1.json'), {})
+        .get('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          .reply(200, 
+            helpers.loadFixture('joyent/fe4d8e28.json'), {})
+        .post('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5'+
+          '?action=reboot')
+          .reply(202, "", {})
+        .get('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          .reply(200, 
+            helpers.loadFixture('joyent/fe4d8e28.json'), {})
+        ;
       }
       else if(provider === 'rackspace') {
         nock('https://' + client.serversUrl)
@@ -240,9 +248,9 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     }
     vows
       .describe('pkgcloud/common/compute/server [' + provider + ']')
-      //.addBatch(batchOne(client, provider))
-      //.addBatch(batchTwo(client, provider))
-      //.addBatch(batchThree(client, provider))
+      .addBatch(batchOne(client, provider))
+      .addBatch(batchTwo(client, provider))
+      .addBatch(batchThree(client, provider))
       .addBatch(batchReboot(client, provider))
        ["export"](module);
   });
