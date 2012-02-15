@@ -54,6 +54,47 @@ pkgcloud  = require('./lib/pkgcloud')
 rackspace = new pkgcloud.compute.createClient({"provider": "rackspace", "auth": { "username": "nodejitsutest", "apiKey": "0286cd520446fe6152b38c519c1a3197"} })
 
 // reboot an active server
+rackspace.createServer({"name": "test-reboot", "flavor": 1, "image": "112"},
+  function(err,server,response) {
+    if(err) { throw err; }
+    var i = 1,
+        j = 1;
+
+      function waitForReboot(server) {
+        return setTimeout(function (){
+          server.refresh(function(err,srv){
+            if(err) { return console.error(err); }
+            console.log(j++, srv.name, srv.status);
+            if(srv.status === "ACTIVE") {
+              console.log('done');
+              return;
+            }
+            waitForReboot(srv);
+          });
+        }, 10000);
+      }
+
+  function keepTrying() { 
+    return setTimeout(function () {
+      if(server.status==='ACTIVE') {
+        console.log('done');
+        server.reboot(function(err,ok) {
+          if(err) { throw err; }
+          waitForReboot(server);
+        });
+      } else {
+        console.log(i++, server.status);
+        server.refresh(function(err,srv){
+          if(err) throw err;
+          server=srv;
+          keepTrying();
+        });
+      }
+    }, 10000);
+  }
+  keepTrying();
+});
+--
 j = 1;
 function waitForReboot(server) {
   return setTimeout(function (){
