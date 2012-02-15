@@ -109,7 +109,7 @@ function batchThree (providerClient, providerName) {
   return test;
 }
 
-function batchReboot(providerClient, providerName) {
+function batchReboot(providerClient, providerName, nock) {
   var name    = providerName   || 'rackspace',
       client  = providerClient || rackspace,
       timeout = process.env.NOCK ? 1 : 10000,
@@ -251,6 +251,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchOne(client, provider))
       .addBatch(batchTwo(client, provider))
       .addBatch(batchThree(client, provider))
-      .addBatch(batchReboot(client, provider))
+      .addBatch(batchReboot(client, provider, nock))
        ["export"](module);
   });

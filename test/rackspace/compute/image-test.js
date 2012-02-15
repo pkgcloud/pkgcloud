@@ -18,7 +18,7 @@ var fs = require('fs'),
 
 if(process.env.NOCK) {
  nock('https://' + client.serversUrl)
- .get('/v1.0/537645/servers.json')
+ .get('/v1.0/537645/servers/detail.json')
    .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
  .post('/v1.0/537645/images', JSON.stringify(
    {"image": {"name": "test-img-id", "serverId": 20578901 } }))
