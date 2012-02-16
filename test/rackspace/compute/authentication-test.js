@@ -24,15 +24,8 @@ if(process.env.NOCK) {
       "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
   nock('https://' + client.authUrl)
     .get('/v1.0')
-    .reply(204, "", {
-      'x-storage-url'         : 'https://storage101.ord1.clouddrive.com/v1/' +   
-        'MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41',
-      'x-auth-token'          : 'eec97af1-c574-4f9f-8c1f-642fa7979023',
-      'x-storage-token'       : 'eec97af1-c574-4f9f-8c1f-642fa7979023',
-      'x-server-management-url': 
-        'https://servers.api.rackspacecloud.com/v1.0/537645',
-      'x-cdn-management-url'  : 'https://cdn2.clouddrive.com/v1/'+
-        'MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41' })
+    .reply(204, "", 
+      JSON.parse(helpers.loadFixture('rackspace/auth.json')))
    .get('/v1.0')
    .reply(401, "Bad username or password", {});
 }

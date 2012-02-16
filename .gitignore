@@ -1,5 +1,5 @@
 .DS_Store
 node_modules
-npm-debug.log
+*.log
 test/fixtures/testkey*
 test/fixtures/test-download*
