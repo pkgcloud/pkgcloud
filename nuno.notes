@@ -123,7 +123,7 @@ rackspace.getServers(function(_,servers) {
 });
 
 // list servers
-rackspace.getServers(function(_,servers) { console.log(servers.length); for (var i in servers){ console.log(servers[i].name, servers[i].id, servers[i].status); } })
+rackspace.getServers(function(_,servers) { for (var i in servers){ console.log(servers[i].name, servers[i].id, servers[i].status); } })
 
 // list images
 rackspace.getImages(function(_,servers) { console.log(servers.length); for (var i in servers){ console.log(servers[i].name, servers[i].id); } })

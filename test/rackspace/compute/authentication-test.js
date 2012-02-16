@@ -6,12 +6,36 @@
  */
 
 var vows = require('vows'),
+    nock = require('nock'),
     assert = require('../../helpers/assert'),
     macros = require('../macros'),
     helpers = require('../../helpers');
 
 var testData = {},
     client = helpers.createClient('rackspace', 'compute');
+
+if(process.env.NOCK) {
+ nock('https://' + client.serversUrl)
+  .get('/')
+    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", 
+      {})
+  .get('/v1.0/537645/limits')
+    .reply(200,
+      "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+  nock('https://' + client.authUrl)
+    .get('/v1.0')
+    .reply(204, "", {
+      'x-storage-url'         : 'https://storage101.ord1.clouddrive.com/v1/' +   
+        'MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41',
+      'x-auth-token'          : 'eec97af1-c574-4f9f-8c1f-642fa7979023',
+      'x-storage-token'       : 'eec97af1-c574-4f9f-8c1f-642fa7979023',
+      'x-server-management-url': 
+        'https://servers.api.rackspacecloud.com/v1.0/537645',
+      'x-cdn-management-url'  : 'https://cdn2.clouddrive.com/v1/'+
+        'MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41' })
+   .get('/v1.0')
+   .reply(401, "Bad username or password", {});
+}
 
 vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
   "The pkgcloud Rackspace compute client": {
