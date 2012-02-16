@@ -31,3 +31,7 @@ assert.assertContainer = function assertContainer(instance) {
 assert.assertFile = function assertFile(instance) {
   assert.equal(instance.constructor.name, 'File');
 };
+
+assert.assertNock = function assertNock(nock) {
+  return assert.ok(nock && nock.isDone ? nock.isDone() : true);
+};

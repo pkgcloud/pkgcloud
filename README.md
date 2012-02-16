@@ -1,23 +1,25 @@
 # pkgcloud 
 
-A loose port of libcloud (python) or fog (ruby) for communicating across multiple cloud providers in an agnostic manner.
+Communicate across multiple cloud providers in an platform agnostic manner.
 
 * [Motivation](#motivation)
-* [Reviewing Libraries](#reviewing-libraries)
 * [System Breakdown](#system-breakdown)
 * [Unified Vocabulary](#unified-vocabulary)
 * [Components](#components)
   * [Compute](#compute)
+      * [Creating Compute Components](#creating-computer-components)
+      * [Image](#image)
+      * [Flavor](#flavor)
   * [Storage](#storage)
   * [DNS](#dns)
   * [CDN](#cdn)
   * [Load Balancers](#load-balancers)
 * [Next Steps](#next-steps)
 
-<a name="motiviation"></a>
+<a name="motivation"></a>
 ## Motivation
 
-Currently Nodejitsu maintains several API libraries for communicating with Cloud environments:
+Currently `Nodejitsu` maintains several API libraries for communicating with Cloud environments:
 
 * [node-cloudfiles](https://github.com/nodejitsu/node-cloudfiles)
 * [node-cloudservers](https://github.com/nodejitsu/node-cloudservers)
@@ -27,14 +29,9 @@ There are also some other decent libraries out there:
 
 * [knox](https://github.com/learnboost/knox)
 
-The main problem is that these libraries **are not consistent in anyway.** This is a problem we are going to have to address head on in [Conservatory](https://github.com/nodejitsu/conservatory) and this is the library to do it in.
+The main problem is that these libraries **are not consistent in anyway.**
 
-With consistency in mind the one design decision I am sure of is using [request](https://github.com/mikeal/request) and [filed](https://github.com/mikeal/filed).
-
-<a name="reviewing-libraries"></a>
-## Reviewing Libraries
-
-Overall, the consistency and semantics in the API design of [fog][0] is preferable (imho) as opposed to [libcloud][1]. [libcloud][1] is more complete in terms of the number of APIs it supports, but the syntax is a little kludgy. 
+`pkgcloud` is a consistent layer across multiple cloud providers.
 
 <a name="Unified Vocabulary"></a>
 ## Unified Vocabulary
@@ -43,18 +40,32 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
 
 **Compute**
 
-```
-+-----------------------------------------------+
-| pkgcloud | OpenStack | Joyent  | Amazon       |
-+-----------------------------------------------+
-| Server   | Server    | Machine | Instance     |
-+-----------------------------------------------+
-| Image    | Image     | Dataset | AMI          | 
-+-----------------------------------------------+
-| Flavor   | Flavor    | Package | InstanceType |
-+-----------------------------------------------+
-```
-
+<table>
+  <tr>
+    <th>pkgcloud</th>
+    <th>OpenStack</th>
+    <th>Joyent</th>
+    <th>Amazon</th>
+  </tr>
+  <tr>
+    <td>Server</td>
+    <td>Server</td>
+    <td>Machine</td>
+    <td>Instance</td>
+  </tr>
+  <tr>
+    <td>Image</td>
+    <td>Image</td>
+    <td>Dataset</td>
+    <td>AMI</td>
+  </tr>
+  <tr>
+    <td>Flavor</td>
+    <td>Flavor</td>
+    <td>Package</td>
+    <td>InstanceType</td>
+  </tr>
+</table>
 
 <a name="system-breakdown"></a>
 ## System Breakdown
@@ -81,42 +92,84 @@ In order of priority the components and providers we need to implement are:
 <a name="compute"></a>
 ### Compute
 
+<a name="creating-computer-components"></a>
 #### Creating Compute Clients
 The options to be passed to the `pkgcloud.compute.Client` object should be:
 
 **Rackspace**
 
 ``` js
+var rackspace = pkgcloud.compute.createClient(
   {
-    provider: 'rackspace',
-    username: 'nodejitsu',
-    apiKey: 'foobar'
+    provider : 'rackspace',
+    username : 'nodejitsu',
+    apiKey   : 'foobar'
   }
+);
 ```
 
-**AWS**
+**Amazon**
 
 ``` js
+var amazon = pkgcloud.compute.createClient(
   {
-    provider: 'amazon', // 'aws', 'ec2'
-    accessKey: 'asdfkjas;dkj43498aj3n',
-    accessKeyId: '98kja34lkj'
+    provider    : 'amazon',
+    accessKey   : 'asdfkjas;dkj43498aj3n',
+    accessKeyId : '98kja34lkj'
   }
+);
 ```
 
-* **pkgcloud.compute.create(options, callback)**
-* **new pkgcloud.compute.Client(options, callback)**
+**Joyent**
 
-#### Using Compute Clients
-Most of this can be modeled off of the [node-cloudservers](https://github.com/nodejitsu/node-cloudservers) API although some of the Rackspace specific nomenclature (e.g. flavors) will have be updated. 
+``` js
+var path = require('path'),
+    fs   = require('fs');
 
-* client.createServer(options, callback)
-* client.getServers(callback)
-* client.listServers(callback)
-* client.destroyServer(callback)
-* client.createImage(options, callback)
-* client.listImages(callback)
-* client.destroyImage(options, callback)
+// joyent needs a username/password or key/keyId combo.
+// key/keyId should be registered in Joyent servers.
+// check `test/helpers/index.js` for details on key/keyId works.
+var joyent = pkgcloud.compute.createClient(
+  {
+    provider : 'joyent',
+    account  : 'nodejitsu'
+    keyId    : '/nodejitsu1/keys/dscape',
+    key      : 
+      fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
+  }
+);
+```
+
+<a name="image"></a>
+#### Image
+
+* `client.getImages(function (err, images) { })`<br/> 
+  `err`: `Error` <br/>
+  `images`: `[Image]`
+* `client.getImage(imageId, function (err, image) { })`<br/> 
+  `imageId`: `Image|String`<br/>
+  `err`: `Error`<br/>
+  `image`: `Image`
+* `client.destroyImage(image, function(err, ok){ })`<br/>
+  `image`: `Image|String`<br/>
+  `err`: `Error`<br/>
+  `ok`: `Object` `{"ok": deletedId}`
+* `client.createImage(options, function (err, image) { })`<br/>
+  `options`: `Object` `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`<br/>
+  `err`: `Error`<br/>
+  `image`: `Image`
+
+<a name="flavor"></a>
+#### Flavor
+
+* `client.getFlavors(function (err, flavors) { })`<br/> 
+  `err`: `Error` <br/>
+  `flavors`: `[Flavor]`
+* `client.getFlavor(flavorId, function (err, flavor) { })`<br/> 
+  `flavorId`: `Image|String`<br/>
+  `err`: `Error`<br/>
+  `flavor`: `Flavor`
+
 
 <a name="storage"></a>
 ### Storage
@@ -173,3 +226,4 @@ Most of this can be modeled off of the [node.js core 'fs' module](http://nodejs.
 [1]: http://libcloud.apache.org/index.html
 [2]: http://vowsjs.org
 [3]: http://npmjs.org
+[smartdc]: https://github.com/joyent/node-smartdc

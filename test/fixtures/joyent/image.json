@@ -1,0 +1,12 @@
+{
+  "id": "880c3250-51ff-11e1-b7aa-837f081ac1a9",
+  "urn": "sdc:sdc:nodejitsu:1.0.0",
+  "name": "nodejitsu",
+  "os": "linux",
+  "type": "virtualmachine",
+  "description": "nodejitsu 1.0.0 VM Image",
+  "default": true,
+  "requirements": {},
+  "version": "1.0.0",
+  "created": "2012-02-08T18:41:41+00:00"
+}

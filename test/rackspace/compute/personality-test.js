@@ -11,6 +11,7 @@ var fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn,
     vows = require('vows'),
+    nock = require('nock'),
     assert = require('../../helpers/assert'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
@@ -19,7 +20,11 @@ var keyBuffer = fs.readFileSync(__dirname + '/../../fixtures/testkey.pub'),
     client = helpers.createClient('rackspace', 'compute'),
     testData = {}, 
     testServer;
-    
+
+if(process.env.NOCK) {
+  return console.log('Sorry this test cant be mocked since it uses ssh');
+}
+
 vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
   "The pkgcloud Rackspace compute client": {
     "the create() method": {
@@ -48,20 +53,20 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
       var that = this,
           data = '';
           
-      testServer.setWait({ status: 'ACTIVE' }, 5000, function () {
+      testServer.setWait({ status: 'RUNNING' }, 5000, function () {
         var ssh  = spawn('ssh', [
           '-i',
           __dirname + '/../../fixtures/testkey',
           '-q',
           '-o',
           'StrictHostKeyChecking no',
-          'root@' + testServer.addresses.public[0],
+          'root@' + testServer.addresses["public"][0],
           'cat /root/.ssh/authorized_keys'
         ]);
         
         function onError(err) {
           console.log(err);
-        };
+        }
         
         ssh.stderr.on('error', onError);
         ssh.stderr.on('data', function (chunk) {});
@@ -92,4 +97,4 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
       assert.equal(res.statusCode, 202); 
     }
   } 
-}).export(module);
+})["export"](module);

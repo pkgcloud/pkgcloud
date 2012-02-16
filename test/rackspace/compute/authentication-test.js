@@ -6,12 +6,29 @@
  */
 
 var vows = require('vows'),
+    nock = require('nock'),
     assert = require('../../helpers/assert'),
     macros = require('../macros'),
     helpers = require('../../helpers');
 
 var testData = {},
     client = helpers.createClient('rackspace', 'compute');
+
+if(process.env.NOCK) {
+ nock('https://' + client.serversUrl)
+  .get('/')
+    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", 
+      {})
+  .get('/v1.0/537645/limits')
+    .reply(200,
+      "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+  nock('https://' + client.authUrl)
+    .get('/v1.0')
+    .reply(204, "", 
+      JSON.parse(helpers.loadFixture('rackspace/auth.json')))
+   .get('/v1.0')
+   .reply(401, "Bad username or password", {});
+}
 
 vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
   "The pkgcloud Rackspace compute client": {
@@ -21,8 +38,8 @@ vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
         client.getVersion(this.callback);
       },
       "should return the proper version": function (versions) {
-        assert.isArray(versions);
-        assert.isFalse(versions.length == 0);
+        assert.ok(versions);
+        assert.isString(versions);
       }
     },
     "the auth() method": {
@@ -44,4 +61,4 @@ vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
       }
     }
   }
-}).export(module);
+})["export"](module);
