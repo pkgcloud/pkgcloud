@@ -139,6 +139,8 @@ function batchReboot(providerClient, providerName, nock) {
               if(err) { return self.callback(err); }
 
               function waitForReboot(server) {
+                // should have used setWait
+                // dont do this in your code
                 return setTimeout(function (){
                   server.refresh(function(err,srv){
                     if(err) { return self.callback(err); }
@@ -150,7 +152,9 @@ function batchReboot(providerClient, providerName, nock) {
                 }, timeout);
               }
 
-            function keepTrying() { 
+            function keepTrying() {
+              // should have used setWait
+              // dont do this in your code
               return setTimeout(function () {
                 if(server.status==='RUNNING') {
                   server.reboot(function(err,ok) {
