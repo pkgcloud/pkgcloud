@@ -41,12 +41,29 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
   "The pkgcloud Rackspace database client": {
     "the create() method": {
      topic: function () {
-       client.createInstance(this.callback);
+      var self = this;
+       client.getFlavor(1, function (err, flavor) {
+        client.createInstance({
+          name:'test-instance',
+          flavor: flavor
+        }, self.callback);
+       });
      },
      "should return a valid instance": function(err, instance) {
       assert.isNull(err);
-      console.log(instance);
-      assert.isTrue(false);
+      assert.ok(instance.id);
+      assert.isString(instance.name);
+      assert.ok(instance.created);
+      assert.ok(instance.updated);
+      assert.isNumber(instance.size);
+      assert.isArray(instance.links);
+      assert.isObject(instance.flavor);
+      assert.isArray(instance.flavor.links);
+     },
+     "should return the same name and flavor used": function (err, instance) {
+      assert.isNull(err);
+      assert.equal(instance.name, 'test-instance');
+      assert.equal(instance.flavor.id, 1);
      }
     }
   }
