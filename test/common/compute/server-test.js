@@ -62,7 +62,7 @@ function batchTwo (providerClient, providerName) {
 
   test["The pkgcloud " + name + " compute client"] =
     {
-      "the create() method": {
+      "the createServer() method": {
         "with image and flavor ids": {
           topic: function () {
             client.createServer({

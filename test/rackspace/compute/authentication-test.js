@@ -38,8 +38,8 @@ vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
         client.getVersion(this.callback);
       },
       "should return the proper version": function (versions) {
-        assert.isArray(versions);
-        assert.isFalse(versions.length === 0);
+        assert.ok(versions);
+        assert.isString(versions);
       }
     },
     "the auth() method": {
