@@ -103,15 +103,15 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock   = require('nock');
     if(process.env.NOCK) {
       if(provider === 'joyent') {
-        nock('https://' + client.config.serversUrl)
-          .get('/' + client.config.account + '/machines')
+        nock('https://' + client.serversUrl)
+          .get('/' + client.account + '/machines')
             .reply(200, "[]", {})
-          .get('/' + client.config.account + '/datasets')
+          .get('/' + client.account + '/datasets')
             .reply(200, helpers.loadFixture('joyent/images.json'), {})
-          .get('/' + client.config.account +
+          .get('/' + client.account +
             '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
             .reply(200, helpers.loadFixture('joyent/image.json'), {})
-          .get('/' + client.config.account +
+          .get('/' + client.account +
             '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
             .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if(provider === 'rackspace') {
