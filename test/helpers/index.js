@@ -51,8 +51,13 @@ helpers.loadConfig = function loadConfig(provider) {
   return JSON.parse(content);
 };
 
-helpers.loadFixture = function loadFixture(path) {
-  return fs.readFileSync(__dirname + '/../fixtures/' + path, 'ascii');
+helpers.loadFixture = function loadFixture(path, json) {
+  var contents = fs.readFileSync(__dirname + '/../fixtures/' + path, 'ascii');
+  if(json==='json') {
+    return JSON.parse(contents);
+  } else {
+    return contents; 
+  }
 };
 
 helpers.personalityPost = function persPost(pubkey) {
