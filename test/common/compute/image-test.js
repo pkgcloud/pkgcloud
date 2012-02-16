@@ -115,6 +115,17 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
             .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if(provider === 'rackspace') {
+        nock('https://' + client.authUrl)
+          .get('/v1.0')
+          .reply(204, "", {
+            'x-storage-url'         : 'https://storage101.ord1.clouddrive.com/v1/' +   
+              'MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41',
+            'x-auth-token'          : 'eec97af1-c574-4f9f-8c1f-642fa7979023',
+            'x-storage-token'       : 'eec97af1-c574-4f9f-8c1f-642fa7979023',
+            'x-server-management-url': 
+              'https://servers.api.rackspacecloud.com/v1.0/537645',
+            'x-cdn-management-url'  : 'https://cdn2.clouddrive.com/v1/'+
+              'MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41' });
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/servers/detail.json')
             .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
