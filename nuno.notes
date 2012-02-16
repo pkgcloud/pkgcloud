@@ -1,3 +1,9 @@
+-- todo
+make serverUrl consistent with rackspace in joyent.
+code setWait in joyent
+change reboot test to use setWait
+add sync time limit to setWait
+
 --
 // creates a server
 require('http').ClientRequest = function (opts,cb) { console.log(this,opts,cb); console.log(opts.body.toString('ascii')); throw new Error("Bringing you down taking names"); };

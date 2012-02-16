@@ -72,7 +72,7 @@ function batchTwo (providerClient, providerName) {
             }, this.callback);
           },
           "should return a valid server": function (err, server) {
-            client.destroyServer(server);
+            testContext.servers = [server];
             assert.isNull(err);
             assert.equal(server.name, 'create-test-ids2');
             assert.equal(server.imageId, testContext.images[0].id);
@@ -102,6 +102,16 @@ function batchThree (providerClient, providerName) {
           servers.forEach(function (server) {
             assert.assertServer(server);
           });
+        }
+      },
+      "the getServer() method": {
+        topic: function () {
+            client.getServer(testContext.servers[0], this.callback);
+        },
+        "should return a valid server": function (err, server) {
+          client.destroyServer(server);
+          assert.isNull(err);
+          assert.assertServerDetails(server);
         }
       }
     };
@@ -206,6 +216,12 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         .get('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(200, 
             helpers.loadFixture('joyent/fe4d8e28.json'), {})
+        .get('/nodejitsu1/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(200, 
+            helpers.loadFixture('joyent/fe4d8e28.json'), {})
+        ["delete"]('/' + client.config.account +  
+         '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          .reply(204, "", {})
         ;
       }
       else if(provider === 'rackspace') {
@@ -234,6 +250,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
           ["delete"]('/v1.0/537645/servers/20592449')
             .reply(200, '{"ok": 20592449}', {})
+          .get('/v1.0/537645/servers/20592449')
+              .reply(200, helpers.loadFixture('rackspace/20592449.json'), {})
           .post('/v1.0/537645/servers', 
               helpers.loadFixture('rackspace/createReboot.json'))
             .reply(202,
