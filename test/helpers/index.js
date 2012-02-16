@@ -54,3 +54,21 @@ helpers.loadConfig = function loadConfig(provider) {
 helpers.loadFixture = function loadFixture(path) {
   return fs.readFileSync(__dirname + '/../fixtures/' + path, 'ascii');
 };
+
+helpers.personalityPost = function persPost(pubkey) {
+  return JSON.stringify(
+    { "server": 
+      { "name": "create-personality-test",
+        "image": 49,
+        "flavor": 1,
+        "personality":
+          [
+            { "path": "/root/.ssh/authorized_keys",
+              "contents": pubkey.toString('base64')
+            }
+          ],
+        "flavorId":1,
+        "imageId":49
+    }
+  });
+};
