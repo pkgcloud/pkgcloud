@@ -42,7 +42,7 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
       }
     }
   }
-}).addBatch({
+})/*.addBatch({
   "connect via ssh" : {
     topic: function () {
       var that = this,
@@ -92,4 +92,4 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
       assert.equal(res.statusCode, 202); 
     }
   } 
-})["export"](module);
+})*/["export"](module);
