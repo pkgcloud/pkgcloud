@@ -68,12 +68,12 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock   = require('nock');
     if(process.env.NOCK) {
       if(provider === 'joyent') {
-        nock('https://' + client.config.serversUrl)
-          .get('/' + client.config.account + '/packages')
+        nock('https://' + client.serversUrl)
+          .get('/' + client.account + '/packages')
             .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
-          .get('/' + client.config.account + '/packages/Small%201GB')
+          .get('/' + client.account + '/packages/Small%201GB')
             .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
-      } else if(provider === 'rackspace') {
+      } else if(provider === 'rackspace') {        
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "", 

@@ -48,8 +48,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock   = require('nock');
     if(process.env.NOCK) {
       if(provider === 'joyent') {
-        nock('https://' + client.config.serversUrl)
-          .get('/nodejitsu1/datacenters')
+        nock('https://' + client.serversUrl)
+          .get('/' + client.account + '/datacenters')
           .reply(200, "", { 'x-api-version': '6.5.0' });
       } else if(provider === 'rackspace') {
         nock('https://' + client.serversUrl)

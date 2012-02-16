@@ -188,38 +188,41 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     testContext = {};
     if(process.env.NOCK) {
       if(provider === 'joyent') {
-        nock('https://' + client.config.serversUrl)
-          .get('/' + client.config.account + '/machines')
+        nock('https://' + client.serversUrl)
+          .get('/' + client.account + '/machines')
             .reply(200, "[]", {})
-          .get('/' + client.config.account + '/datasets')
+          .get('/' + client.account + '/datasets')
             .reply(200, helpers.loadFixture('joyent/images.json'), {})
-          .get('/' + client.config.account + '/packages')
+          .get('/' + client.account + '/packages')
             .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
-        .post('/' + client.config.account + '/machines',
+        .post('/' + client.account + '/machines',
           helpers.loadFixture('joyent/createServer.json'))
         .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
-        ["delete"]('/' + client.config.account +  
+        ["delete"]('/' + client.account +
          '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
           .reply(204, "", {})
-        .get('/nodejitsu1/machines')
+        .get('/' + client.account + '/machines')
           .reply(200, helpers.loadFixture('joyent/servers.json'), {})
-        .post('/nodejitsu1/machines', 
+        .post('/' + client.account + '/machines', 
             helpers.loadFixture('joyent/rebootServerRequest1.json'))
           .reply(201, 
             helpers.loadFixture('joyent/rebootServerResponse1.json'), {})
-        .get('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+        .get('/' + client.account + 
+            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(200, 
             helpers.loadFixture('joyent/fe4d8e28.json'), {})
-        .post('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5'+
-          '?action=reboot')
+        .post('/' + client.account + 
+            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5?action=reboot')
           .reply(202, "", {})
-        .get('/nodejitsu1/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+        .get('/' + client.account +
+            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(200, 
             helpers.loadFixture('joyent/fe4d8e28.json'), {})
-        .get('/nodejitsu1/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+        .get('/' + client.account +
+            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
           .reply(200, 
             helpers.loadFixture('joyent/fe4d8e28.json'), {})
-        ["delete"]('/' + client.config.account +  
+        ["delete"]('/' + client.account +  
          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(204, "", {})
         ;
