@@ -54,7 +54,8 @@ function batchTwo (providerClient, providerName) {
         "on flavors waiting for flavor with name crazyflavah": {
           topic: function () {
             var self = this;
-            client.getFlavors(function(_,flavors) {
+            client.getFlavors(function(err, flavors) {
+              if(err) { return self.callback(err); }
               testContext.flavors = flavors;
               var flavor = flavors[0];
               var now    = Date.now();
@@ -161,6 +162,10 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
               '/machines/534aa63a-104f-4d6d-a3b1-c0d341a20a53')
             .reply(200, helpers.loadFixture('joyent/setWaitResp1.json'), {});
       } else if(provider === 'rackspace') {
+        nock('https://' + client.authUrl)
+          .get('/v1.0')
+          .reply(204, "", 
+            JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/')
             .reply(200,
