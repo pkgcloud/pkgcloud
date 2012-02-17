@@ -57,10 +57,12 @@ function batchTwo (providerClient, providerName) {
             client.getFlavors(function (err, flavors) {
               if (err) { return self.callback(err); }
               testContext.flavors = flavors;
+              
               var flavor = flavors[0];
               var now    = Date.now();
+              
               flavor.until({name: 'crazyFlavah'}, 50*m, 50*m, function () {
-                self.callback(null,Date.now()-now);
+                self.callback(null, Date.now() - now);
               });
             });
           },
@@ -117,10 +119,9 @@ function batchFour (providerClient, providerName) {
               name: 'create-test-setWait',
               image: testContext.images[0].id,
               flavor: testContext.flavors[0].id
-            }, function (err,server) {
+            }, function (err, server) {
               if (err) { return this.callback(err); }
-              server.setWait({status: 'RUNNING'}, 100*m, 
-              function (err,srv) {
+              server.setWait({status: 'RUNNING'}, 100*m, function (err, srv) {
                 self.callback(null, srv);
               });
             });
