@@ -12,32 +12,17 @@ var vows = require('vows'),
 
 var client = helpers.createClient('rackspace', 'database');
 
+var testContext = {};
+
+function assertLinks (links) {
+  assert.isArray(links);
+  links.forEach(function (link) {
+    assert.ok(link.href);
+    assert.ok(link.rel);
+  });
+}
+
 vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the getInstances() method": {
-      "with no details": {
-        topic: function () {
-          client.getInstances(this.callback);
-        },
-        "should return the list of instances": function (err, instances) {
-          assert.isNull(err);
-          console.log(instances);
-          assert.isTrue(false);
-        }
-      },
-      "with details": {
-        topic: function () {
-          client.getInstances(true, this.callback);
-        },
-        "should return list status and details for all databases": function (err, info) {
-          assert.isNull(err);
-          console.log('La info', info);
-          assert.isTrue(false);
-        }
-      }
-    }
-  } 
-}).addBatch({
   "The pkgcloud Rackspace database client": {
     "the create() method": {
      topic: function () {
@@ -51,20 +36,72 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
      },
      "should return a valid instance": function(err, instance) {
       assert.isNull(err);
-      assert.ok(instance.id);
-      assert.isString(instance.name);
-      assert.ok(instance.created);
-      assert.ok(instance.updated);
-      assert.isNumber(instance.size);
-      assert.isArray(instance.links);
-      assert.isObject(instance.flavor);
-      assert.isArray(instance.flavor.links);
+      assert.assertInstance(instance);
      },
      "should return the same name and flavor used": function (err, instance) {
       assert.isNull(err);
+      assert.assertInstance(instance);
       assert.equal(instance.name, 'test-instance');
       assert.equal(instance.flavor.id, 1);
+      testContext.Instance = instance;
      }
     }
   }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the getInstances() method": {
+      "with no details": {
+        topic: function () {
+          client.getInstances(this.callback);
+        },
+        "should return the list of instances": function (err, instances) {
+          assert.isNull(err);
+          assert.isArray(instances);
+          assert.ok(instances.length > 0);
+        },
+        "should valid instance each item in the list": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.assertInstance(instance);
+          });
+        }
+      },
+      "with details": {
+        topic: function () {
+          client.getInstances(true, this.callback);
+        },
+        "should return list status and details for all databases": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.assertInstance(instance);
+          });
+        },
+        "should have the extra info": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.ok(instance.created);
+            assert.ok(instance.hostname);
+            assert.ok(instance.id);
+            assert.ok(instance.updated);
+            assert.isArray(instance.links);
+            assert.isObject(instance.volume);
+            assert.isObject(instance.flavor);
+          });
+        },
+        "should have correct flavor": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.ok(instance.flavor.id);
+            assertLinks(instance.flavor.links);
+          });
+        },
+        "should have correct links": function (err, instances) {
+          instances.forEach(function (instance) {
+            assertLinks(instance.links);
+          });
+        }
+      }
+    }
+  } 
+}).addBatch({
 }).export(module);

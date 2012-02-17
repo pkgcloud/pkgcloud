@@ -41,3 +41,10 @@ assert.assertFile = function assertFile(instance) {
 assert.assertNock = function assertNock(nock) {
   return assert.ok(nock && nock.isDone ? nock.isDone() : true);
 };
+
+assert.assertInstance = function assertInstance (instance) {
+  assert.ok(instance.id);
+  assert.isString(instance.name);
+  assert.isArray(instance.links);
+  assert.isString(instance.status);
+};
