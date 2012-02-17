@@ -16,7 +16,7 @@ var fs = require('fs'),
     testContext = {},
     client = helpers.createClient('rackspace', 'compute');
 
-if(process.env.NOCK) {
+if (process.env.NOCK) {
   nock('https://' + client.authUrl)
     .get('/v1.0')
     .reply(204, "",  JSON.parse(helpers.loadFixture('rackspace/auth.json')));

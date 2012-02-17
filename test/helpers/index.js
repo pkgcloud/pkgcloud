@@ -9,8 +9,8 @@ helpers.createClient = function createClient(provider, service, config) {
   config.provider = provider;
 
   // use your key for testing, so our credentials dont need to go in the repo
-  if(provider === 'joyent') {
-    if(!config.username) {
+  if (provider === 'joyent') {
+    if (!config.username) {
       if (!config.account)
         config.account = process.env.SDC_CLI_ACCOUNT;
 
@@ -30,7 +30,7 @@ helpers.createClient = function createClient(provider, service, config) {
         }
       }
       
-      if(config.account) {
+      if (config.account) {
         config.keyId = '/' + config.account + '/keys/' + config.keyId;
         config.key   = fs.readFileSync(config.identity,'ascii');
       } else {
@@ -53,7 +53,7 @@ helpers.loadConfig = function loadConfig(provider) {
 
 helpers.loadFixture = function loadFixture(path, json) {
   var contents = fs.readFileSync(__dirname + '/../fixtures/' + path, 'ascii');
-  if(json==='json') {
+  if (json==='json') {
     return JSON.parse(contents);
   } else {
     return contents; 
