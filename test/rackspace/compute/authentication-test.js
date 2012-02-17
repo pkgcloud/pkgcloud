@@ -17,17 +17,15 @@ var testData = {},
 if (process.env.NOCK) {
  nock('https://' + client.serversUrl)
   .get('/')
-    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", 
-      {})
+    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
   .get('/v1.0/537645/limits')
-    .reply(200,
-      "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+    .reply(200, "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+    
   nock('https://' + client.authUrl)
     .get('/v1.0')
-    .reply(204, "", 
-      JSON.parse(helpers.loadFixture('rackspace/auth.json')))
-   .get('/v1.0')
-   .reply(401, "Bad username or password", {});
+      .reply(204, "", JSON.parse(helpers.loadFixture('rackspace/auth.json')))
+    .get('/v1.0')
+      .reply(401, "Bad username or password", {});
 }
 
 vows.describe('pkgcloud/rackspace/compute/authentication').addBatch({
