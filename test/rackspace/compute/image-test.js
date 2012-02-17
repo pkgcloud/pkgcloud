@@ -58,7 +58,7 @@ vows.describe('pkgcloud/rackspace/compute/images').addBatch({
             }, this.callback);
         },
         "should create a new image": function (image) {
-          client.destroyImage(image, function (){});
+          client.destroyImage(image, function () {});
           assert.assertImage(image);
           assert.assertNock(nock);
         }
