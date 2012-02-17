@@ -54,12 +54,12 @@ function batchTwo (providerClient, providerName) {
         "on flavors waiting for flavor with name crazyflavah": {
           topic: function () {
             var self = this;
-            client.getFlavors(function(err, flavors) {
+            client.getFlavors(function (err, flavors) {
               if (err) { return self.callback(err); }
               testContext.flavors = flavors;
               var flavor = flavors[0];
               var now    = Date.now();
-              flavor.until({name: 'crazyFlavah'}, 50*m, 50*m, function() {
+              flavor.until({name: 'crazyFlavah'}, 50*m, 50*m, function () {
                 self.callback(null,Date.now()-now);
               });
             });
@@ -117,7 +117,7 @@ function batchFour (providerClient, providerName) {
               name: 'create-test-setWait',
               image: testContext.images[0].id,
               flavor: testContext.flavors[0].id
-            }, function(err,server) {
+            }, function (err,server) {
               if (err) { return this.callback(err); }
               server.setWait({status: 'RUNNING'}, 100*m, 
               function (err,srv){
@@ -139,7 +139,7 @@ function batchFour (providerClient, providerName) {
 }
 
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
-  .forEach(function(provider) {
+  .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
         nock   = require('nock');

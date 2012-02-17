@@ -62,7 +62,7 @@ function batchTwo (providerClient, providerName) {
 
 
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
-  .forEach(function(provider) {
+  .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
         nock   = require('nock');

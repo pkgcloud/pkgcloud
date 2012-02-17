@@ -15,7 +15,7 @@ var path = require('path'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
 
-var client = function() {
+var client = function () {
       return helpers.createClient('rackspace', 'storage')
     },
     fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),

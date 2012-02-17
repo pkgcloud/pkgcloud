@@ -18,7 +18,7 @@ vows.describe('pkgcloud/core/base/client').addBatch({
       "with a wrong request with a cb": {
         topic: function () {
           var cli    = new Client();
-          cli.url = function() { return "badurl"; };
+          cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           cli.request('/', this.callback, this.callback);
         },
@@ -30,11 +30,11 @@ vows.describe('pkgcloud/core/base/client').addBatch({
         topic: function () {
           var self = this,
               cli    = new Client();
-          cli.url = function() { return "badurl"; };
+          cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           var stream = cli.request('/');
-          stream.on('error', function() { return self.callback(null,true); });
-          stream.on('end', function() { return self.callback(null,false); });
+          stream.on('error', function () { return self.callback(null,true); });
+          stream.on('end', function () { return self.callback(null,false); });
         },
         "should return the error on the EE": function (_,ok) {
           assert.ok(ok);
@@ -45,9 +45,9 @@ vows.describe('pkgcloud/core/base/client').addBatch({
       "throwing an error with a cb": {
         topic: function () {
           var cli    = new Client();
-          cli.url = function() { return "badurl"; };
+          cli.url = function () { return "badurl"; };
           cli.failCodes = {};
-          cli.before = [function() { throw new Error('Foo!'); }];
+          cli.before = [function () { throw new Error('Foo!'); }];
           cli.request('/', this.callback, this.callback);
         },
         "should return the error on the cb": function (err, response) {
@@ -59,11 +59,11 @@ vows.describe('pkgcloud/core/base/client').addBatch({
         topic: function () {
           var self = this,
               cli    = new Client();
-          cli.url = function() { return "badurl"; };
+          cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           var stream = cli.request('/');
-          stream.on('error', function() { return self.callback(null,true); });
-          stream.on('end', function() { return self.callback(null,false); });
+          stream.on('error', function () { return self.callback(null,true); });
+          stream.on('end', function () { return self.callback(null,false); });
         },
         "should return the error on the EE": function (_,ok) {
           assert.ok(ok);
