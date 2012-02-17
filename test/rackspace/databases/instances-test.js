@@ -101,7 +101,17 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           });
         }
       }
+    },
+    "the destroyInstance() method": {
+      topic: function () {
+        var self = this;
+        client.getInstances(function (err, instances) {
+          client.destroyInstance(instances[0], self.callback);
+        });
+      },
+      "should respond correctly": function (err, res) {
+        assert.equal(res.statusCode, 202);
+      }
     }
-  } 
-}).addBatch({
+  }
 }).export(module);
