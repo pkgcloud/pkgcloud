@@ -135,17 +135,17 @@ function batchReboot(providerClient, providerName, nock) {
               image : testContext.images[0].id,
               flavor: testContext.flavors[0].id
             },
-            function (err,server,response) {
+            function (err, server, response) {
               if (err) { return self.callback(err); }
 
               function waitForReboot(server) {
                 // should have used setWait
                 // dont do this in your code
                 return setTimeout(function () {
-                  server.refresh(function (err,srv) {
+                  server.refresh(function (err, srv) {
                     if (err) { return self.callback(err); }
                     if (srv.status === "RUNNING") {
-                      return self.callback(null,srv);
+                      return self.callback(null, srv);
                     }
                     waitForReboot(srv);
                   });
@@ -157,14 +157,14 @@ function batchReboot(providerClient, providerName, nock) {
               // dont do this in your code
               return setTimeout(function () {
                 if (server.status==='RUNNING') {
-                  server.reboot(function (err,ok) {
+                  server.reboot(function (err, ok) {
                     if (err) { return self.callback(err); }
                     waitForReboot(server);
                   });
                 } else {
-                  server.refresh(function (err,srv) {
+                  server.refresh(function (err, srv) {
                     if (err) { return self.callback(err); }
-                    server=srv;
+                    server = srv;
                     keepTrying();
                   });
                 }

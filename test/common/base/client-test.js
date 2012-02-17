@@ -17,7 +17,7 @@ vows.describe('pkgcloud/core/base/client').addBatch({
     "the request() method": {
       "with a wrong request with a cb": {
         topic: function () {
-          var cli    = new Client();
+          var cli = new Client();
           cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           cli.request('/', this.callback, this.callback);
@@ -29,14 +29,15 @@ vows.describe('pkgcloud/core/base/client').addBatch({
       "with a wrong request without a cb": {
         topic: function () {
           var self = this,
-              cli    = new Client();
+              cli = new Client();
+              
           cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           var stream = cli.request('/');
-          stream.on('error', function () { return self.callback(null,true); });
-          stream.on('end', function () { return self.callback(null,false); });
+          stream.on('error', function () { return self.callback(null, true); });
+          stream.on('end', function () { return self.callback(null, false); });
         },
-        "should return the error on the EE": function (_,ok) {
+        "should return the error on the EE": function (_, ok) {
           assert.ok(ok);
         }
       }
@@ -44,7 +45,7 @@ vows.describe('pkgcloud/core/base/client').addBatch({
     "the before filters": {
       "throwing an error with a cb": {
         topic: function () {
-          var cli    = new Client();
+          var cli = new Client();
           cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           cli.before = [function () { throw new Error('Foo!'); }];
@@ -58,14 +59,15 @@ vows.describe('pkgcloud/core/base/client').addBatch({
       "throwing an error without a cb": {
         topic: function () {
           var self = this,
-              cli    = new Client();
+              cli = new Client();
+              
           cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           var stream = cli.request('/');
-          stream.on('error', function () { return self.callback(null,true); });
-          stream.on('end', function () { return self.callback(null,false); });
+          stream.on('error', function () { return self.callback(null, true); });
+          stream.on('end', function () { return self.callback(null, false); });
         },
-        "should return the error on the EE": function (_,ok) {
+        "should return the error on the EE": function (_, ok) {
           assert.ok(ok);
         }
       }
