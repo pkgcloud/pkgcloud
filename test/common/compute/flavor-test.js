@@ -20,22 +20,21 @@ function batchOne (providerClient, providerName) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = 
-    {
-      "the getFlavors() method": {
-        "with no details": {
-          topic: function () {
-            client.getFlavors(this.callback);
-          },
-          "should return the list of flavors": function (err, flavors) {
-            testContext.flavors = flavors;
-            flavors.forEach(function (flavor) {
-              assert.assertFlavor(flavor);
-            });
-          }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getFlavors() method": {
+      "with no details": {
+        topic: function () {
+          client.getFlavors(this.callback);
+        },
+        "should return the list of flavors": function (err, flavors) {
+          testContext.flavors = flavors;
+          flavors.forEach(function (flavor) {
+            assert.assertFlavor(flavor);
+          });
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -45,17 +44,16 @@ function batchTwo (providerClient, providerName) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the getFlavor() method": {
-        topic: function () {
-          client.getFlavor(testContext.flavors[0].id, this.callback);
-        },
-        "should return a valid flavor": function (err, flavor) {
-          assert.assertFlavorDetails(flavor);
-        }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getFlavor() method": {
+      topic: function () {
+        client.getFlavor(testContext.flavors[0].id, this.callback);
+      },
+      "should return a valid flavor": function (err, flavor) {
+        assert.assertFlavorDetails(flavor);
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -64,8 +62,10 @@ function batchTwo (providerClient, providerName) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
+    
     var client = clients[provider],
         nock   = require('nock');
+    
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
@@ -85,6 +85,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
       }
     }
+    
     vows
       .describe('pkgcloud/common/compute/flavor [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))

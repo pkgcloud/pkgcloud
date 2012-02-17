@@ -19,23 +19,22 @@ function batchOne (providerClient, providerName, nock) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = 
-    {
-      "the getServers() method": {
-        "with no details": {
-          topic: function () {
-            client.getServers(this.callback);
-          },
-          "should return the list of servers": function (err, servers) {
-            testContext.servers = servers;
-            servers.forEach(function (server) {
-              assert.assertServer(server);
-            });
-            assert.assertNock(nock);
-          }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getServers() method": {
+      "with no details": {
+        topic: function () {
+          client.getServers(this.callback);
+        },
+        "should return the list of servers": function (err, servers) {
+          testContext.servers = servers;
+          servers.forEach(function (server) {
+            assert.assertServer(server);
+          });
+          assert.assertNock(nock);
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -45,23 +44,22 @@ function batchTwo (providerClient, providerName, nock) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the getImages() method": {
-        "with no details": {
-          topic: function () {
-            client.getImages(this.callback);
-          },
-          "should return the list of images": function (err, images) {
-            testContext.images = images;
-            images.forEach(function (image) {
-              assert.assertImage(image);
-            });
-            assert.assertNock(nock);
-          }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getImages() method": {
+      "with no details": {
+        topic: function () {
+          client.getImages(this.callback);
+        },
+        "should return the list of images": function (err, images) {
+          testContext.images = images;
+          images.forEach(function (image) {
+            assert.assertImage(image);
+          });
+          assert.assertNock(nock);
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -71,27 +69,26 @@ function batchThree (providerClient, providerName, nock) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the getImage() method providing an id": {
-        topic: function () {
-          client.getImage(testContext.images[0].id, this.callback);
-        },
-        "should return a valid image": function (err, image) {
-          assert.assertImageDetails(image);
-          assert.assertNock(nock);
-        }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getImage() method providing an id": {
+      topic: function () {
+        client.getImage(testContext.images[0].id, this.callback);
       },
-      "the getImage() method providing an image": {
-        topic: function () {
-          client.getImage(testContext.images[0], this.callback);
-        },
-        "should return a valid image": function (err, image) {
-          assert.assertImageDetails(image);
-          assert.assertNock(nock);
-        }
+      "should return a valid image": function (err, image) {
+        assert.assertImageDetails(image);
+        assert.assertNock(nock);
       }
-    };
+    },
+    "the getImage() method providing an image": {
+      topic: function () {
+        client.getImage(testContext.images[0], this.callback);
+      },
+      "should return a valid image": function (err, image) {
+        assert.assertImageDetails(image);
+        assert.assertNock(nock);
+      }
+    }
+  };
 
   return test;
 }
@@ -99,8 +96,10 @@ function batchThree (providerClient, providerName, nock) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
+    
     var client = clients[provider],
         nock   = require('nock');
+    
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
@@ -130,6 +129,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('rackspace/image.json'), {});
       }
     }
+    
     vows
       .describe('pkgcloud/common/compute/image [' + provider + ']')
       .addBatch(batchOne(client, provider, nock))

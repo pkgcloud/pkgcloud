@@ -20,37 +20,36 @@ function batchOne (providerClient, providerName) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = 
-    {
-      "the getImages() method": {
-        "with details": {
-          topic: function () {
-            client.getImages(this.callback);
-          },
-          "should return the list of images": function (err, images) {
-            assert.isNull(err);
-            testContext.images = images;
-            images.forEach(function (image) {
-              assert.assertImageDetails(image);
-            });
-          }
-        }
-      },
-      "the getFlavors() method": {
-        "with details": {
-          topic: function () {
-            client.getFlavors(this.callback);
-          },
-          "should return the list of flavors": function (err, flavors) {
-            assert.isNull(err);
-            testContext.flavors = flavors;
-            flavors.forEach(function (flavor) {
-              assert.assertFlavorDetails(flavor);
-            });
-          }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getImages() method": {
+      "with details": {
+        topic: function () {
+          client.getImages(this.callback);
+        },
+        "should return the list of images": function (err, images) {
+          assert.isNull(err);
+          testContext.images = images;
+          images.forEach(function (image) {
+            assert.assertImageDetails(image);
+          });
         }
       }
-    };
+    },
+    "the getFlavors() method": {
+      "with details": {
+        topic: function () {
+          client.getFlavors(this.callback);
+        },
+        "should return the list of flavors": function (err, flavors) {
+          assert.isNull(err);
+          testContext.flavors = flavors;
+          flavors.forEach(function (flavor) {
+            assert.assertFlavorDetails(flavor);
+          });
+        }
+      }
+    }
+  };
 
   return test;
 }
@@ -60,27 +59,26 @@ function batchTwo (providerClient, providerName) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the createServer() method": {
-        "with image and flavor ids": {
-          topic: function () {
-            client.createServer({
-              name: 'create-test-ids2',
-              image: testContext.images[0].id,
-              flavor: testContext.flavors[0].id
-            }, this.callback);
-          },
-          "should return a valid server": function (err, server) {
-            testContext.servers = [server];
-            assert.isNull(err);
-            assert.equal(server.name, 'create-test-ids2');
-            assert.equal(server.imageId, testContext.images[0].id);
-            assert.assertServerDetails(server);
-          }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the createServer() method": {
+      "with image and flavor ids": {
+        topic: function () {
+          client.createServer({
+            name: 'create-test-ids2',
+            image: testContext.images[0].id,
+            flavor: testContext.flavors[0].id
+          }, this.callback);
+        },
+        "should return a valid server": function (err, server) {
+          testContext.servers = [server];
+          assert.isNull(err);
+          assert.equal(server.name, 'create-test-ids2');
+          assert.equal(server.imageId, testContext.images[0].id);
+          assert.assertServerDetails(server);
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -90,31 +88,30 @@ function batchThree (providerClient, providerName) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the getServers() method": {
-        topic: function () {
-          client.getServers(this.callback);
-        },
-        "should return the list of servers": function (err, servers) {
-          assert.isNull(err);
-          testContext.servers = servers;
-          servers.forEach(function (server) {
-            assert.assertServer(server);
-          });
-        }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getServers() method": {
+      topic: function () {
+        client.getServers(this.callback);
       },
-      "the getServer() method": {
-        topic: function () {
-            client.getServer(testContext.servers[0], this.callback);
-        },
-        "should return a valid server": function (err, server) {
-          client.destroyServer(server);
-          assert.isNull(err);
-          assert.assertServerDetails(server);
-        }
+      "should return the list of servers": function (err, servers) {
+        assert.isNull(err);
+        testContext.servers = servers;
+        servers.forEach(function (server) {
+          assert.assertServer(server);
+        });
       }
-    };
+    },
+    "the getServer() method": {
+      topic: function () {
+          client.getServer(testContext.servers[0], this.callback);
+      },
+      "should return a valid server": function (err, server) {
+        client.destroyServer(server);
+        assert.isNull(err);
+        assert.assertServerDetails(server);
+      }
+    }
+  };
 
   return test;
 }
@@ -125,60 +122,59 @@ function batchReboot(providerClient, providerName, nock) {
       timeout = process.env.NOCK ? 1 : 10000,
       test    = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the rebootServer() method": {
-        topic: function () {
-          var self = this;
-          client.createServer({
-              name  : "test-reboot", 
-              image : testContext.images[0].id,
-              flavor: testContext.flavors[0].id
-            },
-            function (err, server, response) {
-              if (err) { return self.callback(err); }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the rebootServer() method": {
+      topic: function () {
+        var self = this;
+        client.createServer({
+            name  : "test-reboot", 
+            image : testContext.images[0].id,
+            flavor: testContext.flavors[0].id
+          },
+          function (err, server, response) {
+            if (err) { return self.callback(err); }
 
-              function waitForReboot(server) {
-                // should have used setWait
-                // dont do this in your code
-                return setTimeout(function () {
-                  server.refresh(function (err, srv) {
-                    if (err) { return self.callback(err); }
-                    if (srv.status === "RUNNING") {
-                      return self.callback(null, srv);
-                    }
-                    waitForReboot(srv);
-                  });
-                }, timeout);
-              }
-
-            function keepTrying() {
+            function waitForReboot(server) {
               // should have used setWait
               // dont do this in your code
               return setTimeout(function () {
-                if (server.status==='RUNNING') {
-                  server.reboot(function (err, ok) {
-                    if (err) { return self.callback(err); }
-                    waitForReboot(server);
-                  });
-                } else {
-                  server.refresh(function (err, srv) {
-                    if (err) { return self.callback(err); }
-                    server = srv;
-                    keepTrying();
-                  });
-                }
+                server.refresh(function (err, srv) {
+                  if (err) { return self.callback(err); }
+                  if (srv.status === "RUNNING") {
+                    return self.callback(null, srv);
+                  }
+                  waitForReboot(srv);
+                });
               }, timeout);
             }
-            keepTrying();
-          });
-        },
-        "should return a server after reboot": function (err, server) {
-          assert.isNull(err);
-          assert.assertServer(server);
-        }
+
+          function keepTrying() {
+            // should have used setWait
+            // dont do this in your code
+            return setTimeout(function () {
+              if (server.status==='RUNNING') {
+                server.reboot(function (err, ok) {
+                  if (err) { return self.callback(err); }
+                  waitForReboot(server);
+                });
+              } else {
+                server.refresh(function (err, srv) {
+                  if (err) { return self.callback(err); }
+                  server = srv;
+                  keepTrying();
+                });
+              }
+            }, timeout);
+          }
+          keepTrying();
+        });
+      },
+      "should return a server after reboot": function (err, server) {
+        assert.isNull(err);
+        assert.assertServer(server);
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -186,10 +182,13 @@ function batchReboot(providerClient, providerName, nock) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
+    
     var client = clients[provider],
         nock   = require('nock');
+    
     testData    = {};
     testContext = {};
+    
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
@@ -275,6 +274,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           ;
       }
     }
+    
     vows
       .describe('pkgcloud/common/compute/server [' + provider + ']')
       .addBatch(batchOne(client, provider))

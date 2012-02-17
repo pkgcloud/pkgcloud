@@ -20,24 +20,24 @@ function batchOne (providerClient, providerName) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = 
-    {
-      "the getVersion() method": {
-        "with no arguments": {
-          topic: function () {
-            client.getVersion(this.callback);
-          },
-          "should return the version": function (err, version) {
-            assert.ok(typeof version === 'string');
-            if (version!==versions[name]) {
-              console.error(
-                '!! API Version for ' + name + ' is ' + version + '.'+
-                ' we were expecting it to be ' + versions[name]);
-            }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getVersion() method": {
+      "with no arguments": {
+        topic: function () {
+          client.getVersion(this.callback);
+        },
+        "should return the version": function (err, version) {
+          assert.ok(typeof version === 'string');
+          if (version !== versions[name]) {
+            console.error(
+              '!! API Version for ' + name + ' is ' + version + '.'+
+              ' we were expecting it to be ' + versions[name]
+            );
           }
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -48,31 +48,30 @@ function batchTwo (providerClient, providerName) {
       test   = {},
       m      = process.env.NOCK ? 1 : 100;
 
-  test["The pkgcloud " + name + " compute client"] = 
-    {
-      "the setWait() method": {
-        "on flavors waiting for flavor with name crazyflavah": {
-          topic: function () {
-            var self = this;
-            client.getFlavors(function (err, flavors) {
-              if (err) { return self.callback(err); }
-              testContext.flavors = flavors;
-              
-              var flavor = flavors[0];
-              var now    = Date.now();
-              
-              flavor.until({name: 'crazyFlavah'}, 50*m, 50*m, function () {
-                self.callback(null, Date.now() - now);
-              });
+  test["The pkgcloud " + name + " compute client"] = {
+    "the setWait() method": {
+      "on flavors waiting for flavor with name crazyflavah": {
+        topic: function () {
+          var self = this;
+          client.getFlavors(function (err, flavors) {
+            if (err) { return self.callback(err); }
+            testContext.flavors = flavors;
+            
+            var flavor = flavors[0];
+            var now    = Date.now();
+            
+            flavor.until({name: 'crazyFlavah'}, 50*m, 50*m, function () {
+              self.callback(null, Date.now() - now);
             });
-          },
-          "should timeout": function (err, duration) {
-            assert.ok(duration);
-            assert.ok(duration > 50);
-          }
+          });
+        },
+        "should timeout": function (err, duration) {
+          assert.ok(duration);
+          assert.ok(duration > 50);
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -82,23 +81,22 @@ function batchThree (providerClient, providerName, nock) {
       client = providerClient || rackspace,
       test   = {};
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the getImages() method": {
-        "with no details": {
-          topic: function () {
-            client.getImages(this.callback);
-          },
-          "should return the list of images": function (err, images) {
-            testContext.images = images;
-            images.forEach(function (image) {
-              assert.assertImage(image);
-            });
-            assert.assertNock(nock);
-          }
+  test["The pkgcloud " + name + " compute client"] = {
+    "the getImages() method": {
+      "with no details": {
+        topic: function () {
+          client.getImages(this.callback);
+        },
+        "should return the list of images": function (err, images) {
+          testContext.images = images;
+          images.forEach(function (image) {
+            assert.assertImage(image);
+          });
+          assert.assertNock(nock);
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -109,32 +107,31 @@ function batchFour (providerClient, providerName) {
       test   = {},
       m      = process.env.NOCK ? 1 : 100;
 
-  test["The pkgcloud " + name + " compute client"] =
-    {
-      "the setWait() method": {
-        "waiting for a server to be operational": {
-          topic: function () {
-            var self = this;
-            client.createServer({
-              name: 'create-test-setWait',
-              image: testContext.images[0].id,
-              flavor: testContext.flavors[0].id
-            }, function (err, server) {
-              if (err) { return this.callback(err); }
-              server.setWait({status: 'RUNNING'}, 100*m, function (err, srv) {
-                self.callback(null, srv);
-              });
+  test["The pkgcloud " + name + " compute client"] = {
+    "the setWait() method": {
+      "waiting for a server to be operational": {
+        topic: function () {
+          var self = this;
+          client.createServer({
+            name: 'create-test-setWait',
+            image: testContext.images[0].id,
+            flavor: testContext.flavors[0].id
+          }, function (err, server) {
+            if (err) { return this.callback(err); }
+            server.setWait({status: 'RUNNING'}, 100*m, function (err, srv) {
+              self.callback(null, srv);
             });
-          },
-          "should a server in running state": function (err, server) {
-            assert.isNull(err);
-            assert.equal(server.name, 'create-test-setWait');
-            assert.equal(server.status, 'RUNNING');
-            assert.assertServerDetails(server);
-          }
+          });
+        },
+        "should a server in running state": function (err, server) {
+          assert.isNull(err);
+          assert.equal(server.name, 'create-test-setWait');
+          assert.equal(server.status, 'RUNNING');
+          assert.assertServerDetails(server);
         }
       }
-    };
+    }
+  };
 
   return test;
 }
@@ -144,6 +141,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
         nock   = require('nock');
+
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
@@ -187,6 +185,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(200, helpers.loadFixture('rackspace/20602046.json'), {});
       }
     }
+    
     vows
       .describe('pkgcloud/common/compute/flavor [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
