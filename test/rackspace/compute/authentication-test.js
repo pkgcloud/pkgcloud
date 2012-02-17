@@ -14,7 +14,7 @@ var vows = require('vows'),
 var testData = {},
     client = helpers.createClient('rackspace', 'compute');
 
-if(process.env.NOCK) {
+if (process.env.NOCK) {
  nock('https://' + client.serversUrl)
   .get('/')
     .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", 

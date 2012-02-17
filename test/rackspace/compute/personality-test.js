@@ -21,7 +21,7 @@ var keyBuffer = fs.readFileSync(__dirname + '/../../fixtures/testkey.pub'),
     testData = {}, 
     testServer;
 
-if(process.env.NOCK) {
+if (process.env.NOCK) {
   return console.log('Sorry this test cant be mocked since it uses ssh');
 }
 
