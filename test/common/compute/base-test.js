@@ -29,7 +29,7 @@ function batchOne (providerClient, providerName) {
           },
           "should return the version": function (err, version) {
             assert.ok(typeof version === 'string');
-            if(version!==versions[name]) {
+            if (version!==versions[name]) {
               console.error(
                 '!! API Version for ' + name + ' is ' + version + '.'+
                 ' we were expecting it to be ' + versions[name]);
@@ -55,7 +55,7 @@ function batchTwo (providerClient, providerName) {
           topic: function () {
             var self = this;
             client.getFlavors(function(err, flavors) {
-              if(err) { return self.callback(err); }
+              if (err) { return self.callback(err); }
               testContext.flavors = flavors;
               var flavor = flavors[0];
               var now    = Date.now();
@@ -118,7 +118,7 @@ function batchFour (providerClient, providerName) {
               image: testContext.images[0].id,
               flavor: testContext.flavors[0].id
             }, function(err,server) {
-              if(err) { return this.callback(err); }
+              if (err) { return this.callback(err); }
               server.setWait({status: 'RUNNING'}, 100*m, 
               function (err,srv){
                 self.callback(null, srv);
@@ -143,8 +143,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
         nock   = require('nock');
-    if(process.env.NOCK) {
-      if(provider === 'joyent') {
+    if (process.env.NOCK) {
+      if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/datacenters')
             .reply(200, "", { 'x-api-version': '6.5.0' })
@@ -161,7 +161,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .get('/' + client.account +
               '/machines/534aa63a-104f-4d6d-a3b1-c0d341a20a53')
             .reply(200, helpers.loadFixture('joyent/setWaitResp1.json'), {});
-      } else if(provider === 'rackspace') {
+      } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "", 

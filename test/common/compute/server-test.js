@@ -136,15 +136,15 @@ function batchReboot(providerClient, providerName, nock) {
               flavor: testContext.flavors[0].id
             },
             function(err,server,response) {
-              if(err) { return self.callback(err); }
+              if (err) { return self.callback(err); }
 
               function waitForReboot(server) {
                 // should have used setWait
                 // dont do this in your code
                 return setTimeout(function (){
                   server.refresh(function(err,srv){
-                    if(err) { return self.callback(err); }
-                    if(srv.status === "RUNNING") {
+                    if (err) { return self.callback(err); }
+                    if (srv.status === "RUNNING") {
                       return self.callback(null,srv);
                     }
                     waitForReboot(srv);
@@ -156,14 +156,14 @@ function batchReboot(providerClient, providerName, nock) {
               // should have used setWait
               // dont do this in your code
               return setTimeout(function () {
-                if(server.status==='RUNNING') {
+                if (server.status==='RUNNING') {
                   server.reboot(function(err,ok) {
-                    if(err) { return self.callback(err); }
+                    if (err) { return self.callback(err); }
                     waitForReboot(server);
                   });
                 } else {
                   server.refresh(function(err,srv){
-                    if(err) { return self.callback(err); }
+                    if (err) { return self.callback(err); }
                     server=srv;
                     keepTrying();
                   });
@@ -190,8 +190,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock   = require('nock');
     testData    = {};
     testContext = {};
-    if(process.env.NOCK) {
-      if(provider === 'joyent') {
+    if (process.env.NOCK) {
+      if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/machines')
             .reply(200, "[]", {})
@@ -231,7 +231,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(204, "", {})
         ;
       }
-      else if(provider === 'rackspace') {
+      else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "",
