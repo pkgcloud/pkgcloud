@@ -120,7 +120,7 @@ function batchFour (providerClient, providerName) {
             }, function (err,server) {
               if (err) { return this.callback(err); }
               server.setWait({status: 'RUNNING'}, 100*m, 
-              function (err,srv){
+              function (err,srv) {
                 self.callback(null, srv);
               });
             });
