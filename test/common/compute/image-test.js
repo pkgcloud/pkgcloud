@@ -101,8 +101,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
         nock   = require('nock');
-    if(process.env.NOCK) {
-      if(provider === 'joyent') {
+    if (process.env.NOCK) {
+      if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/machines')
             .reply(200, "[]", {})
@@ -114,7 +114,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .get('/' + client.account +
             '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
             .reply(200, helpers.loadFixture('joyent/image.json'), {});
-      } else if(provider === 'rackspace') {
+      } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "",

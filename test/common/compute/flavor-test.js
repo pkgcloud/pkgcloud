@@ -66,14 +66,14 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
         nock   = require('nock');
-    if(process.env.NOCK) {
-      if(provider === 'joyent') {
+    if (process.env.NOCK) {
+      if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/packages')
             .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
           .get('/' + client.account + '/packages/Small%201GB')
             .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
-      } else if(provider === 'rackspace') {        
+      } else if (provider === 'rackspace') {        
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "", 
