@@ -102,6 +102,19 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         }
       }
     },
+    "the getInstance() method": {
+      topic: function () {
+        console.log('La creada fue', testContext.Instance.id);
+        console.log(typeof client.getInstance);
+        client.getInstance(testContext.Instance.id, this.callback);
+      },
+      "should response with details": function (err, instance) {
+        assert.isNull(err);
+        assert.ok(instance);
+        assert.assertInstance(instance);
+        asert.ok(false);
+      }
+    },
     "the destroyInstance() method": {
       topic: function () {
         var self = this;
