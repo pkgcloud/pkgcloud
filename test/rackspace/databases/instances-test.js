@@ -43,7 +43,6 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       assert.assertInstance(instance);
       assert.equal(instance.name, 'test-instance');
       assert.equal(instance.flavor.id, 1);
-      testContext.Instance = instance;
      }
     }
   }
@@ -84,7 +83,6 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
             assert.ok(instance.id);
             assert.ok(instance.updated);
             assert.isArray(instance.links);
-            assert.isObject(instance.volume);
             assert.isObject(instance.flavor);
           });
         },
@@ -101,29 +99,38 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           });
         }
       }
-    },
+    }
+  }
+}).addBatch({
+  "the destroyInstance() method": {
+      topic: function () {
+        var self = this;
+        client.getInstances(function (err, instances) {
+          var ready = instances.filter(function (instance) {
+            return (instance.status == 'ACTIVE');
+          });
+          if (ready.length === 0) {
+            console.log('ERROR:   Is necessary have Instances actived for test the destroy');
+          }
+          testContext.Instance = ready[0];
+          client.destroyInstance(testContext.Instance, self.callback);
+        });
+      },
+      "should respond correctly": function (err, res) {
+        assert.isNull(err);
+        assert.equal(res.statusCode, 202);
+      }
+    }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
     "the getInstance() method": {
       topic: function () {
-        console.log('La creada fue', testContext.Instance.id);
-        console.log(typeof client.getInstance);
         client.getInstance(testContext.Instance.id, this.callback);
       },
       "should response with details": function (err, instance) {
         assert.isNull(err);
         assert.ok(instance);
         assert.assertInstance(instance);
-        asert.ok(false);
-      }
-    },
-    "the destroyInstance() method": {
-      topic: function () {
-        var self = this;
-        client.getInstances(function (err, instances) {
-          client.destroyInstance(instances[0], self.callback);
-        });
-      },
-      "should respond correctly": function (err, res) {
-        assert.equal(res.statusCode, 202);
       }
     }
   }

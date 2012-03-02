@@ -5,3 +5,4 @@ test/fixtures/testkey*
 test/fixtures/test-download*
 *.notes
 *.swp
+.project
