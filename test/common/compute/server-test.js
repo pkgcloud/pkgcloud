@@ -109,6 +109,10 @@ function batchThree (providerClient, providerName) {
         client.destroyServer(server);
         assert.isNull(err);
         assert.assertServerDetails(server);
+        assert.ok(Array.isArray(server.addresses["public"]));
+        assert.ok(Array.isArray(server.addresses["private"]));
+        assert.ok(typeof server.addresses["private"][0] === 'string');
+        assert.ok(typeof server.addresses["public"][0] === 'string');
       }
     }
   };
