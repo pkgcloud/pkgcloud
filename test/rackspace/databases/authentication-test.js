@@ -68,7 +68,8 @@ vows.describe('pkgcloud/rackspace/database/authentication').addBatch({
       topic: function () {
         client.getVersion(this.callback);
       },
-      "should return the proper version": function (versions) {
+      "should return the proper version": function (err,versions) {
+        assert.isNull(err);
         assert.isArray(versions);
         assert.isFalse(versions.length == 0);
       }
