@@ -102,7 +102,8 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
     }
   }
 }).addBatch({
-  "the destroyInstance() method": {
+  "The pkgcloud Rackspace database client": {
+    "the destroyInstance() method": {
       topic: function () {
         var self = this;
         client.getInstances(function (err, instances) {
@@ -121,6 +122,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         assert.equal(res.statusCode, 202);
       }
     }
+  }
 }).addBatch({
   "The pkgcloud Rackspace database client": {
     "the getInstance() method": {
