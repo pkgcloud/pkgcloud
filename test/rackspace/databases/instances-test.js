@@ -106,14 +106,8 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
     "the destroyInstance() method": {
       topic: function () {
         var self = this;
-        client.getInstances(function (err, instances) {
-          var ready = instances.filter(function (instance) {
-            return (instance.status == 'ACTIVE');
-          });
-          if (ready.length === 0) {
-            console.log('ERROR:   Is necessary have Instances actived for test the destroy');
-          }
-          testContext.Instance = ready[0];
+        helpers.selectInstance(client, function (instance) {
+          testContext.Instance = instance;
           client.destroyInstance(testContext.Instance, self.callback);
         });
       },

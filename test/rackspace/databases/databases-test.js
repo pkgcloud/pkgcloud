@@ -17,14 +17,8 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
     "the createDatabases() method": {
       topic: function () {
         var self = this;
-        client.getInstances(function (err, instances) {
-          var ready = instances.filter(function (instance) {
-            return (instance.status == 'ACTIVE');
-          });
-          if (ready.length === 0) {
-            console.log('ERROR:   Is necessary have Instances actived for test the create of database');
-          }
-          client.createDatabase({name: 'TestDatabase', instance:ready[0]}, self.callback);
+        helpers.selectInstance(client, function (instance) {
+          client.createDatabase({name: 'TestDatabase', instance:instance}, self.callback);
         });
       },
       "should respond correctly": function (err, response) {
@@ -64,14 +58,8 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
     "the getDatabases() method": {
       topic: function () {
         var self = this;
-        client.getInstances(function (err, instances) {
-          var ready = instances.filter(function (instance) {
-            return (instance.status == 'ACTIVE');
-          });
-          if (ready.length === 0) {
-            console.log('ERROR:   Is necessary have Instances actived for test the create of database');
-          }
-          client.getDatabases(ready[0], self.callback);
+        helpers.selectInstance(client, function (instance) {
+          client.getDatabases(instance, self.callback);
         });
       },
       "should return a list of databases": function (err, list, response) {
@@ -92,14 +80,8 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
     "the destroyDatabase() method": {
       topic: function () {
         var self = this;
-        client.getInstances(function (err, instances) {
-          var ready = instances.filter(function (instance) {
-            return (instance.status == 'ACTIVE');
-          });
-          if (ready.length === 0) {
-            console.log('ERROR:   Is necessary have Instances actived for test the create of database');
-          }
-          client.destroyDatabase('TestDatabase', ready[0], self.callback);
+        helpers.selectInstance(client, function (instance) {
+          client.destroyDatabase('TestDatabase', instance, self.callback);
         });
       },
       "should respond correctly": function (err, response) {
