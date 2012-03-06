@@ -56,10 +56,15 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
   "The pkgcloud Rackspace Database client": {
     "the destroyUsers() method": {
       topic: function () {
-        this.callback();
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.destroyUser(instance, 'joeTest2', self.callback);
+        });
       },
-      "should respond correctly": function (err, list) {
-        assert.ok(false);
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.ok(response);
+        assert.equal(response.statusCode, 202);
       }
     }
   }
