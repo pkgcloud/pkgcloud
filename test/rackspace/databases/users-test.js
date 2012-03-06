@@ -13,13 +13,22 @@ var vows = require('vows'),
 var client = helpers.createClient('rackspace', 'database');
 
 vows.describe('pkgcloud/rackspace/databases/users').addBatch({
-  "The pkgcloud Rackspace Database client": {
+  "The pkgcloud Rackspace User client": {
     "the createUser() method": {
       topic: function () {
-        this.callback();
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+            client.createUser({
+              username: 'joeTest',
+              password: 'joepasswd',
+              database: 'TestDatabase',
+              instance: instance
+            }, self.callback);
+        });
       },
       "should respond correctly": function (err, response) {
-        assert.ok(false);
+        assert.isNull(err);
+        assert.equal(response.statusCode, 202);
       }
     }
   }
