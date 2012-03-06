@@ -48,3 +48,9 @@ assert.assertInstance = function assertInstance (instance) {
   assert.isArray(instance.links);
   assert.isString(instance.status);
 };
+
+assert.assertUser = function assertUser (user) {
+  assert.ok(user);
+  assert.isString(user.name);
+  assert.equal(user.constructor.name, 'User');
+};
