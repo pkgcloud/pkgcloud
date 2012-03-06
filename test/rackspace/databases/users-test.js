@@ -28,6 +28,7 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
       },
       "should respond correctly": function (err, response) {
         assert.isNull(err);
+        assert.ok(response);
         assert.equal(response.statusCode, 202);
       }
     }
@@ -36,10 +37,18 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
   "The pkgcloud Rackspace Database client": {
     "the getUsers() method": {
       topic: function () {
-        this.callback();
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getUsers(instance, self.callback);
+        });
       },
-      "should get the list of users": function (err, list) {
-        assert.ok(false);
+      "should get the list of users": function (err, users, response) {
+        assert.isNull(err);
+        assert.isArray(users);
+        assert.ok(response);
+        users.forEach(function (user) {
+          assert.assertUser(user);
+        });
       }
     }
   }
