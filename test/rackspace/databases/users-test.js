@@ -58,7 +58,7 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
       topic: function () {
         var self = this;
         helpers.selectInstance(client, function (instance) {
-          client.destroyUser(instance, 'joeTest2', self.callback);
+          client.destroyUser(instance, 'joeTest', self.callback);
         });
       },
       "should respond correctly": function (err, response) {
@@ -72,21 +72,20 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
   "The pkgcloud Rackspace Database client": {
     "the enableRoot() method": {
       topic: function () {
-        this.callback();
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.enableRoot(instance, self.callback);
+        });
       },
-      "should respond correctly": function (err, list) {
-        assert.ok(false);
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace Database client": {
-    "the disableRoot() method": {
-      topic: function () {
-        this.callback();
-      },
-      "should respond correctly": function (err, list) {
-        assert.ok(false);
+      "should respond correctly": function (err, user, response) {
+        assert.isNull(err);
+        assert.assertUser(user);
+        assert.ok(response);
+        assert.equal(response.statusCode, 200);
+        assert.ok(response.body);
+        assert.isObject(response.body.user);
+        assert.ok(response.body.user.password);
+        assert.equal(response.body.user.name, 'root');
       }
     }
   }
@@ -94,10 +93,16 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
   "The pkgcloud Rackspace Database client": {
     "the rootEnabled() method": {
       topic: function () {
-        this.callback();
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.rootEnabled(instance, self.callback);
+        });
       },
-      "should respond correctly": function (err, list) {
-        assert.ok(false);
+      "should respond correctly": function (err, root, response) {
+        assert.isNull(err);
+        assert.ok(root);
+        assert.ok(response);
+        assert.equal(response.statusCode, 200);
       }
     }
   }
