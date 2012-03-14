@@ -78,7 +78,7 @@ helpers.personalityPost = function persPost(pubkey) {
 helpers.selectInstance = function selectInstance (client, callback) {
   function filterInstances (instances) {
     var ready = instances.filter(function (instance) {
-      return (instance.status == 'ACTIVE');
+      return (instance.status == 'RUNNING');
     });
     if (ready.length === 0) {
       console.log('ERROR:   Is necessary have Instances actived for this test.');
