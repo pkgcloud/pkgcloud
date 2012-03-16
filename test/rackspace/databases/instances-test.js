@@ -130,4 +130,13 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       }
     }
   }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the create() method with erros": {
+      topic: client,
+      "should throw an Error": function (client) {
+        assert.throws(client.createInstance({ name: 'test-without-flavor' }));
+      }
+    }
+  }
 }).export(module);
