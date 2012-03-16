@@ -1,17 +1,15 @@
 var assert = module.exports = require('assert');
 
-assert.assertFlavor = function assertFlavor(instance) {
-  assert.isNumber(instance.id);
-  assert.isString(instance.name);
-  assert.equal(instance.constructor.name, 'Flavor');
+assert.assertFlavor = function assertFlavor(flavor) {
+  assert.ok(flavor.id);
+  assert.isString(flavor.name);
+  assert.equal(flavor.constructor.name, 'Flavor');
 };
 
-assert.assertFlavorDetails = function assertFlavorDetails(instance) {
-  assert.isNumber(instance.id);
-  assert.isString(instance.name);
-  assert.isNumber(instance.ram);
-  assert.isString(instance.href);
-  assert.equal(instance.constructor.name, 'Flavor');
+assert.assertFlavorDetails = function assertFlavorDetails(flavor) {
+  assert.ok(flavor.id);
+  assert.isString(flavor.name);
+  assert.equal(flavor.constructor.name, 'Flavor');
 };
 
 assert.assertServer = function assertServer(instance) {
