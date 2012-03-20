@@ -1,0 +1,18 @@
+{"version":{
+  "id":"v1.1",
+  "updated":"2012-01-19T22:30:00.25Z",
+  "status":"CURRENT",
+  "links":[{
+    "rel":"self",
+    "href":"https:\/\/auth.api.rackspacecloud.com\/v1.1\/"
+    },{
+    "rel":"describedby",
+    "type":"application\/pdf",
+    "href":"http:\/\/docs.rackspacecloud.com\/auth\/api\/v1.1\/auth-client-devguide-latest.pdf"
+    },{
+    "rel":"describedby",
+    "type":"application\/vnd.sun.wadl+xml",
+    "href":"http:\/\/docs.rackspacecloud.com\/auth\/api\/v1.1\/auth.wadl"
+    }
+  ]}
+}
