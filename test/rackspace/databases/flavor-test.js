@@ -7,10 +7,25 @@
 
 var vows = require('vows'),
     assert = require('../../helpers/assert'),
+    nock = require('nock')
     helpers = require('../../helpers');
 
 var testContext = {},
     client = helpers.createClient('rackspace', 'database');
+
+if (process.env.NOCK) {
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/flavors')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavors.json')));
+
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/flavors/detail')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavorsDetail.json')));
+
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/flavors/3')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavor3.json')));
+}
 
 vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
   "The pkgcloud Rackspace database client": {
