@@ -9,10 +9,30 @@
 var vows = require('vows'),
     assert = require('../../helpers/assert'),
     macros = require('../macros'),
+    nock = require('nock'),
     helpers = require('../../helpers');
 
 var testData = {},
     client = helpers.createClient('rackspace', 'database');
+
+if (process.env.NOCK) {
+ nock('https://' + client.serversUrl)
+  .get('/')
+    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
+  .get('/v1.0/537645/limits')
+    .reply(200, "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+
+  var credentials = {
+     username: client.config.auth.username,
+     key: client.config.auth.apiKey
+  };
+
+  nock('https://' + client.authUrl)
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/token.json')))
+    .post('/v1.1/auth', { "credentials": { "username": "fake", "key": "data" }})
+      .reply(401, "{\"unauthorized\":{\"message\":\"Username or api key is invalid\", \"code\":401}}")
+}
 
 function shouldAuthNew (client) {
   return {
