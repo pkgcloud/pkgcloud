@@ -1,0 +1,68 @@
+{
+  "flavors": [
+    {
+      "vcpus": 1,
+      "ram": 2048,
+      "id": 3,
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/3",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/flavors/3",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.medium"
+    },
+    {
+      "vcpus": 1,
+      "ram": 4096,
+      "id": 4,
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/4",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/flavors/4",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.large"
+    },
+    {
+      "vcpus": 1,
+      "ram": 512,
+      "id": 1,
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/flavors/1",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.tiny"
+    },
+    {
+      "vcpus": 1,
+      "ram": 1024,
+      "id": 2,
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/flavors/2",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.small"
+    }
+  ]
+}
