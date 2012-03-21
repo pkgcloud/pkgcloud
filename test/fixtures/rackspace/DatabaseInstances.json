@@ -1,0 +1,34 @@
+{
+  "instances": [
+    {
+      "status": "BUILD",
+      "id": "aa21dcee-141b-4e5e-a231-01acf985f259",
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/aa21dcee-141b-4e5e-a231-01acf985f259",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/instances/aa21dcee-141b-4e5e-a231-01acf985f259",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "test-instance"
+    },
+    {
+      "status": "ACTIVE",
+      "id": "1893d822-3c91-449f-9359-6d172139d883",
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/1893d822-3c91-449f-9359-6d172139d883",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/instances/1893d822-3c91-449f-9359-6d172139d883",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "test-instance"
+    }
+  ]
+}
