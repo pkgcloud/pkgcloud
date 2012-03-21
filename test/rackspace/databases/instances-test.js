@@ -8,11 +8,38 @@
 
 var vows = require('vows'),
     assert = require('../../helpers/assert'),
+    nock = require('nock'),
     helpers = require('../../helpers');
 
 var client = helpers.createClient('rackspace', 'database');
 
 var testContext = {};
+
+if (process.env.NOCK) {
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/flavors/1')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavors.json')));
+
+  nock('https://' + client.serversUrl)
+    .post('/v1.0/537645/instances',
+      "{\"instance\": { \
+        \"name\":\"test-instance\", \
+        \"flavorRef\":\"http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1\", \
+        \"databases\":[],\"volume\":{\"size\":1}}}")
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/createdDatabaseInstance.json')));
+
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/instances')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstances.json')));
+
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/instances/detail')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstancesDetails.json')));
+
+  nock('https://' + client.serversUrl)
+    .delete('/v1.0/537645/instances/37a7eb5b-3f92-41c5-afe7-670443faac15')
+      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+}
 
 function assertLinks (links) {
   assert.isArray(links);

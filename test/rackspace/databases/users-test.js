@@ -8,9 +8,33 @@
 
 var vows = require('vows'),
     assert = require('../../helpers/assert'),
+    nock = require('nock'),
     helpers = require('../../helpers');
 
 var client = helpers.createClient('rackspace', 'database');
+
+if (process.env.NOCK) {
+  nock('https://' + client.serversUrl)
+    .post('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/users',
+      "{\"users\":[{\"name\":\"joeTest\",\"password\":\"joepasswd\",\"databases\":[]}]}")
+      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/users')
+      .reply(200, "{\"users\": [{\"name\": \"joeTest\"}]}");
+
+  nock('https://' + client.serversUrl)
+    .delete('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/users/joeTest')
+      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+
+  nock('https://' + client.serversUrl)
+    .post('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/root')
+      .reply(200, "{\"user\": {\"password\": \"038cdd63-4a15-447c-9cbf-46242e3027a1\", \"name\": \"root\"}}");
+
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645//instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/root')
+      .reply(200, "{\"rootEnabled\": true}");
+}
 
 vows.describe('pkgcloud/rackspace/databases/users').addBatch({
   "The pkgcloud Rackspace User client": {
