@@ -8,9 +8,25 @@
 
 var vows = require('vows'),
     assert = require('../../helpers/assert'),
+    nock = require('nock'),
     helpers = require('../../helpers');
 
 var client = helpers.createClient('rackspace', 'database');
+
+if (process.env.NOCK) {
+  nock('https://' + client.serversUrl)
+    .get('/v1.0/537645/instances')
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/DatabaseInstances.json')));
+
+  nock('https://' + client.serversUrl)
+    .delete('/v1.0/537645/instances/aa21dcee-141b-4e5e-a231-01acf985f259/databases/TestDatabase')
+      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+
+  nock('https://' + client.serversUrl)
+    .post('/v1.0/537645/instances/aa21dcee-141b-4e5e-a231-01acf985f259/databases',
+      "{\"databases\":[{\"name\":\"TestDatabase\"}]}")
+      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+}
 
 vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
   "The pkgcloud Rackspace Database client": {
