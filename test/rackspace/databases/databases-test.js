@@ -16,7 +16,7 @@ var client = helpers.createClient('rackspace', 'database');
 if (process.env.NOCK) {
   nock('https://' + client.serversUrl)
     .get('/v1.0/537645/instances')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/DatabaseInstances.json')));
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstances.json')));
 
   nock('https://' + client.serversUrl)
     .delete('/v1.0/537645/instances/aa21dcee-141b-4e5e-a231-01acf985f259/databases/TestDatabase')
