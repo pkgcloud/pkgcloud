@@ -23,14 +23,14 @@
   ],
   "dependencies": {
     "async":         "0.1.x",
+    "errs":          "0.2.x",
     "eventemitter2": "0.4.x",
     "filed":         "0.0.x",
     "mime":          "1.2.x",
     "morestreams":   "0.1.x",
-    "request":       "2.x.x",
-    "utile":         "0.x.x",
     "pkginfo":       "0.2.x",
-    "errs":          "0.2.x"
+    "request":       "2.x.x",
+    "utile":         "0.x.x"
   },
   "devDependencies": {
     "vows": "0.6.x",
