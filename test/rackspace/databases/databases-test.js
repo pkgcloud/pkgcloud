@@ -1,5 +1,5 @@
 /*
- * instances-test.js: Tests for Rackspace Cloud Database instances
+ * databases-test.js: Tests for Rackspace Cloud Database instances
  *
  * (C) 2010 Nodejitsu Inc.
  * MIT LICENSE

@@ -52,3 +52,9 @@ assert.assertUser = function assertUser (user) {
   assert.isString(user.name);
   assert.equal(user.constructor.name, 'User');
 };
+
+assert.assertError = function assertEror (error, param){
+  assert.ok(error);
+  assert.isObject(error);
+  assert.isUndefined(param);
+}
