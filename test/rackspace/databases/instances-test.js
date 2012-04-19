@@ -160,10 +160,16 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
 }).addBatch({
   "The pkgcloud Rackspace database client": {
     "the create() method with erros": {
-      topic: client,
-      "should throw an Error": function (client) {
-        assert.throws(client.createInstance({ name: 'test-without-flavor' }));
-      }
+      topic: function () {
+        client.createInstance(this.callback);
+      },
+      "should respond with errors": assert.assertError
+    },
+    "the create() method without flavor": {
+      topic: function () {
+        client.createInstance({ name: 'test-without-flavor' }, this.callback);
+      },
+      "should respond with errors": assert.assertError
     }
   }
 }).export(module);
