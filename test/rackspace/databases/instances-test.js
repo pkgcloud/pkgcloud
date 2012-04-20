@@ -94,7 +94,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       },
       "with details": {
         topic: function () {
-          client.getInstances(true, this.callback);
+          client.getInstances(this.callback);
         },
         "should return list status and details for all databases": function (err, instances) {
           assert.isNull(err);
