@@ -45,7 +45,7 @@ vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
       },
       "with details": {
         topic: function () {
-          client.getFlavors(true, this.callback);
+          client.getFlavors(this.callback);
         },
         "should return the list of flavors with details": function (err, flavors) {
           assert.isNull(err);
