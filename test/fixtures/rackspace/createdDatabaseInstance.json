@@ -1,0 +1,36 @@
+{
+  "instance": {
+    "status": "BUILD",
+    "updated": "2012-03-21T18:12:00Z",
+    "name": "test-instance",
+    "links": [
+      {
+        "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/37a7eb5b-3f92-41c5-afe7-670443faac15",
+        "rel": "self"
+      },
+      {
+        "href": "http://ord.databases.api.rackspacecloud.com/instances/37a7eb5b-3f92-41c5-afe7-670443faac15",
+        "rel": "bookmark"
+      }
+    ],
+    "created": "2012-03-21T18:12:00Z",
+    "hostname": "c4bab32816faad3994d214d4cdee8f729d3537aa.rackspaceclouddb.com",
+    "volume": {
+      "size": 1
+    },
+    "flavor": {
+      "id": "1",
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/flavors/1",
+          "rel": "bookmark"
+        }
+      ]
+    },
+    "id": "37a7eb5b-3f92-41c5-afe7-670443faac15"
+  }
+}

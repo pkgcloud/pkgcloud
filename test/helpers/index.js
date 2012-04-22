@@ -74,3 +74,20 @@ helpers.personalityPost = function persPost(pubkey) {
     }
   });
 };
+
+helpers.selectInstance = function selectInstance (client, callback) {
+  function filterInstances (instances) {
+    var ready = instances.filter(function (instance) {
+      return (instance.status == 'RUNNING');
+    });
+    if (ready.length === 0) {
+      console.log('ERROR:   Is necessary have Instances actived for this test.');
+    }
+    return ready[0];
+  }
+  
+  client.getInstances(function (err, instances) {
+    if (err) throw new Error(err);
+    callback(filterInstances(instances));
+  });
+};
