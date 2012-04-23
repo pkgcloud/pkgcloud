@@ -1,0 +1,69 @@
+{
+  "instances": [
+    {
+      "status": "BUILD",
+      "updated": "2012-03-21T19:30:32Z",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/f2c56275-67c6-4d83-9465-d4d98c1c6fa0",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/instances/f2c56275-67c6-4d83-9465-d4d98c1c6fa0",
+          "rel": "bookmark"
+        }
+      ],
+      "created": "2012-03-21T19:30:31Z",
+      "hostname": "e9d33c59afce1556e6e32fb342f17e00d69bc631.rackspaceclouddb.com",
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          },
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "f2c56275-67c6-4d83-9465-d4d98c1c6fa0"
+    },
+    {
+      "status": "ACTIVE",
+      "updated": "2012-03-21T18:12:25Z",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/37a7eb5b-3f92-41c5-afe7-670443faac15",
+          "rel": "self"
+        },
+        {
+          "href": "http://ord.databases.api.rackspacecloud.com/instances/37a7eb5b-3f92-41c5-afe7-670443faac15",
+          "rel": "bookmark"
+        }
+      ],
+      "created": "2012-03-21T18:12:00Z",
+      "hostname": "c4bab32816faad3994d214d4cdee8f729d3537aa.rackspaceclouddb.com",
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          },
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "37a7eb5b-3f92-41c5-afe7-670443faac15"
+    }
+  ]
+}
