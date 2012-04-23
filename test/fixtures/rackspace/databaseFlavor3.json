@@ -1,0 +1,18 @@
+{
+  "flavor": {
+    "vcpus": 1,
+    "ram": 2048,
+    "id": 3,
+    "links": [
+      {
+        "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/3",
+        "rel": "self"
+      },
+      {
+        "href": "http://ord.databases.api.rackspacecloud.com/flavors/3",
+        "rel": "bookmark"
+      }
+    ],
+    "name": "m1.medium"
+  }
+}
