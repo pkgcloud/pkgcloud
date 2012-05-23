@@ -60,7 +60,7 @@ function batchTwo (providerClient, providerName) {
             var flavor = flavors[0];
             var now    = Date.now();
             
-            flavor.until({name: 'crazyFlavah'}, 50*m, 50*m, function () {
+            flavor.until({ name: 'crazyFlavah' }, 50*m, 50*m, function () {
               self.callback(null, Date.now() - now);
             });
           });
@@ -118,7 +118,7 @@ function batchFour (providerClient, providerName) {
             flavor: testContext.flavors[0].id
           }, function (err, server) {
             if (err) { return this.callback(err); }
-            server.setWait({status: 'RUNNING'}, 100*m, function (err, srv) {
+            server.setWait({ status: 'RUNNING' }, 100*m, function (err, srv) {
               self.callback(null, srv);
             });
           });

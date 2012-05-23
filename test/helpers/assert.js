@@ -40,20 +40,20 @@ assert.assertNock = function assertNock(nock) {
   return assert.ok(nock && nock.isDone ? nock.isDone() : true);
 };
 
-assert.assertInstance = function assertInstance (instance) {
+assert.assertInstance = function assertInstance(instance) {
   assert.ok(instance.id);
   assert.isString(instance.name);
   assert.isArray(instance.links);
   assert.isString(instance.status);
 };
 
-assert.assertUser = function assertUser (user) {
+assert.assertUser = function assertUser(user) {
   assert.ok(user);
   assert.isString(user.name);
   assert.equal(user.constructor.name, 'User');
 };
 
-assert.assertError = function assertEror (error, param){
+assert.assertError = function assertEror(error, param) {
   assert.ok(error);
   assert.isObject(error);
   assert.isUndefined(param);

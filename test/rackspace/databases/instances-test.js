@@ -56,12 +56,12 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       var self = this;
        client.getFlavor(1, function (err, flavor) {
         client.createInstance({
-          name:'test-instance',
+          name: 'test-instance',
           flavor: flavor
         }, self.callback);
        });
      },
-     "should return a valid instance": function(err, instance) {
+     "should return a valid instance": function (err, instance) {
       assert.isNull(err);
       assert.assertInstance(instance);
      },
