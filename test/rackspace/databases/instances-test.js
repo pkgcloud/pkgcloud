@@ -61,7 +61,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         }, self.callback);
        });
      },
-     "should return a valid instance": function(err, instance) {
+     "should return a valid instance": function (err, instance) {
       assert.isNull(err);
       assert.assertInstance(instance);
      },
