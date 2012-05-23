@@ -60,7 +60,7 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
   "The pkgcloud Rackspace Database client": {
     "the createDatabase() method with no instance": {
       topic: function () {
-        client.createDatabase({name:'NotCreated'}, this.callback);
+        client.createDatabase({ name: 'NotCreated' }, this.callback);
       },
       "should get error for instance": function (err, response) {
         assert.isObject(err);

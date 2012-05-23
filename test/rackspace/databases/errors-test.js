@@ -99,13 +99,13 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
       },
       "createUser() whit bad options": {
         topic: function () {
-          client.createUser({ username: 'testing', password:'shouldFail'}, this.callback);
+          client.createUser({ username: 'testing', password: 'shouldFail' }, this.callback);
         },
         "should respond with errors": assert.assertError
       },
       "createUser() whit bad options": {
         topic: function () {
-          client.createUser({ username: 'testing', password:'shouldFail', database:'none'}, this.callback);
+          client.createUser({ username: 'testing', password: 'shouldFail', database: 'none' }, this.callback);
         },
         "should respond with errors": assert.assertError
       },
