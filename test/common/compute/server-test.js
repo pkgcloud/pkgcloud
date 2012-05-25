@@ -276,6 +276,121 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, 
               helpers.loadFixture('rackspace/activeReboot.json'), {})
           ;
+      } else if (provider === 'amazon') {
+        nock('https://' + client.serversUrl)
+          .filteringRequestBody(helpers.authFilter)
+          .post('/?Action=DescribeImages', { 'Owner.1': 'self' })
+            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .post('/?Action=RunInstances', {
+            'ImageId': 'ami-85db1cec',
+            'InstanceType': 'm1.small',
+            'MaxCount': '1',
+            'MinCount': '1',
+            'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3QtaWRzMiJ9'
+          })
+            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .post('/?Action=DescribeInstances', {})
+            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=TerminateInstances', {
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200, 'doesn\'t matter', {})
+          .post('/?Action=RunInstances', {
+            'ImageId': 'ami-85db1cec',
+            'InstanceType': 'm1.small',
+            'MaxCount': '1',
+            'MinCount': '1',
+            'UserData': 'eyJuYW1lIjoidGVzdC1yZWJvb3QifQ=='
+          })
+            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=RebootInstances', {
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/reboot-server.xml', {}))
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
       }
     }
     
