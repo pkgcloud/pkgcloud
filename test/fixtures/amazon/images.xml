@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DescribeImagesResponse xmlns="http://ec2.amazonaws.com/doc/2012-04-01/">
+    <requestId>43c2772f-6788-47e4-b6c1-cfab1f997692</requestId>
+    <imagesSet>
+        <item>
+            <imageId>ami-85db1cec</imageId>
+            <imageLocation>705297679815/station kohai</imageLocation>
+            <imageState>available</imageState>
+            <imageOwnerId>705297679815</imageOwnerId>
+            <isPublic>false</isPublic>
+            <architecture>x86_64</architecture>
+            <imageType>machine</imageType>
+            <kernelId>aki-427d952b</kernelId>
+            <name>station kohai</name>
+            <description>A backup image with station and kohai configured.</description>
+            <rootDeviceType>ebs</rootDeviceType>
+            <rootDeviceName>/dev/sda1</rootDeviceName>
+            <blockDeviceMapping>
+                <item>
+                    <deviceName>/dev/sda1</deviceName>
+                    <ebs>
+                        <snapshotId>snap-f54df694</snapshotId>
+                        <volumeSize>8</volumeSize>
+                        <deleteOnTermination>true</deleteOnTermination>
+                    </ebs>
+                </item>
+            </blockDeviceMapping>
+            <virtualizationType>paravirtual</virtualizationType>
+            <hypervisor>xen</hypervisor>
+        </item>
+        <item>
+            <imageId>ami-fcc80c95</imageId>
+            <imageLocation>705297679815/station-backup</imageLocation>
+            <imageState>available</imageState>
+            <imageOwnerId>705297679815</imageOwnerId>
+            <isPublic>false</isPublic>
+            <architecture>x86_64</architecture>
+            <imageType>machine</imageType>
+            <kernelId>aki-427d952b</kernelId>
+            <name>station-backup</name>
+            <description>station-backup</description>
+            <rootDeviceType>ebs</rootDeviceType>
+            <rootDeviceName>/dev/sda1</rootDeviceName>
+            <blockDeviceMapping>
+                <item>
+                    <deviceName>/dev/sda1</deviceName>
+                    <ebs>
+                        <snapshotId>snap-236c9242</snapshotId>
+                        <volumeSize>8</volumeSize>
+                        <deleteOnTermination>true</deleteOnTermination>
+                    </ebs>
+                </item>
+            </blockDeviceMapping>
+            <virtualizationType>paravirtual</virtualizationType>
+            <hypervisor>xen</hypervisor>
+        </item>
+    </imagesSet>
+</DescribeImagesResponse>
