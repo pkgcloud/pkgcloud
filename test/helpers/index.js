@@ -105,3 +105,5 @@ helpers.authFilter = function authFilter(body) {
 
   return JSON.stringify(data);
 };
+
+helpers.pkgcloud = pkgcloud;
