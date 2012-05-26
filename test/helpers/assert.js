@@ -47,6 +47,14 @@ assert.assertInstance = function assertInstance(instance) {
   assert.isString(instance.status);
 };
 
+assert.assertContainer = function assertContainer(container) {
+  assert.equal(container.constructor.name, 'Container');
+};
+
+assert.assertFile = function assertFile(file) {
+  assert.equal(file.constructor.name, 'File');
+};
+
 assert.assertUser = function assertUser(user) {
   assert.ok(user);
   assert.isString(user.name);
