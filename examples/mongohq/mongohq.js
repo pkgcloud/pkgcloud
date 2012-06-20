@@ -17,7 +17,7 @@ mongodb.create({
   //
   // Now delete that same MongoDB
   //
-  mongodb.remove(result.id, function(err, result) {
+  mongodb.destroy(result.id, function(err, result) {
     console.log(err, result);
   });
 });
