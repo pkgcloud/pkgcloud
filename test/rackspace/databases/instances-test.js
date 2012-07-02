@@ -72,55 +72,45 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
 }).addBatch({
   "The pkgcloud Rackspace database client": {
     "the getInstances() method": {
-      "with no details": {
-        topic: function () {
-          client.getInstances(this.callback);
-        },
-        "should return the list of instances": function (err, instances) {
-          assert.isNull(err);
-          assert.isArray(instances);
-          assert.ok(instances.length > 0);
-        },
-        "should valid instance each item in the list": function (err, instances) {
-          assert.isNull(err);
-          instances.forEach(function (instance) {
-            assert.assertInstance(instance);
-          });
-        }
+      topic: function () {
+        client.getInstances(this.callback);
       },
-      "with details": {
-        topic: function () {
-          client.getInstances(this.callback);
-        },
-        "should return list status and details for all databases": function (err, instances) {
-          assert.isNull(err);
-          instances.forEach(function (instance) {
-            assert.assertInstance(instance);
-          });
-        },
-        "should have the extra info": function (err, instances) {
-          assert.isNull(err);
-          instances.forEach(function (instance) {
-            assert.ok(instance.created);
-            assert.ok(instance.hostname);
-            assert.ok(instance.id);
-            assert.ok(instance.updated);
-            assert.isArray(instance.links);
-            assert.isObject(instance.flavor);
-          });
-        },
-        "should have correct flavor": function (err, instances) {
-          assert.isNull(err);
-          instances.forEach(function (instance) {
-            assert.ok(instance.flavor.id);
-            assertLinks(instance.flavor.links);
-          });
-        },
-        "should have correct links": function (err, instances) {
-          instances.forEach(function (instance) {
-            assertLinks(instance.links);
-          });
-        }
+      "should return the list of instances": function (err, instances) {
+        assert.isNull(err);
+        assert.isArray(instances);
+        assert.ok(instances.length > 0);
+      },
+      "should valid instance each item in the list": function (err, instances) {
+        assert.isNull(err);
+        instances.forEach(function (instance) {
+          assert.assertInstance(instance);
+        });
+      },
+      "should response with extra info": function (err, instances) {
+        assert.isNull(err);
+        console.log('RESPUESTA', instances);
+        instances.forEach(function (instance) {
+          assert.ok(instance.created);
+          assert.ok(instance.hostname);
+          assert.ok(instance.id);
+          assert.ok(instance.updated);
+          assert.isArray(instance.links);
+          assert.isObject(instance.flavor);
+          assert.isObject(instance.volume);
+          assert.isNumber(instance.volume.size);
+        });
+      },
+      "should have correct flavor": function (err, instances) {
+        assert.isNull(err);
+        instances.forEach(function (instance) {
+          assert.ok(instance.flavor.id);
+          assertLinks(instance.flavor.links);
+        });
+      },
+      "should have correct links": function (err, instances) {
+        instances.forEach(function (instance) {
+          assertLinks(instance.links);
+        });
       }
     }
   }
