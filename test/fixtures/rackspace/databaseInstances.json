@@ -13,6 +13,22 @@
           "rel": "bookmark"
         }
       ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          },
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
       "name": "test-instance"
     },
     {
@@ -28,6 +44,22 @@
           "rel": "bookmark"
         }
       ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          },
+          {
+            "href": "http://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
       "name": "test-instance"
     }
   ]

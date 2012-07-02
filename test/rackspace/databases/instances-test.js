@@ -33,10 +33,6 @@ if (process.env.NOCK) {
       .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstances.json')));
 
   nock('https://' + client.serversUrl)
-    .get('/v1.0/537645/instances/detail')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstancesDetails.json')));
-
-  nock('https://' + client.serversUrl)
     .delete('/v1.0/537645/instances/37a7eb5b-3f92-41c5-afe7-670443faac15')
       .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
 }
