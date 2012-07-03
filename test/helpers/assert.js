@@ -6,12 +6,6 @@ assert.assertFlavor = function assertFlavor(flavor) {
   assert.equal(flavor.constructor.name, 'Flavor');
 };
 
-assert.assertFlavorDetails = function assertFlavorDetails(flavor) {
-  assert.ok(flavor.id);
-  assert.isString(flavor.name);
-  assert.equal(flavor.constructor.name, 'Flavor');
-};
-
 assert.assertServer = function assertServer(instance) {
   assert.equal(instance.constructor.name, 'Server');
 };

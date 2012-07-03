@@ -30,30 +30,23 @@ if (process.env.NOCK) {
 vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
   "The pkgcloud Rackspace database client": {
     "the getFlavors() method": {
-      "with no details": {
-        topic: function () {
-          client.getFlavors(this.callback);
-        },
-        "should return the list of flavors": function (err, flavors) {
-          testContext.flavors = flavors;
-          assert.isNull(err);
-          assert.isArray(flavors);
-          flavors.forEach(function (flavor) {
-            assert.assertFlavor(flavor);
-          });
-        }
+      topic: function () {
+        client.getFlavors(this.callback);
       },
-      "with details": {
-        topic: function () {
-          client.getFlavors(this.callback);
-        },
-        "should return the list of flavors with details": function (err, flavors) {
-          assert.isNull(err);
-          assert.isArray(flavors);
-          flavors.forEach(function (flavor) {
-            assert.assertFlavorDetails(flavor);
-          });
-        }
+      "should return the list of flavors": function (err, flavors) {
+        testContext.flavors = flavors;
+        assert.isNull(err);
+        assert.isArray(flavors);
+        flavors.forEach(function (flavor) {
+          assert.assertFlavor(flavor);
+        });
+      },
+      "should return the list of flavor with rackspace specific information": function (err, flavors) {
+        assert.isNull(err);
+        flavors.forEach(function (flavor) {
+          assert.isNumber(flavor.ram);
+          assert.isString(flavor.href);
+        });
       }
     }
   }
@@ -64,7 +57,8 @@ vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
         client.getFlavor(testContext.flavors[0].id, this.callback);
       },
       "should return a valid flavor": function (err, flavor) {
-        assert.assertFlavorDetails(flavor);
+        assert.isNull(err);
+        assert.assertFlavor(flavor);
       }
     }
   }
