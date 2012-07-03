@@ -88,12 +88,8 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       },
       "should response with extra info": function (err, instances) {
         assert.isNull(err);
-        console.log('RESPUESTA', instances);
         instances.forEach(function (instance) {
-          assert.ok(instance.created);
-          assert.ok(instance.hostname);
           assert.ok(instance.id);
-          assert.ok(instance.updated);
           assert.isArray(instance.links);
           assert.isObject(instance.flavor);
           assert.isObject(instance.volume);
