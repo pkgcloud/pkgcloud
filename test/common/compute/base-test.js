@@ -172,7 +172,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .get('/v1.0/537645/images/detail.json')
             .reply(200, helpers.loadFixture('rackspace/images.json'), {})
           .get('/v1.0/537645/flavors/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/flavors.json'), {})
+            .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
           .get('/v1.0/537645/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/flavor.json'), {})
         .post('/v1.0/537645/servers',

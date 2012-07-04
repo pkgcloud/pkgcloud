@@ -44,7 +44,7 @@ function batchOne (providerClient, providerName) {
           assert.isNull(err);
           testContext.flavors = flavors;
           flavors.forEach(function (flavor) {
-            assert.assertFlavorDetails(flavor);
+            assert.assertFlavor(flavor);
           });
         }
       }
