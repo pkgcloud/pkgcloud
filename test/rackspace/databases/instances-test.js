@@ -152,6 +152,19 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         client.createInstance({ name: 'test-without-flavor' }, this.callback);
       },
       "should respond with errors": assert.assertError
+    },
+    "the create() method with a incorrect size": {
+      topic: function () {
+        var self = this;
+        client.getFlavor(1, function (err, flavor) {
+          client.createInstance({
+            name: 'test-instance',
+            flavor: flavor,
+            size: '1'
+          }, self.callback);
+        });
+      },
+      "should respond with errors": assert.assertError
     }
   }
 }).export(module);
