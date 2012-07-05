@@ -72,41 +72,69 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
 }).addBatch({
   "The pkgcloud Rackspace database client": {
     "the getInstances() method": {
-      topic: function () {
-        client.getInstances(this.callback);
+      "without options": {
+        topic: function () {
+          client.getInstances(this.callback);
+        },
+        "should return the list of instances": function (err, instances) {
+          assert.isNull(err);
+          assert.isArray(instances);
+          assert.ok(instances.length > 0);
+        },
+        "should valid instance each item in the list": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.assertInstance(instance);
+          });
+        },
+        "should response with extra info": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.ok(instance.id);
+            assert.isArray(instance.links);
+            assert.isObject(instance.flavor);
+            assert.isObject(instance.volume);
+            assert.isNumber(instance.volume.size);
+          });
+        },
+        "should have correct flavor": function (err, instances) {
+          assert.isNull(err);
+          instances.forEach(function (instance) {
+            assert.ok(instance.flavor.id);
+            assertLinks(instance.flavor.links);
+          });
+        },
+        "should have correct links": function (err, instances) {
+          instances.forEach(function (instance) {
+            assertLinks(instance.links);
+          });
+        }
       },
-      "should return the list of instances": function (err, instances) {
+      "with limit": {
+        topic: function () {
+          client.getInstances({ limit: 2 }, this.callback);
+        },
+        "should respond only with 2 elements": function (err, instances) {
+          assert.isNull(err);
+          assert.isArray(instances);
+          assert.equal(2, instances.length);
+        },
+        "should pass as third argument the offset mark": function (err, instances, marker) {
+          assert.isNull(err);
+          assert.isNotNull(marker);
+          assert.ok(marker);
+          testContext.marker = marker;
+        }
+      }
+    },
+    "the getInstances() method with offset": {
+      topic: function () {
+        client.getInstances({ offset: testContext.marker }, this.callback);
+      },
+      "should respond ": function (err, instances, marker) {
         assert.isNull(err);
         assert.isArray(instances);
-        assert.ok(instances.length > 0);
-      },
-      "should valid instance each item in the list": function (err, instances) {
-        assert.isNull(err);
-        instances.forEach(function (instance) {
-          assert.assertInstance(instance);
-        });
-      },
-      "should response with extra info": function (err, instances) {
-        assert.isNull(err);
-        instances.forEach(function (instance) {
-          assert.ok(instance.id);
-          assert.isArray(instance.links);
-          assert.isObject(instance.flavor);
-          assert.isObject(instance.volume);
-          assert.isNumber(instance.volume.size);
-        });
-      },
-      "should have correct flavor": function (err, instances) {
-        assert.isNull(err);
-        instances.forEach(function (instance) {
-          assert.ok(instance.flavor.id);
-          assertLinks(instance.flavor.links);
-        });
-      },
-      "should have correct links": function (err, instances) {
-        instances.forEach(function (instance) {
-          assertLinks(instance.links);
-        });
+        assert.ok(instances.length >= 2);
       }
     }
   }
