@@ -80,6 +80,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           assert.isNull(err);
           assert.isArray(instances);
           assert.ok(instances.length > 0);
+          testContext.instancesQuantity = instances.length;
         },
         "should valid instance each item in the list": function (err, instances) {
           assert.isNull(err);
@@ -108,6 +109,11 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           instances.forEach(function (instance) {
             assertLinks(instance.links);
           });
+        },
+        "should have a null offset": function (err, instances, offset) {
+          assert.isNull(err);
+          assert.ok(instances);
+          assert.isNull(offset);
         }
       },
       "with limit": {
@@ -117,24 +123,14 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         "should respond only with 2 elements": function (err, instances) {
           assert.isNull(err);
           assert.isArray(instances);
-          assert.equal(2, instances.length);
+          assert.equal(instances.length, 2);
         },
-        "should pass as third argument the offset mark": function (err, instances, marker) {
+        "should pass as third argument the offset mark": function (err, instances, offset) {
           assert.isNull(err);
-          assert.isNotNull(marker);
-          assert.ok(marker);
-          testContext.marker = marker;
+          assert.isNotNull(offset);
+          assert.ok(offset);
+          testContext.marker = offset;
         }
-      }
-    },
-    "the getInstances() method with offset": {
-      topic: function () {
-        client.getInstances({ offset: testContext.marker }, this.callback);
-      },
-      "should respond ": function (err, instances, marker) {
-        assert.isNull(err);
-        assert.isArray(instances);
-        assert.ok(instances.length >= 2);
       }
     }
   }
@@ -164,6 +160,31 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         assert.isNull(err);
         assert.ok(instance);
         assert.assertInstance(instance);
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the getInstances() method with offset": {
+      topic: function () {
+        client.getInstances({ offset: testContext.marker }, this.callback);
+      },
+      "should respond less quantity": function (err, instances, offset) {
+        assert.isNull(err);
+        assert.isArray(instances);
+        assert.ok(instances.length >= 2
+            && instances.length < testContext.instancesQuantity);
+      }
+    },
+    "the getInstances() method with limit and offset": {
+      topic: function () {
+        client.getInstances({limit:1, offset: testContext.marker }, this.callback);
+      },
+      "should respond just one result with more next points": function (err, instances, offset) {
+        assert.isNull(err);
+        assert.isArray(instances);
+        assert.equal(instances.length, 1);
+        assert.ok(offset);
       }
     }
   }
