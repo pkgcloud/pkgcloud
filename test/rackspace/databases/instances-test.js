@@ -216,4 +216,30 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       "should respond with errors": assert.assertError
     }
   }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the restartInstance() method": {
+      "with valid instance": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            client.restartInstance(instance, self.callback);
+          });
+        },
+        "should respond correctly": function (err) {
+          assert.isUndefined(err);
+        }
+      },
+      "with no instance": {
+        topic: function () {
+          client.restartInstance(this.callback);
+        },
+        "should get errors": assert.assertError
+      },
+      "with no parameters": {
+        topic: client.restartInstance,
+        "should get errros": assert.assertError
+      }
+    }
+  }
 }).export(module);
