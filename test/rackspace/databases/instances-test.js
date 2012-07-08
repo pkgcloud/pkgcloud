@@ -209,7 +209,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           client.createInstance({
             name: 'test-instance',
             flavor: flavor,
-            size: '1'
+            size: 1
           }, self.callback);
         });
       },
@@ -278,7 +278,8 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           var self = this;
           helpers.selectInstance(client, function (instance) {
             if (instance) {
-              client.getFlavor(2, function (err, flavor) {
+              var newFlavor = instance.flavor.id + 1
+              client.getFlavor(newFlavor, function (err, flavor) {
                 if (!err && flavor) {
                   client.setFlavor(instance, flavor, self.callback);
                 }
@@ -292,4 +293,51 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       }
     }
   }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the setVolumeSize() method": {
+      "without instance and size parameters": {
+        topic: function () {
+          client.setVolumeSize(this.callback);
+        },
+        "should get errors": assert.assertError
+      },
+      "without size parameter": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            if (instance) {
+              client.setVolumeSize(instance, self.callback);
+            }
+          });
+        },
+        "should get errors": assert.assertError
+      },
+      "with invalid size parameter": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            if (instance) {
+              client.setVolumeSize(instance, 12, self.callback);
+            }
+          });
+        },
+        "should get errors": assert.assertError
+      },
+      "with correct parameters": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            if (instance) {
+              client.setVolumeSize(instance, 5, self.callback);
+            }
+          });
+        },
+        "should respond correctly": function (err) {
+          assert.isUndefined(err);
+        }
+      }
+    }
+  }
+// TODO: Make a clean up of all instances when the tests done.
 }).export(module);
