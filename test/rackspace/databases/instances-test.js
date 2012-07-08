@@ -242,4 +242,54 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       }
     }
   }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the setFlavor() method": {
+      "without instance and flavor parameters": {
+        topic: function () {
+          client.setFlavor(this.callback);
+        },
+        "should get errors": assert.assertError
+      },
+      "whitout flavor parameter": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            if (instance) {
+              client.setFlavor(instance, self.callback);
+            }
+          });
+        },
+        "should get errors": assert.assertError
+      },
+      "whitout instance parameter": {
+        topic: function () {
+          var self = this;
+          client.getFlavor(2, function (err, flavor) {
+            if (!err && flavor) {
+              client.setFlavor(flavor, self.callback);
+            }
+          })
+        },
+        "should get errors": assert.assertError
+      },
+      "with correct parameters": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            if (instance) {
+              client.getFlavor(2, function (err, flavor) {
+                if (!err && flavor) {
+                  client.setFlavor(instance, flavor, self.callback);
+                }
+              });
+            }
+          });
+        },
+        "should respond correctly": function (err) {
+          assert.isUndefined(err);
+        }
+      }
+    }
+  }
 }).export(module);
