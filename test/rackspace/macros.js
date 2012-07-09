@@ -6,6 +6,7 @@
  */
 
 var fs = require('fs'),
+    filed = require('filed'),
     assert = require('../helpers/assert'),
     helpers = require('../helpers');
 

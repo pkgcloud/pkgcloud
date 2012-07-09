@@ -117,7 +117,7 @@ function batchFour (providerClient, providerName) {
             image: testContext.images[0].id,
             flavor: testContext.flavors[0].id
           }, function (err, server) {
-            if (err) { return this.callback(err); }
+            if (err) { return self.callback(err); }
             server.setWait({ status: 'RUNNING' }, 100*m, function (err, srv) {
               self.callback(null, srv);
             });

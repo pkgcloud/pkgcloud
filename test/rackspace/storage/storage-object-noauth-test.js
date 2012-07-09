@@ -9,7 +9,6 @@
 var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
-    filed = require('filed'),
     assert = require('../../helpers/assert'),
     macros = require('../macros'),
     pkgcloud = require('../../../lib/pkgcloud'),
