@@ -354,5 +354,4 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       }
     }
   }
-**/
-}).export(module);
+})**/.export(module);
