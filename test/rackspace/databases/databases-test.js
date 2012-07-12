@@ -11,7 +11,8 @@ var vows = require('vows'),
     nock = require('nock'),
     helpers = require('../../helpers');
 
-var client = helpers.createClient('rackspace', 'database');
+var client = helpers.createClient('rackspace', 'database'),
+    testContext = {};
 
 if (process.env.NOCK) {
   nock('https://' + client.serversUrl)
@@ -35,6 +36,18 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
         var self = this;
         helpers.selectInstance(client, function (instance) {
           client.createDatabase({name: 'TestDatabase', instance:instance}, self.callback);
+        });
+      },
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.equal(response.statusCode, 202);
+      }
+    },
+    "create another database for pagination test": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.createDatabase({name: 'TestDatabaseTwo', instance:instance}, self.callback);
         });
       },
       "should respond correctly": function (err, response) {
@@ -75,34 +88,97 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
       topic: function () {
         var self = this;
         helpers.selectInstance(client, function (instance) {
-          client.getDatabases(instance, self.callback);
+          client.getDatabases({ instance: instance }, self.callback);
         });
       },
-      "should return a list of databases": function (err, list, response) {
+      "should return a list of databases": function (err, list) {
         assert.isNull(err);
         assert.isArray(list);
         assert.ok(list.length > 0);
-        assert.equal(response.statusCode, 200);
       },
-      "the list should have names": function (err, list, response) {
+      "the list should have names": function (err, list) {
         assert.ok(list[0]);
         assert.ok(list[0].name);
         assert.isString(list[0].name);
+      }
+    },
+    "the getDatabases() method with limit": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            client.getDatabases({ instance: instance, limit:1 }, self.callback);
+          });
+        },
+        "should respond one element": function (err, instances) {
+          assert.isNull(err);
+          assert.isArray(instances);
+          assert.equal(instances.length, 1);
+        },
+        "should pass as third argument the offset mark": function (err, instances, offset) {
+          assert.isNull(err);
+          assert.isNotNull(offset);
+          assert.ok(offset);
+          testContext.marker = offset;
+        }
+      }
+  }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the getDatabases() method with offset": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getDatabases({ instance: instance, offset: testContext.marker }, self.callback);
+        });
+      },
+      "should respond less quantity": function (err, instances, offset) {
+        assert.isNull(err);
+        assert.isArray(instances);
+        assert.equal(instances.length, 1);
+        assert.isNull(offset);
+      }
+    },
+    "the getDatabases() method with limit and offset": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getDatabases({ instance: instance, limit:1, offset: testContext.marker }, self.callback);
+        });
+      },
+      "should respond just one result with more next points": function (err, instances, offset) {
+        assert.isNull(err);
+        assert.isArray(instances);
+        assert.equal(instances.length, 1);
+        assert.isNull(offset);
       }
     }
   }
 }).addBatch({
   "The pkgcloud Rackspace Database client": {
     "the destroyDatabase() method": {
-      topic: function () {
-        var self = this;
-        helpers.selectInstance(client, function (instance) {
-          client.destroyDatabase('TestDatabase', instance, self.callback);
-        });
+      "with first db": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            client.destroyDatabase('TestDatabase', instance, self.callback);
+          });
+        },
+        "should respond correctly": function (err, response) {
+          assert.isNull(err);
+          assert.equal(response.statusCode, 202);
+        }
       },
-      "should respond correctly": function (err, response) {
-        assert.isNull(err);
-        assert.equal(response.statusCode, 202);
+      "with last db": {
+        topic: function () {
+          var self = this;
+          helpers.selectInstance(client, function (instance) {
+            client.destroyDatabase('TestDatabaseTwo', instance, self.callback);
+          });
+        },
+        "should respond correctly": function (err, response) {
+          assert.isNull(err);
+          assert.equal(response.statusCode, 202);
+        }
       }
     }
   }
