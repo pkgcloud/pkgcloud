@@ -120,7 +120,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           client.getInstances({ limit: 2 }, this.callback);
         },
-        "should respond only with 2 elements": function (err, instances) {
+        "should respond at least 2 elements": function (err, instances) {
           assert.isNull(err);
           assert.isArray(instances);
           assert.equal(instances.length, 2);
@@ -255,9 +255,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            if (instance) {
-              client.setFlavor(instance, self.callback);
-            }
+            client.setFlavor(instance, self.callback);
           });
         },
         "should get errors": assert.assertError
@@ -277,14 +275,12 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            if (instance) {
-              var newFlavor = instance.flavor.id + 1
-              client.getFlavor(newFlavor, function (err, flavor) {
-                if (!err && flavor) {
-                  client.setFlavor(instance, flavor, self.callback);
-                }
-              });
-            }
+            var newFlavor = Number(instance.flavor.id) + 1
+            client.getFlavor(newFlavor, function (err, flavor) {
+              if (!err && flavor) {
+                client.setFlavor(instance, flavor, self.callback);
+              }
+            });
           });
         },
         "should respond correctly": function (err) {
@@ -306,9 +302,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            if (instance) {
-              client.setVolumeSize(instance, self.callback);
-            }
+            client.setVolumeSize(instance, self.callback);
           });
         },
         "should get errors": assert.assertError
@@ -317,9 +311,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            if (instance) {
-              client.setVolumeSize(instance, 12, self.callback);
-            }
+            client.setVolumeSize(instance, 12, self.callback);
           });
         },
         "should get errors": assert.assertError
@@ -328,9 +320,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            if (instance) {
-              client.setVolumeSize(instance, 5, self.callback);
-            }
+            client.setVolumeSize(instance, 5, self.callback);
           });
         },
         "should respond correctly": function (err) {
@@ -339,5 +329,30 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
       }
     }
   }
-// TODO: Make a clean up of all instances when the tests done.
+})
+//
+// Its better run the tests again for have instances already running.
+// for the moment I will not clean up the instances at the end.
+//
+/**
+.addBatch({
+  "The pkgcloud Rackspace database client": {
+    "destroying test instances": {
+      topic: function () {
+        var self  = this,
+            async = require('async');
+        client.getInstances(function (err, instances) {
+          if (err) throw new Error(err);
+          async.forEach(instances, function () {
+            // I dont know why I have to do this for not lost the context of client.
+            client.destroyInstance(arguments[0], arguments[1]);
+          } , self.callback);
+        })
+      },
+      "should complete without erros": function (err) {
+        assert.isUndefined(err);
+      }
+    }
+  }
+**/
 }).export(module);
