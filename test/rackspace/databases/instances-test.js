@@ -275,7 +275,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            var newFlavor = Number(instance.flavor.id) + 1
+            var newFlavor = (Number(instance.flavor.id) === 4) ? 1 : Number(instance.flavor.id) + 1;
             client.getFlavor(newFlavor, function (err, flavor) {
               if (!err && flavor) {
                 client.setFlavor(instance, flavor, self.callback);
@@ -320,7 +320,8 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
         topic: function () {
           var self = this;
           helpers.selectInstance(client, function (instance) {
-            client.setVolumeSize(instance, 5, self.callback);
+            var newSize = (Number(instance.volume.size) === 8) ? 1 : Number(instance.volume.size) + 1;
+            client.setVolumeSize(instance, newSize, self.callback);
           });
         },
         "should respond correctly": function (err) {
