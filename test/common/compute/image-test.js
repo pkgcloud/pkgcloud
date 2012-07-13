@@ -96,10 +96,10 @@ function batchThree (providerClient, providerName, nock) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
-    
+
     var client = clients[provider],
         nock   = require('nock');
-    
+
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
@@ -127,9 +127,26 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('rackspace/image.json'), {})
           .get('/v1.0/537645/images/112')
             .reply(200, helpers.loadFixture('rackspace/image.json'), {});
+      } else if (provider === 'amazon') {
+        nock('https://' + client.serversUrl)
+          .filteringRequestBody(helpers.authFilter)
+          .post('/?Action=DescribeInstances', {})
+            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=DescribeImages', { 'Owner.1': 'self' })
+            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .post('/?Action=DescribeImages', { 'ImageId.1': 'ami-85db1cec' })
+            .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
+          .post('/?Action=DescribeImages', { 'ImageId.1': 'ami-85db1cec' })
+            .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
       }
     }
-    
+
     vows
       .describe('pkgcloud/common/compute/image [' + provider + ']')
       .addBatch(batchOne(client, provider, nock))

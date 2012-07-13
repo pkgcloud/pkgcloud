@@ -56,10 +56,10 @@ function batchTwo (providerClient, providerName) {
           client.getFlavors(function (err, flavors) {
             if (err) { return self.callback(err); }
             testContext.flavors = flavors;
-            
+
             var flavor = flavors[0];
             var now    = Date.now();
-            
+
             flavor.until({ name: 'crazyFlavah' }, 50*m, 50*m, function () {
               self.callback(null, Date.now() - now);
             });
@@ -163,7 +163,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
-          .reply(204, "", 
+          .reply(204, "",
             JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/')
@@ -183,9 +183,54 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(202, helpers.loadFixture('rackspace/setWaitResp2.json'), {})
         .get('/v1.0/537645/servers/20602046')
           .reply(200, helpers.loadFixture('rackspace/20602046.json'), {});
+      } else if (provider === 'amazon') {
+        nock('https://' + client.serversUrl)
+          .filteringRequestBody(helpers.authFilter)
+          .post('/?Action=DescribeImages', { 'Owner.1': 'self' })
+            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .post('/?Action=RunInstances', {
+            'ImageId': 'ami-85db1cec',
+            'InstanceType': 'm1.small',
+            'MaxCount': '1',
+            'MinCount': '1',
+            'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3Qtc2V0V2FpdCJ9'
+          })
+            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .post('/?Action=DescribeInstances', {
+            'Filter.1.Name': 'instance-state-code',
+            'Filter.1.Value.1': '0',
+            'Filter.1.Value.2': '16',
+            'Filter.1.Value.3': '32',
+            'Filter.1.Value.4': '64',
+            'Filter.1.Value.5': '80',
+            'InstanceId.1': 'i-1d48637b'
+          })
+            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .post('/?Action=DescribeInstanceAttribute', {
+            'Attribute': 'userData',
+            'InstanceId': 'i-1d48637b'
+          })
+            .reply(200,
+                   helpers.loadFixture('amazon/running-server-attr.xml', {}));
       }
     }
-    
+
     vows
       .describe('pkgcloud/common/compute/flavor [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
