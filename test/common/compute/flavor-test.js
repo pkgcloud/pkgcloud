@@ -62,10 +62,10 @@ function batchTwo (providerClient, providerName) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
-    
+
     var client = clients[provider],
         nock   = require('nock');
-    
+
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
@@ -73,19 +73,21 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
           .get('/' + client.account + '/packages/Small%201GB')
             .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
-      } else if (provider === 'rackspace') {        
+      } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
-          .reply(204, "", 
+          .reply(204, "",
             JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/flavors/detail.json')
             .reply(200, helpers.loadFixture('rackspace/flavors.json'), {})
           .get('/v1.0/537645/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
+      } else if (provider === 'amazon') {
+        // No need in nock here, all flavors are stored in provider's files
       }
     }
-    
+
     vows
       .describe('pkgcloud/common/compute/flavor [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))

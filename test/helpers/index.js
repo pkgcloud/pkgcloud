@@ -1,5 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
+    qs = require('querystring'),
     pkgcloud = require('../../lib/pkgcloud');
 
 var helpers = exports;
@@ -91,3 +92,18 @@ helpers.selectInstance = function selectInstance (client, callback) {
     callback(filterInstances(instances));
   });
 };
+
+helpers.authFilter = function authFilter(body) {
+  var data = qs.parse(body);
+
+  delete data.AWSAccessKeyId;
+  delete data.Signature;
+  delete data.SignatureMethod;
+  delete data.SignatureVersion;
+  delete data.Timestamp;
+  delete data.Version;
+
+  return JSON.stringify(data);
+};
+
+helpers.pkgcloud = pkgcloud;
