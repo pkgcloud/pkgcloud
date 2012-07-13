@@ -103,24 +103,24 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
       }
     },
     "the getDatabases() method with limit": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            client.getDatabases({ instance: instance, limit:1 }, self.callback);
-          });
-        },
-        "should respond one element": function (err, instances) {
-          assert.isNull(err);
-          assert.isArray(instances);
-          assert.equal(instances.length, 1);
-        },
-        "should pass as third argument the offset mark": function (err, instances, offset) {
-          assert.isNull(err);
-          assert.isNotNull(offset);
-          assert.ok(offset);
-          testContext.marker = offset;
-        }
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getDatabases({ instance: instance, limit:1 }, self.callback);
+        });
+      },
+      "should respond one element": function (err, instances) {
+        assert.isNull(err);
+        assert.isArray(instances);
+        assert.equal(instances.length, 1);
+      },
+      "should pass as third argument the offset mark": function (err, instances, offset) {
+        assert.isNull(err);
+        assert.isNotNull(offset);
+        assert.ok(offset);
+        testContext.marker = offset;
       }
+    }
   }
 }).addBatch({
   "The pkgcloud Rackspace database client": {
@@ -145,7 +145,7 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
           client.getDatabases({ instance: instance, limit:1, offset: testContext.marker }, self.callback);
         });
       },
-      "should respond just one result with more next points": function (err, instances, offset) {
+      "should respond just one result with no more next points": function (err, instances, offset) {
         assert.isNull(err);
         assert.isArray(instances);
         assert.equal(instances.length, 1);

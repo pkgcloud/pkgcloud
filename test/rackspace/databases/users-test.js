@@ -11,7 +11,8 @@ var vows = require('vows'),
     nock = require('nock'),
     helpers = require('../../helpers');
 
-var client = helpers.createClient('rackspace', 'database');
+var client = helpers.createClient('rackspace', 'database'),
+    testContext = {};
 
 if (process.env.NOCK) {
   nock('https://' + client.serversUrl)
@@ -55,6 +56,24 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
         assert.ok(response);
         assert.equal(response.statusCode, 202);
       }
+    },
+    "create an other user for test pagination": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.createUser({
+            username: 'joeTestTwo',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          }, self.callback)
+        })
+      },
+      "shoudl respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.ok(response);
+        assert.equal(response.statusCode, 202);
+      }
     }
   }
 }).addBatch({
@@ -63,16 +82,65 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
       topic: function () {
         var self = this;
         helpers.selectInstance(client, function (instance) {
-          client.getUsers(instance, self.callback);
+          client.getUsers({ instance: instance }, self.callback);
         });
       },
-      "should get the list of users": function (err, users, response) {
+      "should get the list of users": function (err, users) {
         assert.isNull(err);
         assert.isArray(users);
-        assert.ok(response);
         users.forEach(function (user) {
           assert.assertUser(user);
         });
+      }
+    },
+    "the getUsers() method with limit": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getUsers({ instance: instance, limit:1 }, self.callback);
+        });
+      },
+      "should respond one element": function (err, users) {
+        assert.isNull(err);
+        assert.isArray(users);
+        assert.equal(users.length, 1);
+      },
+      "should pass as third argument the offset mark": function (err, users, offset) {
+        assert.isNull(err);
+        assert.isNotNull(offset);
+        assert.ok(offset);
+        testContext.marker = offset;
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud Rackspace database client": {
+    "the getUsers() method with offset": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getUsers({ instance: instance, offset: testContext.marker }, self.callback);
+        });
+      },
+      "should respond less quantity": function (err, users, offset) {
+        assert.isNull(err);
+        assert.isArray(users);
+        assert.equal(users.length, 2);
+        assert.isNull(offset);
+      }
+    },
+    "the getUsers() method with limit and offset": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.getUsers({ instance: instance, limit:1, offset: testContext.marker }, self.callback);
+        });
+      },
+      "should respond just one result with more next points": function (err, users, offset) {
+        assert.isNull(err);
+        assert.isArray(users);
+        assert.equal(users.length, 1);
+        assert.ok(offset);
       }
     }
   }
@@ -83,6 +151,19 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
         var self = this;
         helpers.selectInstance(client, function (instance) {
           client.destroyUser(instance, 'joeTest', self.callback);
+        });
+      },
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.ok(response);
+        assert.equal(response.statusCode, 202);
+      }
+    },
+    "destroy the user used for pagination": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.destroyUser(instance, 'joeTestTwo', self.callback);
         });
       },
       "should respond correctly": function (err, response) {
