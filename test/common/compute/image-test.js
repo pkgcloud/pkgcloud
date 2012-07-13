@@ -138,7 +138,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           })
             .reply(200,
                    helpers.loadFixture('amazon/running-server-attr.xml', {}))
-          .post('/?Action=DescribeImages', { 'Owner.1': 'self' })
+          .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
             .reply(200, helpers.loadFixture('amazon/images.xml'), {})
           .post('/?Action=DescribeImages', { 'ImageId.1': 'ami-85db1cec' })
             .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
