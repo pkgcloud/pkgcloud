@@ -103,7 +103,7 @@ function batchThree (providerClient, providerName) {
     },
     "the getServer() method": {
       topic: function () {
-          client.getServer(testContext.servers[0], this.callback);
+        client.getServer(testContext.servers[0], this.callback);
       },
       "should return a valid server": function (err, server) {
         client.destroyServer(server);
@@ -279,7 +279,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       } else if (provider === 'amazon') {
         nock('https://' + client.serversUrl)
           .filteringRequestBody(helpers.authFilter)
-          .post('/?Action=DescribeImages', { 'Owner.1': 'self' })
+          .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
             .reply(200, helpers.loadFixture('amazon/images.xml'), {})
           .post('/?Action=RunInstances', {
             'ImageId': 'ami-85db1cec',
