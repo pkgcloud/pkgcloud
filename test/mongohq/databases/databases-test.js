@@ -44,6 +44,12 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
             client.create({ invalid:'keys' }, this.callback);
           },
           "should respond with errors": assert.assertError
+        },
+        "no plan": {
+          topic: function () {
+            client.create({ name:'testDatabase' }, this.callback);
+          },
+          "should respond with errors": assert.assertError
         }
       }
     }
@@ -62,8 +68,11 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
           assert.equal(confirm, 'deleted');
         }
       },
-      "with invalid options": {
-        
+      "without options": {
+        topic: function () {
+          client.create(this.callback);
+        },
+        "should respond with errors": assert.assertError
       }
     }
   }
