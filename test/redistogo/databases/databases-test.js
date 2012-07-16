@@ -13,7 +13,7 @@ var vows = require('vows'),
 var client = helpers.createClient('redistogo', 'database'),
     testContext = {};
 
-vows.describe('pkgcloud/mongohq/databases').addBatch({
+vows.describe('pkgcloud/redistogo/databases').addBatch({
   "The pkgcloud Redistogo client": {
     "the create() method": {
       "with correct options": {
