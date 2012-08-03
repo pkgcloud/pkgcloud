@@ -19,8 +19,10 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
       "with correct options": {
         topic: function () {
           client.create({
-            plan: 'free',
-            name: 'testDatabase'
+            subdomain: 'testDatabase',
+            first_name: "Marak",
+            last_name: "Squires",
+            email: "marak.squires@gmail.com"
           }, this.callback);
         },
         "should respond correctly": function (err, database) {
@@ -43,11 +45,23 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
           topic: function () {
             client.create({ invalid:'keys' }, this.callback);
           },
+          "should respond with errors": assert.assertError,
+        },
+        "no email": {
+          topic: function () {
+            client.create({ subdomain:'testDatabase', first_name: "Marak", last_name: "Squires"}, this.callback);
+          },
           "should respond with errors": assert.assertError
         },
-        "no plan": {
+        "no subdomain": {
           topic: function () {
-            client.create({ name:'testDatabase' }, this.callback);
+            client.create({ email: "marak.squires@gmail.com", first_name: "Marak", last_name: "Squires"}, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "no names": {
+          topic: function () {
+            client.create({ email: "marak.squires@gmail.com", subdomain:'testDatabase'}, this.callback);
           },
           "should respond with errors": assert.assertError
         }

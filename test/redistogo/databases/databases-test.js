@@ -61,7 +61,6 @@ vows.describe('pkgcloud/redistogo/databases').addBatch({
           client.get(testContext.databaseId, this.callback);
         },
         "should respond correctly": function (err, database) {
-          console.log('TRALLENDO', database);
           assert.isNull(err);
           assert.ok(database.id);
           assert.ok(database.uri);
