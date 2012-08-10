@@ -14,15 +14,19 @@ var testContext = {},
     client = helpers.createClient('rackspace', 'database');
 
 if (process.env.NOCK) {
-  nock('https://' + client.serversUrl)
+  var credentials = {
+     username: client.config.auth.username,
+     key: client.config.auth.apiKey
+  };
+
+  nock('https://' + client.authUrl)
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/token.json')));
+
+  nock('https://ord.databases.api.rackspacecloud.com')
     .get('/v1.0/537645/flavors')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavors.json')));
+      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavors.json')))
 
-  nock('https://' + client.serversUrl)
-    .get('/v1.0/537645/flavors/detail')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavorsDetail.json')));
-
-  nock('https://' + client.serversUrl)
     .get('/v1.0/537645/flavors/3')
       .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavor3.json')));
 }
@@ -54,7 +58,7 @@ vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
   "The pkgcloud Rackspace database client": {
     "the getFlavor() method": {
       topic: function () {
-        client.getFlavor(testContext.flavors[0].id, this.callback);
+        client.getFlavor(testContext.flavors[2].id, this.callback);
       },
       "should return a valid flavor": function (err, flavor) {
         assert.isNull(err);

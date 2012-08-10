@@ -18,9 +18,8 @@ var testData = {},
 if (process.env.NOCK) {
  nock('https://' + client.serversUrl)
   .get('/')
-    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
-  .get('/v1.0/537645/limits')
-    .reply(200, "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+    .reply(203, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
+
 
   var credentials = {
      username: client.config.auth.username,
