@@ -16,25 +16,86 @@ var client = helpers.createClient('rackspace', 'database');
 var testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://' + client.serversUrl)
+
+  var credentials = {
+     username: client.config.auth.username,
+     key: client.config.auth.apiKey
+  };
+
+  nock('https://' + client.authUrl)
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'));
+
+  nock('https://ord.databases.api.rackspacecloud.com')
     .get('/v1.0/537645/flavors/1')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavors.json')));
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
 
-  nock('https://' + client.serversUrl)
     .post('/v1.0/537645/instances',
-      "{\"instance\": { \
-        \"name\":\"test-instance\", \
-        \"flavorRef\":\"http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1\", \
-        \"databases\":[],\"volume\":{\"size\":1}}}")
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/createdDatabaseInstance.json')));
+      "{\"instance\":{\"name\":\"test-instance\",\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1\",\"databases\":[],\"volume\":{\"size\":1}}}")
+      .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'))
 
-  nock('https://' + client.serversUrl)
-    .get('/v1.0/537645/instances')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstances.json')));
+    .post('/v1.0/537645/instances',
+      "{\"instance\":{\"name\":\"test-instance\",\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1\",\"databases\":[],\"volume\":{\"size\":1}}}")
+      .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'))
 
-  nock('https://' + client.serversUrl)
-    .delete('/v1.0/537645/instances/37a7eb5b-3f92-41c5-afe7-670443faac15')
-      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+    .get('/v1.0/537645/instances?limit=2')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+      .reply(202)
+
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstanceShutdown.json'))
+
+    .get('/v1.0/537645/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstanceOffset.json'))
+
+    .get('/v1.0/537645/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstanceLimitOffset.json'))
+
+    .get('/v1.0/537645/flavors/1')
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', "{\"restart\":{}}")
+      .reply(202)
+
+    .get('/v1.0/537645/flavors/2')
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/flavors/2')
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action',
+      "{\"resize\":{\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2\"}}")
+      .reply(202)
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action',
+      "{\"resize\":{\"volume\":{\"size\":2}}}")
+      .reply(202);
 }
 
 function assertLinks (links) {
@@ -209,7 +270,7 @@ vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
           client.createInstance({
             name: 'test-instance',
             flavor: flavor,
-            size: 1
+            size: '1'
           }, self.callback);
         });
       },

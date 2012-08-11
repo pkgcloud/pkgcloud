@@ -1,0 +1,67 @@
+{
+  "instances": [
+    {
+      "status": "ACTIVE",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f"
+    }, {
+      "status": "ACTIVE",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/55041e91-98ab-4cd5-8148-f3b3978b3262",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/55041e91-98ab-4cd5-8148-f3b3978b3262",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "55041e91-98ab-4cd5-8148-f3b3978b3262"
+    }
+  ],
+  "links": [
+    {
+      "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262&limit=2",
+      "rel": "next"
+    }
+  ]
+}
