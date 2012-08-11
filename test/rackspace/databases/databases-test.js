@@ -15,18 +15,50 @@ var client = helpers.createClient('rackspace', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://' + client.serversUrl)
-    .get('/v1.0/537645/instances')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseInstances.json')));
+  var credentials = {
+     username: client.config.auth.username,
+     key: client.config.auth.apiKey
+  };
 
-  nock('https://' + client.serversUrl)
-    .delete('/v1.0/537645/instances/aa21dcee-141b-4e5e-a231-01acf985f259/databases/TestDatabase')
-      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+  nock('https://' + client.authUrl)
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'));
 
-  nock('https://' + client.serversUrl)
-    .post('/v1.0/537645/instances/aa21dcee-141b-4e5e-a231-01acf985f259/databases',
-      "{\"databases\":[{\"name\":\"TestDatabase\"}]}")
-      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+  nock('https://ord.databases.api.rackspacecloud.com')
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases', "{\"databases\":[{\"name\":\"TestDatabaseTwo\"}]}")
+      .reply(202)
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases', "{\"databases\":[{\"name\":\"TestDatabase\"}]}")
+      .reply(202)
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
+      .reply(200, helpers.loadFixture('rackspace/databasesLimit.json'))
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?')
+      .reply(200, "{\"databases\": [{\"name\": \"TestDatabase\"}, {\"name\": \"TestDatabaseTwo\"}]}")
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?marker=TestDatabase')
+      .reply(200, "{\"databases\": [{\"name\": \"TestDatabaseTwo\"}]}")
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1&marker=TestDatabase')
+      .reply(200, "{\"databases\": [{\"name\": \"TestDatabaseTwo\"}]}")
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
+      .reply(202)
+    .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
+      .reply(202)
 }
 
 vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
