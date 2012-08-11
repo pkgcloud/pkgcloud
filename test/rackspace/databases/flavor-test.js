@@ -21,14 +21,14 @@ if (process.env.NOCK) {
 
   nock('https://' + client.authUrl)
     .post('/v1.1/auth', { "credentials": credentials })
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/token.json')));
+      .reply(200, helpers.loadFixture('rackspace/token.json'));
 
   nock('https://ord.databases.api.rackspacecloud.com')
     .get('/v1.0/537645/flavors')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavors.json')))
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'))
 
     .get('/v1.0/537645/flavors/3')
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/databaseFlavor3.json')));
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
 }
 
 vows.describe('pkgcloud/rackspace/database/flavors').addBatch({
