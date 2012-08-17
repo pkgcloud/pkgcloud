@@ -15,26 +15,72 @@ var client = helpers.createClient('rackspace', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://' + client.serversUrl)
-    .post('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/users',
+  nock('https://ord.databases.api.rackspacecloud.com')
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', 
       "{\"users\":[{\"name\":\"joeTest\",\"password\":\"joepasswd\",\"databases\":[]}]}")
-      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+      .reply(202)
 
-  nock('https://' + client.serversUrl)
-    .get('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/users')
-      .reply(200, "{\"users\": [{\"name\": \"joeTest\"}]}");
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', 
+      "{\"users\":[{\"name\":\"joeTestTwo\",\"password\":\"joepasswd\",\"databases\":[]}]}")
+      .reply(202)
 
-  nock('https://' + client.serversUrl)
-    .delete('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/users/joeTest')
-      .reply(202, "202 Accepted\n\nThe request is accepted for processing.\n\n   ");
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', 
+      "{\"users\":[{\"name\":\"joeTestThree\",\"password\":\"joepasswd\",\"databases\":[]}]}")
+      .reply(202)
 
-  nock('https://' + client.serversUrl)
-    .post('/v1.0/537645/instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/root')
-      .reply(200, "{\"user\": {\"password\": \"038cdd63-4a15-447c-9cbf-46242e3027a1\", \"name\": \"root\"}}");
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
-  nock('https://' + client.serversUrl)
-    .get('/v1.0/537645//instances/b601038d-d896-4f6b-9f62-e83a1d5c0e85/root')
-      .reply(200, "{\"rootEnabled\": true}");
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
+      .reply(200, helpers.loadFixture('rackspace/databaseUsersLimit.json'))
+
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?')
+      .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1&marker=joeTest')
+      .reply(200, helpers.loadFixture('rackspace/databaseUsersLimitOffset.json'))
+
+    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest')
+      .reply(200, "{\"users\": [{\"name\": \"joeTestTwo\", \"databases\": []}, {\"name\": \"joeTestThree\", \"databases\": []}]}")
+
+    .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
+      .reply(202)
+
+    .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
+      .reply(202)
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, "{\"user\": {\"password\": \"dbba235b-d078-42ec-b992-dec1464c49cc\", \"name\": \"root\"}}")
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645//instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, "{\"rootEnabled\": true}")
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 }
 
 vows.describe('pkgcloud/rackspace/databases/users').addBatch({
@@ -66,7 +112,14 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
             password: 'joepasswd',
             database: 'TestDatabase',
             instance: instance
-          }, self.callback)
+          }, function () {
+            client.createUser({
+              username: 'joeTestThree',
+              password: 'joepasswd',
+              database: 'TestDatabase',
+              instance: instance
+            }, self.callback);
+          })
         })
       },
       "shoudl respond correctly": function (err, response) {
