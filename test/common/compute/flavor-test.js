@@ -50,7 +50,7 @@ function batchTwo (providerClient, providerName) {
         client.getFlavor(testContext.flavors[0].id, this.callback);
       },
       "should return a valid flavor": function (err, flavor) {
-        assert.assertFlavorDetails(flavor);
+        assert.assertFlavor(flavor);
       }
     }
   };
@@ -80,7 +80,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/flavors/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/flavors.json'), {})
+            .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
           .get('/v1.0/537645/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
       } else if (provider === 'amazon') {
