@@ -1,0 +1,16 @@
+ {
+  "flavor": {
+    "ram": 512,
+    "id": 1,
+    "links": [
+      {
+        "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+        "rel": "self"
+      }, {
+        "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+        "rel": "bookmark"
+      }
+    ],
+    "name": "m1.tiny"
+  }
+}
