@@ -18,9 +18,7 @@ var testData = {},
 if (process.env.NOCK) {
  nock('https://' + client.serversUrl)
   .get('/')
-    .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
-  .get('/v1.0/537645/limits')
-    .reply(200, "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
+    .reply(203, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {});
 
   var credentials = {
      username: client.config.auth.username,
@@ -29,9 +27,9 @@ if (process.env.NOCK) {
 
   nock('https://' + client.authUrl)
     .post('/v1.1/auth', { "credentials": credentials })
-      .reply(200, JSON.parse(helpers.loadFixture('rackspace/token.json')))
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
     .post('/v1.1/auth', { "credentials": { "username": "fake", "key": "data" }})
-      .reply(401, "{\"unauthorized\":{\"message\":\"Username or api key is invalid\", \"code\":401}}")
+      .reply(401, "{\"unauthorized\":{\"message\":\"Username or api key is invalid\", \"code\":401}}");
 }
 
 function shouldAuthNew (client) {

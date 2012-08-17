@@ -1,0 +1,10 @@
+{
+  "users": [{
+    "name": "joeTest",
+    "databases": []
+  }],
+  "links": [{
+    "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest&limit=1",
+    "rel": "next"
+  }]
+}
