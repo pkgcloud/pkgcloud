@@ -8,6 +8,7 @@
 var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
+    Buffer = require('buffer').Buffer,
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers');
 
@@ -71,21 +72,21 @@ function batchThree (providerClient, providerName, nock) {
         topic: function () {
           var stream = providerClient.upload({
             container: testContext.container,
-            remote: 'test-file.txt',
-            headers: {
-              'content-length': 5
-            }
+            remote: 'test-file.txt'
           }, this.callback);
 
-          stream.write('hello');
-          stream.end();
+          var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
+          file.pipe(stream);
         },
         "should upload file successfuly": function (err, ok) {
           assert.isNull(err);
           assert.ok(ok);
           assert.assertNock(nock);
 
-          testContext.file = { name: 'test-file.txt', size: 5 };
+          testContext.file = {
+            name: 'test-file.txt',
+            size: Buffer.byteLength(helpers.loadFixture('fillerama.txt'))
+          };
         }
       }
     }
@@ -118,8 +119,9 @@ function batchFour (providerClient, providerName, nock) {
           assert.assertNock(nock);
 
           assert.equal(file.name, testContext.file.name);
-          assert.equal(testContext.fileContents, 'hello');
-          assert.equal(file.size, testContext.fileContents.length);
+          assert.equal(testContext.fileContents,
+                       helpers.loadFixture('fillerama.txt'));
+          assert.equal(file.size, Buffer.byteLength(testContext.fileContents));
         }
       }
     },
@@ -191,6 +193,82 @@ function batchSix (providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
+    "the upload() method": {
+      "with container and large file as arguments": {
+        topic: function () {
+          var stream = providerClient.upload({
+            container: testContext.container,
+            remote: 'bigfile.raw'
+          }, this.callback);
+
+          var file = fs.createReadStream(helpers.fixturePath('bigfile.raw'));
+          file.pipe(stream);
+        },
+        "should upload file": function (err, ok) {
+          assert.isNull(err);
+          assert.ok(ok);
+          assert.assertNock(nock);
+
+          testContext.file = {
+            name: 'bigfile.raw',
+            size: fs.readFileSync(helpers.fixturePath('bigfile.raw')).length
+          };
+        }
+      }
+    }
+  };
+
+  return test;
+}
+
+function batchSeven (providerClient, providerName, nock) {
+  var test   = {};
+
+  test["The pkgcloud " + providerName + " storage client"] = {
+    "the download() method": {
+      "with container and large file's name as arguments": {
+        topic: function () {
+          var stream = providerClient.download({
+            container: testContext.container,
+            remote: testContext.file.name
+          }, this.callback);
+
+          testContext.fileContents = [];
+          testContext.fileContentsSize = 0;
+          stream.on('data', function (data) {
+            testContext.fileContents.push(data);
+            testContext.fileContentsSize += data.length;
+          });
+          stream.end();
+        },
+        "should download file successfuly": function (err, file) {
+          assert.isNull(err);
+          assert.assertFile(file);
+          assert.assertNock(nock);
+
+          assert.equal(file.name, testContext.file.name);
+          assert.equal(file.size, testContext.fileContentsSize);
+
+          testContext.fileContents = Buffer.concat(testContext.fileContents,
+                                                   file.size);
+
+          // Compare byte by byte
+          var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
+          for (var i = 0; i < file.size; i++) {
+            assert.equal(testContext.fileContents[i], original[i]);
+          }
+        }
+      }
+    }
+  };
+
+  return test;
+}
+
+function batchEight (providerClient, providerName, nock) {
+  var test   = {};
+
+  test["The pkgcloud " + providerName + " storage client"] = {
     "the destroyContainer() method": {
       "with container as argument": {
         topic: function () {
@@ -210,7 +288,7 @@ function batchSix (providerClient, providerName, nock) {
   return test;
 }
 
-function batchSeven (providerClient, providerName, nock) {
+function batchNine (providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -287,5 +365,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchFive(clients[provider], provider, nock))
       .addBatch(batchSix(clients[provider], provider, nock))
       .addBatch(batchSeven(clients[provider], provider, nock))
+      .addBatch(batchEight(clients[provider], provider, nock))
+      .addBatch(batchNine(clients[provider], provider, nock))
        ["export"](module);
   });
