@@ -23,13 +23,14 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
             email: 'daniel@nodejitsu.com'
           }, this.callback);
         },
-        "should respond correctly": function (err, account) {
+        "should respond correctly": function (err, response) {
           assert.isNull(err);
-          assert.ok(account);
-          assert.ok(account.username);
-          assert.ok(account.email);
-          assert.ok(account.password);
-          assert.equal(account.email, 'daniel@nodejitsu.com');
+          assert.ok(response.account);
+          assert.ok(response.account.username);
+          assert.ok(response.account.email);
+          assert.ok(response.account.password);
+          assert.equal(response.account.email, 'daniel@nodejitsu.com');
+          testContext.account = response.account;
         }
       },
       "with invalid options like": {
@@ -96,4 +97,26 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
       }
     }
   }
-})**/.export(module);
+})**/.addBatch({
+  "The pkgcloud MongoLab client": {
+    "the deleteAccount() method": {
+      "with correct options": {
+        topic: function () {
+          client.deleteAccount(testContext.account.username, this.callback);
+        },
+        "should respond correctly": function (err, response) {
+          assert.isNull(err);
+          assert.equal(response.statusCode, 200);
+        }
+      },
+      "with invalid options like": {
+        "no name": {
+          topic: function () {
+            client.deleteAccount(this.callback);
+          },
+          "should respond with errors": assert.assertError
+        }
+      }
+    }
+  }
+}).export(module);
