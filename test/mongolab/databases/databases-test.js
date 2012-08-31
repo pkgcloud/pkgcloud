@@ -55,15 +55,15 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
       }
     }
   }
-})/**.addBatch({
+}).addBatch({
   "The pkgcloud MongoLab client": {
-    "the create() method": {
+    "the createDatabase() method": {
       "with correct options": {
         topic: function () {
           client.createDatabase({
             plan:'free',
             name:'testDatabase',
-            owner:'daniel'
+            owner: testContext.account.username
           }, this.callback)
         },
         "should respond correctly": function (err, database) {
@@ -97,7 +97,7 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
       }
     }
   }
-})**/.addBatch({
+}).addBatch({
   "The pkgcloud MongoLab client": {
     "the deleteAccount() method": {
       "with correct options": {
