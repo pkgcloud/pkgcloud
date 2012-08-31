@@ -13,14 +13,56 @@ var vows = require('vows'),
 var client = helpers.createClient('mongolab', 'database'),
     testContext = {};
 
-vows.describe('pkgcloud/mongohq/databases').addBatch({
+vows.describe('pkgcloud/mongolab/databases').addBatch({
+  "The pkgcloud MongoLab client": {
+    "the createAccount() method": {
+      "with correct options": {
+        topic: function () {
+          client.createAccount({
+            name: 'daniel',
+            email: 'daniel@nodejitsu.com'
+          }, this.callback);
+        },
+        "should respond correctly": function (err, account) {
+          assert.isNull(err);
+          assert.ok(account);
+          assert.ok(account.username);
+          assert.ok(account.email);
+          assert.ok(account.password);
+          assert.equal(account.email, 'daniel@nodejitsu.com');
+        }
+      },
+      "with invalid options like": {
+        "no options": {
+          topic: function () {
+            client.createAccount(this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "invalid options": {
+          topic: function () {
+            client.createAccount({ invalid:'keys' }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "no email": {
+          topic: function () {
+            client.createAccount({ name: 'testDatabase' }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        }
+      }
+    }
+  }
+})/**.addBatch({
   "The pkgcloud MongoLab client": {
     "the create() method": {
       "with correct options": {
         topic: function () {
-          client.create({
+          client.createDatabase({
             plan:'free',
-            name:'testDatabase'
+            name:'testDatabase',
+            owner:'daniel'
           }, this.callback)
         },
         "should respond correctly": function (err, database) {
@@ -35,23 +77,23 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
       "with invalid options like": {
         "no options": {
           topic: function () {
-            client.create(this.callback);
+            client.createDatabase(this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "invalid options": {
           topic: function () {
-            client.create({ invalid:'keys' }, this.callback);
+            client.createDatabase({ invalid:'keys' }, this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "no plan": {
           topic: function () {
-            client.create({ name:'testDatabase' }, this.callback);
+            client.createDatabase({ name:'testDatabase' }, this.callback);
           },
           "should respond with errors": assert.assertError
         }
       }
     }
   }
-}).export(module);
+})**/.export(module);
