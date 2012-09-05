@@ -52,6 +52,36 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
           },
           "should respond with errors": assert.assertError
         }
+      },
+      "with a custom password": {
+        "without number character": {
+          topic: function () {
+            client.createAccount({
+              name: 'custompassword',
+              email: 'custom@password.com',
+              password: 'mycustompassword'
+            }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "with number character": {
+          topic: function () {
+            client.createAccount({
+              name: 'custompassword',
+              email: 'custom@password.com',
+              password: 'my1custom2password'
+            }, this.callback);
+          },
+          "should respond with the defined password": function (err, response) {
+            assert.isNull(err);
+            assert.ok(response.account);
+            assert.ok(response.account.username);
+            assert.ok(response.account.email);
+            assert.isUndefined(response.account.password);
+            assert.equal(response.account.email, 'custom@password.com');
+            testContext.custompw = response.account.username;
+          }
+        }
       }
     }
   }
@@ -115,6 +145,15 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
             client.deleteAccount(this.callback);
           },
           "should respond with errors": assert.assertError
+        }
+      },
+      "other account with correct options": {
+        topic: function () {
+          client.deleteAccount(testContext.custompw, this.callback);
+        },
+        "should respond correctly": function (err, response) {
+          assert.isNull(err);
+          assert.equal(response.statusCode, 200);
         }
       }
     }
