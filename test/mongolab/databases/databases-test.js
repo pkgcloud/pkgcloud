@@ -129,6 +129,28 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
   }
 }).addBatch({
   "The pkgcloud MongoLab client": {
+    "the getDatabases() method": {
+      "with correct options": {
+        topic: function () {
+          client.getDatabases(testContext.account.username, this.callback);
+        },
+        "should respond correctly": function (err, databases) {
+          assert.isNull(err);
+          assert.isArray(databases);
+          assert.isObject(databases[0]);
+          assert.equal(databases[0].name, testContext.account.username + '_testDatabase');
+        }
+      },
+      "with invalid options like no name": {
+        topic: function () {
+          client.getDatabases(this.callback);
+        },
+        "should respond with errors": assert.assertError
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud MongoLab client": {
     "the deleteAccount() method": {
       "with correct options": {
         topic: function () {
