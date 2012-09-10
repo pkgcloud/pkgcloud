@@ -139,6 +139,7 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
           assert.isArray(databases);
           assert.isObject(databases[0]);
           assert.equal(databases[0].name, testContext.account.username + '_testDatabase');
+          testContext.databaseName = databases[0].name;
         }
       },
       "with invalid options like no name": {
@@ -146,6 +147,89 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
           client.getDatabases(this.callback);
         },
         "should respond with errors": assert.assertError
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud MongoLab client": {
+    "the getDatabase() method": {
+      "with correct options":{
+        topic: function () {
+          client.getDatabase({
+            name: testContext.databaseName,
+            owner: testContext.account.username
+          }, this.callback);
+        },
+        "should respond correctly": function (err, database) {
+          // @todo Check for details like hostname, port, username, or password
+          assert.isNull(err);
+          assert.ok(database);
+        }
+      },
+      "with invalid options like":{
+        "no owner": {
+          topic: function () {
+            client.getDatabase({ name: testContext.databaseName }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "no name": {
+          topic: function () {
+            client.getDatabase({ owner: testContext.account.username }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "no options": {
+          topic: function () {
+            client.getDatabase(this.callback);
+          },
+          "should respond with errors": assert.assertError
+        }
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud MongoLab client": {
+    "the deleteDatabase() method": {
+      "with correct options": {
+        topic: function () {
+          client.deleteDatabase({
+            name: testContext.databaseName,
+            owner: testContext.account.username
+          }, this.callback);
+        },
+        "should respond correctly": function (err) {
+          assert.isUndefined(err);
+        },
+        "should have no databases": {
+          topic: function () {
+            client.getDatabases(testContext.account.username, this.callback);
+          },
+          "empty response": function (err, databases) {
+            assert.isNull(err);
+            assert.isEmpty(databases);
+          }
+        }
+      },
+      "with invalid options like": {
+        "no owner": {
+          topic: function () {
+            client.deleteDatabase({ name: testContext.databaseName }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "no name": {
+          topic: function () {
+            client.deleteDatabase({ owner: testContext.account.username }, this.callback);
+          },
+          "should respond with errors": assert.assertError
+        },
+        "no options": {
+          topic: function () {
+            client.deleteDatabase(this.callback);
+          },
+          "should respond with errors": assert.assertError
+        }
       }
     }
   }
