@@ -240,9 +240,8 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
         topic: function () {
           client.deleteAccount(testContext.account.username, this.callback);
         },
-        "should respond correctly": function (err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 200);
+        "should respond correctly": function (err) {
+          assert.isUndefined(err);
         }
       },
       "with invalid options like": {
@@ -257,9 +256,8 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
         topic: function () {
           client.deleteAccount(testContext.custompw, this.callback);
         },
-        "should respond correctly": function (err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 200);
+        "should respond correctly": function (err) {
+          assert.isUndefined(err);
         }
       }
     }
