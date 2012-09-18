@@ -6,3 +6,4 @@ test/fixtures/test-download*
 *.notes
 *.swp
 .project
+test/configs/mongolab.json
