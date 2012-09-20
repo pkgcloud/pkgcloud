@@ -19,7 +19,7 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
       "with correct options": {
         topic: function () {
           client.create({
-            subdomain: 'testDatabase',
+            subdomain: 'nodejitsudb' + Math.floor(Math.random()*100000),
             first_name: "Marak",
             last_name: "Squires",
             email: "marak.squires@gmail.com"
@@ -29,8 +29,6 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
           assert.isNull(err);
           assert.ok(database.id);
           assert.ok(database.uri);
-          assert.ok(database.username);
-          assert.ok(database.password);
           testContext.databaseId = database.id;
         }
       },
@@ -49,19 +47,19 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
         },
         "no email": {
           topic: function () {
-            client.create({ subdomain:'testDatabase', first_name: "Marak", last_name: "Squires"}, this.callback);
+            client.create({ subdomain:'testDatabase', first_name: "Daniel", last_name: "Aristizabal"}, this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "no subdomain": {
           topic: function () {
-            client.create({ email: "marak.squires@gmail.com", first_name: "Marak", last_name: "Squires"}, this.callback);
+            client.create({ email: "daniel@nodejitsu.com", first_name: "Daniel", last_name: "Aristizabal"}, this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "no names": {
           topic: function () {
-            client.create({ email: "marak.squires@gmail.com", subdomain:'testDatabase'}, this.callback);
+            client.create({ email: "daniel@nodejitsu.com", subdomain:'testDatabase'}, this.callback);
           },
           "should respond with errors": assert.assertError
         }
