@@ -6,12 +6,25 @@
  *
  */
 
-var vows = require('vows'),
+var vows    = require('vows'),
     helpers = require('../../helpers'),
-    assert = require('../../helpers/assert');
+    assert  = require('../../helpers/assert'),
+    nock    = require('nock');
 
 var client = helpers.createClient('redistogo', 'database'),
     testContext = {};
+
+if (process.env.NOCK) {
+  nock('https://redistogo.com')
+    .post('/instances.json', "instance%5Bplan%5D=nano")
+      .reply(201, helpers.loadFixture('redistogo/database.json'))
+
+    .get('/instances/253739.json')
+      .reply(200, helpers.loadFixture('redistogo/database.json'))
+
+    .delete('/instances/253739.json')
+      .reply(200);
+}
 
 vows.describe('pkgcloud/redistogo/databases').addBatch({
   "The pkgcloud Redistogo client": {
@@ -81,9 +94,7 @@ vows.describe('pkgcloud/redistogo/databases').addBatch({
     "the destroy() method": {
       "with correct options": {
         topic: function () {
-          client.destroy({
-            id: testContext.databaseId
-          }, this.callback);
+          client.destroy(testContext.databaseId, this.callback);
         },
         "should respond correctly": function (err, confirm) {
           assert.isNull(err);
