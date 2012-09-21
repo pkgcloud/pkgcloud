@@ -6,12 +6,22 @@
  *
  */
 
-var vows = require('vows'),
+var vows    = require('vows'),
     helpers = require('../../helpers'),
-    assert = require('../../helpers/assert');
+    assert  = require('../../helpers/assert'),
+    nock    = require('nock');
 
 var client = helpers.createClient('mongohq', 'database'),
     testContext = {};
+
+if (process.env.NOCK) {
+  nock('https://www.mongohq.com')
+    .post('/provider/resources', "app_id=testDatabase&plan=free")
+      .reply(200, helpers.loadFixture('mongohq/database.json'))
+
+    .delete('/provider/resources/63562')
+      .reply(200, "OK");
+}
 
 vows.describe('pkgcloud/mongohq/databases').addBatch({
   "The pkgcloud MongoHQ client": {
