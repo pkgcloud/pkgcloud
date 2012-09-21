@@ -6,20 +6,37 @@
  *
  */
 
-var vows = require('vows'),
+var vows    = require('vows'),
     helpers = require('../../helpers'),
-    assert = require('../../helpers/assert');
+    assert  = require('../../helpers/assert'),
+    nock    = require('nock');
 
 var client = helpers.createClient('iriscouch', 'database'),
     testContext = {};
+
+if (process.env.NOCK) {
+  nock('https://hosting.iriscouch.com:443')
+    .post('/hosting_public', helpers.loadFixture('iriscouch/database.json'))
+      .reply(201,
+        "{\"ok\":true,\"id\":\"Server/nodejitsudb908\",\"rev\":\"1-dc91e4ee524420e6f32607b0c24151de\"}\n");
+
+  nock('http://nodejitsudb908.iriscouch.com')
+    .get('/')
+      .reply(404, "Host not found: nodejitsudb908.iriscouch.com")
+    .get('/')
+      .reply(404, "Host not found: nodejitsudb908.iriscouch.com")
+    .get('/')
+      .reply(200, "{\"couchdb\":\"Welcome\",\"version\":\"1.2.0\"}\n");
+}
 
 vows.describe('pkgcloud/iriscouch/databases').addBatch({
   "The pkgcloud IrisCouch client": {
     "the create() method": {
       "with correct options": {
         topic: function () {
+          var subdomain = ((process.env.NOCK) ? 'nodejitsudb908' : 'nodejitsudb' + Math.floor(Math.random()*100000));
           client.create({
-            subdomain: 'nodejitsudb' + Math.floor(Math.random()*100000),
+            subdomain: subdomain,
             first_name: "Marak",
             last_name: "Squires",
             email: "marak.squires@gmail.com"
