@@ -7,3 +7,4 @@ test/fixtures/test-download*
 *.swp
 .project
 test/configs/mongolab.json
+test/configs/redistogo.json
