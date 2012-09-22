@@ -9,3 +9,4 @@ test/fixtures/test-download*
 test/configs/mongolab.json
 test/configs/redistogo.json
 test/configs/iriscouch.json
+test/configs/mongohq.json
