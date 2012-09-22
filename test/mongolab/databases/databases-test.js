@@ -6,12 +6,46 @@
 *
 */
 
-var vows = require('vows'),
+var vows    = require('vows'),
     helpers = require('../../helpers'),
-    assert = require('../../helpers/assert');
+    assert  = require('../../helpers/assert'),
+    nock    = require('nock');
 
 var client = helpers.createClient('mongolab', 'database'),
     testContext = {};
+
+if (process.env.NOCK) {
+  nock('https://api.mongolab.com')
+    .post('/api/1/partners/nodejitsu/accounts', "{\"name\":\"nodejitsu_daniel\",\"adminUser\":{\"email\":\"daniel@nodejitsu.com\"}}")
+      .reply(200, helpers.loadFixture('mongolab/user.json'))
+
+    .post('/api/1/partners/nodejitsu/accounts', "{\"name\":\"nodejitsu_custompassword\",\"adminUser\":{\"email\":\"custom@password.com\",\"password\":\"my1custom2password\"}}")
+      .reply(200, helpers.loadFixture('mongolab/customUser.json'))
+
+    .get('/api/1/partners/nodejitsu/accounts')
+      .reply(200, helpers.loadFixture('mongolab/userList.json'))
+
+    .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', helpers.loadFixture('mongolab/reqDatabase.json'))
+      .reply(200, helpers.loadFixture('mongolab/database.json'))
+
+    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
+      .reply(200, "[ { \"name\" : \"nodejitsu_daniel_testDatabase\"} ]")
+
+    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
+      .reply(200, "{ \"name\" : \"nodejitsu_daniel_testDatabase\"}")
+
+    .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
+      .reply(200, " null ")
+
+    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
+      .reply(200, "[  ]")
+
+    .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
+      .reply(200, " null ")
+
+    .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_custompassword')
+      .reply(200, " null ");
+}
 
 vows.describe('pkgcloud/mongolab/databases').addBatch({
   "The pkgcloud MongoLab client": {
