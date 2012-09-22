@@ -8,3 +8,4 @@ test/fixtures/test-download*
 .project
 test/configs/mongolab.json
 test/configs/redistogo.json
+test/configs/iriscouch.json
