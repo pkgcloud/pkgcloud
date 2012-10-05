@@ -44,11 +44,17 @@ helpers.createClient = function createClient(provider, service, config) {
 };
 
 helpers.loadConfig = function loadConfig(provider) {
-  var content = fs.readFileSync(path.join(
-    __dirname,
-    '../configs/',
-    provider + '.json'
-  ), 'utf8');
+  var basefile = path.join(__dirname, '..', 'configs'),
+      content;
+
+  if (process.env.NOCK === 'on') {
+    basefile = path.join(basefile, 'mock', provider + '.json');
+  }
+  else {
+    basefile = path.join(basefile, provider + '.json');
+  }
+
+  content = fs.readFileSync(basefile, 'utf8');
 
   return JSON.parse(content);
 };
