@@ -4,8 +4,9 @@
   "version":     "0.3.12",
   "author":      "Nodejitsu Inc <info@nodejitsu.com",
   "contributors": [
-    { "name": "Charlie Robbins", "email": "charlie@nodejitsu.com" },
-    { "name": "Nuno Job",        "email": "nunojobpinto@gmail.com" }
+    { "name": "Charlie Robbins",    "email": "charlie@nodejitsu.com" },
+    { "name": "Nuno Job",           "email": "nuno@nodejitsu.com" },
+    { "name": "Daniel Aristizabal", "email": "daniel@nodejitsu.com" }
   ],
   "repository": {
     "type": "git",
