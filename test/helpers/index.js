@@ -54,7 +54,15 @@ helpers.loadConfig = function loadConfig(provider) {
     basefile = path.join(basefile, provider + '.json');
   }
 
-  content = fs.readFileSync(basefile, 'utf8');
+  try {
+    content = fs.readFileSync(basefile, 'utf8');
+  }
+  catch (ex) {
+    console.log('Error parsing: ' + basefile);
+    console.log(ex.message);
+    console.log('\nAre you sure that file exists?\n');
+    process.exit(1);
+  }
 
   return JSON.parse(content);
 };
