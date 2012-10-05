@@ -67,11 +67,15 @@ helpers.loadConfig = function loadConfig(provider) {
   return JSON.parse(content);
 };
 
+helpers.fixturePath = function fixturePath(path) {
+  return __dirname + '/../fixtures/' + path;
+};
+
 helpers.loadFixture = function loadFixture(path, json) {
-  var contents = fs.readFileSync(__dirname + '/../fixtures/' + path, 'ascii');
+  var contents = fs.readFileSync(helpers.fixturePath(path), 'ascii');
   return json === 'json'
     ? JSON.parse(contents)
-    : contents; 
+    : contents;
 };
 
 helpers.personalityPost = function persPost(pubkey) {
