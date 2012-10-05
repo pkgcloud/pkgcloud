@@ -244,7 +244,9 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
 
     if (process.env.NOCK) {
       if (provider === 'joyent') {
+        return;
       } else if (provider === 'rackspace') {
+        return;
       } else if (provider === 'amazon') {
         nock('https://pkgcloud-test-container.' + client.serversUrl)
           .put('/')
@@ -277,7 +279,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     }
 
     vows
-      .describe('pkgcloud/common/compute/flavor [' + provider + ']')
+      .describe('pkgcloud/common/storage [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
