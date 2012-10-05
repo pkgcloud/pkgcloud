@@ -6,4 +6,5 @@ test/fixtures/test-download*
 *.notes
 *.swp
 .project
-test/configs/mongolab.json
+test/configs/*.json
+!test/configs/providers.json
