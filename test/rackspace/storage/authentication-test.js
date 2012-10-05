@@ -12,6 +12,10 @@ var vows = require('vows'),
 var testData = {},
     client = helpers.createClient('rackspace', 'storage');
 
+if (process.env.NOCK) {
+  return;
+}
+
 vows.describe('pkgcloud/rackspace/storage/authentication').addBatch({
   "The pkgcloud Rackspace storage client": {
     "should have core methods defined": macros.shouldHaveCreds(client),
