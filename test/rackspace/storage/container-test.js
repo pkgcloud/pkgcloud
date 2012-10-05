@@ -19,6 +19,9 @@ var testData = {},
     fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
     sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8');
 
+if (process.env.NOCK) {
+  return;
+}
 
 vows.describe('pkgcloud/rackspace/storage/containers').addBatch(
   macros.shouldCreateContainer(

@@ -14,6 +14,10 @@ var path = require('path'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
 
+if (process.env.NOCK) {
+  return;
+}
+
 var client = function () {
       return helpers.createClient('rackspace', 'storage')
     },

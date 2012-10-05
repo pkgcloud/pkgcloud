@@ -15,7 +15,16 @@ var client = helpers.createClient('rackspace', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://ord.databases.api.rackspacecloud.com')
+  var credentials = {
+     username: client.config.auth.username,
+     key: client.config.auth.apiKey
+  };
+  
+  nock('https://' + client.authUrl)
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'));
+  
+  nock('https://ord.databases.api.rackspacecloud.com')  
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 

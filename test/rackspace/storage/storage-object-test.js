@@ -15,6 +15,10 @@ var path = require('path'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
 
+if (process.env.NOCK) {
+  return;
+}
+
 var client = helpers.createClient('rackspace', 'storage'),
     fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
     sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8'),
