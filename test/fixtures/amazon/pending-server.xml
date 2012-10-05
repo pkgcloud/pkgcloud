@@ -19,8 +19,8 @@
                         <code>0</code>
                         <name>pending</name>
                     </instanceState>
-                    <privateDnsName/>
-                    <dnsName/>
+                    <privateDnsName>internal-amazonip.awsips.com</privateDnsName>
+                    <dnsName>an.public.ip.v4</dnsName>
                     <reason/>
                     <amiLaunchIndex>0</amiLaunchIndex>
                     <productCodes/>
