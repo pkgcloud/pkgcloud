@@ -317,8 +317,9 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'storage');
 
-    var client = clients[provider],
-        nock   = require('nock');
+    var client    = clients[provider],
+        nock      = require('nock'),
+        fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
 
     if (process.env.NOCK) {
       if (provider === 'joyent') {
@@ -329,12 +330,12 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock('https://pkgcloud-test-container.' + client.serversUrl)
           .put('/')
             .reply(200, '', {})
-          .put('/test-file.txt', 'hello')
+          .put('/test-file.txt', fillerama)
             .reply(200, '', {})
           .get('/test-file.txt')
-            .reply(200, 'hello', { 'content-length': 5 })
+            .reply(200, fillerama, { 'content-length': fillerama.length + 2 })
           .head('/test-file.txt')
-            .reply(200, '', { 'content-length': 5 })
+            .reply(200, '', { 'content-length': fillerama.length + 2 })
           .get('/')
             .reply(200, helpers.loadFixture('amazon/list-bucket-files.xml'), {})
           .delete('/test-file.txt')
@@ -356,16 +357,19 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       }
     }
 
-    vows
-      .describe('pkgcloud/common/storage [' + provider + ']')
+    var suite = vows.describe('pkgcloud/common/storage [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
       .addBatch(batchFour(clients[provider], provider, nock))
       .addBatch(batchFive(clients[provider], provider, nock))
-      .addBatch(batchSix(clients[provider], provider, nock))
-      .addBatch(batchSeven(clients[provider], provider, nock))
-      .addBatch(batchEight(clients[provider], provider, nock))
+      
+    if (!process.env.NOCK) {
+      suite.addBatch(batchSix(clients[provider], provider, nock))
+        .addBatch(batchSeven(clients[provider], provider, nock))      
+    }
+    
+    suite.addBatch(batchEight(clients[provider], provider, nock))
       .addBatch(batchNine(clients[provider], provider, nock))
-       ["export"](module);
+      ["export"](module);
   });
