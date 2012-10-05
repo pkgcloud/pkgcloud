@@ -38,7 +38,10 @@ function batchOne (providerClient, providerName) {
     "the getFlavors() method": {
       "with details": {
         topic: function () {
-          client.getFlavors(this.callback);
+          var that = this;
+          setTimeout(function () {
+            client.getFlavors(that.callback);
+          }, 1000);
         },
         "should return the list of flavors": function (err, flavors) {
           assert.isNull(err);
@@ -232,6 +235,9 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         ["delete"]('/' + client.account +  
          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(204, "", {})
+        .post('/' + client.account +
+          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5', { action: 'stop' })
+          .reply(202, "", {})
         ;
       }
       else if (provider === 'rackspace') {
