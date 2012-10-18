@@ -1,22 +1,7 @@
 {
-    "auth": {
-        "storageName": "pkgcloudeast",
-        "storageApiKey": "Beo6e44qaiLdGjvFe+pS9SJFCJo6XNbDLQ2Xj5iDvvny/PD666S3dhwJYgtGQg2yNdtgX/iysnUMQu8PfJiNpA==",
-        "pemFile": "/Users/stammen/dev/microsoft/pemtest/management.pem",
-        "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc"
-    },
-    "azure": {
-        "Location": "East US",
-        "username": "stammen",
-        "password": "Abc.123@@",
-        "ssh" : {
-            "port": 22,
-            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem"
-        },
-        "rdp" : {
-            "port": 3389
-        },
-        "StorageAccount": "http://pkgcloudeast.blob.core.windows.net/vhd/"
-    }
+  "auth": {
+    "username": "stammen",
+    "apiKey": "LbCGuSvg28f6kUgM5CzEAO2E2SyyZb0MZFMKYNzR2qVe/KqOQoeJ/GYS/r2AF8aB7eCjeVXvdL2fiBcb4U0lkA=="
+  }
 }
 
