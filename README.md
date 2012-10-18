@@ -1,44 +1,29 @@
 # pkgcloud 
 
-Communicate across multiple cloud providers in an platform agnostic manner.
+pkgcloud is a standard library for node.js that abstracts away differences among multiple cloud providers.
 
-* [Motivation](#motivation)
-* [System Breakdown](#system-breakdown)
 * [Unified Vocabulary](#unified-vocabulary)
-* [Components](#components)
+* [Services](#components)
   * [Compute](#compute)
-      * [Creating Compute Components](#creating-computer-components)
-      * [Image](#image)
-      * [Flavor](#flavor)
+    * [Creating Compute Clients](#creating-compute-clients)
+    * [Server](#server)
+    * [Image](#image)
+    * [Flavor](#flavor)
   * [Storage](#storage)
-  * [DNS](#dns)
-  * [CDN](#cdn)
-  * [Load Balancers](#load-balancers)
-* [Next Steps](#next-steps)
-
-<a name="motivation"></a>
-## Motivation
-
-Currently `Nodejitsu` maintains several API libraries for communicating with Cloud environments:
-
-* [node-cloudfiles](https://github.com/nodejitsu/node-cloudfiles)
-* [node-cloudservers](https://github.com/nodejitsu/node-cloudservers)
-* [node-zerigo](https://github.com/nodejitsu/node-zerigo)
-
-There are also some other decent libraries out there:
-
-* [knox](https://github.com/learnboost/knox)
-
-The main problem is that these libraries **are not consistent in anyway.**
-
-`pkgcloud` is a consistent layer across multiple cloud providers.
+    * [Creating Storage Clients](#creating-storage-clients)
+    * [Container](#container)
+    * [Uploading Files](#uploading)
+    * [Downloading Files](#downloading)
+  * [Database](#database)
+    * [Creating Storage Clients](#creating-storage-clients)
+* [Roadmap](#next-steps)
 
 <a name="Unified Vocabulary"></a>
 ## Unified Vocabulary
 
-When considering all IaaS providers as a whole their vocabulary is somewhat disjoint. `pkgcloud` attempts to overcome this through a unified vocabulary:
+When considering all IaaS providers as a whole their vocabulary is somewhat disjoint. `pkgcloud` attempts to overcome this through a unified vocabulary. Note that all Database providers use the same vocabulary: _database_.
 
-**Compute**
+### Compute
 
 <table>
   <tr>
@@ -67,113 +52,105 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
   </tr>
 </table>
 
-<a name="system-breakdown"></a>
-## System Breakdown
+### Storage
 
-In order of priority the components and providers we need to implement are:
+<table>
+  <tr>
+    <th>pkgcloud</th>
+    <th>OpenStack</th>
+    <th>Amazon</th>
+  </tr>
+  <tr>
+    <td>Container</td>
+    <td>Container</td>
+    <td>Bucket</td>
+  </tr>
+  <tr>
+    <td>File</td>
+    <td>StorageObject</td>
+    <td>Object</td>
+  </tr>
+</table>
 
-### Components
+<a name="services"></a>
+## Services
 
-1. Compute
-2. Storage
-3. DNS
-4. CDN
-5. Load Balancers
+Currently there are several service types which are handled by pkgcloud:
 
-### Providers
-
-1. Rackspace
-2. Joyent
-3. Amazon
-
-<a name="components"></a>
-## Components
+* [Compute](#compute)
+* [Storage](#storage)
+* [Database](#database)
 
 <a name="compute"></a>
 ### Compute
 
-<a name="creating-computer-components"></a>
+<a name="creating-compute-clients"></a>
 #### Creating Compute Clients
 The options to be passed to the `pkgcloud.compute.Client` object should be:
 
 **Rackspace**
 
 ``` js
-var rackspace = pkgcloud.compute.createClient(
-  {
-    provider : 'rackspace',
-    username : 'nodejitsu',
-    apiKey   : 'foobar'
-  }
-);
+  var rackspace = pkgcloud.compute.createClient({
+    provider: 'rackspace',
+    username: 'nodejitsu',
+    apiKey: 'foobar'
+  });
 ```
 
 **Amazon**
 
 ``` js
-var amazon = pkgcloud.compute.createClient(
-  {
-    provider    : 'amazon',
-    accessKey   : 'asdfkjas;dkj43498aj3n',
-    accessKeyId : '98kja34lkj'
-  }
-);
+  var amazon = pkgcloud.compute.createClient({
+    provider: 'amazon',
+    accessKey: 'asdfkjas;dkj43498aj3n',
+    accessKeyId: '98kja34lkj'
+  });
 ```
 
 **Joyent**
 
 ``` js
-var path = require('path'),
-    fs   = require('fs');
+  var path = require('path'),
+      fs   = require('fs');
 
-// joyent needs a username/password or key/keyId combo.
-// key/keyId should be registered in Joyent servers.
-// check `test/helpers/index.js` for details on key/keyId works.
-var joyent = pkgcloud.compute.createClient(
-  {
-    provider : 'joyent',
-    account  : 'nodejitsu'
-    keyId    : '/nodejitsu1/keys/dscape',
-    key      : 
-      fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
-  }
-);
+  //
+  // Joyent requires a username / password or key / keyId combo.
+  // key/keyId should be registered in Joyent servers.
+  // check `test/helpers/index.js` for details on key/keyId works.
+  //
+  var joyent = pkgcloud.compute.createClient({
+    provider: 'joyent',
+    account: 'nodejitsu'
+    keyId: '/nodejitsu1/keys/dscape',
+    key: fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
+  });
 ```
+
+<a name="server"></a>
+#### Server
+* `client.getServers(function (err, servers) { })`
+* `client.createServer(options, function (err, server) { })`
+* `client.destroyServer(serverId, function (err, server) { })`
+* `client.getServer(serverId, function (err, server) { })`
+* `client.rebootServer(server, function (err, server) { })`
 
 <a name="image"></a>
 #### Image
-
-* `client.getImages(function (err, images) { })`<br/> 
-  `err`: `Error` <br/>
-  `images`: `[Image]`
-* `client.getImage(imageId, function (err, image) { })`<br/> 
-  `imageId`: `Image|String`<br/>
-  `err`: `Error`<br/>
-  `image`: `Image`
-* `client.destroyImage(image, function (err, ok) { })`<br/>
-  `image`: `Image|String`<br/>
-  `err`: `Error`<br/>
-  `ok`: `Object` `{"ok": deletedId}`
-* `client.createImage(options, function (err, image) { })`<br/>
-  `options`: `Object` `{"name": "NameToGiveToImage", "server": "ServerOrServerIdToBaseImageUpon"}`<br/>
-  `err`: `Error`<br/>
-  `image`: `Image`
+* `client.getImages(function (err, images) { })`
+* `client.getImage(imageId, function (err, image) { })`
+* `client.destroyImage(image, function (err, ok) { })`
+* `client.createImage(options, function (err, image) { })`
 
 <a name="flavor"></a>
 #### Flavor
-
-* `client.getFlavors(function (err, flavors) { })`<br/> 
-  `err`: `Error` <br/>
-  `flavors`: `[Flavor]`
-* `client.getFlavor(flavorId, function (err, flavor) { })`<br/> 
-  `flavorId`: `Image|String`<br/>
-  `err`: `Error`<br/>
-  `flavor`: `Flavor`
-
+* `client.getFlavors(function (err, flavors) { })`
+* `client.getFlavor(flavorId, function (err, flavor) { })`
 
 <a name="storage"></a>
 ### Storage
 
+<a name="creating-storage-clients"></a>
 #### Creating Storage Clients
 The options to be passed to the `pkgcloud.storage.Client` object should be:
 
@@ -200,30 +177,12 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 * **pkgcloud.storage.create(options, callback)**
 * **new pkgcloud.storage.Client(options, callback)**
 
-#### Using Storage Clients
-Most of this can be modeled off of the [node.js core 'fs' module](http://nodejs.org/docs/v0.4.12/api/fs.html) API although there needs to be some improvements for copying files and creating root directories (i.e. containers)
+<a name="roadmap"></a>
+## Roadmap
 
-<a name="dns"></a>
-### DNS
-
-<a name="cdn"></a>
-### CDN
-
-<a name="load-balancers"></a>
-### Load Balancers
-
-<a name="next-steps"></a>
-## NEXT STEPS
-
-1. Stub out an API which works well across providers
-2. Try implementing it for a couple of providers
-3. REPEAT
+1. Add support for additional IaaS providers (Azure, etc)
+2. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
+3. 
 
 #### Author: [Nodejitsu](http://nodejitsu.com)
-#### License: CLOSED
-
-[0]: http://fog.io
-[1]: http://libcloud.apache.org/index.html
-[2]: http://vowsjs.org
-[3]: http://npmjs.org
-[smartdc]: https://github.com/joyent/node-smartdc
+#### License: MIT
