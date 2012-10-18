@@ -20,6 +20,7 @@
     "joyent", 
     "aws",
     "amazon",
+    "azure",
     "iaas"
   ],
   "dependencies": {
@@ -32,7 +33,8 @@
     "morestreams":   "0.1.x",
     "pkginfo":       "0.2.x",
     "request":       "2.x.x",
-    "utile":         "0.x.x"
+    "utile":         "0.x.x",
+    "azure":         "0.6.x"
   },
   "devDependencies": {
     "vows": "0.6.x",
