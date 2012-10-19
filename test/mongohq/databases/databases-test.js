@@ -28,7 +28,7 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
     "the create() method": {
       "with correct options": {
         topic: function () {
-          client.createDatabase({
+          client.create({
             plan: 'free',
             name: 'testDatabase'
           }, this.callback);
@@ -45,13 +45,13 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
       "with invalid options like": {
         "no options": {
           topic: function () {
-            client.createDatabase(this.callback);
+            client.create(this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "invalid options": {
           topic: function () {
-            client.createDatabase({ invalid:'keys' }, this.callback);
+            client.create({ invalid:'keys' }, this.callback);
           },
           "should respond with errors": assert.assertError
         }
@@ -60,10 +60,10 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
   }
 }).addBatch({
   "The pkgcloud MongoHQ client": {
-    "the destroy() method": {
+    "the remove() method": {
       "with correct options": {
         topic: function () {
-          client.deleteDatabase(testContext.databaseId, this.callback);
+          client.remove(testContext.databaseId, this.callback);
         },
         "should respond correctly": function (err, confirm) {
           assert.isNull(err);
@@ -72,7 +72,7 @@ vows.describe('pkgcloud/mongohq/databases').addBatch({
       },
       "without options": {
         topic: function () {
-          client.deleteDatabase(this.callback);
+          client.remove(this.callback);
         },
         "should respond with errors": assert.assertError
       }
