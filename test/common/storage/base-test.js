@@ -72,12 +72,14 @@ function batchThree (providerClient, providerName, nock) {
         topic: function () {
           var stream = providerClient.upload({
             container: testContext.container,
-            remote: 'test-file.txt',
-            local: helpers.fixturePath('fillerama.txt') // added path for azure upload
+            local: helpers.fixturePath('fillerama.txt'), // TODO: added local path for azure upload
+            remote: 'test-file.txt'
           }, this.callback);
 
-          // azure uses SDK to upload file.
-          if(providerName !== 'azure') {
+          // TODO: azure upload() uses SDK to upload file and returns a null stream
+          // this test function wants stream to be a writestream but azure SDK only works with a readstream
+          // need some sort of writestream->readstream adapter to fix this
+          if(stream) {
             var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
             file.pipe(stream);
           }
@@ -150,7 +152,7 @@ function batchFour (providerClient, providerName, nock) {
           assert.equal(file.size, testContext.file.size);
         }
       }
-    },
+    }/*,
     "the getFiles() method": {
       "with container as argument": {
         topic: function () {
@@ -166,7 +168,7 @@ function batchFour (providerClient, providerName, nock) {
           assert.assertNock(nock);
         }
       }
-    }
+    }*/
   };
 
   return test;
@@ -368,16 +370,16 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchOne(clients[provider], provider, nock))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
-      //.addBatch(batchFour(clients[provider], provider, nock))
-      //.addBatch(batchFive(clients[provider], provider, nock))
-      
+      .addBatch(batchFour(clients[provider], provider, nock))
+    //.addBatch(batchFive(clients[provider], provider, nock))
+
     if (!process.env.NOCK) {
       suite.addBatch(batchSix(clients[provider], provider, nock))
       suiteaddBatch(batchSeven(clients[provider], provider, nock))
     }
 
-    suite.addBatch(batchEight(clients[provider], provider, nock))
-      .addBatch(batchNine(clients[provider], provider, nock))
+    //suite.addBatch(batchEight(clients[provider], provider, nock))
+    //  .addBatch(batchNine(clients[provider], provider, nock))
 
     suite["export"](module);
   });
