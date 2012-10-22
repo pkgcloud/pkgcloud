@@ -1,5 +1,5 @@
 /*
- * databases-test.js: Tests for IrisCouch databases service
+ * databases-redis-test.js: Tests for IrisCouch Redis database service
  *
  * (C) 2012 Nodejitsu Inc.
  * MIT LICENSE
@@ -15,31 +15,24 @@ var client = helpers.createClient('iriscouch', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://hosting.iriscouch.com:443')
-    .post('/hosting_public', helpers.loadFixture('iriscouch/database.json'))
-      .reply(201,
-        "{\"ok\":true,\"id\":\"Server/nodejitsudb908\",\"rev\":\"1-dc91e4ee524420e6f32607b0c24151de\"}\n");
-
-  nock('http://nodejitsudb908.iriscouch.com')
-    .get('/')
-      .reply(404, "Host not found: nodejitsudb908.iriscouch.com")
-    .get('/')
-      .reply(404, "Host not found: nodejitsudb908.iriscouch.com")
-    .get('/')
-      .reply(200, "{\"couchdb\":\"Welcome\",\"version\":\"1.2.0\"}\n");
+  //nock.recorder.rec();
 }
 
-vows.describe('pkgcloud/iriscouch/databases').addBatch({
+vows.describe('pkgcloud/iriscouch/databases-redis').addBatch({
   "The pkgcloud IrisCouch client": {
     "the create() method": {
       "with correct options": {
         topic: function () {
           var subdomain = ((process.env.NOCK) ? 'nodejitsudb908' : 'nodejitsudb' + Math.floor(Math.random()*100000));
+          testContext.tempPassword = randomPassword(12).replace("\\", "");
           client.create({
             subdomain: subdomain,
             first_name: "Marak",
             last_name: "Squires",
-            email: "marak.squires@gmail.com"
+            email: "marak.squires@gmail.com",
+            // For redis instead of couch just put type to redis
+            type: "redis",
+            password: testContext.tempPassword
           }, this.callback);
         },
         "should respond correctly": function (err, database) {
@@ -47,6 +40,7 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
           assert.ok(database.id);
           assert.ok(database.uri);
           testContext.databaseId = database.id;
+          assert.equal(database.metadata.password, testContext.tempPassword);
         }
       },
       "with invalid options like": {
@@ -84,3 +78,13 @@ vows.describe('pkgcloud/iriscouch/databases').addBatch({
     }
   }
 }).export(module);
+
+//
+// Just a quick and lazy random password generator
+//
+function randomPassword (length) {
+  if (length == 1) {
+    return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48);
+  }
+  return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48) + randomPassword(length - 1);
+}
