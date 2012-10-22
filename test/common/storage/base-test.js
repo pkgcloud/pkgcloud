@@ -152,7 +152,7 @@ function batchFour (providerClient, providerName, nock) {
           assert.equal(file.size, testContext.file.size);
         }
       }
-    }/*,
+    },
     "the getFiles() method": {
       "with container as argument": {
         topic: function () {
@@ -168,7 +168,7 @@ function batchFour (providerClient, providerName, nock) {
           assert.assertNock(nock);
         }
       }
-    }*/
+    }
   };
 
   return test;
@@ -378,8 +378,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       suiteaddBatch(batchSeven(clients[provider], provider, nock))
     }
 
-    //suite.addBatch(batchEight(clients[provider], provider, nock))
-    //  .addBatch(batchNine(clients[provider], provider, nock))
+    suite.addBatch(batchEight(clients[provider], provider, nock))
+      .addBatch(batchNine(clients[provider], provider, nock))
 
     suite["export"](module);
   });
