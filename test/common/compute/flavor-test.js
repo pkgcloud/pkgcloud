@@ -6,19 +6,19 @@
  */
 
 var fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    assert = require('../../helpers/assert'),
-    helpers = require('../../helpers');
+  path = require('path'),
+  vows = require('vows'),
+  assert = require('../../helpers/assert'),
+  helpers = require('../../helpers');
 
 var testData    = {},
-    testContext = {},
-    clients     = {};
+  testContext = {},
+  clients     = {};
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getFlavors() method": {
@@ -41,8 +41,8 @@ function batchOne (providerClient, providerName) {
 
 function batchTwo (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getFlavor() method": {
@@ -64,26 +64,28 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'compute');
 
     var client = clients[provider],
-        nock   = require('nock');
+      nock   = require('nock');
 
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/packages')
-            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+          .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
           .get('/' + client.account + '/packages/Small%201GB')
-            .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
+          .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
       } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "",
-            JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+          JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/flavors/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
           .get('/v1.0/537645/flavors/1')
-            .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
+          .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
       } else if (provider === 'amazon') {
+        // No need in nock here, all flavors are stored in provider's files
+      } else if (provider === 'azure') {
         // No need in nock here, all flavors are stored in provider's files
       }
     }
@@ -92,5 +94,5 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .describe('pkgcloud/common/compute/flavor [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
       .addBatch(batchTwo(clients[provider], provider, nock))
-       ["export"](module);
+      ["export"](module);
   });
