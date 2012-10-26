@@ -51,18 +51,18 @@ vows.describe('pkgcloud/redistogo/databases').addBatch({
           },
           "should respond with errors": assert.assertError
         },
-        "invalid options": {
-          topic: function () {
-            client.create({ invalid:'keys' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no plan": {
-          topic: function () {
-            client.create({ name:'testDatabase' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
+        // "invalid options": {
+        //   topic: function () {
+        //     client.create({ invalid:'keys' }, this.callback);
+        //   },
+        //   "should respond with errors": assert.assertError
+        // },
+        // "no plan": {
+        //   topic: function () {
+        //     client.create({ name:'testDatabase' }, this.callback);
+        //   },
+        //   "should respond with errors": assert.assertError
+        // }
       }
     }
   }
