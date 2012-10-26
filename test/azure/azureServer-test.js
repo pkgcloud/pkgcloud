@@ -18,7 +18,7 @@ var testServer = new azureServer.AzureServerInfo('create-test-ids2','create-test
 
 var az = new azureServer.AzureServer(config);
 
-var createServer = false;
+var createServer = true;
 var destroyServer = true;
 
 async.waterfall([
