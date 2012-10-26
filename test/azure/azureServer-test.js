@@ -2,6 +2,7 @@
 
 var azureServer = require('../../lib/pkgcloud/azure/compute/client/azure/azureServer.js');
 var fs = require('fs');
+var async = require('async');
 
 var options = {
   name: "create-test-ids2",
@@ -15,15 +16,43 @@ var config = JSON.parse(fs.readFileSync("../configs/azure.json",'utf8'));
 
 var testServer = new azureServer.AzureServerInfo('create-test-ids2','create-test-ids2');
 
-var server = new azureServer.AzureServer(config);
-server.destroyServer(testServer, function(err, results) {
+var az = new azureServer.AzureServer(config);
 
-  if(err) {
-    console.log(err);
-  } else {
-    console.dir(results);
+var createServer = false;
+var destroyServer = true;
+
+async.waterfall([
+  function(callback) {
+    if(!createServer) {
+      callback(null, testServer);
+      return;
+    }
+    console.log("creating server:" + options.name)
+    az.createServer(options, function(err, server) {
+       if(err) {
+         callback(err);
+       } else {
+         callback(null, server);
+       }
+     });
+  },
+  function(server, callback) {
+    console.log("destroying server:" + server.name)
+    az.destroyServer(server, function(err, result) {
+      callback(err, result);
+    });
+  }],
+  function (err, result) {
+    if(err) {
+      console.dir(err);
+    } else {
+      console.dir('ok');
+    }
   }
-});
+);
+
+
+
 
 /*
 
