@@ -403,6 +403,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchOne(client, provider))
       .addBatch(batchTwo(client, provider))
       .addBatch(batchThree(client, provider))
-      //.addBatch(batchReboot(client, provider, nock))
+      .addBatch(batchReboot(client, provider, nock))
        ["export"](module);
   });
