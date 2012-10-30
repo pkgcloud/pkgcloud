@@ -5,8 +5,8 @@ var fs = require('fs');
 var async = require('async');
 
 var options = {
-  name: "create-test-ids2",
-  flavor: "ExtraSmall",
+  name: "create-test-ids3",
+  flavor: "Small",
   image: "CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd"
 };
 
@@ -35,13 +35,13 @@ async.waterfall([
          callback(null, server);
        }
      });
-  },
+  }/*,
   function(server, callback) {
     console.log("destroying server:" + server.name)
     az.destroyServer(server, function(err, result) {
       callback(err, result);
     });
-  }],
+  }*/],
   function (err, result) {
     if(err) {
       console.dir(err);
