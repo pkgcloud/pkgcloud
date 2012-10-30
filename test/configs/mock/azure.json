@@ -1,7 +1,7 @@
 {
     "auth": {
-        "username": "Nodejitsu",
-        "apiKey": "409efed7-eabe-45ea-adec-a92dfc9cddfc",
+        "storageName": "pkgcloudtest",
+        "storageApiKey": "vvy70Oiput6seOtWIlIdllCe6EPDx77FOi9p4BFMxZa9obm5yIXVu4Ayk6iRluXWJRdAh4hDToYldBRvQQ+78w==",
         "pemFile": "/Users/stammen/.azure/managementCertificate.pem",
         "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc"
     },

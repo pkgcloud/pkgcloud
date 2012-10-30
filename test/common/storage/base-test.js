@@ -371,7 +371,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
       .addBatch(batchFour(clients[provider], provider, nock))
-    //.addBatch(batchFive(clients[provider], provider, nock))
+      .addBatch(batchFive(clients[provider], provider, nock))
 
     if (!process.env.NOCK) {
       suite.addBatch(batchSix(clients[provider], provider, nock))
