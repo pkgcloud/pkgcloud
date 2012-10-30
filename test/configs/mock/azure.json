@@ -1,13 +1,20 @@
 {
     "auth": {
-        "storageName": "pkgcloudtest",
+        "storageName": "pkgcloudeast",
         "storageApiKey": "vvy70Oiput6seOtWIlIdllCe6EPDx77FOi9p4BFMxZa9obm5yIXVu4Ayk6iRluXWJRdAh4hDToYldBRvQQ+78w==",
         "pemFile": "/Users/stammen/.azure/managementCertificate.pem",
         "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc"
     },
     "azure": {
-        "Location": "West US",
-        "StorageAccount": "http://pkgcloudtest.blob.core.windows.net/vhd/"
+        "Location": "East US",
+        "username": "stammen",
+        "password": "Abc.123@@",
+        "ssh" : {
+            "port": 22,
+            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem",
+            "pfx": "/Users/stammen/dev/microsoft/cert/mycert.pfx"
+        },
+        "StorageAccount": "http://pkgcloudeast.blob.core.windows.net/vhd/"
     }
 }
 
