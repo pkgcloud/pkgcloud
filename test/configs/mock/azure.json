@@ -11,8 +11,10 @@
         "password": "Abc.123@@",
         "ssh" : {
             "port": 22,
-            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem",
-            "pfx": "/Users/stammen/dev/microsoft/cert/mycert.pfx"
+            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem"
+        },
+        "rdp" : {
+            "port": 3389
         },
         "StorageAccount": "http://pkgcloudeast.blob.core.windows.net/vhd/"
     }
