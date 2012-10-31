@@ -40,7 +40,7 @@ vows.describe('pkgcloud/iriscouch/databases-redis').addBatch({
           assert.ok(database.id);
           assert.ok(database.uri);
           testContext.databaseId = database.id;
-          assert.equal(database.metadata.password, testContext.tempPassword);
+          assert.equal(database.password, [database.host, testContext.tempPassword].join(':'));
         }
       },
       "with invalid options like": {
