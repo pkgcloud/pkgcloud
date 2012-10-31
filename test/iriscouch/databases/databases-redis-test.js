@@ -15,7 +15,10 @@ var client = helpers.createClient('iriscouch', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  //nock.recorder.rec();
+  nock('https://hosting.iriscouch.com:443')
+    .post('/hosting_public', helpers.loadFixture('iriscouch/database-redis.json'))
+  .reply(201,
+    "{\"ok\":true,\"id\":\"Redis/nodejitsudb43639\",\"rev\":\"1-63cf360ebc115cdc8a709a910fdef6d7\"}\n");
 }
 
 vows.describe('pkgcloud/iriscouch/databases-redis').addBatch({
@@ -23,8 +26,8 @@ vows.describe('pkgcloud/iriscouch/databases-redis').addBatch({
     "the create() method": {
       "with correct options": {
         topic: function () {
-          var subdomain = ((process.env.NOCK) ? 'nodejitsudb908' : 'nodejitsudb' + Math.floor(Math.random()*100000));
-          testContext.tempPassword = randomPassword(12).replace("\\", "");
+          var subdomain = ((process.env.NOCK) ? 'nodejitsudb43639' : 'nodejitsudb' + Math.floor(Math.random()*100000));
+          testContext.tempPassword = ((process.env.NOCK) ? 'sTTi:lh9vCF[' : randomPassword(12).replace("\\", ""));
           client.create({
             subdomain: subdomain,
             first_name: "Marak",
