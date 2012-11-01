@@ -1,0 +1,23 @@
+//TODO: Make this a vows test
+
+var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
+var helpers = require('../../../helpers');
+
+var fs = require('fs');
+var async = require('async');
+
+var client = helpers.createClient('azure', 'compute');
+
+var options = {
+  name: "fooLinux.vhd",
+  server: "create-test-ids1"
+};
+
+client.destroyImage(options.name, function(err, result) {
+  if(err) {
+    console.dir(err);
+  } else {
+    console.dir(result);
+  }
+});
+
