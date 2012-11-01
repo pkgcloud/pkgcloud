@@ -10,12 +10,12 @@ var client = helpers.createClient('azure', 'compute');
 
 var options = {
   name: "fooLinux.vhd",
-  server: "create-test-ids1"
+  server: "test-reboot"
 };
 
 client.createImage(options, function(err, result) {
   if(err) {
-    console.dir(err);
+    console.log(err);
   } else {
     console.dir(result);
   }
