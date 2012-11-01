@@ -5,10 +5,10 @@ var fs = require('fs');
 var async = require('async');
 
 var options = {
-  name: "create-test-ids5",
+  name: "create-test-ids1",
   flavor: "Small",
-  //image: "CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd"
-  image: "MSFT__Windows-Server-2012-Datacenter-201208.01-en.us-30GB.vhd"
+  image: "create-test-ids2 "
+  //image: "MSFT__Windows-Server-2012-Datacenter-201208.01-en.us-30GB.vhd"
 };
 
 // load azure config file

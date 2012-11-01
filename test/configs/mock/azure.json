@@ -2,7 +2,7 @@
     "auth": {
         "storageName": "pkgcloudeast",
         "storageApiKey": "Beo6e44qaiLdGjvFe+pS9SJFCJo6XNbDLQ2Xj5iDvvny/PD666S3dhwJYgtGQg2yNdtgX/iysnUMQu8PfJiNpA==",
-        "pemFile": "/Users/stammen/.azure/managementCertificate.pem",
+        "pemFile": "/Users/stammen/dev/microsoft/pemtest/management.pem",
         "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc"
     },
     "azure": {
