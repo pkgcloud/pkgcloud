@@ -149,7 +149,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
 
     vows
       .describe('pkgcloud/common/compute/image [' + provider + ']')
-      .addBatch(batchOne(client, provider, nock))
+      //.addBatch(batchOne(client, provider, nock))
       .addBatch(batchTwo(client, provider, nock))
       .addBatch(batchThree(client, provider, nock))
        ["export"](module);
