@@ -6,15 +6,15 @@
  */
 
 var fs = require('fs'),
-  path = require('path'),
-  vows = require('vows'),
-  Buffer = require('buffer').Buffer,
-  assert = require('../../helpers/assert'),
-  helpers = require('../../helpers');
+    path = require('path'),
+    vows = require('vows'),
+    Buffer = require('buffer').Buffer,
+    assert = require('../../helpers/assert'),
+    helpers = require('../../helpers');
 
 var clients     = {},
-  testContext = {},
-  versions    = JSON.parse(helpers.loadFixture('versions.json'));
+    testContext = {},
+    versions    = JSON.parse(helpers.loadFixture('versions.json'));
 
 function batchOne (providerClient, providerName, nock) {
   var test   = {};
@@ -23,7 +23,7 @@ function batchOne (providerClient, providerName, nock) {
     "the createContainer() method": {
       topic: function () {
         providerClient.createContainer('pkgcloud-test-container',
-          this.callback);
+                                       this.callback);
       },
       "should return newly created container": function (err, container) {
         assert.isNull(err);
@@ -75,10 +75,8 @@ function batchThree (providerClient, providerName, nock) {
             remote: 'test-file.txt'
           }, this.callback);
 
-          if(stream) {
-            var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
-            file.pipe(stream);
-          }
+          var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
+          file.pipe(stream);
         },
         "should upload file successfuly": function (err, ok) {
           assert.isNull(err);
@@ -110,13 +108,10 @@ function batchFour (providerClient, providerName, nock) {
           }, this.callback);
 
           testContext.fileContents = '';
-
-          if(stream) {
-            stream.on('data', function (data) {
-              testContext.fileContents += data;
-            });
-            stream.end();
-          }
+          stream.on('data', function (data) {
+            testContext.fileContents += data;
+          });
+          stream.end();
         },
         "should download file successfuly": function (err, file) {
           assert.isNull(err);
@@ -125,7 +120,7 @@ function batchFour (providerClient, providerName, nock) {
 
           assert.equal(file.name, testContext.file.name);
           assert.equal(testContext.fileContents,
-            helpers.loadFixture('fillerama.txt'));
+                       helpers.loadFixture('fillerama.txt'));
           assert.equal(file.size, Buffer.byteLength(testContext.fileContents));
         }
       }
@@ -255,7 +250,7 @@ function batchSeven (providerClient, providerName, nock) {
           assert.equal(file.size, testContext.fileContentsSize);
 
           testContext.fileContents = Buffer.concat(testContext.fileContents,
-            file.size);
+                                                   file.size);
 
           // Compare byte by byte
           var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
@@ -323,8 +318,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'storage');
 
     var client    = clients[provider],
-      nock      = require('nock'),
-      fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
+        nock      = require('nock'),
+        fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
 
     if (process.env.NOCK) {
       if (provider === 'joyent') {
@@ -334,31 +329,31 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       } else if (provider === 'amazon') {
         nock('https://pkgcloud-test-container.' + client.serversUrl)
           .put('/')
-          .reply(200, '', {})
+            .reply(200, '', {})
           .put('/test-file.txt', fillerama)
-          .reply(200, '', {})
+            .reply(200, '', {})
           .get('/test-file.txt')
-          .reply(200, fillerama, { 'content-length': fillerama.length + 2 })
+            .reply(200, fillerama, { 'content-length': fillerama.length + 2 })
           .head('/test-file.txt')
-          .reply(200, '', { 'content-length': fillerama.length + 2 })
+            .reply(200, '', { 'content-length': fillerama.length + 2 })
           .get('/')
-          .reply(200, helpers.loadFixture('amazon/list-bucket-files.xml'), {})
+            .reply(200, helpers.loadFixture('amazon/list-bucket-files.xml'), {})
           .delete('/test-file.txt')
-          .reply(204, '', {})
+            .reply(204, '', {})
           .get('/')
-          .reply(
-          200,
-          helpers.loadFixture('amazon/list-bucket-files2.xml'),
-          {}
-        )
+            .reply(
+              200,
+              helpers.loadFixture('amazon/list-bucket-files2.xml'),
+              {}
+            )
           .delete('/')
-          .reply(204, '', {});
+            .reply(204, '', {});
 
         nock('https://' + client.serversUrl)
           .get('/')
-          .reply(200, helpers.loadFixture('amazon/list-buckets.xml'), {})
+            .reply(200, helpers.loadFixture('amazon/list-buckets.xml'), {})
           .get('/')
-          .reply(200, helpers.loadFixture('amazon/list-buckets2.xml'), {});
+            .reply(200, helpers.loadFixture('amazon/list-buckets2.xml'), {});
       }
     }
 
@@ -368,14 +363,13 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchThree(clients[provider], provider, nock))
       .addBatch(batchFour(clients[provider], provider, nock))
       .addBatch(batchFive(clients[provider], provider, nock))
-
+      
     if (!process.env.NOCK) {
       suite.addBatch(batchSix(clients[provider], provider, nock))
-      suite.addBatch(batchSeven(clients[provider], provider, nock))
+        .addBatch(batchSeven(clients[provider], provider, nock))      
     }
-
+    
     suite.addBatch(batchEight(clients[provider], provider, nock))
       .addBatch(batchNine(clients[provider], provider, nock))
-
-    suite["export"](module);
+      ["export"](module);
   });
