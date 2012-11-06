@@ -138,10 +138,10 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
   }
 }).addBatch({
   "The pkgcloud MongoLab client": {
-    "the createDatabase() method": {
+    "the create() method": {
       "with correct options": {
         topic: function () {
-          client.createDatabase({
+          client.create({
             plan:'free',
             name:'testDatabase',
             owner: testContext.account.username
@@ -159,19 +159,19 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
       "with invalid options like": {
         "no options": {
           topic: function () {
-            client.createDatabase(this.callback);
+            client.create(this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "invalid options": {
           topic: function () {
-            client.createDatabase({ invalid:'keys' }, this.callback);
+            client.create({ invalid:'keys' }, this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "no plan": {
           topic: function () {
-            client.createDatabase({ name:'testDatabase' }, this.callback);
+            client.create({ name:'testDatabase' }, this.callback);
           },
           "should respond with errors": assert.assertError
         }
@@ -241,10 +241,10 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
   }
 }).addBatch({
   "The pkgcloud MongoLab client": {
-    "the deleteDatabase() method": {
+    "the remove() method": {
       "with correct options": {
         topic: function () {
-          client.deleteDatabase({
+          client.remove({
             name: testContext.databaseName,
             owner: testContext.account.username
           }, this.callback);
@@ -265,19 +265,19 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
       "with invalid options like": {
         "no owner": {
           topic: function () {
-            client.deleteDatabase({ name: testContext.databaseName }, this.callback);
+            client.remove({ name: testContext.databaseName }, this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "no name": {
           topic: function () {
-            client.deleteDatabase({ owner: testContext.account.username }, this.callback);
+            client.remove({ owner: testContext.account.username }, this.callback);
           },
           "should respond with errors": assert.assertError
         },
         "no options": {
           topic: function () {
-            client.deleteDatabase(this.callback);
+            client.remove(this.callback);
           },
           "should respond with errors": assert.assertError
         }

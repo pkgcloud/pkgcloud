@@ -18,7 +18,7 @@ redis.create({
   //
   redis.get(result.id, function(err, result) {
     console.log(err, result);
-    redis.destroy(result.id, function(err, result) {
+    redis.remove(result.id, function(err, result) {
       console.log(err, result);
     });
   });
