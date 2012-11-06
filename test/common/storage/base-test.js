@@ -72,13 +72,9 @@ function batchThree (providerClient, providerName, nock) {
         topic: function () {
           var stream = providerClient.upload({
             container: testContext.container,
-            local: helpers.fixturePath('fillerama.txt'), // TODO: added local path for azure upload
             remote: 'test-file.txt'
           }, this.callback);
 
-          // TODO: azure upload() uses SDK to upload file and returns a null stream
-          // this test function wants stream to be a writestream but azure SDK only works with a readstream
-          // need some sort of writestream->readstream adapter to fix this
           if(stream) {
             var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
             file.pipe(stream);
