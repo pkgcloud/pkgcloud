@@ -115,7 +115,7 @@ function batchFour (providerClient, providerName, nock) {
             stream.on('data', function (data) {
               testContext.fileContents += data;
             });
-            //stream.end(); //TODO: why is this here? Stops download stream before it is complete!
+            stream.end();
           }
         },
         "should download file successfuly": function (err, file) {
