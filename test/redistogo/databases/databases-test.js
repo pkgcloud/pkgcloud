@@ -51,18 +51,18 @@ vows.describe('pkgcloud/redistogo/databases').addBatch({
           },
           "should respond with errors": assert.assertError
         },
-        "invalid options": {
-          topic: function () {
-            client.create({ invalid:'keys' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no plan": {
-          topic: function () {
-            client.create({ name:'testDatabase' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
+        // "invalid options": {
+        //   topic: function () {
+        //     client.create({ invalid:'keys' }, this.callback);
+        //   },
+        //   "should respond with errors": assert.assertError
+        // },
+        // "no plan": {
+        //   topic: function () {
+        //     client.create({ name:'testDatabase' }, this.callback);
+        //   },
+        //   "should respond with errors": assert.assertError
+        // }
       }
     }
   }
@@ -91,10 +91,10 @@ vows.describe('pkgcloud/redistogo/databases').addBatch({
   }
 }).addBatch({
   "The pkgcloud Redistogo client": {
-    "the destroy() method": {
+    "the remove() method": {
       "with correct options": {
         topic: function () {
-          client.destroy(testContext.databaseId, this.callback);
+          client.remove(testContext.databaseId, this.callback);
         },
         "should respond correctly": function (err, confirm) {
           assert.isNull(err);
