@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CreateDeployment xmlns="http://schemas.microsoft.com/windowsazure">
+  <Name>deployment-name</Name>
+  <PackageUrl>package-url-in-blob-storage</PackageUrl>
+  <Label>base64-encoded-deployment-label</Label>
+  <Configuration>base64-encoded-configuration-file</Configuration>
+  <StartDeployment>true</StartDeployment>
+  <TreatWarningsAsError>false</TreatWarningsAsError>
+  <ExtendedProperties></ExtendedProperties>
+</CreateDeployment>

@@ -1,0 +1,21 @@
+<ConfigurationSet>
+    <ConfigurationSetType>LinuxProvisioningConfiguration</ConfigurationSetType>
+    <HostName>host-name-for-the-vm</HostName>
+    <UserName>new-user-name</UserName>
+    <UserPassword>password-for-the-new-user</UserPassword>
+    <DisableSshPasswordAuthentication>true|false</DisableSshPasswordAuthentication>
+    <SSH>
+        <PublicKeys>
+           <PublicKey>
+               <FingerPrint>certificate-fingerprint</FingerPrint>
+               <Path>SSH-public-key-storage-location</Path>
+           </PublicKey>
+        </PublicKeys>
+        <KeyPairs>
+           <KeyPair>
+               <FingerPrint>certificate-fingerprint</FingerPrint>
+               <Path>SSH-public-key-storage-location</Path>
+           </KeyPair>
+        </KeyPairs>
+    </SSH>
+</ConfigurationSet>

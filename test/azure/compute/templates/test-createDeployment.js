@@ -2,22 +2,20 @@
 
 var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../../helpers');
+var templates = require('../../../../lib/pkgcloud/azure2/compute/templates/templates');
+var _ = require('underscore');
 
 var fs = require('fs');
-var async = require('async');
 
-var client = helpers.createClient('azure', 'compute');
-
-var options = {
-  name: "fooLinux.vhd",
-  server: "test-reboot"
-};
-
-client.createImage(options, function(err, result) {
+templates.loadTemplate('deploymentConfig.xml', function(err, template) {
   if(err) {
-    console.log(err);
+    console.dir(err);
   } else {
-    console.dir(result);
+    var params = {
+      NAME: 'moe',
+      OS_CONFIG_SET: 'foobar'
+    };
+
+    console.log(_.template(template, params));
   }
 });
-
