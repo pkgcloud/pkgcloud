@@ -7,7 +7,12 @@ var _ = require('underscore');
 
 var fs = require('fs');
 
-templates.loadTemplate('deploymentConfig.xml', function(err, template) {
+var params = {
+  NAME: 'moe',
+  OS_CONFIG_SET: 'foobar'
+};
+
+templates.load('deploymentConfig.xml', function(err, template) {
   if(err) {
     console.dir(err);
   } else {

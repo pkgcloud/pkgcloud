@@ -1,0 +1,27 @@
+<CaptureRoleOperation xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+   <OperationType>CaptureRoleOperation</OperationType>
+   <PostCaptureAction>Delete|Reprovision</PostCaptureAction>
+   <ProvisioningConfiguration>
+      <ConfigurationSetType>LinuxProvisioningConfiguration<ConfigurationSetType>
+      <HostName>host-name-for-the-vm</HostName>
+      <UserName>new-user-name</UserName>
+      <UserPassword>password-for-the-new-user</UserPassword>
+      <DisableSshPasswordAuthentication>true|false</DisableSshPasswordAuthentication>
+      <SSH>
+         <PublicKeys>
+            <PublicKey>
+               <FingerPrint>certificate-fingerprint</FingerPrint>
+               <Path>SSH-public-key-storage-location</Path>
+            </PublicKey>
+         </PublicKeys>
+         <KeyPairs>
+         <KeyPair>
+               <FingerPrint>certificate-fingerprint</FingerPrint>
+               <Path>SSH-public-key-storage-location</Path>
+         </KeyPair>
+         </KeyPairs>
+      </SSH>
+   </ProvisioningConfiguration>
+   <TargetImageLabel>image-label</TargetImageLabel>
+   <TargetImageName>image-name</TargetImageName>
+</CaptureRoleOperation>

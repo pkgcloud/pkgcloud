@@ -5,10 +5,5 @@
   <Description>description</Description>
   <Location>location</Location>
   <AffinityGroup>affinity-group</AffinityGroup>
-  <ExtendedProperties>
-    <ExtendedProperty>
-      <Name>property-name</Name>
-      <Value>property-value</Value>
-    </ExtendedProperty>
-  </ExtendedProperties>
+  <ExtendedProperties></ExtendedProperties>
 </CreateHostedService>
