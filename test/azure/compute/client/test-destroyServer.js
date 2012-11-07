@@ -7,7 +7,7 @@ var client = helpers.createClient('azure2', 'compute');
 
 var options = {};
 
-client.destroyServer('pkgcloud2', function(err, result) {
+client.destroyServer('pkgcloud4', function(err, result) {
   if(err) {
     console.log(err);
   } else {
