@@ -138,6 +138,19 @@ vows.describe('pkgcloud/mongolab/databases').addBatch({
   }
 }).addBatch({
   "The pkgcloud MongoLab client": {
+    "the getAccount() method": {
+      topic: function () {
+        client.getAccount(testContext.account.username, this.callback);
+      },
+      "should respond with the account": function (err, account) {
+        assert.isNull(err);
+        assert.equal(account.username, testContext.account.username);
+        assert.equal(account.email, testContext.account.email);
+      }
+    }
+  }
+}).addBatch({
+  "The pkgcloud MongoLab client": {
     "the create() method": {
       "with correct options": {
         topic: function () {
