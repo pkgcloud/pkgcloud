@@ -10,14 +10,14 @@
   ],
   "repository": {
     "type": "git",
-    "url" : "http://github.com/nodejitsu/pkgcloud.git" 
+    "url" : "http://github.com/nodejitsu/pkgcloud.git"
   },
   "keywords": [
     "cloud",
     "cloud computing",
-    "api", 
-    "rackspace", 
-    "joyent", 
+    "api",
+    "rackspace",
+    "joyent",
     "aws",
     "amazon",
     "azure",
@@ -33,6 +33,7 @@
     "morestreams":   "0.1.x",
     "pkginfo":       "0.2.x",
     "request":       "2.x.x",
+    "underscore":    "1.4.x",
     "utile":         "0.x.x",
     "azure":         "0.6.x"
   },

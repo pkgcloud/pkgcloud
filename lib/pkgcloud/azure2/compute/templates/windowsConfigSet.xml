@@ -1,0 +1,24 @@
+<ConfigurationSet>
+    <ConfigurationSetType>WindowsProvisioningConfiguration</ConfigurationSetType>
+    <ComputerName>computer-name</ComputerName>
+    <AdminPassword>administrator-password-for-the-vm</AdminPassword>
+    <ResetPasswordOnFirstLogon>true|false</ResetPasswordOnFirstLogon >
+    <EnableAutomaticUpdate>true|false</EnableAutomaticUpdate>
+    <TimeZone>Pacific Standard Time</TimeZone>
+    <DomainJoin>
+       <Credentials>
+            <Domain>domain-to-join</Domain>
+            <Username>user-name-in-the-domain</Username>
+            <Password>password-for-the-user-name</Password>
+       </Credentials>
+       <JoinDomain>domain-to-join</JoinDomain>
+       <MachineObjectOU>distinguished-name-of-the-ou</MachineObjectOU>
+    </DomainJoin>
+    <StoredCertificateSettings>
+       <CertificateSetting>
+            <StoreLocation>LocalMachine</StoreLocation>
+            <StoreName>name-of-store-on-the-machine</StoreName>
+            <Thumbprint>certificate-thumbprint</Thumbprint>
+       </CertificateSetting>
+    </StoredCertificateSettings>
+</ConfigurationSet>
