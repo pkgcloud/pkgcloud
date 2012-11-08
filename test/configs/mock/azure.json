@@ -8,7 +8,7 @@
     "azure": {
         "location": "East US",
         "username": "stammen",
-        "password": "Abc.123@@",
+        "password": "pkgcloud!!",
         "ssh" : {
             "port": 22,
             "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem",

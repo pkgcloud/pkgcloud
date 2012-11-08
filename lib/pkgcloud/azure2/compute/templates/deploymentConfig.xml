@@ -7,50 +7,16 @@
          <RoleName><%= NAME %></RoleName>
          <RoleType>PersistentVMRole</RoleType>
          <ConfigurationSets>
-            <%= OS_CONFIG_SET %>
-            <ConfigurationSet>
-                <ConfigurationSetType>NetworkConfiguration</ConfigurationSetType>
-                <InputEndpoints>
-                    <InputEndpoint>
-                        <EnableDirectServerReturn>true|false</EnableDirectServerReturn>
-                        <LoadBalancedEndpointSetName></LoadBalancedEndpointSetName>
-                        <LocalPort>local-port-number</LocalPort>
-                        <Name>endpoint-name</Name>
-                        <Port>external-port-number</Port>
-                        <LoadBalancerProbe>
-                            <Path>relative-path-that-contains-status</Path>
-                            <Port>port-to-use-for-status</Port>
-                            <Protocol>TCP|UDP</Protocol>
-                        </LoadBalancerProbe>
-                        <Protocol>TCP|UDP</Protocol>
-                    </InputEndpoint>
-                </InputEndpoints>
-                <SubnetNames>
-                 <string>FrontEndSubnet1</string>
-                 <string>BackEndSubnet1</string>
-                </SubnetNames>
-            </ConfigurationSet>
-         </ConfigurationSets>
-         <AvailabilitySetName>availability-set-for-the-vm</AvailabilitySetName>
-         <DataVirtualHardDisks>
-            <DataVirtualHardDisk>
-               <HostCaching>ReadOnly|ReadWrite</HostCaching>
-               <DiskLabel>data-disk-label</DiskLabel>
-               <DiskName>new-or-existing-disk-name</DiskName>
-               <Lun>logical-unit-number</Lun>
-               <LogicalDiskSizeInGB>size-in-gb-of-the-data-data-disk</LogicalDiskSizeInGB>
-               <MediaLink>url-of-the-blob-containing-the-data-disk</MediaLink>
-            </DataVirtualHardDisk>
-         </DataVirtualHardDisks>
+             <%= OS_CONFIG_SET %>
+             <%= NETWORK_CONFIG_SET %>
+       </ConfigurationSets>
          <OSVirtualHardDisk>
-            <HostCaching>ReadOnly|ReadWrite</HostCaching>
-            <DiskLabel>os-disk-label</DiskLabel>
-            <DiskName>new-or-existing-disk-name</DiskName>
-            <MediaLink>url-of-the-blob-containing-the-os-disk</MediaLink>
-            <SourceImageName>name-of-the-image-to-use-for-disk-creation</SourceImageName>
+            <DiskLabel>pkgcloud os disk</DiskLabel>
+            <MediaLink>OS_IMAGE_MEDIALINK</MediaLink>
+            <SourceImageName><%= OS_SOURCE_IMAGE_NAME %></SourceImageName>
          </OSVirtualHardDisk>
-         <RoleSize>ExtraSmall|Small|Medium|Large|ExtraLarge</RoleSize>
+         <RoleSize><%= ROLESIZE %></RoleSize>
       </Role>
     </RoleList>
-    <VirtualNetworkName>MyProdictionNetwork</VirtualNetworkName>
+    <VirtualNetworkName></VirtualNetworkName>
 </Deployment>

@@ -7,9 +7,15 @@
     <SSH>
         <PublicKeys>
            <PublicKey>
-               <FingerPrint><%= SSH_CERTIFICATE_FINGERPRINT %></FingerPrint>
+               <FingerPrint><%= CERTIFICATE_FINGERPRINT %></FingerPrint>
                <Path>/home/<%= USERNAME %>/.ssh/authorized_keys</Path>
            </PublicKey>
         </PublicKeys>
+        <KeyPairs>
+           <KeyPair>
+               <FingerPrint>certificate-fingerprint</FingerPrint>
+               <Path>SSH-public-key-storage-location</Path>
+           </KeyPair>
+        </KeyPairs>
     </SSH>
 </ConfigurationSet>
