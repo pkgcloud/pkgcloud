@@ -16,7 +16,7 @@
                         <PublicKeys>
                             <PublicKey>
                                 <Fingerprint><%= SSH_CERTIFICATE_FINGERPRINT %></Fingerprint>
-                                <Path>/home/<%= NAME %>/.ssh/authorized_keys</Path>
+                                <Path>/home/<%= USERNAME %>/.ssh/authorized_keys</Path>
                             </PublicKey>
                         </PublicKeys>
                     </SSH>
