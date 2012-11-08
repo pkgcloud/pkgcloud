@@ -2,11 +2,12 @@
     <ConfigurationSetType>NetworkConfiguration</ConfigurationSetType>
     <InputEndpoints>
         <InputEndpoint>
-            <EnableDirectServerReturn>false</EnableDirectServerReturn>
+            <EnableDirectServerReturn>true</EnableDirectServerReturn>
             <LocalPort><%= LOCAL_PORT %></LocalPort>
             <Name>ssh</Name>
             <Port><%= PORT %></Port>
-            <Protocol>TCP</Protocol>
+            <Protocol>tcp</Protocol>
         </InputEndpoint>
     </InputEndpoints>
+    <SubnetNames/>
 </ConfigurationSet>
