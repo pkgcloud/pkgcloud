@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CreateHostedService xmlns="http://schemas.microsoft.com/windowsazure">
-  <ServiceName>service-name</ServiceName>
-  <Label>base64-encoded-service-label</Label>
-  <Description>description</Description>
-  <Location>location</Location>
-  <AffinityGroup>affinity-group</AffinityGroup>
+  <ServiceName><%= NAME %></ServiceName>
+  <Label><%= LABEL_BASE64 %></Label>
+  <Description>service created by pkgcloud</Description>
+  <Location><%= LOCATION %></Location>
   <ExtendedProperties></ExtendedProperties>
 </CreateHostedService>

@@ -6,7 +6,7 @@
         "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc"
     },
     "azure": {
-        "Location": "East US",
+        "location": "East US",
         "username": "stammen",
         "password": "Abc.123@@",
         "ssh" : {
@@ -16,7 +16,7 @@
         "rdp" : {
             "port": 3389
         },
-        "StorageAccount": "http://pkgcloudeast.blob.core.windows.net/vhd/"
+        "storageAccount": "http://pkgcloudeast.blob.core.windows.net/vhd/"
     }
 }
 
