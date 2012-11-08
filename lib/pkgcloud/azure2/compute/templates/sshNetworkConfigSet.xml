@@ -3,11 +3,10 @@
     <InputEndpoints>
         <InputEndpoint>
             <EnableDirectServerReturn>false</EnableDirectServerReturn>
-            <LoadBalancedEndpointSetName></LoadBalancedEndpointSetName>
             <LocalPort><%= LOCAL_PORT %></LocalPort>
             <Name>ssh</Name>
             <Port><%= PORT %></Port>
             <Protocol>TCP</Protocol>
         </InputEndpoint>
     </InputEndpoints>
-/ConfigurationSet>
+</ConfigurationSet>

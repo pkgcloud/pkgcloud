@@ -9,14 +9,13 @@
          <ConfigurationSets>
              <%= OS_CONFIG_SET %>
              <%= NETWORK_CONFIG_SET %>
-       </ConfigurationSets>
+         </ConfigurationSets>
          <OSVirtualHardDisk>
             <DiskLabel>pkgcloud os disk</DiskLabel>
-            <MediaLink>OS_IMAGE_MEDIALINK</MediaLink>
+            <MediaLink><%= OS_IMAGE_MEDIALINK %></MediaLink>
             <SourceImageName><%= OS_SOURCE_IMAGE_NAME %></SourceImageName>
          </OSVirtualHardDisk>
          <RoleSize><%= ROLESIZE %></RoleSize>
       </Role>
     </RoleList>
-    <VirtualNetworkName></VirtualNetworkName>
 </Deployment>
