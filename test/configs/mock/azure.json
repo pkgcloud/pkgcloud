@@ -11,7 +11,8 @@
         "password": "Abc.123@@",
         "ssh" : {
             "port": 22,
-            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem"
+            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem",
+            "pemPassword": ""
         },
         "rdp" : {
             "port": 3389
