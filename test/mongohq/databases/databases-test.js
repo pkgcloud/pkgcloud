@@ -15,7 +15,7 @@ var client = helpers.createClient('mongohq', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://www.mongohq.com')
+  nock('https://providers.mongohq.com')
     .post('/provider/resources', "app_id=testDatabase&plan=free")
       .reply(200, helpers.loadFixture('mongohq/database.json'))
 
