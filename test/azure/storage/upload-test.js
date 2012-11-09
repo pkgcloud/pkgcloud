@@ -5,7 +5,7 @@ var helpers = require('../../helpers');
 var fs = require('fs');
 var async = require('async');
 
-var client = helpers.createClient('azure2', 'storage');
+var client = helpers.createClient('azure', 'storage');
 
 var options = {
   container: 'pkgcloud-test-container',

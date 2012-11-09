@@ -4,7 +4,7 @@ var Client = new require('../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../helpers');
 var async = require('async');
 
-var client = helpers.createClient('azure2', 'storage');
+var client = helpers.createClient('azure', 'storage');
 
 
 client.getFile('pkgcloud-test-container', 'test-file.txt', function(err, res) {

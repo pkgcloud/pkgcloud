@@ -3,7 +3,7 @@
 var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../../helpers');
 
-var client = helpers.createClient('azure2', 'compute');
+var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 

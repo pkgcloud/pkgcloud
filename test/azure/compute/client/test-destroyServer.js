@@ -5,7 +5,7 @@ var helpers = require('../../../helpers');
 var pkgcloud = require('../../../../lib/pkgcloud');
 
 //pkgcloud.storage.createClient()
-var client = helpers.createClient('azure2', 'compute');
+var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 

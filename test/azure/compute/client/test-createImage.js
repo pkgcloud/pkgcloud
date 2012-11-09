@@ -6,7 +6,7 @@ var helpers = require('../../../helpers');
 var fs = require('fs');
 var async = require('async');
 
-var client = helpers.createClient('azure2', 'compute');
+var client = helpers.createClient('azure', 'compute');
 
 var options = {
   name: "pkgcloud1",

@@ -2,7 +2,7 @@
 
 var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../../helpers');
-var templates = require('../../../../lib/pkgcloud/azure2/compute/templates/templates');
+var templates = require('../../../../lib/pkgcloud/azure/compute/templates/templates');
 var _ = require('underscore');
 
 var fs = require('fs');

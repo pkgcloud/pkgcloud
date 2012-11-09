@@ -1,4 +1,4 @@
-var SharedKey = require('../../../lib/pkgcloud/azure2/utils/sharedkey');
+var SharedKey = require('../../../lib/pkgcloud/azure/utils/sharedkey');
 var request = require('request');
 var xml2js = require('xml2js');
 
