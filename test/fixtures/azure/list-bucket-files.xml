@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>pkgcloud-test-container</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>test-file.txt</Key><LastModified>2012-05-26T15:09:14.000Z</LastModified><ETag>&quot;5d41402abc4b2a76b9719d911017c592&quot;</ETag><Size>5</Size><Owner><ID>f049f2bbbc20f0bce8fc8b226185f431292dd60a0f525e81c52e27bbb52e64b9</ID><DisplayName>info</DisplayName></Owner><StorageClass>STANDARD</StorageClass></Contents></ListBucketResult>

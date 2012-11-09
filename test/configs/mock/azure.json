@@ -1,13 +1,11 @@
 {
-    "auth": {
-        "storageName": "pkgcloudeast",
-        "storageApiKey": "Beo6e44qaiLdGjvFe+pS9SJFCJo6XNbDLQ2Xj5iDvvny/PD666S3dhwJYgtGQg2yNdtgX/iysnUMQu8PfJiNpA==",
-        "pemFile": "/Users/stammen/dev/microsoft/pemtest/management.pem",
-        "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc"
-    },
+    "storageAccount": "pkgcloudeast",
+    "storageAccountKey": "Beo6e44qaiLdGjvFe+pS9SJFCJo6XNbDLQ2Xj5iDvvny/PD666S3dhwJYgtGQg2yNdtgX/iysnUMQu8PfJiNpA==",
+    "pemFile": "/Users/stammen/dev/microsoft/pemtest/management.pem",
+    "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc",
     "azure": {
         "location": "East US",
-        "username": "stammen",
+        "username": "pkgcloud",
         "password": "Pkgcloud!!",
         "ssh" : {
             "port": 22,
@@ -16,8 +14,7 @@
         },
         "rdp" : {
             "port": 3389
-        },
-        "storageAccount": "http://pkgcloudeast.blob.core.windows.net/vhd/"
+        }
     }
 }
 
