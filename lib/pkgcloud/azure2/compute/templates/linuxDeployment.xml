@@ -12,6 +12,7 @@
                     <HostName><%= NAME %></HostName>
                     <UserName><%= USERNAME %></UserName>
                     <UserPassword><%= PASSWORD %></UserPassword>
+                    <ResetPasswordOnFirstLogon>false</ResetPasswordOnFirstLogon>
                     <SSH>
                         <PublicKeys>
                             <PublicKey>
