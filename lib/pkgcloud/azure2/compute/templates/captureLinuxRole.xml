@@ -1,27 +1,20 @@
 <CaptureRoleOperation xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
    <OperationType>CaptureRoleOperation</OperationType>
-   <PostCaptureAction>Delete|Reprovision</PostCaptureAction>
+   <PostCaptureAction>Delete</PostCaptureAction>
    <ProvisioningConfiguration>
       <ConfigurationSetType>LinuxProvisioningConfiguration<ConfigurationSetType>
-      <HostName>host-name-for-the-vm</HostName>
-      <UserName>new-user-name</UserName>
-      <UserPassword>password-for-the-new-user</UserPassword>
-      <DisableSshPasswordAuthentication>true|false</DisableSshPasswordAuthentication>
-      <SSH>
-         <PublicKeys>
-            <PublicKey>
-               <FingerPrint>certificate-fingerprint</FingerPrint>
-               <Path>SSH-public-key-storage-location</Path>
-            </PublicKey>
-         </PublicKeys>
-         <KeyPairs>
-         <KeyPair>
-               <FingerPrint>certificate-fingerprint</FingerPrint>
-               <Path>SSH-public-key-storage-location</Path>
-         </KeyPair>
-         </KeyPairs>
-      </SSH>
+      <HostName><%= NAME %></HostName>
+      <UserName><%= USERNAME %></UserName>
+      <UserPassword><%= PASSWORD %></UserPassword>
+       <SSH>
+            <PublicKeys>
+                <PublicKey>
+                    <Fingerprint><%= SSH_CERTIFICATE_FINGERPRINT %></Fingerprint>
+                    <Path>/home/<%= USERNAME %>/.ssh/authorized_keys</Path>
+                </PublicKey>
+            </PublicKeys>
+        </SSH>
    </ProvisioningConfiguration>
-   <TargetImageLabel>image-label</TargetImageLabel>
-   <TargetImageName>image-name</TargetImageName>
+   <TargetImageLabel><%= NAME %>.vhd</TargetImageLabel>
+   <TargetImageName><%= NAME %>.vhd</TargetImageName>
 </CaptureRoleOperation>

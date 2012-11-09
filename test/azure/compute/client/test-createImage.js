@@ -6,11 +6,11 @@ var helpers = require('../../../helpers');
 var fs = require('fs');
 var async = require('async');
 
-var client = helpers.createClient('azure', 'compute');
+var client = helpers.createClient('azure2', 'compute');
 
 var options = {
-  name: "fooLinux.vhd",
-  server: "test-reboot"
+  name: "create-test-ids2.vhd",
+  server: "create-test-ids2"
 };
 
 client.createImage(options, function(err, result) {

@@ -10,7 +10,7 @@ var client = helpers.createClient('azure2', 'compute');
 var options = {};
 
 
-client.destroyServer('test-reboot', function(err, result) {
+client.destroyServer('create-test-ids2', function(err, result) {
   if(err) {
     console.log(err);
   } else {
