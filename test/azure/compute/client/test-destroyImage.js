@@ -6,14 +6,10 @@ var helpers = require('../../../helpers');
 var fs = require('fs');
 var async = require('async');
 
-var client = helpers.createClient('azure', 'compute');
+var client = helpers.createClient('azure2', 'compute');
 
-var options = {
-  name: "fooLinux.vhd",
-  server: "create-test-ids1"
-};
 
-client.destroyImage(options.name, function(err, result) {
+client.destroyImage('pkgcloud1', function(err, result) {
   if(err) {
     console.dir(err);
   } else {
