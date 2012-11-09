@@ -9,8 +9,8 @@ var async = require('async');
 var client = helpers.createClient('azure2', 'compute');
 
 var options = {
-  name: "create-test-ids2.vhd",
-  server: "create-test-ids2"
+  name: "test-reboot",
+  server: "test-reboot"
 };
 
 client.createImage(options, function(err, result) {
