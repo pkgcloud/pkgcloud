@@ -25,6 +25,9 @@ if (process.env.NOCK) {
     .get('/api/1/partners/nodejitsu/accounts')
       .reply(200, helpers.loadFixture('mongolab/userList.json'))
 
+    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
+      .reply(200, " {\"name\": \"nodejitsu_daniel\", \"adminUser\": { \"username\": \"nodejitsu_daniel\", \"email\": \"daniel@nodejitsu.com\"}}")
+
     .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', helpers.loadFixture('mongolab/reqDatabase.json'))
       .reply(200, helpers.loadFixture('mongolab/database.json'))
 
