@@ -1,7 +1,7 @@
 var fs = require('fs'),
-    path = require('path'),
-    qs = require('querystring'),
-    pkgcloud = require('../../lib/pkgcloud');
+  path = require('path'),
+  qs = require('querystring'),
+  pkgcloud = require('../../lib/pkgcloud');
 
 var helpers = exports;
 
@@ -31,7 +31,7 @@ helpers.createClient = function createClient(provider, service, config) {
           config.keyId = 'id_rsa';
         }
       }
-      
+
       if (config.account) {
         config.keyId = '/' + config.account + '/keys/' + config.keyId;
         config.key   = fs.readFileSync(config.identity,'ascii');
@@ -45,7 +45,7 @@ helpers.createClient = function createClient(provider, service, config) {
 
 helpers.loadConfig = function loadConfig(provider) {
   var basefile = path.join(__dirname, '..', 'configs'),
-      content;
+    content;
 
   if (process.env.NOCK === 'on') {
     basefile = path.join(basefile, 'mock', provider + '.json');
@@ -79,12 +79,12 @@ helpers.loadFixture = function loadFixture(path, json) {
 };
 
 helpers.personalityPost = function persPost(pubkey) {
-  return JSON.stringify({ 
-    "server": { 
+  return JSON.stringify({
+    "server": {
       "name": "create-personality-test",
       "image": 49,
       "flavor": 1,
-      "personality": [{ 
+      "personality": [{
         "path": "/root/.ssh/authorized_keys",
         "contents": pubkey.toString('base64')
       }],
@@ -104,7 +104,7 @@ helpers.selectInstance = function selectInstance (client, callback) {
     }
     return ready[0];
   }
-  
+
   client.getInstances(function (err, instances) {
     if (err) throw new Error(err);
     if (instances.length === 0) {
@@ -125,5 +125,44 @@ helpers.authFilter = function authFilter(body) {
 
   return JSON.stringify(data);
 };
+
+helpers.azureResponseHeaders = function azureHeaders(headers) {
+  var headers = headers || {};
+  headers['transfer-encoding'] = 'chunked';
+  headers['last-modified'] = 'Sat, 10 Nov 2012 14:15:36 GMT';
+  headers['x-ms-request-id'] = '0ec15c65-970b-4342-bf34-383650212189';
+  headers['x-ms-version'] = '2011-08-18';
+  headers.etag = '"0x8CF8D64FD4A4B45"';
+  headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
+
+helpers.azureDeleteResponseHeaders = function azureHeaders(headers) {
+  var headers = headers || {};
+  headers['transfer-encoding'] = 'chunked';
+  headers['x-ms-request-id'] = '0ec15c65-970b-4342-bf34-383650212189';
+  headers['x-ms-version'] = '2011-08-18';
+  headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
+helpers.azureGetFileResponseHeaders = function azureHeaders(headers) {
+  var headers = headers || {};
+  headers['transfer-encoding'] = 'chunked';
+  headers['accept-ranges'] = 'bytes';
+  headers['x-ms-lease-status'] = 'unlocked';
+  headers['x-ms-blob-type'] = 'BlockBlob';
+  headers['last-modified'] = 'Sat, 10 Nov 2012 14:15:36 GMT';
+  headers['x-ms-request-id'] = '0ec15c65-970b-4342-bf34-383650212189';
+  headers['x-ms-version'] = '2011-08-18';
+  headers.etag = '"0x8CF8D64FD4A4B45"';
+  headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
 
 helpers.pkgcloud = pkgcloud;

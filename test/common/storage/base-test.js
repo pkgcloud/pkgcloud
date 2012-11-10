@@ -355,33 +355,27 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .get('/')
           .reply(200, helpers.loadFixture('amazon/list-buckets2.xml'), {});
       } else if (provider === 'azure') {
-        nock('https://pkgcloud-test-container.' + client.serversUrl)
-          .put('/')
-          .reply(200, '', {})
-          .put('/test-file.txt', fillerama)
-          .reply(200, '', {})
-          .get('/test-file.txt')
-          .reply(200, fillerama, { 'content-length': fillerama.length + 2 })
-          .head('/test-file.txt')
-          .reply(200, '', { 'content-length': fillerama.length + 2 })
-          .get('/')
-          .reply(200, helpers.loadFixture('amazon/list-bucket-files.xml'), {})
-          .delete('/test-file.txt')
-          .reply(204, '', {})
-          .get('/')
-          .reply(
-          200,
-          helpers.loadFixture('amazon/list-bucket-files2.xml'),
-          {}
-        )
-          .delete('/')
-          .reply(204, '', {});
-
-        nock('https://' + client.serversUrl)
-          .get('/')
-          .reply(200, helpers.loadFixture('amazon/list-buckets.xml'), {})
-          .get('/')
-          .reply(200, helpers.loadFixture('amazon/list-buckets2.xml'), {});
+        nock('http://test-storage-account.' + client.serversUrl)
+          .put('/pkgcloud-test-container?restype=container')
+          .reply(201, "", helpers.azureResponseHeaders())
+          .get('/?comp=list')
+          .reply(200, helpers.loadFixture('azure/list-containers.xml'),helpers.azureResponseHeaders())
+          .get('/?comp=list')
+          .reply(200, helpers.loadFixture('azure/list-containers2.xml'),helpers.azureResponseHeaders())
+          .put('/pkgcloud-test-container/test-file.txt?comp=block&blockid=block000000000000000', fillerama)
+          .reply(201, "", helpers.azureResponseHeaders({'content-md5': 'mw0KEVFFwT8SgYGK3Cu8vg=='}))
+          .put('/pkgcloud-test-container/test-file.txt?comp=blocklist', "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList><Latest>block000000000000000</Latest></BlockList>")
+          .reply(201, "", helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
+          .get('/pkgcloud-test-container?restype=container&comp=list')
+          .reply(200, helpers.loadFixture('azure/list-container-files.xml'), helpers.azureResponseHeaders({'content-type': 'application/xml'}))
+          .get('/pkgcloud-test-container/test-file.txt')
+          .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2,'content-type': 'text/plain'}))
+          .get('/pkgcloud-test-container/test-file.txt')
+          .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2,'content-type': 'text/plain'}))
+          .delete('/pkgcloud-test-container/test-file.txt')
+          .reply(202, "", helpers.azureDeleteResponseHeaders())
+          .delete('/pkgcloud-test-container?restype=container')
+          .reply(202, "", helpers.azureDeleteResponseHeaders());
       }
     }
 

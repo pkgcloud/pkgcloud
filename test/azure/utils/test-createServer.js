@@ -6,7 +6,7 @@ var azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi');
 var client = helpers.createClient('azure', 'compute');
 
 var options = {
-  name: 'pkgcloud6',
+  name: 'pkgcloud7',
   flavor: 'Small',
   image: 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd'
 };

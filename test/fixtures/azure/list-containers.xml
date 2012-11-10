@@ -1,4 +1,4 @@
-﻿﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <EnumerationResults AccountName="http://pkgcloudeast.blob.core.windows.net/">
     <Containers>
         <Container>
@@ -7,6 +7,22 @@
             <Properties>
                 <Last-Modified>Fri, 09 Nov 2012 17:05:04 GMT</Last-Modified>
                 <Etag>"0x8CF8CB37F7B4A28"</Etag></Properties>
+        </Container>
+        <Container>
+            <Name>vhd</Name>
+            <Url>http://pkgcloudeast.blob.core.windows.net/vhd</Url>
+            <Properties>
+                <Last-Modified>Fri, 09 Nov 2012 16:52:57 GMT</Last-Modified>
+                <Etag>"0x8CF8CB1CDC1E5B6"</Etag>
+            </Properties>
+        </Container>
+        <Container>
+            <Name>vhd-store</Name>
+            <Url>http://pkgcloudeast.blob.core.windows.net/vhd-store</Url>
+            <Properties>
+                <Last-Modified>Tue, 30 Oct 2012 23:38:55 GMT</Last-Modified>
+                <Etag>"0x8CF850EDC4DB2F4"</Etag>
+            </Properties>
         </Container>
     </Containers>
     <NextMarker />

@@ -1,8 +1,8 @@
 {
-    "storageAccount": "pkgcloudeast",
-    "storageAccountKey": "Beo6e44qaiLdGjvFe+pS9SJFCJo6XNbDLQ2Xj5iDvvny/PD666S3dhwJYgtGQg2yNdtgX/iysnUMQu8PfJiNpA==",
-    "pemFile": "/Users/stammen/dev/microsoft/pemtest/management.pem",
-    "subscriptionId": "409efed7-eabe-45ea-adec-a92dfc9cddfc",
+    "storageAccount": "test-storage-account",
+    "storageAccountKey": "test-storage-account-key",
+    "managementCertificate": "/Users/stammen/dev/microsoft/pemtest/management.pem",
+    "subscriptionId": "azure-account-subscription-id",
     "azure": {
         "location": "East US",
         "username": "pkgcloud",
