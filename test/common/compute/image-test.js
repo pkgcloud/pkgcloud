@@ -6,18 +6,18 @@
  */
 
 var fs          = require('fs'),
-    path        = require('path'),
-    vows        = require('vows'),
-    assert      = require('../../helpers/assert'),
-    helpers     = require('../../helpers'),
-    testData    = {},
-    testContext = {},
-    clients     = {};
+  path        = require('path'),
+  vows        = require('vows'),
+  assert      = require('../../helpers/assert'),
+  helpers     = require('../../helpers'),
+  testData    = {},
+  testContext = {},
+  clients     = {};
 
 function batchOne (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getServers() method": {
@@ -41,8 +41,8 @@ function batchOne (providerClient, providerName, nock) {
 
 function batchTwo (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getImages() method": {
@@ -66,8 +66,8 @@ function batchTwo (providerClient, providerName, nock) {
 
 function batchThree (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getImage() method providing an id": {
@@ -98,52 +98,60 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     clients[provider] = helpers.createClient(provider, 'compute');
 
     var client = clients[provider],
-        nock   = require('nock');
+      nock   = require('nock');
 
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/machines')
-            .reply(200, "[]", {})
+          .reply(200, "[]", {})
           .get('/' + client.account + '/datasets')
-            .reply(200, helpers.loadFixture('joyent/images.json'), {})
+          .reply(200, helpers.loadFixture('joyent/images.json'), {})
           .get('/' + client.account +
-            '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
-            .reply(200, helpers.loadFixture('joyent/image.json'), {})
+          '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
+          .reply(200, helpers.loadFixture('joyent/image.json'), {})
           .get('/' + client.account +
-            '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
-            .reply(200, helpers.loadFixture('joyent/image.json'), {});
+          '/datasets/sdc%3Asdc%3Anodejitsu%3A1.0.0')
+          .reply(200, helpers.loadFixture('joyent/image.json'), {});
       } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "",
-            JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+          JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/servers/detail.json')
-            .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
+          .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
           .get('/v1.0/537645/images/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/images.json'), {})
           .get('/v1.0/537645/images/112')
-            .reply(200, helpers.loadFixture('rackspace/image.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/image.json'), {})
           .get('/v1.0/537645/images/112')
-            .reply(200, helpers.loadFixture('rackspace/image.json'), {});
+          .reply(200, helpers.loadFixture('rackspace/image.json'), {});
       } else if (provider === 'amazon') {
         nock('https://' + client.serversUrl)
           .filteringRequestBody(helpers.authFilter)
           .post('/?Action=DescribeInstances', {})
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
-            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/images.xml'), {})
           .post('/?Action=DescribeImages', { 'ImageId.1': 'ami-85db1cec' })
-            .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
           .post('/?Action=DescribeImages', { 'ImageId.1': 'ami-85db1cec' })
-            .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
+      } else if (provider === 'azure') {
+        nock('https://' + client.serversUrl)
+          .get('/azure-account-subscription-id/services/images')
+          .reply(200,helpers.loadFixture('azure/images.xml'),{})
+          .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+          .reply(200,helpers.loadFixture('azure/image-1.xml'),{})
+          .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+          .reply(200,helpers.loadFixture('azure/image-1.xml'),{});
       }
     }
 
@@ -152,5 +160,5 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       //.addBatch(batchOne(client, provider, nock))
       .addBatch(batchTwo(client, provider, nock))
       .addBatch(batchThree(client, provider, nock))
-       ["export"](module);
+      ["export"](module);
   });
