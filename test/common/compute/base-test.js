@@ -6,19 +6,19 @@
  */
 
 var fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    assert = require('../../helpers/assert'),
-    helpers = require('../../helpers');
+  path = require('path'),
+  vows = require('vows'),
+  assert = require('../../helpers/assert'),
+  helpers = require('../../helpers');
 
 var clients     = {},
-    testContext = {},
-    versions    = JSON.parse(helpers.loadFixture('versions.json'));
+  testContext = {},
+  versions    = JSON.parse(helpers.loadFixture('versions.json'));
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getVersion() method": {
@@ -31,7 +31,7 @@ function batchOne (providerClient, providerName) {
           if (version !== versions[name]) {
             console.error(
               '!! API Version for ' + name + ' is ' + version + '.'+
-              ' we were expecting it to be ' + versions[name]
+                ' we were expecting it to be ' + versions[name]
             );
           }
         }
@@ -44,9 +44,9 @@ function batchOne (providerClient, providerName) {
 
 function batchTwo (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {},
-      m      = process.env.NOCK ? 1 : 100;
+    client = providerClient || rackspace,
+    test   = {},
+    m      = process.env.NOCK ? 1 : 100;
 
   test["The pkgcloud " + name + " compute client"] = {
     "the setWait() method": {
@@ -78,8 +78,8 @@ function batchTwo (providerClient, providerName) {
 
 function batchThree (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getImages() method": {
@@ -103,9 +103,9 @@ function batchThree (providerClient, providerName, nock) {
 
 function batchFour (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {},
-      m      = process.env.NOCK ? 1 : 100;
+    client = providerClient || rackspace,
+    test   = {},
+    m      = process.env.NOCK ? 1 : 100;
 
   test["The pkgcloud " + name + " compute client"] = {
     "the setWait() method": {
@@ -140,54 +140,54 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
     var client = clients[provider],
-        nock   = require('nock');
+      nock   = require('nock');
 
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/datacenters')
-            .reply(200, "", { 'x-api-version': '6.5.0' })
+          .reply(200, "", { 'x-api-version': '6.5.0' })
           .get('/' + client.account + '/datasets')
-            .reply(200, helpers.loadFixture('joyent/images.json'), {})
+          .reply(200, helpers.loadFixture('joyent/images.json'), {})
           .get('/' + client.account + '/packages')
-            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+          .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
           .get('/' + client.account + '/packages/Small%201GB')
-            .reply(200, helpers.loadFixture('joyent/flavor.json'), {})
+          .reply(200, helpers.loadFixture('joyent/flavor.json'), {})
           .post('/' + client.account + '/machines',
-            "{\"name\":\"create-test-setWait\",\"package\":" +
+          "{\"name\":\"create-test-setWait\",\"package\":" +
             "\"Small 1GB\",\"dataset\":\"sdc:sdc:nodejitsu:1.0.0\"}")
-            .reply(201, helpers.loadFixture('joyent/setWait.json'), {})
+          .reply(201, helpers.loadFixture('joyent/setWait.json'), {})
           .get('/' + client.account +
-              '/machines/534aa63a-104f-4d6d-a3b1-c0d341a20a53')
-            .reply(200, helpers.loadFixture('joyent/setWaitResp1.json'), {});
+          '/machines/534aa63a-104f-4d6d-a3b1-c0d341a20a53')
+          .reply(200, helpers.loadFixture('joyent/setWaitResp1.json'), {});
       } else if (provider === 'rackspace') {
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "",
-            JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+          JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/')
-            .reply(200,
-              "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
+          .reply(200,
+          "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
           .get('/v1.0/537645/images/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/images.json'), {})
           .get('/v1.0/537645/flavors/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
           .get('/v1.0/537645/flavors/1')
-            .reply(200, helpers.loadFixture('rackspace/flavor.json'), {})
-        .post('/v1.0/537645/servers',
-            helpers.loadFixture('rackspace/setWait.json'))
+          .reply(200, helpers.loadFixture('rackspace/flavor.json'), {})
+          .post('/v1.0/537645/servers',
+          helpers.loadFixture('rackspace/setWait.json'))
           .reply(202, helpers.loadFixture('rackspace/setWaitResp1.json'), {})
-        .post('/v1.0/537645/servers',
-            helpers.loadFixture('rackspace/setWait.json'))
+          .post('/v1.0/537645/servers',
+          helpers.loadFixture('rackspace/setWait.json'))
           .reply(202, helpers.loadFixture('rackspace/setWaitResp2.json'), {})
-        .get('/v1.0/537645/servers/20602046')
+          .get('/v1.0/537645/servers/20602046')
           .reply(200, helpers.loadFixture('rackspace/20602046.json'), {});
       } else if (provider === 'amazon') {
         nock('https://' + client.serversUrl)
           .filteringRequestBody(helpers.authFilter)
           .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
-            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/images.xml'), {})
           .post('/?Action=RunInstances', {
             'ImageId': 'ami-85db1cec',
             'InstanceType': 'm1.small',
@@ -195,7 +195,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'MinCount': '1',
             'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3Qtc2V0V2FpdCJ9'
           })
-            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -205,13 +205,13 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -221,13 +221,42 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}));
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}));
+      } else if (provider === 'azure') {
+        // note: x-ms-request-id' always 'b67cc525ecc546618fd6fb3e57d724f5'
+        nock('https://' + client.serversUrl)
+          .get('/azure-account-subscription-id/services/images')
+          .reply(200,helpers.loadFixture('azure/images.xml'),{})
+          .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
+          .reply(404,helpers.loadFixture('azure/hosted-service-404.xml'),{})
+          .post('/azure-account-subscription-id/services/hostedservices', helpers.loadFixture('azure/create-hosted-service.xml'))
+          .reply(201, "", {
+            location: 'https://management.core.windows.net/subscriptions/azure-account-subscription-id/compute/create-test-setWait',
+            'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
+          .get('//azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+          .reply(200,helpers.loadFixture('azure/image-1.xml'),{})
+          .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/certificates', helpers.loadFixture('azure/add-certificate.xml'))
+          .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
+          .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/deployments', helpers.loadFixture('azure/create-deployment.xml'))
+          .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-inprogress.xml'),{ })
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
+          .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
+          .reply(200, helpers.loadFixture('azure/running-server.xml'), {})
+          .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
+          .reply(200, helpers.loadFixture('azure/running-server.xml'), {});
       }
     }
 
@@ -237,5 +266,5 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
       .addBatch(batchFour(clients[provider], provider, nock))
-       ["export"](module);
+      ["export"](module);
   });
