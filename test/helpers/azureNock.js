@@ -105,42 +105,6 @@ exports.serverTest = function(nock, helpers) {
 
   nock('https://management.core.windows.net')
     .get('/azure-account-subscription-id/operations/636c060108354e1785abdd52f0a0d660')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>636c0601-0835-4e17-85ab-dd52f0a0d660</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '2265a5e71c8247edb7e46dde4090ab53',
-    date: 'Sun, 11 Nov 2012 18:14:27 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/636c060108354e1785abdd52f0a0d660')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>636c0601-0835-4e17-85ab-dd52f0a0d660</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '9ca08d5608ff463ebb21710e5a16c4ec',
-    date: 'Sun, 11 Nov 2012 18:14:35 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/636c060108354e1785abdd52f0a0d660')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>636c0601-0835-4e17-85ab-dd52f0a0d660</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '8900b6498ee941748691b3d55cd664b5',
-    date: 'Sun, 11 Nov 2012 18:14:50 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/636c060108354e1785abdd52f0a0d660')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>636c0601-0835-4e17-85ab-dd52f0a0d660</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '7d17f337de7d4a8f9fecf5560dd45e2a',
-    date: 'Sun, 11 Nov 2012 18:15:00 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/636c060108354e1785abdd52f0a0d660')
     .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>636c0601-0835-4e17-85ab-dd52f0a0d660</ID><Status>Succeeded</Status><HttpStatusCode>200</HttpStatusCode></Operation>", { 'cache-control': 'no-cache',
     'content-length': '232',
     'content-type': 'application/xml; charset=utf-8',
@@ -262,43 +226,6 @@ exports.serverTest = function(nock, helpers) {
 
   nock('https://management.core.windows.net')
     .get('/azure-account-subscription-id/operations/f88c839335ad4e65a446fd666b259765')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>f88c8393-35ad-4e65-a446-fd666b259765</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '9fd0e4b7d120434289261cd32777accf',
-    date: 'Sun, 11 Nov 2012 18:15:40 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/f88c839335ad4e65a446fd666b259765')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>f88c8393-35ad-4e65-a446-fd666b259765</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '244780f5e48940f3b20bad296c4a4a71',
-    date: 'Sun, 11 Nov 2012 18:15:53 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/f88c839335ad4e65a446fd666b259765')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>f88c8393-35ad-4e65-a446-fd666b259765</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '7e9fdecec86f4456ace290fe3ad10cf0',
-    date: 'Sun, 11 Nov 2012 18:16:02 GMT' });
-
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/f88c839335ad4e65a446fd666b259765')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>f88c8393-35ad-4e65-a446-fd666b259765</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': '12dd27f39ed54881952e83e9fae539e8',
-    date: 'Sun, 11 Nov 2012 18:16:15 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/f88c839335ad4e65a446fd666b259765')
     .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>f88c8393-35ad-4e65-a446-fd666b259765</ID><Status>Succeeded</Status><HttpStatusCode>200</HttpStatusCode></Operation>", { 'cache-control': 'no-cache',
     'content-length': '232',
     'content-type': 'application/xml; charset=utf-8',
@@ -332,24 +259,6 @@ exports.serverTest = function(nock, helpers) {
     server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
     'x-ms-request-id': '6f301af4113e430e9de117591ae5f621',
     date: 'Sun, 11 Nov 2012 18:16:29 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/d3cc1f3a13b148f29cea4e505367fdc3')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>d3cc1f3a-13b1-48f2-9cea-4e505367fdc3</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': 'e3443fb71e08466889422c76adf21b13',
-    date: 'Sun, 11 Nov 2012 18:16:39 GMT' });
-
-  nock('https://management.core.windows.net')
-    .get('/azure-account-subscription-id/operations/d3cc1f3a13b148f29cea4e505367fdc3')
-    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>d3cc1f3a-13b1-48f2-9cea-4e505367fdc3</ID><Status>InProgress</Status></Operation>", { 'cache-control': 'no-cache',
-    'content-length': '197',
-    'content-type': 'application/xml; charset=utf-8',
-    server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
-    'x-ms-request-id': 'fd56c5f126024053a25bc3f7c918f352',
-    date: 'Sun, 11 Nov 2012 18:16:52 GMT' });
 
   nock('https://management.core.windows.net')
     .get('/azure-account-subscription-id/operations/d3cc1f3a13b148f29cea4e505367fdc3')
