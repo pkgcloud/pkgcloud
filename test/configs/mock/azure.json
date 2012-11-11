@@ -1,7 +1,7 @@
 {
     "storageAccount": "test-storage-account",
     "storageAccountKey": "test-storage-account-key",
-    "managementCertificate": "/Users/stammen/dev/microsoft/pemtest/management.pem",
+    "managementCertificate": "../../../test/fixtures/azure/cert/management/management.pem",
     "subscriptionId": "azure-account-subscription-id",
     "azure": {
         "location": "East US",
@@ -9,7 +9,7 @@
         "password": "Pkgcloud!!",
         "ssh" : {
             "port": 22,
-            "pem": "/Users/stammen/dev/microsoft/cert/mycert.pem",
+            "pem": "../../../test/fixtures/azure/cert/ssh/mycert.pem",
             "pemPassword": ""
         },
         "rdp" : {

@@ -229,7 +229,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(200,
           helpers.loadFixture('amazon/running-server-attr.xml', {}));
       } else if (provider === 'azure') {
-        // note: x-ms-request-id' always 'b67cc525ecc546618fd6fb3e57d724f5'
+        // Note: response x-ms-request-id header always 'b67cc525ecc546618fd6fb3e57d724f5'.
+        // Azure would return a different value for each request
         nock('https://' + client.serversUrl)
           .get('/azure-account-subscription-id/services/images')
           .reply(200,helpers.loadFixture('azure/images.xml'),{})
@@ -253,6 +254,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(200, helpers.loadFixture('azure/operation-inprogress.xml'),{ })
           .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
           .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
+          // TODO: have to do this twice as setWait() does not check server status before calling server.refresh()?
           .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
           .reply(200, helpers.loadFixture('azure/running-server.xml'), {})
           .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
