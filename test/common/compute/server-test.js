@@ -6,19 +6,21 @@
  */
 
 var fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    assert = require('../../helpers/assert'),
-    helpers = require('../../helpers');
+  path = require('path'),
+  vows = require('vows'),
+  assert = require('../../helpers/assert'),
+  azureNock = require('../../helpers/azureNock');
+
+  helpers = require('../../helpers');
 
 var testData    = {},
-    testContext = {},
-    clients     = {};
+  testContext = {},
+  clients     = {};
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getImages() method": {
@@ -59,8 +61,8 @@ function batchOne (providerClient, providerName) {
 
 function batchTwo (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the createServer() method": {
@@ -88,8 +90,8 @@ function batchTwo (providerClient, providerName) {
 
 function batchThree (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+    client = providerClient || rackspace,
+    test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the getServers() method": {
@@ -125,16 +127,16 @@ function batchThree (providerClient, providerName) {
 
 function batchReboot(providerClient, providerName, nock) {
   var name    = providerName   || 'rackspace',
-      client  = providerClient || rackspace,
-      timeout = process.env.NOCK ? 1 : 10000,
-      test    = {};
+    client  = providerClient || rackspace,
+    timeout = process.env.NOCK ? 1 : 10000,
+    test    = {};
 
   test["The pkgcloud " + name + " compute client"] = {
     "the rebootServer() method": {
       topic: function () {
         var self = this;
         client.createServer({
-            name  : "test-reboot", 
+            name  : "test-reboot",
             image : testContext.images[0].id,
             flavor: testContext.flavors[0].id
           },
@@ -155,26 +157,26 @@ function batchReboot(providerClient, providerName, nock) {
               }, timeout);
             }
 
-          function keepTrying() {
-            // should have used setWait
-            // dont do this in your code
-            return setTimeout(function () {
-              if (server.status==='RUNNING') {
-                server.reboot(function (err, ok) {
-                  if (err) { return self.callback(err); }
-                  waitForReboot(server);
-                });
-              } else {
-                server.refresh(function (err, srv) {
-                  if (err) { return self.callback(err); }
-                  server = srv;
-                  keepTrying();
-                });
-              }
-            }, timeout);
-          }
-          keepTrying();
-        });
+            function keepTrying() {
+              // should have used setWait
+              // dont do this in your code
+              return setTimeout(function () {
+                if (server.status==='RUNNING') {
+                  server.reboot(function (err, ok) {
+                    if (err) { return self.callback(err); }
+                    waitForReboot(server);
+                  });
+                } else {
+                  server.refresh(function (err, srv) {
+                    if (err) { return self.callback(err); }
+                    server = srv;
+                    keepTrying();
+                  });
+                }
+              }, timeout);
+            }
+            keepTrying();
+          });
       },
       "should return a server after reboot": function (err, server) {
         assert.isNull(err);
@@ -189,53 +191,53 @@ function batchReboot(providerClient, providerName, nock) {
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
-    
+
     var client = clients[provider],
-        nock   = require('nock');
-    
+      nock   = require('nock');
+
     testData    = {};
     testContext = {};
-    
+
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
           .get('/' + client.account + '/machines')
-            .reply(200, "[]", {})
+          .reply(200, "[]", {})
           .get('/' + client.account + '/datasets')
-            .reply(200, helpers.loadFixture('joyent/images.json'), {})
+          .reply(200, helpers.loadFixture('joyent/images.json'), {})
           .get('/' + client.account + '/packages')
-            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
-        .post('/' + client.account + '/machines',
+          .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+          .post('/' + client.account + '/machines',
           helpers.loadFixture('joyent/createServer.json'))
-        .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
-        ["delete"]('/' + client.account +
-         '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
+          ["delete"]('/' + client.account +
+          '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
           .reply(204, "", {})
-        .get('/' + client.account + '/machines')
+          .get('/' + client.account + '/machines')
           .reply(200, helpers.loadFixture('joyent/servers.json'), {})
-        .post('/' + client.account + '/machines', 
-            helpers.loadFixture('joyent/rebootServerRequest1.json'))
-          .reply(201, 
-            helpers.loadFixture('joyent/rebootServerResponse1.json'), {})
-        .get('/' + client.account + 
-            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
-          .reply(200, 
-            helpers.loadFixture('joyent/fe4d8e28.json'), {})
-        .post('/' + client.account + 
-            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5?action=reboot')
+          .post('/' + client.account + '/machines',
+          helpers.loadFixture('joyent/rebootServerRequest1.json'))
+          .reply(201,
+          helpers.loadFixture('joyent/rebootServerResponse1.json'), {})
+          .get('/' + client.account +
+          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          .reply(200,
+          helpers.loadFixture('joyent/fe4d8e28.json'), {})
+          .post('/' + client.account +
+          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5?action=reboot')
           .reply(202, "", {})
-        .get('/' + client.account +
-            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
-          .reply(200, 
-            helpers.loadFixture('joyent/fe4d8e28.json'), {})
-        .get('/' + client.account +
-            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-          .reply(200, 
-            helpers.loadFixture('joyent/fe4d8e28.json'), {})
-        ["delete"]('/' + client.account +  
-         '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          .get('/' + client.account +
+          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          .reply(200,
+          helpers.loadFixture('joyent/fe4d8e28.json'), {})
+          .get('/' + client.account +
+          '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(200,
+          helpers.loadFixture('joyent/fe4d8e28.json'), {})
+          ["delete"]('/' + client.account +
+          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(204, "", {})
-        .post('/' + client.account +
+          .post('/' + client.account +
           '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5', { action: 'stop' })
           .reply(202, "", {})
         ;
@@ -244,47 +246,47 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, "",
-            JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+          JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         nock('https://' + client.serversUrl)
           .get('/v1.0/537645/flavors/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
           .get('/v1.0/537645/images/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/images.json'), {})
           .get('/v1.0/537645/images/detail.json')
-            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
-          .post('/v1.0/537645/servers',  
-              helpers.loadFixture('rackspace/createServer.json'))
-            .reply(202,  helpers.loadFixture('rackspace/createdServer.json'), 
-              {})
-          .post('/v1.0/537645/servers',  
-              helpers.loadFixture('rackspace/createServer.json'))
-            .reply(202,  helpers.loadFixture('rackspace/createdServer.json'), 
-              {})
+          .reply(200, helpers.loadFixture('rackspace/images.json'), {})
+          .post('/v1.0/537645/servers',
+          helpers.loadFixture('rackspace/createServer.json'))
+          .reply(202,  helpers.loadFixture('rackspace/createdServer.json'),
+          {})
+          .post('/v1.0/537645/servers',
+          helpers.loadFixture('rackspace/createServer.json'))
+          .reply(202,  helpers.loadFixture('rackspace/createdServer.json'),
+          {})
           .get('/v1.0/537645/servers/detail.json')
-            .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
+          .reply(204, helpers.loadFixture('rackspace/servers.json'), {})
           ["delete"]('/v1.0/537645/servers/20592449')
-            .reply(200, '{"ok": 20592449}', {})
+          .reply(200, '{"ok": 20592449}', {})
           .get('/v1.0/537645/servers/20592449')
-              .reply(200, helpers.loadFixture('rackspace/20592449.json'), {})
-          .post('/v1.0/537645/servers', 
-              helpers.loadFixture('rackspace/createReboot.json'))
-            .reply(202,
-              helpers.loadFixture('rackspace/buildingReboot.json'), {})
+          .reply(200, helpers.loadFixture('rackspace/20592449.json'), {})
+          .post('/v1.0/537645/servers',
+          helpers.loadFixture('rackspace/createReboot.json'))
+          .reply(202,
+          helpers.loadFixture('rackspace/buildingReboot.json'), {})
           .get('/v1.0/537645/servers/20596929')
-            .reply(200, 
-              helpers.loadFixture('rackspace/activeReboot.json'), {})
+          .reply(200,
+          helpers.loadFixture('rackspace/activeReboot.json'), {})
           .post('/v1.0/537645/servers/20596929/action',
-              '{"reboot":{"type":"SOFT"}}')
-            .reply(202, "", {})
+          '{"reboot":{"type":"SOFT"}}')
+          .reply(202, "", {})
           .get('/v1.0/537645/servers/20596929')
-            .reply(200, 
-              helpers.loadFixture('rackspace/activeReboot.json'), {})
-          ;
+          .reply(200,
+          helpers.loadFixture('rackspace/activeReboot.json'), {})
+        ;
       } else if (provider === 'amazon') {
         nock('https://' + client.serversUrl)
           .filteringRequestBody(helpers.authFilter)
           .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
-            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/images.xml'), {})
           .post('/?Action=RunInstances', {
             'ImageId': 'ami-85db1cec',
             'InstanceType': 'm1.small',
@@ -292,15 +294,15 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'MinCount': '1',
             'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3QtaWRzMiJ9'
           })
-            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
           .post('/?Action=DescribeInstances', {})
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -310,17 +312,17 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=TerminateInstances', {
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200, 'doesn\'t matter', {})
+          .reply(200, 'doesn\'t matter', {})
           .post('/?Action=RunInstances', {
             'ImageId': 'ami-85db1cec',
             'InstanceType': 'm1.small',
@@ -328,7 +330,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'MinCount': '1',
             'UserData': 'eyJuYW1lIjoidGVzdC1yZWJvb3QifQ=='
           })
-            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -338,13 +340,13 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -354,17 +356,17 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=RebootInstances', {
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/reboot-server.xml', {}))
+          .reply(200, helpers.loadFixture('amazon/reboot-server.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -374,13 +376,13 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+          helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -390,19 +392,22 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
+      } else if (provider === 'azure') {
+        azureNock.serverTest(nock,helpers);
+        // nock.recorder.rec();
       }
     }
-    
+
     vows
       .describe('pkgcloud/common/compute/server [' + provider + ']')
       .addBatch(batchOne(client, provider))
       .addBatch(batchTwo(client, provider))
       .addBatch(batchThree(client, provider))
       .addBatch(batchReboot(client, provider, nock))
-       ["export"](module);
+      ["export"](module);
   });
