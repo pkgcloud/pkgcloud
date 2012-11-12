@@ -119,8 +119,8 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 ``` js
   var azure = pkgcloud.compute.createClient({
     provider: 'azure',
-    storageAccount: "test-storage-account",
-    storageAccountKey: "test-storage-account-key",
+    storageAccount: "test-storage-account",			//name of your storage account
+    storageAccountKey: "test-storage-account-key", 	//access key for storage account
     managementCertificate: "./test/fixtures/azure/cert/management/management.pem",
     subscriptionId: "azure-account-subscription-id",
     azure: {
@@ -237,8 +237,8 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 ``` js
   {
     provider: 'azure',
-    storageAccount: "test-storage-account",
-    storageAccountKey: "test-storage-account-key"
+    storageAccount: "test-storage-account",			//name of your storage account
+    storageAccountKey: "test-storage-account-key"	//access key for storage account
   }
 ```
 **Note:** Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount and storageAccountKey are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
