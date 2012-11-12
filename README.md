@@ -275,7 +275,7 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 
 	openssl pkcs12 -export -out management.pfx -in temp.pem -inkey management.key -name "My Certificate"
 
-6. Create management cer. This will be the managementCertificate .cer file you need to upload to the Management Certificates section of the Azure portal. https://manage.windowsazure.com/#Workspace/AdminTasks/ListManagementCertificates
+6. Create management cer. This will be the managementCertificate .cer file you need to upload to the [Management Certificates section](https://manage.windowsazure.com/#Workspace/AdminTasks/ListManagementCertificates) of the Azure portal. 
 
 7. Secure files
 
