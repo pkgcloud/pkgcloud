@@ -240,12 +240,11 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
     storageAccount: "test-storage-account",
     storageAccountKey: "test-storage-account-key"
   }
-  
-Note: Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount and storageAccountKey are obtained from the Storage section of the Azure Portal at:
-
-	https://manage.windowsazure.com/#Workspace/StorageExtension/storage
-
 ```
+**Note:** Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount and storageAccountKey are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
+<br><br>
+
+
 * **pkgcloud.storage.create(options, callback)**
 * **new pkgcloud.storage.Client(options, callback)**
 
