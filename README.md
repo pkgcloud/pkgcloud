@@ -114,6 +114,26 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
     accessKeyId: '98kja34lkj'
   });
 ```
+
+**Joyent**
+
+``` js
+  var path = require('path'),
+      fs   = require('fs');
+
+  //
+  // Joyent requires a username / password or key / keyId combo.
+  // key/keyId should be registered in Joyent servers.
+  // check `test/helpers/index.js` for details on key/keyId works.
+  //
+  var joyent = pkgcloud.compute.createClient({
+    provider: 'joyent',
+    account: 'nodejitsu'
+    keyId: '/nodejitsu1/keys/dscape',
+    key: fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
+  });
+```
+
 **Azure**
 
 ``` js
@@ -137,6 +157,15 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
         }
 	});
 ```
+**Azure Prerequisites**
+
+1. Create a [Azure Management Certificate](#AzureManageCert).
+2. Upload the management .cer file to the [Management Certificates](https://manage.windowsazure.com/#Workspace/AdminTasks/ListManagementCertificates) section of the Azure portal. 
+3. Specify the location of the management.pem file in the azure.managementCertificate field.
+4. Create a [Storage Account](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) if one does not already exist. Storage accounts and Azure VMs will need to be in the same Azure location (East US, West US, etc.).
+5. Obtain the Storage Account name and access key from the [Azure Portal] (https://manage.windowsazure.com/#Workspace/StorageExtension/storage). Click on 'Manage Keys' to view Storage account name and access key.
+6. Specify the Storage account name and access key in the storageAccount and storageAccountKey fields.
+7. Create a [Azure SSH Certificate](#AzureSSHCert) if you will be using a Linux compute instance. Specify the path to the certificate pem file in the azure.ssh.pem field. If you used a password when creating the pem file, place the password in the azure.ssh.password field.
 
 **Azure Account Settings**
 
@@ -166,24 +195,6 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
 **azure.rdp.port:** The port to use for RDP on Windows servers.
 
 <br>
-**Joyent**
-
-``` js
-  var path = require('path'),
-      fs   = require('fs');
-
-  //
-  // Joyent requires a username / password or key / keyId combo.
-  // key/keyId should be registered in Joyent servers.
-  // check `test/helpers/index.js` for details on key/keyId works.
-  //
-  var joyent = pkgcloud.compute.createClient({
-    provider: 'joyent',
-    account: 'nodejitsu'
-    keyId: '/nodejitsu1/keys/dscape',
-    key: fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
-  });
-```
 
 <a name="server"></a>
 #### Server
