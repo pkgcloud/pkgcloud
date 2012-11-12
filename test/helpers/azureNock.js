@@ -13,6 +13,14 @@
  * limitations under the License.
  */
 
+/*
+  azureNock - nock support for azure in test-server.js
+
+  nock calls created by nock.recorder.rec() against live Azure server.
+  need to change azure subscription id to azure-account-subscription-id
+  need to change azure storage account name to test-storage-account
+  need to move deployment xml to create-ids-test.xml and create-test-reboot.xml
+ */
 
 exports.serverTest = function(nock, helpers) {
   nock('https://management.core.windows.net')
