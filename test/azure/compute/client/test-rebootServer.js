@@ -7,7 +7,7 @@ var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 
-client.rebootServer('pkgcloud2', function(err, result) {
+client.rebootServer('pkgcloud8', function(err, result) {
   if(err) {
     console.log(err);
   } else {
