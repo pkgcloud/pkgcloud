@@ -280,6 +280,9 @@ irisClient.create({
 });
 ```
 
+* **new pkgcloud.database.Client(options, callback)**
+* **pkgcloud.database.create(options, callback)**
+
 **MongoLab**
 
 The MongoLab API has a better aproach for manage the databases, they have implemented accounts for users, and each account could be provision databases. For create a database with MongoLab you will need first create an account and then use the created account as "owner" of the database.
@@ -321,6 +324,17 @@ MongoLabClient.create({
   console.log(database);
 });
 ```
+
+* **new pkgcloud.database.Client(options, callback)**
+* **pkgcloud.database.create(options, callback)**
+* **pkgcloud.database.createAccount(options, callback)**
+* **pkgcloud.database.getAccounts(callback)**
+* **pkgcloud.database.getAccount(name, callback)**
+* **pkgcloud.database.deleteAccount(name, callback)**
+* **pkgcloud.database.getDatabases(owner, callback)**
+* **pkgcloud.database.getDatabase(options, callback)**
+* **pkgcloud.database.remove(options, callback)**
+
 
 **MongoHQ**
 
