@@ -8,9 +8,8 @@
 var fs = require('fs'),
   path = require('path'),
   vows = require('vows'),
+  azureNock = require('../../helpers/azureNock'),
   assert = require('../../helpers/assert'),
-  azureNock = require('../../helpers/azureNock');
-
   helpers = require('../../helpers');
 
 var testData    = {},
@@ -111,7 +110,7 @@ function batchThree (providerClient, providerName) {
         client.getServer(testContext.servers[0], this.callback);
       },
       "should return a valid server": function (err, server) {
-        // TODO client.destroyServer(server);
+        client.destroyServer(server);
         assert.isNull(err);
         assert.assertServerDetails(server);
         assert.ok(Array.isArray(server.addresses["public"]));
@@ -397,9 +396,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-      } else if (provider === 'azure') {
-        azureNock.serverTest(nock,helpers);
-        // nock.recorder.rec();
+      } else if(provider === 'azure') {
+        azureNock.serverTest(nock, helpers);
       }
     }
 

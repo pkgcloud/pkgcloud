@@ -22,6 +22,8 @@
  need to move deployment xml to create-ids-test.xml and create-test-reboot.xml
  */
 
+var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi');
+
 exports.serverTest = function(nock, helpers) {
   nock('https://management.core.windows.net')
     .get('/azure-account-subscription-id/services/images')
@@ -118,6 +120,16 @@ exports.serverTest = function(nock, helpers) {
       'content-length': '3287',
       'content-type': 'application/xml; charset=utf-8',
       server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
+      'x-ms-request-id': 'afe954a4d4e348af81d118874770094f',
+      date: 'Sun, 11 Nov 2012 18:15:12 GMT' });
+
+  nock('https://management.core.windows.net')
+    .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
+    .reply(200, "<HostedService xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties><Deployments><Deployment><Name>create-test-ids2</Name><DeploymentSlot>Production</DeploymentSlot><PrivateID>f08040e5e922456a859f77254a703495</PrivateID><Status>Running</Status><Label>WTNKbFlYUmxMWFJsYzNRdGFXUnpNZz09</Label><Url>http://create-test-ids2.cloudapp.net/</Url><Configuration>PFNlcnZpY2VDb25maWd1cmF0aW9uIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL1NlcnZpY2VIb3N0aW5nLzIwMDgvMTAvU2VydmljZUNvbmZpZ3VyYXRpb24iPg0KICA8Um9sZSBuYW1lPSJjcmVhdGUtdGVzdC1pZHMyIj4NCiAgICA8SW5zdGFuY2VzIGNvdW50PSIxIiAvPg0KICA8L1JvbGU+DQo8L1NlcnZpY2VDb25maWd1cmF0aW9uPg==</Configuration><RoleInstanceList><RoleInstance><RoleName>create-test-ids2</RoleName><InstanceName>create-test-ids2</InstanceName><InstanceStatus>StoppedVM</InstanceStatus><InstanceUpgradeDomain>0</InstanceUpgradeDomain><InstanceFaultDomain>0</InstanceFaultDomain><InstanceSize>ExtraSmall</InstanceSize><InstanceStateDetails/><IpAddress>10.74.100.131</IpAddress><InstanceEndpoints><InstanceEndpoint><Name>ssh</Name><Vip>168.62.176.239</Vip><PublicPort>22</PublicPort><LocalPort>22</LocalPort><Protocol>tcp</Protocol></InstanceEndpoint></InstanceEndpoints><PowerState>Stopped</PowerState></RoleInstance></RoleInstanceList><UpgradeDomainCount>1</UpgradeDomainCount><RoleList>" +
+    "<Role i:type=\"PersistentVMRole\"><RoleName>create-test-ids2</RoleName><OsVersion/><RoleType>PersistentVMRole</RoleType><ConfigurationSets><ConfigurationSet i:type=\"NetworkConfigurationSet\"><ConfigurationSetType>NetworkConfiguration</ConfigurationSetType><InputEndpoints><InputEndpoint><LocalPort>22</LocalPort><Name>ssh</Name><Port>22</Port><Protocol>tcp</Protocol><Vip>168.62.176.239</Vip></InputEndpoint></InputEndpoints><SubnetNames/></ConfigurationSet></ConfigurationSets><DataVirtualHardDisks/><OSVirtualHardDisk><HostCaching>ReadWrite</HostCaching><DiskName>create-test-ids2-create-test-ids2-0-20121111181413</DiskName><MediaLink>http://test-storage-account.blob.core.windows.net/vhd/create-test-ids2.vhd</MediaLink><SourceImageName>CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd</SourceImageName><OS>Linux</OS></OSVirtualHardDisk><RoleSize>ExtraSmall</RoleSize></Role></RoleList><SdkVersion/><Locked>false</Locked><RollbackAllowed>false</RollbackAllowed><CreatedTime>2012-11-11T18:14:12Z</CreatedTime><LastModifiedTime>2012-11-11T18:14:37Z</LastModifiedTime><ExtendedProperties/><PersistentVMDowntime><StartTime>2012-10-21T18:20:20Z</StartTime><EndTime>2013-10-21T18:20:20Z</EndTime><Status>PersistentVMUpdateCompleted</Status></PersistentVMDowntime></Deployment></Deployments></HostedService>", { 'cache-control': 'no-cache',
+      'content-length': '3287',
+      'content-type': 'application/xml; charset=utf-8',
+      server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
       'x-ms-request-id': '74313ad871a945c3ab728a84bc97e0ef',
       date: 'Sun, 11 Nov 2012 18:15:12 GMT' });
 
@@ -139,6 +151,59 @@ exports.serverTest = function(nock, helpers) {
       server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
       'x-ms-request-id': 'f46a3cf844644bdc89a5ee8253b0c7c3',
       date: 'Sun, 11 Nov 2012 18:15:15 GMT' });
+
+  nock('https://management.core.windows.net')
+    .post('/azure-account-subscription-id/services/hostedservices/create-test-ids2/deployments/create-test-ids2/roleInstances/create-test-ids2/Operations', helpers.loadFixture('azure/shutdown-role.xml'))
+    .reply(201, "", { 'cache-control': 'no-cache',
+       'content-length': '0',
+       location: 'https://management.core.windows.net/subscriptions/azure-account-subscription-id/compute/test-reboot',
+       server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
+       'x-ms-request-id': '1a2c53d295b8451eb8fe902ea7ee478f',
+       date: 'Sun, 11 Nov 2012 18:15:22 GMT' });
+
+  nock('https://management.core.windows.net')
+    .get('/azure-account-subscription-id/operations/1a2c53d295b8451eb8fe902ea7ee478f')
+    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>1a2c53d295b8451eb8fe902ea7ee478f</ID><Status>Succeeded</Status><HttpStatusCode>200</HttpStatusCode></Operation>", { 'cache-control': 'no-cache',
+      'content-length': '232',
+      'content-type': 'application/xml; charset=utf-8',
+      server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
+      'x-ms-request-id': '399dec0dd9114bd59f8d759746d9bfcd',
+      date: 'Sun, 11 Nov 2012 18:15:22 GMT' });
+
+  nock('https://management.core.windows.net')
+    .delete('/azure-account-subscription-id/services/hostedservices/create-test-ids2/deployments/create-test-ids2')
+    .reply(200, "", { 'cache-control': 'no-cache',
+       'x-ms-request-id': '1a2c53d295b8451eb8fe902ea7ee478e',
+       date: 'Sun, 11 Nov 2012 18:15:22 GMT' });
+
+  nock('https://management.core.windows.net')
+    .get('/azure-account-subscription-id/operations/1a2c53d295b8451eb8fe902ea7ee478e')
+    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>1a2c53d295b8451eb8fe902ea7ee478e</ID><Status>Succeeded</Status><HttpStatusCode>200</HttpStatusCode></Operation>", { 'cache-control': 'no-cache',
+      'content-length': '232',
+      'content-type': 'application/xml; charset=utf-8',
+      server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
+      'x-ms-request-id': '399dec0dd9114bd59f8d759746d9bfcd',
+      date: 'Sun, 11 Nov 2012 18:15:22 GMT' });
+
+  nock('https://management.core.windows.net')
+    .delete('/azure-account-subscription-id/services/disks/create-test-ids2-create-test-ids2-0-20121111181413')
+    .reply(200, "", { 'cache-control': 'no-cache',
+       'x-ms-request-id': '1a2c53d295b8451eb8fe902ea7ee478e',
+       date: 'Sun, 11 Nov 2012 18:15:22 GMT' })
+    .get('/azure-account-subscription-id/operations/1a2c53d295b8451eb8fe902ea7ee478e')
+    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>1a2c53d295b8451eb8fe902ea7ee478e</ID><Status>Succeeded</Status><HttpStatusCode>200</HttpStatusCode></Operation>", {});
+
+  nock('http://test-storage-account.' + azureApi.STORAGE_ENDPOINT)
+    .delete('/vhd/create-test-ids2.vhd')
+    .reply(202, "", helpers.azureDeleteResponseHeaders());
+
+  nock('https://management.core.windows.net')
+    .delete('/azure-account-subscription-id/services/hostedservices/create-test-ids2')
+    .reply(200, "", { 'cache-control': 'no-cache',
+       'x-ms-request-id': '1a2c53d295b8451eb8fe902ea7ee478e',
+       date: 'Sun, 11 Nov 2012 18:15:22 GMT' })
+    .get('/azure-account-subscription-id/operations/1a2c53d295b8451eb8fe902ea7ee478e')
+    .reply(200, "<Operation xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><ID>1a2c53d295b8451eb8fe902ea7ee478e</ID><Status>Succeeded</Status><HttpStatusCode>200</HttpStatusCode></Operation>", {});
 
   nock('https://management.core.windows.net')
     .get('/azure-account-subscription-id/services/hostedservices/test-reboot?embed-detail=true')
