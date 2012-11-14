@@ -222,7 +222,7 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 ```
 See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
 
-<a name="databases"></a>
+<a name="database"></a>
 ### Databases
 
 <a name="creating-databases-clients"></a>
@@ -230,7 +230,8 @@ See  [azure.md](docs/azure.md) for more information on the Azure configuration s
 The options to be passed to the `pkgcloud.database.createClient` object should be:
 
 **IrisCouch**
-For use this service you will need a created and valid account. The important thing is the `username` and `password` but for iriscouch there is other required fields like `first_name`, `last_name`, `subdomain` and `email`
+
+For use this service you will need a created and valid account. The important thing is the `username` and `password` for the `createClient()` method. But for IrisCouch creation method there is other required fields like `first_name`, `last_name`, `subdomain` and `email`
 
 ``` js
 var irisClient = pkgcloud.database.createClient({
@@ -254,7 +255,7 @@ irisClient.create({
   //
 });
 ```
-IrisCouch also provide a way to provision a redis database, in that case just past the option `type: 'redis'` to the `create()` method and put a `password` for the access.
+IrisCouch also provide a way to provision a redis database, in that case just pass the option `type: 'redis'` to the `create()` method and put a `password` for the access.
 
 ``` js
 //
