@@ -208,8 +208,8 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
   }
 ```
 
-* **pkgcloud.storage.create(options, callback)**
-* **new pkgcloud.storage.Client(options, callback)**
+* `pkgcloud.storage.create(options, callback)`
+* `new pkgcloud.storage.Client(options, callback)`
 
 **Azure**
 
@@ -280,8 +280,8 @@ irisClient.create({
 });
 ```
 
-* **new pkgcloud.database.createClient(options, callback)**
-* **pkgcloud.database.create(options, callback)**
+* `new pkgcloud.database.createClient(options, callback)`
+* `pkgcloud.database.create(options, callback)`
 
 **MongoLab**
 
@@ -325,19 +325,19 @@ MongoLabClient.create({
 });
 ```
 
-* **new pkgcloud.database.createClient(options, callback)**
+* `new pkgcloud.database.createClient(options, callback)`
 
 #### Accounts
-* **pkgcloud.database.createAccount(options, callback)**
-* **pkgcloud.database.getAccounts(callback)**
-* **pkgcloud.database.getAccount(name, callback)**
-* **pkgcloud.database.deleteAccount(name, callback)**
+* `pkgcloud.database.createAccount(options, callback)`
+* `pkgcloud.database.getAccounts(callback)`
+* `pkgcloud.database.getAccount(name, callback)`
+* `pkgcloud.database.deleteAccount(name, callback)`
 
 #### Databases
-* **pkgcloud.database.create(options, callback)**
-* **pkgcloud.database.getDatabases(owner, callback)**
-* **pkgcloud.database.getDatabase(options, callback)**
-* **pkgcloud.database.remove(options, callback)**
+* `pkgcloud.database.create(options, callback)`
+* `pkgcloud.database.getDatabases(owner, callback)`
+* `pkgcloud.database.getDatabase(options, callback)`
+* `pkgcloud.database.remove(options, callback)`
 
 **MongoHQ**
 
@@ -365,9 +365,9 @@ MongoClient.create({
 });
 ```
 
-* **new pkgcloud.database.createClient(options, callback)**
-* **pkgcloud.database.create(options, callback)**
-* **pkgcloud.database.remove(id, callback)**
+* `new pkgcloud.database.createClient(options, callback)`
+* `pkgcloud.database.create(options, callback)`
+* `pkgcloud.database.remove(id, callback)`
 
 **Rackspace**
 
@@ -402,10 +402,10 @@ redis.create({
 });
 ```
 
-* **new pkgcloud.database.createClient(options, callback)**
-* **pkgcloud.database.create(options, callback)**
-* **pkgcloud.database.remove(id, callback)**
-* **pkgcloud.database.get(id, callback)**
+* `new pkgcloud.database.createClient(options, callback)`
+* `pkgcloud.database.create(options, callback)`
+* `pkgcloud.database.remove(id, callback)`
+* `pkgcloud.database.get(id, callback)`
 
 <a name="roadmap"></a>
 ## Roadmap
