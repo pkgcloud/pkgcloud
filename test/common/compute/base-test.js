@@ -244,10 +244,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
           .get('//azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
           .reply(200,helpers.loadFixture('azure/image-1.xml'),{})
-          .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/certificates', helpers.loadFixture('azure/add-certificate.xml'))
-          .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
-          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
-          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
           .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/deployments', helpers.loadFixture('azure/create-deployment.xml'))
           .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
           .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
@@ -259,6 +255,14 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(200, helpers.loadFixture('azure/running-server.xml'), {})
           .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
           .reply(200, helpers.loadFixture('azure/running-server.xml'), {});
+
+        nock('https://' + client.serversUrl)
+          .filteringRequestBody(/.*/, '*')
+          .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/certificates', '*')
+           .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+           .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ });
+
       }
     }
 
