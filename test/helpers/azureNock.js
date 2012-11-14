@@ -52,7 +52,9 @@ exports.serverTest = function(nock, helpers) {
     .reply(200,helpers.loadFixture('azure/image-1.xml'),{});
 
   nock('https://management.core.windows.net')
-    .post('/azure-account-subscription-id/services/hostedservices/create-test-ids2/certificates',  helpers.loadFixture('azure/add-certificate.xml'))
+    // need to filter request body because base64 cert is different on windows
+    .filteringRequestBody(/.*/, '*')
+    .post('/azure-account-subscription-id/services/hostedservices/test-reboot/certificates', '*')
     .reply(202, "", { 'cache-control': 'no-cache',
       'content-length': '0',
       server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
@@ -235,7 +237,9 @@ exports.serverTest = function(nock, helpers) {
       date: 'Sun, 11 Nov 2012 18:15:23 GMT' });
 
   nock('https://management.core.windows.net')
-    .post('/azure-account-subscription-id/services/hostedservices/test-reboot/certificates', helpers.loadFixture('azure/add-certificate.xml'))
+     // need to filter request body because base64 cert is different on windows
+    .filteringRequestBody(/.*/, '*')
+    .post('/azure-account-subscription-id/services/hostedservices/create-test-ids2/certificates', '*')
     .reply(202, "", { 'cache-control': 'no-cache',
       'content-length': '0',
       server: '6.0.6002.18488 (rd_rdfe_stable.121021-2100) Microsoft-HTTPAPI/2.0',
