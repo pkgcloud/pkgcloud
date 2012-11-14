@@ -280,7 +280,7 @@ irisClient.create({
 });
 ```
 
-* **new pkgcloud.database.Client(options, callback)**
+* **new pkgcloud.database.createClient(options, callback)**
 * **pkgcloud.database.create(options, callback)**
 
 **MongoLab**
@@ -325,12 +325,16 @@ MongoLabClient.create({
 });
 ```
 
-* **new pkgcloud.database.Client(options, callback)**
-* **pkgcloud.database.create(options, callback)**
+* **new pkgcloud.database.createClient(options, callback)**
+
+#### Accounts
 * **pkgcloud.database.createAccount(options, callback)**
 * **pkgcloud.database.getAccounts(callback)**
 * **pkgcloud.database.getAccount(name, callback)**
 * **pkgcloud.database.deleteAccount(name, callback)**
+
+#### Databases
+* **pkgcloud.database.create(options, callback)**
 * **pkgcloud.database.getDatabases(owner, callback)**
 * **pkgcloud.database.getDatabase(options, callback)**
 * **pkgcloud.database.remove(options, callback)**
@@ -361,13 +365,47 @@ MongoClient.create({
 });
 ```
 
-* **new pkgcloud.database.Client(options, callback)**
+* **new pkgcloud.database.createClient(options, callback)**
 * **pkgcloud.database.create(options, callback)**
 * **pkgcloud.database.remove(id, callback)**
 
 **Rackspace**
 
 **RedisToGO**
+
+``` js
+var redisClient = pkgcloud.database.createClient({
+  provider: 'redistogo',
+  username: "bob",
+  password: "1234"
+});
+
+//
+// Create a redis
+//
+redis.create({
+  plan: "nano",
+}, function (err, result) {
+  console.log(err, result);
+  //
+  // Get the same redis we just created
+  //
+  redis.get(result.id, function(err, result) {
+    console.log(err, result);
+    //
+    // Remove the redis created
+    //
+    redis.remove(result.id, function(err, result) {
+      console.log(err, result);
+    });
+  });
+});
+```
+
+* **new pkgcloud.database.createClient(options, callback)**
+* **pkgcloud.database.create(options, callback)**
+* **pkgcloud.database.remove(id, callback)**
+* **pkgcloud.database.get(id, callback)**
 
 <a name="roadmap"></a>
 ## Roadmap
