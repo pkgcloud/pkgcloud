@@ -32,6 +32,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <th>Joyent</th>
     <th>Amazon</th>
     <th>Azure</th>
+    <th>Rackspace</th>
   </tr>
   <tr>
     <td>Server</td>
@@ -39,6 +40,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <td>Machine</td>
     <td>Instance</td>
     <td>Virtual Machine</td>
+    <td>Server</td>
   </tr>
   <tr>
     <td>Image</td>
@@ -53,6 +55,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <td>Package</td>
     <td>InstanceType</td>
     <td>RoleSize</td>
+    <td>Flavor</td>
   </tr>
 </table>
 
@@ -64,11 +67,13 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <th>OpenStack</th>
     <th>Amazon</th>
     <th>Azure</th>
+    <th>Rackspace</th>
   </tr>
   <tr>
     <td>Container</td>
     <td>Container</td>
     <td>Bucket</td>
+    <td>Container</td>
     <td>Container</td>
   </tr>
   <tr>
@@ -76,6 +81,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <td>StorageObject</td>
     <td>Object</td>
     <td>Blob</td>
+    <td>File</td>
   </tr>
 </table>
 
