@@ -35,6 +35,10 @@ if (process.env.NOCK) {
       .reply(202)
     .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases', "{\"databases\":[{\"name\":\"TestDatabase\"}]}")
       .reply(202)
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases', "{\"databases\":[{\"name\":\"TestDatabaseThree\"}]}")
+      .reply(202)
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
     .get('/v1.0/537645/instances?')
@@ -80,6 +84,18 @@ vows.describe('pkgcloud/rackspace/databases/databases').addBatch({
         var self = this;
         helpers.selectInstance(client, function (instance) {
           client.createDatabase({name: 'TestDatabaseTwo', instance:instance}, self.callback);
+        });
+      },
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.equal(response.statusCode, 202);
+      }
+    },
+    "the create() method": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.create({name: 'TestDatabaseThree', instance:instance}, self.callback);
         });
       },
       "should respond correctly": function (err, response) {
