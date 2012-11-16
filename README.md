@@ -242,18 +242,18 @@ For use this service you will need a created and valid account. The important th
 ``` js
 var irisClient = pkgcloud.database.createClient({
   provider: 'iriscouch',
-  username: "bob",
-  password: "1234"
+  username: 'bob',
+  password: '1234'
 });
 
 //
 // Create a couch
 //
 irisClient.create({
-  subdomain: "pkgcloud-nodejitsu-test-7",
-  first_name: "pkgcloud",
-  last_name: "pkgcloud",
-  email: "info@nodejitsu.com"
+  subdomain: 'pkgcloud-nodejitsu-test-7',
+  first_name: 'pkgcloud',
+  last_name: 'pkgcloud',
+  email: 'info@nodejitsu.com'
 }, function (err, result) {
   console.log(err, result);
   //
@@ -268,14 +268,14 @@ IrisCouch also provide a way to provision a redis database, in that case just pa
 // Crate a redis database
 //
 irisClient.create({
-  subdomain: "pkgcloud-nodejitsu-test-7",
-  first_name: "pkgcloud",
-  last_name: "pkgcloud",
-  email: "info@nodejitsu.com",
+  subdomain: 'pkgcloud-nodejitsu-test-7',
+  first_name: 'pkgcloud',
+  last_name: 'pkgcloud',
+  email: 'info@nodejitsu.com',
   // For redis instead of couch just put type to redis
-  type: "redis",
+  type: 'redis',
   // AND ADD A PASSWORD! (required)
-  password: "mys3cur3p4ssw0rd"
+  password: 'mys3cur3p4ssw0rd'
 }, function (err, result) {
   console.log('HOST to connect:', result.host);
   console.log('KEY to use:', result.password);
@@ -297,8 +297,8 @@ The MongoLab API has a better aproach for manage the databases, they have implem
 // First lets set up the client
 var MongoLabClient = pkgcloud.database.createClient({
   provider: 'mongolab',
-  username: "bob",
-  password: "1234"
+  username: 'bob',
+  password: '1234'
 });
 ```
 
@@ -350,16 +350,16 @@ MongoLabClient.create({
 ``` js
 var MongoClient = pkgcloud.database.createClient({
   provider: 'mongohq',
-  username: "bob",
-  password: "1234"
+  username: 'bob',
+  password: '1234'
 });
 
 //
 // Create a MongoDB
 //
 MongoClient.create({
-  name: "mongo-instance",
-  plan: "free",
+  name: 'mongo-instance',
+  plan: 'free',
 }, function (err, result) {
   console.log(err, result);
   //
@@ -376,21 +376,28 @@ MongoClient.create({
 * `pkgcloud.database.remove(id, callback)`
 
 **Rackspace**
+``` js
+var rackspaceClient = pkgcloud.database.createClient({
+  provider: 'rackspace',
+  username: 'bob',
+  key: '124'
+});
+```
 
 **RedisToGO**
 
 ``` js
 var redisClient = pkgcloud.database.createClient({
   provider: 'redistogo',
-  username: "bob",
-  password: "1234"
+  username: 'bob',
+  password: '1234'
 });
 
 //
 // Create a redis
 //
 redis.create({
-  plan: "nano",
+  plan: 'nano',
 }, function (err, result) {
   console.log(err, result);
   //
