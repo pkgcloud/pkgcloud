@@ -37,7 +37,7 @@
     "utile":         "0.x.x"
   },
   "devDependencies": {
-    "vows": "0.6.x",
+    "vows": "0.7.x",
     "nock": "0.13.x"
   },
   "main":    "./lib/pkgcloud",
