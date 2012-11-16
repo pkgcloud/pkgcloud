@@ -31,28 +31,24 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
     <th>OpenStack</th>
     <th>Joyent</th>
     <th>Amazon</th>
-    <th>Rackspace</th>
   </tr>
   <tr>
     <td>Server</td>
     <td>Server</td>
     <td>Machine</td>
     <td>Instance</td>
-    <td>Server</td>
   </tr>
   <tr>
     <td>Image</td>
     <td>Image</td>
     <td>Dataset</td>
     <td>AMI</td>
-    <td>Image</td>
   </tr>
   <tr>
     <td>Flavor</td>
     <td>Flavor</td>
     <td>Package</td>
     <td>InstanceType</td>
-    <td>Flavor</td>
   </tr>
 </table>
 
@@ -63,19 +59,16 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
     <th>pkgcloud</th>
     <th>OpenStack</th>
     <th>Amazon</th>
-    <th>Rackspace</th>
   </tr>
   <tr>
     <td>Container</td>
     <td>Container</td>
     <td>Bucket</td>
-    <td>Container</td>
   </tr>
   <tr>
     <td>File</td>
     <td>StorageObject</td>
     <td>Object</td>
-    <td>File</td>
   </tr>
 </table>
 
