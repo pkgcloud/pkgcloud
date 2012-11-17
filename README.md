@@ -31,24 +31,28 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
     <th>OpenStack</th>
     <th>Joyent</th>
     <th>Amazon</th>
+    <th>Azure</th>
   </tr>
   <tr>
     <td>Server</td>
     <td>Server</td>
     <td>Machine</td>
     <td>Instance</td>
+    <td>Virtual Machine</td>
   </tr>
   <tr>
     <td>Image</td>
     <td>Image</td>
     <td>Dataset</td>
     <td>AMI</td>
+    <td>Image</td>
   </tr>
   <tr>
     <td>Flavor</td>
     <td>Flavor</td>
     <td>Package</td>
     <td>InstanceType</td>
+    <td>RoleSize</td>
   </tr>
 </table>
 
@@ -59,16 +63,19 @@ When considering all IaaS providers as a whole their vocabulary is somewhat disj
     <th>pkgcloud</th>
     <th>OpenStack</th>
     <th>Amazon</th>
+    <th>Azure</th>
   </tr>
   <tr>
     <td>Container</td>
     <td>Container</td>
     <td>Bucket</td>
+    <td>Container</td>
   </tr>
   <tr>
     <td>File</td>
     <td>StorageObject</td>
     <td>Object</td>
+    <td>Blob</td>
   </tr>
 </table>
 
@@ -127,6 +134,33 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
   });
 ```
 
+**Azure**
+
+``` js
+  var azure = pkgcloud.compute.createClient({
+    provider: 'azure',
+    storageAccount: "test-storage-account",			//name of your storage account
+    storageAccountKey: "test-storage-account-key", 	//access key for storage account
+    managementCertificate: "./test/fixtures/azure/cert/management/management.pem",
+    subscriptionId: "azure-account-subscription-id",
+    azure: {
+        location: "East US",	//azure location for server
+        username: "pkgcloud",	//username for server
+        password: "Pkgcloud!!",	//password for server
+        ssh : {					//ssh settings for linux server
+            port: 22,			//default is 22
+            pem: "./test/fixtures/azure/cert/ssh/mycert.pem",
+            pemPassword: ""
+        },
+        rdp : {					// rdp settings for windows server
+            port: 3389
+        }
+	});
+```
+See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
+
+<br>
+
 <a name="server"></a>
 #### Server
 * `client.getServers(function (err, servers) { })`
@@ -176,6 +210,17 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 
 * **pkgcloud.storage.create(options, callback)**
 * **new pkgcloud.storage.Client(options, callback)**
+
+**Azure**
+
+``` js
+  {
+    provider: 'azure',
+    storageAccount: "test-storage-account",			//name of your storage account
+    storageAccountKey: "test-storage-account-key"	//access key for storage account
+  }
+```
+See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
 
 <a name="roadmap"></a>
 ## Roadmap

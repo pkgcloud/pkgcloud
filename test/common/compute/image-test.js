@@ -144,6 +144,14 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
           .post('/?Action=DescribeImages', { 'ImageId.1': 'ami-85db1cec' })
             .reply(200, helpers.loadFixture('amazon/image-1.xml'), {})
+      } else if (provider === 'azure') {
+        nock('https://' + client.serversUrl)
+          .get('/azure-account-subscription-id/services/images')
+          .reply(200,helpers.loadFixture('azure/images.xml'),{})
+          .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+          .reply(200,helpers.loadFixture('azure/image-1.xml'),{})
+          .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+          .reply(200,helpers.loadFixture('azure/image-1.xml'),{});
       }
     }
 

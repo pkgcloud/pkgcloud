@@ -1,4 +1,5 @@
 {
   "account"    : "MOCK-ACCOUNT",
-  "serversUrl" : "us-sw-1.api.joyentcloud.com"
+  "serversUrl" : "us-sw-1.api.joyentcloud.com",
+  "identity" : "./test/fixtures/testkey"
 }

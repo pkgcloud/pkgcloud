@@ -228,6 +228,41 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           })
             .reply(200,
                    helpers.loadFixture('amazon/running-server-attr.xml', {}));
+      } else if (provider === 'azure') {
+        // Note: response x-ms-request-id header always 'b67cc525ecc546618fd6fb3e57d724f5'.
+        // Azure would return a different value for each request
+        nock('https://' + client.serversUrl)
+          .get('/azure-account-subscription-id/services/images')
+          .reply(200,helpers.loadFixture('azure/images.xml'),{})
+          .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
+          .reply(404,helpers.loadFixture('azure/hosted-service-404.xml'),{})
+          .post('/azure-account-subscription-id/services/hostedservices', helpers.loadFixture('azure/create-hosted-service.xml'))
+          .reply(201, "", {
+            location: 'https://management.core.windows.net/subscriptions/azure-account-subscription-id/compute/create-test-setWait',
+            'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
+          .get('//azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+          .reply(200,helpers.loadFixture('azure/image-1.xml'),{})
+          .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/deployments', helpers.loadFixture('azure/create-deployment.xml'))
+          .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-inprogress.xml'),{ })
+          .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ })
+          // TODO: have to do this twice as setWait() does not check server status before calling server.refresh()?
+          .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
+          .reply(200, helpers.loadFixture('azure/running-server.xml'), {})
+          .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true')
+          .reply(200, helpers.loadFixture('azure/running-server.xml'), {});
+
+        nock('https://' + client.serversUrl)
+          .filteringRequestBody(/.*/, '*')
+          .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/certificates', '*')
+           .reply(202, "", {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+           .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
+          .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ });
+
       }
     }
 

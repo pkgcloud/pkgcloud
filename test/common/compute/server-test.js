@@ -6,10 +6,11 @@
  */
 
 var fs = require('fs'),
-    path = require('path'),
-    vows = require('vows'),
-    assert = require('../../helpers/assert'),
-    helpers = require('../../helpers');
+  path = require('path'),
+  vows = require('vows'),
+  azureNock = require('../../helpers/azureNock'),
+  assert = require('../../helpers/assert'),
+  helpers = require('../../helpers');
 
 var testData    = {},
     testContext = {},
@@ -395,6 +396,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
+      } else if(provider === 'azure') {
+        azureNock.serverTest(nock, helpers);
       }
     }
     

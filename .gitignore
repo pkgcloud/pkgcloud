@@ -8,3 +8,5 @@ test/fixtures/test-download*
 .project
 test/configs/*.json
 !test/configs/providers.json
+.idea
+azure_error

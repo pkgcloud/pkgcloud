@@ -126,4 +126,43 @@ helpers.authFilter = function authFilter(body) {
   return JSON.stringify(data);
 };
 
+helpers.azureResponseHeaders = function azureHeaders(headers) {
+  var headers = headers || {};
+  headers['transfer-encoding'] = 'chunked';
+  headers['last-modified'] = 'Sat, 10 Nov 2012 14:15:36 GMT';
+  headers['x-ms-request-id'] = '0ec15c65-970b-4342-bf34-383650212189';
+  headers['x-ms-version'] = '2011-08-18';
+  headers.etag = '"0x8CF8D64FD4A4B45"';
+  headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
+
+helpers.azureDeleteResponseHeaders = function azureHeaders(headers) {
+  var headers = headers || {};
+  headers['transfer-encoding'] = 'chunked';
+  headers['x-ms-request-id'] = '0ec15c65-970b-4342-bf34-383650212189';
+  headers['x-ms-version'] = '2011-08-18';
+  headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
+helpers.azureGetFileResponseHeaders = function azureHeaders(headers) {
+  var headers = headers || {};
+  headers['transfer-encoding'] = 'chunked';
+  headers['accept-ranges'] = 'bytes';
+  headers['x-ms-lease-status'] = 'unlocked';
+  headers['x-ms-blob-type'] = 'BlockBlob';
+  headers['last-modified'] = 'Sat, 10 Nov 2012 14:15:36 GMT';
+  headers['x-ms-request-id'] = '0ec15c65-970b-4342-bf34-383650212189';
+  headers['x-ms-version'] = '2011-08-18';
+  headers.etag = '"0x8CF8D64FD4A4B45"';
+  headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
+
 helpers.pkgcloud = pkgcloud;

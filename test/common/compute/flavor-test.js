@@ -85,6 +85,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
       } else if (provider === 'amazon') {
         // No need in nock here, all flavors are stored in provider's files
+      } else if (provider === 'azure') {
+        // No need in nock here, all flavors are stored in provider's files
       }
     }
 
