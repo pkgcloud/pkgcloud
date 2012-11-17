@@ -41,6 +41,6 @@
     "nock": "0.13.x"
   },
   "main":    "./lib/pkgcloud",
-  "scripts": { "test": "echo y  | ssh-keygen -f test/fixtures/testkey -q -t rsa -N '' 2>&1 > /dev/null && NOCK=on vows test/*/*/*-test.js --spec --isolate" },
+  "scripts": { "test": "node ./test/test.js"},
   "engines": { "node": "0.6.x || 0.8.x" }
 }
