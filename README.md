@@ -13,7 +13,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
     * [Downloading Files](#downloading)
   * [Database](#database)
     * [Creating Storage Clients](#creating-storage-clients)
-* [Roadmap](#next-steps)
+* [Roadmap](#roadmap)
 
 <a name="Unified Vocabulary"></a>
 ## Unified Vocabulary
@@ -149,6 +149,17 @@ See  [azure.md](docs/azure.md) for more information on the Azure configuration s
 #### Creating Databases Clients
 The options to be passed to the `pkgcloud.database.createClient` object should be:
 
+
+## Install from NPM
+
+``` bash
+npm install pkgcloud
+```
+For run the tests you will need `vows@0.7.0` or higher, please install it and then run:
+
+``` bash
+npm test
+```
 
 <a name="contributing"></a>
 ## Contributing Guidelines
