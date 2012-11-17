@@ -1,9 +1,17 @@
+/*
+ * flavors.js: Implementation of Azure Flavors Client.
+ *
+ * (C) Microsoft Open Technologies, Inc.
+ *
+ */
+
 // spawns the following vows command line in a cross platform manner
 // NOCK=on vows test/*/*/*-test.js --spec --isolate"
 
-
-// "echo y  | ssh-keygen -f test/fixtures/testkey -q -t rsa -N '' 2>&1 > /dev/null && is no longer
-// needed in the test command line. testkey are checked into tests/fixtures/testkey and testkey.pub
+// Note:
+// "echo y  | ssh-keygen -f test/fixtures/testkey -q -t rsa -N '' 2>&1 > /dev/null &&
+// is no longer needed in the test command line.
+// testkey are checked into tests/fixtures/testkey and testkey.pub
 
 var path = require('path'),
   spawn = require('child_process').spawn,
