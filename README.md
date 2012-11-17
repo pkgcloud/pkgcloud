@@ -21,7 +21,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 <a name="Unified Vocabulary"></a>
 ## Unified Vocabulary
 
-When considering all IaaS providers as a whole their vocabulary is somewhat disjoint. `pkgcloud` attempts to overcome this through a unified vocabulary. Note that all Database providers use the same vocabulary: _database_.
+When considering all IaaS providers as a whole, their vocabulary is somewhat disjointed. `pkgcloud` attempts to overcome this through a unified vocabulary. Note that all Database providers use the same vocabulary: _database_.
 
 ### Compute
 
