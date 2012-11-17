@@ -8,8 +8,8 @@ If you are reading this maybe is because you want to contribute something to the
 
 We only accept issues that are bug reports or feature requests. Bugs must be isolated and reproducible problems that we can fix within the code base. Please read the following guidelines before opening any issue.
 
-1. **Search for existing issues.** Please first of all, check if someone else have reported the issue before. If the issue is already reported then maybe someone is work on it or better there is a fix available.
-2. **Create an isolated and reproducible test case.** We use [vows](http://vowsjs.org/) as tool for make test cases, and the whole test suite already have some helpers and utils for make a complete test. Go check the `test` folders for example of tests and how to use those helpers. Afterwards try to make and submit a vows valid test, that would help us a lot for find the problem, also is super easy do it in this way for feature request, more easy to us understand what really you want. It is very possible that your test will eventually added to the test suite.
+1. **Search for existing issues.** Please first of all, check if someone else have reported the issue before. If the issue is already reported then maybe someone is work on it or even better perhaps there is a fix available.
+2. **Create an isolated and reproducible test case.** We use [vows](http://vowsjs.org/) as tool for make test cases, and the whole test suite already have some helpers and utils for make a complete test. Go check the `test/` directory for example of tests and how to use those helpers. Afterwards try to make and submit a vows valid test, that would help us a lot for find the problem, also is super easy do it in this way for feature request, more easy to us understand what really you want. It is very possible that your test will eventually added to the test suite.
 3. **Include logs and backtraces** Please try to include some logs or backtrace of your problem or error, that help a lot to identify wich part is the involved.
 4. **Share as much information as possible.** Include operating system and version, `node` and `npm` version, version of Pkgcloud. Also include steps to reproduce the bug and any further information about your environment
 
@@ -21,10 +21,10 @@ We only accept issues that are bug reports or feature requests. Bugs must be iso
 ## Pull requests
  
 - Please follow the style guide that is being used in code base.
-- If you are adding new methods please include a documentation above the function definition
-- If you are adding a new provider or new service please add the complete documentation to the `docs/` directory
+- If you are adding new methods please include a documentation above the function definition.
+- If you are adding a new provider or new service please add the complete documentation to the `docs/` directory.
 - Try to tag your commits depending what does (`[misc]`, `[docs]`, `[database]`, `[compute]`)
-- Follow style guide on code and docs
+- Follow style guide on code and docs.
 - Your pull request should pass the tests and the `travis-ci` build, that will be reviewed by the maintainer.
 
 
