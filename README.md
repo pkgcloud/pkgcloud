@@ -106,7 +106,7 @@ See  [azure.md](docs/azure.md) for more information on the Azure configuration s
 
 <a name="creating-storage-clients"></a>
 #### Creating Storage Clients
-The options to be passed to the `pkgcloud.storage.Client` object should be:
+The options to be passed to the `pkgcloud.storage.createClient` object should be:
 
 **Rackspace**
 
