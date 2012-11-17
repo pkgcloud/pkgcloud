@@ -32,7 +32,7 @@ Currently there are three service types which are handled by pkgcloud:
 
 <a name="creating-compute-clients"></a>
 #### Creating Compute Clients
-The options to be passed to the `pkgcloud.compute.Client` object should be:
+The options to be passed to the `pkgcloud.compute.createClient` object should be:
 
 **Rackspace**
 
