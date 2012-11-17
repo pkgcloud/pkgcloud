@@ -150,11 +150,17 @@ See  [azure.md](docs/azure.md) for more information on the Azure configuration s
 The options to be passed to the `pkgcloud.database.createClient` object should be:
 
 
+<a name="contributing"></a>
+## Contributing Guidelines
+You can read the contribution guidelines at `CONTRIBUTING.md` file or [click here](https://github.com/nodejitsu/pkgcloud/blob/master/CONTRIBUTING.md)
+
+Not too much strict but we encourage you to read and to follow that guidelines before made a pull request.
+
 <a name="roadmap"></a>
 ## Roadmap
 
 1. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
-3. 
+2. Include more providers or services
 
 #### Author: [Nodejitsu](http://nodejitsu.com)
 #### License: MIT
