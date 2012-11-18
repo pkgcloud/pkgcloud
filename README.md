@@ -74,14 +74,14 @@ Due to the differences between the vocabulary for each service provider, **[pkgc
 Supporting every API for every cloud service provider in Node.js is a huge undertaking, but _that is the long-term goal of `pkgcloud`_. **Special attention has been made to ensure that each service type has enough providers for a critical mass of portability between providers** (i.e. Each service implemented has multiple providers).
 
 * **[Compute](#compute)**
-  * [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#compute)
-  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#compute)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#compute)
-  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#compute)
+  * [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#using-compute)
+  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-compute)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-compute)
+  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-compute)
 * **[Storage](#storage)**
-  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#storage)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#storage)
-  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#storage)
+  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-storage)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-storage)
+  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-storage)
 * **[Database](#database)**
   * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md)
   * [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
@@ -109,10 +109,10 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
 
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#compute)
-* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#compute)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#compute)
-* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#compute)
+* [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#using-compute)
+* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-compute)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-compute)
+* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-compute)
 
 Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
 
@@ -158,9 +158,9 @@ To get started with a `pkgcloud.storage` client just create one:
 
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#storage)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#storage)
-* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#storage)
+* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-storage)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-storage)
+* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-storage)
 
 Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
 

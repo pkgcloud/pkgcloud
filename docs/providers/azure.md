@@ -73,30 +73,20 @@
 
 **Azure Account Settings**
 
-**storageAccount:** Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount name is obtained from the Storage section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
-
-**storageAccessKey:** Azure storage account access key. storageAccessKey is obtained from the Storage section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
-
-**managementCertificate:** See [Azure Management Certificates](#azure-manage-cert).
-
-**subscriptionId:** The subscription ID of your Azure account obtained from the Administrators section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/AdminTasks/ListUsers).
+* `storageAccount`: Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount name is obtained from the Storage section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
+* `storageAccessKey`: Azure storage account access key. storageAccessKey is obtained from the Storage section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
+* `managementCertificate`: See [Azure Management Certificates](#azure-manage-cert).
+* `subscriptionId`: The subscription ID of your Azure account obtained from the Administrators section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/AdminTasks/ListUsers).
 
 **Azure Specific Settings**
 
-**azure.location:** Location of storage account and Azure compute servers (East US, West US, etc.). Storage account and compute servers need to be in same location.
-
-**azure.username:** The administrator username used to log into the Azure virtual machine. For Windows servers, this field is ignored and administrator is used for the username.
-
-**azure.password:** The administrator password.
-
-
-**azure.ssh.port:** The port to use for SSH on Linux servers.
-
-**azure.ssh.pem:** The X509 certificate with a 2048-bit RSA keypair. Specify the path to this pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
-
-**azure.ssh.pemPassword:** The password/pass phrase used when creating the pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
-
-**azure.rdp.port:** The port to use for RDP on Windows servers.
+* `azure.location`: Location of storage account and Azure compute servers (East US, West US, etc.). Storage account and compute servers need to be in same location.
+* `azure.username`: The administrator username used to log into the Azure virtual machine. For Windows servers, this field is ignored and administrator is used for the username.
+* `azure.password`: The administrator password.
+* `azure.ssh.port`: The port to use for SSH on Linux servers.
+* `azure.ssh.pem`: The X509 certificate with a 2048-bit RSA keypair. Specify the path to this pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
+* `azure.ssh.pemPassword`: The password/pass phrase used when creating the pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
+* `azure.rdp.port`: The port to use for RDP on Windows servers.
 
 <a name="azure-manage-cert"></a>
 ## Azure Management Certificates
@@ -104,41 +94,41 @@
 ### Create an Azure Service Management certificate on Linux/Mac OSX:
 
 1. Create rsa private key
-
+``` bash
 	openssl genrsa -out management.key 2048
-
+```
 2. Create self signed certificate
-
+``` bash
 	openssl req -new -key management.key -out management.csr
-
+```
 3. Create temp x509 pem file from rsa key and self signed certificate
-
+``` bash 
 	openssl x509 -req -days 3650 -in management.csr -signkey management.key -out temp.pem
-
+```
 4. Create management pem from temp pem file and rsa key file. This will be the managementCertificate file used by the compute client in pkgcloud.
-
+``` bash
 	cat management.key temp.pem > management.pem. 
-	
+```
 5. Create management pfx
-
+``` bash
 	openssl pkcs12 -export -out management.pfx -in temp.pem -inkey management.key -name "My Certificate"
-
+```
 6. Create management cer. This will be the managementCertificate .cer file you need to upload to the [Management Certificates section](https://manage.windowsazure.com/#Workspace/AdminTasks/ListManagementCertificates) of the Azure portal. 
-
 7. Secure files
-
+``` bash
 	chmod 600 *.*
+```
 
 ### Create an Azure Service Management certificate from a .publishsettings file:
 
-https://www.windowsazure.com/en-us/manage/linux/common-tasks/manage-certificates/
+For more information about this [read the article on windowsazure.com:](https://www.windowsazure.com/en-us/manage/linux/common-tasks/manage-certificates/) https://www.windowsazure.com/en-us/manage/linux/common-tasks/manage-certificates/
 
 	
 ### Create an Azure Service Management certificate on Windows:
 
-http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx
+For more information about this [read the article on MSDN:](http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx) http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx.
 
-<br>
+<br/>
 <a name="azure-ssh-cert"></a>
 ## Azure x.509 SSH Certificates
 
