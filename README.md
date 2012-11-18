@@ -5,6 +5,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [Getting started](#getting-started)
   * [Basic APIs](#basic-apis)
   * [Supported APIs](#supported-apis)
+  * [Unified Vocabulary](#unified-vocabulary)
 * [Compute](#compute)
 * [Storage](#storage)
   * [Uploading Files](#uploading)
@@ -59,10 +60,13 @@ Services provided by `pkgcloud` are exposed in two ways:
 
 All API clients exposed by `pkgcloud` can be instantiated through `pkgcloud[serviceType].createClient({ ... })` or `pkcloud.providers[provider][serviceType].createClient({ ... })`.
 
+<a name="unified-vocabulary"></a>
+### Unified Vocabulary
+
 Due to the differences between the vocabulary for each service provider, **[pkgcloud uses its own unified vocabulary](https://github.com/nodejitsu/pkgcloud/blob/master/docs/vocabulary.md).** 
 
-* **Compute:** Server, Image, Flavor
-* **Storage:** Container, File
+* **Compute:** [Server](#server), [Image](#image), [Flavor](#flavor)
+* **Storage:** [Container](#container), [File](#file)
 
 <a name="supported-apis"></a>
 ### Supported APIs
@@ -85,7 +89,6 @@ Supporting every API for every cloud service provider in Node.js is a huge under
   * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
   * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
   
-
 <a name="compute"></a>
 ## Compute
 
@@ -111,11 +114,7 @@ Each compute provider takes different credentials to authenticate; these details
 * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#compute)
 * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#compute)
 
-Each instance of `pkgcloud.compute.Client` has a set of uniform APIs:
-
-* [Server](#server)
-* [Image](#image)
-* [Flavor](#flavor)
+Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
 
 <a name="server"></a>
 ### Server
@@ -140,13 +139,73 @@ Each instance of `pkgcloud.compute.Client` has a set of uniform APIs:
 <a name="storage"></a>
 ## Storage
 
-* `pkgcloud.storage.create(options, callback)`
-* `new pkgcloud.storage.Client(options, callback)`
+The `pkgcloud.storage` service is designed to make it easy to upload and download files to various infrastructure providers. **_Special attention has been paid so that methods are stream-capable._**
 
+To get started with a `pkgcloud.storage` client just create one:
+
+```
+  var client = require('pkgcloud').compute.createClient({
+    //
+    // The name of the provider (e.g. "joyent")
+    //
+    provider: 'provider-name',
+  
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
 * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#storage)
 * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#storage)
 * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#storage)
+
+Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
+
+<a name="container"></a>
+### Container
+* `client.getContainers(function (err, containers) { })`
+* `client.createContainer(options, function (err, container) { })`
+* `client.destroyContainer(containerName, function (err) { })`
+* `client.getContainer(containerName, function (err, container) { })`
+
+<a name="file"></a>
+### File
+* `client.upload(options, function (err) { })`
+* `client.download(options, function (err) { })`
+* `client.getFiles(container, function (err, files) { })`
+* `client.getFile(container, file, function (err, server) { })`
+* `client.removeFile(container, file, function (err) { })`
+
+Both the `.upload(options)` and `.download(options)` have had **careful attention paid to make sure they are pipe and stream capable:**
+
+### Upload a File
+``` js
+  var pkgcloud = require('pkgcloud'),
+      fs = require('fs');
+  
+  var client = pkgcloud.storage.createClient({ /* ... */ });
+  
+  fs.createReadStream('a-file.txt').pipe(client.upload({
+    container: 'a-container',
+    remote: 'remote-file-name.txt'
+  }));
+```
+
+### Download a File
+``` js
+  var pkgcloud = require('pkgcloud'),
+      fs = require('fs');
+  
+  var client = pkgcloud.storage.createClient({ /* ... */ });
+  
+  client.download({
+    container: 'a-container',
+    remote: 'remote-file-name.txt'
+  }).pipe(fs.createWriteStream('a-file.txt'));
+```
 
 <a name="database"></a>
 ## Databases
@@ -156,7 +215,6 @@ Each instance of `pkgcloud.compute.Client` has a set of uniform APIs:
 * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
 * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
 * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
-
 
 <a name="installation"></a>
 ## Installation
