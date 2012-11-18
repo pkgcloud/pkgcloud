@@ -2,24 +2,22 @@
 
 pkgcloud is a standard library for node.js that abstracts away differences among multiple cloud providers.
 
-* [Unified Vocabulary](#unified-vocabulary)
-* [Services](#components)
-  * [Compute](#compute)
-    * [Creating Compute Clients](#creating-compute-clients)
-  * [Storage](#storage)
-    * [Creating Storage Clients](#creating-storage-clients)
-    * [Container](#container)
-    * [Uploading Files](#uploading)
-    * [Downloading Files](#downloading)
-  * [Database](#database)
-    * [Creating Storage Clients](#creating-storage-clients)
-* [Roadmap](#roadmap)
+* [Getting started](#getting-started)
+  * [Basic APIs](#basic-apis)
+  * [Providers](#providers)
+* [Compute](#compute)
+* [Storage](#storage)
+  * [Uploading Files](#uploading)
+  * [Downloading Files](#downloading)
+* [Database](#database)
+* Fine Print
+  * [Installation](#installation)
+  * [Tests](#tests)
+  * [Roadmap](#roadmap)
+  * [Contribute!](#contributing)
 
-<a name="Unified Vocabulary"></a>
-## Unified Vocabulary
-
-<a name="services"></a>
-## Services
+<a name="getting-started"></a>
+## Getting Started
 
 Currently there are three service types which are handled by pkgcloud:
 
@@ -27,11 +25,37 @@ Currently there are three service types which are handled by pkgcloud:
 * [Storage](#storage)
 * [Database](#database)
 
+These services are exposed in two ways:
+
+1. **By service type:** For example, if you wanted to create an API client to communicate with a compute service you could simply:
+``` js 
+  var client = require('pkgcloud').compute.createClient({
+    //
+    // The name of the provider (e.g. "joyent")
+    //
+    provider: 'provider-name',
+    
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+2. **By provider name:** For example, if you knew the name of the provider you wished to communicate with you could do so directly:
+``` js
+  var client = require('pkgcloud').providers.joyent.compute.createClient({
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+All API clients exposed by `pkgcloud` can be instantiated through `pkgcloud[serviceType].createClient({ ... })` or `pkcloud.providers[provider][serviceType].createClient({ ... })`.
+
 <a name="compute"></a>
-### Compute
+## Compute
 
 <a name="creating-compute-clients"></a>
-#### Creating Compute Clients
+### Creating Compute Clients
 The options to be passed to the `pkgcloud.compute.createClient` object should be:
 
 **Rackspace**
@@ -98,14 +122,11 @@ The options to be passed to the `pkgcloud.compute.createClient` object should be
 ```
 See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
 
-<br>
-
-
 <a name="storage"></a>
-### Storage
+## Storage
 
 <a name="creating-storage-clients"></a>
-#### Creating Storage Clients
+### Creating Storage Clients
 The options to be passed to the `pkgcloud.storage.createClient` object should be:
 
 **Rackspace**
@@ -143,35 +164,41 @@ The options to be passed to the `pkgcloud.storage.createClient` object should be
 See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
 
 <a name="database"></a>
-### Databases
+## Databases
 
 <a name="creating-databases-clients"></a>
-#### Creating Databases Clients
+### Creating Databases Clients
 The options to be passed to the `pkgcloud.database.createClient` object should be:
 
 
-## Install from NPM
+<a name="installation"></a>
+## Installation
 
 ``` bash
-npm install pkgcloud
+  $ npm install pkgcloud
 ```
+
+<a name="tests"></a>
+## Tests
 For run the tests you will need `vows@0.7.0` or higher, please install it and then run:
 
 ``` bash
-npm test
+ $ npm test
 ```
 
 <a name="contributing"></a>
-## Contributing Guidelines
-You can read the contribution guidelines at `CONTRIBUTING.md` file or [click here](https://github.com/nodejitsu/pkgcloud/blob/master/CONTRIBUTING.md)
+## Contribute!
+We welcome contribution to `pkgcloud` by any and all individuals or organizations. Before contributing please take a look at the [Contribution Guidelines in CONTRIBUTING.md](https://github.com/nodejitsu/pkgcloud/blob/master/CONTRIBUTING.md).
 
-Not too much strict but we encourage you to read and to follow that guidelines before made a pull request.
+We are pretty flexible about these guidelines, but the closer you follow them the more likely we are to merge your pull-request.
 
 <a name="roadmap"></a>
 ## Roadmap
 
 1. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
-2. Include more providers or services
+2. Include `CDN` and `DNS` services.
+
 
 #### Author: [Nodejitsu](http://nodejitsu.com)
+#### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), []
 #### License: MIT
