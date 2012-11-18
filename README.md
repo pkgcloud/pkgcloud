@@ -4,8 +4,8 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 
 * [Getting started](#getting-started)
   * [Basic APIs](#basic-apis)
-  * [Supported APIs](#supported-apis)
   * [Unified Vocabulary](#unified-vocabulary)
+  * [Supported APIs](#supported-apis)
 * [Compute](#compute)
 * [Storage](#storage)
   * [Uploading Files](#uploading)
@@ -14,8 +14,8 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
-  * [Roadmap](#roadmap)
   * [Contribute!](#contributing)
+  * [Roadmap](#roadmap)
 
 <a name="getting-started"></a>
 ## Getting Started
@@ -94,7 +94,7 @@ Supporting every API for every cloud service provider in Node.js is a huge under
 
 The `pkgcloud.compute` service is designed to make it easy to provision and work with VMs. To get started with a `pkgcloud.compute` client just create one:
 
-```
+``` js
   var client = require('pkgcloud').compute.createClient({
     //
     // The name of the provider (e.g. "joyent")
@@ -143,7 +143,7 @@ The `pkgcloud.storage` service is designed to make it easy to upload and downloa
 
 To get started with a `pkgcloud.storage` client just create one:
 
-```
+``` js
   var client = require('pkgcloud').compute.createClient({
     //
     // The name of the provider (e.g. "joyent")
@@ -244,6 +244,6 @@ We are pretty flexible about these guidelines, but the closer you follow them th
 2. Include `CDN` and `DNS` services.
 
 
-#### Author: [Nodejitsu](http://nodejitsu.com)
-#### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), []
+#### Author: [Nodejitsu Inc.](http://nodejitsu.com)
+#### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), [Daniel Aristizabal](https://github.com/cronopio), [Marak Squires](https://github.com/marak), [Dale Stammen](https://github.com/stammen)
 #### License: MIT

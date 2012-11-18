@@ -1,36 +1,46 @@
 # Using Azure with `pkgcloud`
 
 * [Using Compute](#using-compute)
+  * [Prerequisites](#compute-prerequisites)
 * [Using Storage](#using-storage)
+  * [Prerequisites](#storage-prerequisites)
 * [Certificates](#azure-manage-cert)
   * [Azure Management Certificates](#azure-manage-cert)
   * [Azure SSH Certificates](#azure-ssh-cert)
 
-<a name="azure-compute"></a>
-**Azure Compute Configuration**
+<a name="using-compute"></a>
+## Using Compute
 
 ``` js
   var azure = pkgcloud.compute.createClient({
     provider: 'azure',
-    storageAccount: "test-storage-account",			//name of your storage account
-    storageAccessKey: "test-storage-access-key", 	//access key for storage account
+    storageAccount: "test-storage-account",			  // Name of your storage account
+    storageAccessKey: "test-storage-access-key", 	// Access key for storage account
     managementCertificate: "./test/fixtures/azure/cert/management/management.pem",
     subscriptionId: "azure-account-subscription-id",
     azure: {
-      location: "East US",	//azure location for server
-      username: "pkgcloud",	//username for server
-      password: "Pkgcloud!!",	//password for server
-      ssh: {					//ssh settings for linux server
-        port: 22,			//default is 22
+      location: 'East US',	  // Azure location for server
+      username: 'pkgcloud',	  // Username for server
+      password: 'Pkgcloud!!',	// Password for server
+      //
+      // SSH settings for linux server
+      //
+      ssh: {					        
+        port: 22,			        // default is 22
         pem: "./test/fixtures/azure/cert/ssh/mycert.pem",
         pemPassword: ""
       },
-      rdp : {					// rdp settings for windows server
+      //
+      // RDP settings for windows server
+      //
+      rdp: {	
         port: 3389
       }
 	});
 ```
-**Prerequisites**
+
+<a name="compute-prerequisites"></a>
+### Compute Prerequisites
 
 1. Create a [Azure Management Certificate](#AzureManageCert).
 2. Upload the management .cer file to the [Management Certificates](https://manage.windowsazure.com/#Workspace/AdminTasks/ListManagementCertificates) section of the Azure portal. 
@@ -39,6 +49,27 @@
 5. Obtain the Storage Account name and access key from the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage). Click on 'Manage Keys' to view Storage account name and access key.
 6. Specify the Storage account name and access key in the storageAccount and storageAccessKey fields.
 7. Create a [Azure SSH Certificate](#azure-ssh-cert) if you will be using a Linux compute instance. Specify the path to the certificate pem file in the azure.ssh.pem field. If you used a password when creating the pem file, place the password in the azure.ssh.password field.
+
+<a name="using-storage"></a>
+## Using Storage
+
+``` js
+  var azure = pkgcloud.storage.createClient({
+    provider: 'azure',
+    storageAccount: "test-storage-account",			// Name of your storage account
+    storageAccessKey: "test-storage-access-key" // Access key for storage account
+  });
+```
+
+<a name="storage-prerequisites"></a>
+### Storage Prerequisites
+
+1. Azure storage account must already exist. 
+2. Storage account must be in same Azure location as compute servers (East US, West US, etc.). 
+3. `storageAccount` and `storageAccessKey` are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
+
+<a name="all-azure-options"></a>
+## All Azure Options
 
 **Azure Account Settings**
 
@@ -67,31 +98,10 @@
 
 **azure.rdp.port:** The port to use for RDP on Windows servers.
 
-<br>
-
-
-<a name="azure-storage"></a>
-**Azure Storage Configuration**
-
-``` js
-  {
-    provider: 'azure',
-    storageAccount: "test-storage-account",		//name of your storage account
-    storageAccessKey: "test-storage-access-key"	//access key for storage account
-  }
-```
-
-**Prerequisites**
-
-1. Azure storage account must already exist. 
-2. Storage account must be in same Azure location as compute servers (East US, West US, etc.). 
-3. storageAccount and storageAccountKey are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
-<br><br>
-
 <a name="azure-manage-cert"></a>
 ## Azure Management Certificates
 
-#####Create an Azure Service Management certificate on Linux/Mac OSX:
+### Create an Azure Service Management certificate on Linux/Mac OSX:
 
 1. Create rsa private key
 
@@ -109,7 +119,6 @@
 
 	cat management.key temp.pem > management.pem. 
 	
-
 5. Create management pfx
 
 	openssl pkcs12 -export -out management.pfx -in temp.pem -inkey management.key -name "My Certificate"
@@ -120,12 +129,12 @@
 
 	chmod 600 *.*
 
-#####Create an Azure Service Management certificate from a .publishsettings file:
+### Create an Azure Service Management certificate from a .publishsettings file:
 
 https://www.windowsazure.com/en-us/manage/linux/common-tasks/manage-certificates/
 
 	
-#####Create an Azure Service Management certificate on Windows:
+### Create an Azure Service Management certificate on Windows:
 
 http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx
 
@@ -133,7 +142,7 @@ http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx
 <a name="azure-ssh-cert"></a>
 ## Azure x.509 SSH Certificates
 
-#####Create an Azure x.509 SSH certificate on Linux/Mac OSX:
+### Create an Azure x.509 SSH certificate on Linux/Mac OSX:
 
 1. Create x.509 pem file and key file
 	
@@ -152,11 +161,4 @@ http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx
  
 	ssh -i  myPrivateKey.key -p <port> username@servicename.cloudapp.net
 
-For more info: 
-
-https://www.windowsazure.com/en-us/manage/linux/how-to-guides/ssh-into-linux/
-
-* **new pkgcloud.storage.Client(options, callback)**
-
-#### Author: [Nodejitsu](http://nodejitsu.com)
-#### License: MIT
+For more info: https://www.windowsazure.com/en-us/manage/linux/how-to-guides/ssh-into-linux/

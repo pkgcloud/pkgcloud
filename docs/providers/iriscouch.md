@@ -1,4 +1,4 @@
-# IrisCouch
+# Using IrisCouch with `pkgcloud`
 
 For use this service you will need a created and valid account. The important thing is the `username` and `password` for the `createClient()` method. But for IrisCouch creation method there is other required fields like `first_name`, `last_name`, `subdomain` and `email`
 
@@ -24,6 +24,7 @@ irisClient.create({
   //
 });
 ```
+
 IrisCouch also provide a way to provision a redis database, in that case just pass the option `type: 'redis'` to the `create()` method and put a `password` for the access.
 
 ``` js

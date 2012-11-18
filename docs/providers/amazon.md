@@ -14,14 +14,13 @@
   });
 ```
 
-
 <a name="using-storage"></a>
 ## Using Storage
 
 ``` js
-  {
+  var amazon = pkgcloud.storage.createClient({
     provider: 'amazon', // 'aws', 's3'
     accessKey: 'asdfkjas;dkj43498aj3n',
     accessKeyId: '98kja34lkj'
-  }
+  });
 ```
