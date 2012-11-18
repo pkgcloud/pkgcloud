@@ -157,7 +157,7 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
         }
 	});
 ```
-See  [azure.md](blob/master/docs/azure.md) for more information on the Azure configuration settings.
+See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
 
 <br>
 
@@ -220,7 +220,7 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
     storageAccessKey: "test-storage-access-key"	//access key for storage account
   }
 ```
-See  [azure.md](blob/master/docs/azure.md) for more information on the Azure configuration settings.
+See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
 
 <a name="roadmap"></a>
 ## Roadmap
