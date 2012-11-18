@@ -9,7 +9,7 @@ var fs = require('fs');
 
 var params = {
   HOSTNAME: 'pkgcloud1',
-  USERNAME: 'stammen',
+  USERNAME: 'pkgcloud',
   PASSWORD: 'pkgcloud!!',
   SSH_CERTIFICATE_FINGERPRINT: '123456789'
 };
