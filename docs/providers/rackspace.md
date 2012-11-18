@@ -20,13 +20,12 @@
 ## Using Storage
 
 ``` js
-  {
+  var rackspace = pkgcloud.storage.create({
     provider: 'rackspace', // 'cloudservers'
     username: 'nodejitsu',
     apiKey: 'foobar'
-  }
+  });
 ```
-
 
 <a name="using-databases"></a>
 ## Using Databases
@@ -34,7 +33,7 @@
 **Rackspace**
 
 ``` js
-  var rackspaceClient = pkgcloud.database.createClient({
+  var client = pkgcloud.database.createClient({
     provider: 'rackspace',
     username: 'bob',
     key: '124'
@@ -44,13 +43,13 @@
 The steps for provision a MySQL database from rackspace cloud databases are: Choose a flavor (memory RAM size) and create an instace, when the instance is provisioned create your database. Also you can manage users across your instances and each instance can handle several databases.
 
 ``` js
-  rackspaceClient.getFlavors(function (err, flavors) {
+  client.getFlavors(function (err, flavors) {
     // Look at the availables flavors for your instance
     console.log(flavors);
     // Lets choose the ID 1 for 512MB flavor
-    rackspaceClient.getFlavor(1, function (err, flavor) {
+    client.getFlavor(1, function (err, flavor) {
       // Create the instance for host the databases.
-      rackspaceClient.createInstance({
+      client.createInstance({
         name: 'test-instance',
         flavor: flavor,
         // Optional, you can choose the disk size for the instance (1 - 8) in GB
@@ -61,7 +60,7 @@ The steps for provision a MySQL database from rackspace cloud databases are: Cho
         //
         // At this point when the instance is ready we can manage the databases
         //
-        rackspaceClient.createDatabase({
+        client.createDatabase({
           name: 'test-database',
           instance: instance
         }, function (err, database) {

@@ -1,29 +1,39 @@
-# MongoHQ
+# Using MongoHQ with `pkgcloud`
+
+MongoHQ is available in `pkgcloud` as a `pkgcloud.databases` target. Here is an example of how to use it:
 
 ``` js
-  var MongoClient = pkgcloud.database.createClient({
+  var client = pkgcloud.database.createClient({
     provider: 'mongohq',
-    username: 'bob',
-    password: '1234'
+    username: "bob",
+    password: "1234"
   });
 
   //
   // Create a MongoDB
   //
-  MongoClient.create({
-    name: 'mongo-instance',
-    plan: 'free',
+  client.create({
+    name: "mongo-instance",
+    plan: "free",
   }, function (err, result) {
+    //
+    // Check the result
+    //
     console.log(err, result);
+  
     //
-    // Now delete that same mongodb
+    // Now delete that same MongoDB
     //
-    MongoClient.remove(result.id, function(err, result) {
+    client.remove(result.id, function(err, result) {
+      //
+      // Check the result
+      //
       console.log(err, result);
     });
   });
 ```
 
-* `new pkgcloud.database.createClient(options, callback)`
-* `pkgcloud.database.create(options, callback)`
-* `pkgcloud.database.remove(id, callback)`
+The `client` instance returned by `pkgcloud.database.createClient` has the following methods for MongoHQ:
+
+* `client.create(options, callback)`
+* `client.remove(id, callback)`
