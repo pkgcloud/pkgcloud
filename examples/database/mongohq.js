@@ -1,6 +1,6 @@
 var pkgcloud = require('../../lib/pkgcloud');
 
-var mongodb = pkgcloud.database.createClient({
+var client = pkgcloud.database.createClient({
   provider: 'mongohq',
   username: "bob",
   password: "1234"
@@ -9,15 +9,22 @@ var mongodb = pkgcloud.database.createClient({
 //
 // Create a MongoDB
 //
-mongodb.create({
+client.create({
   name: "mongo-instance",
   plan: "free",
 }, function (err, result) {
+  //
+  // Check the result
+  //
   console.log(err, result);
+  
   //
   // Now delete that same MongoDB
   //
-  mongodb.remove(result.id, function(err, result) {
+  client.remove(result.id, function(err, result) {
+    //
+    // Check the result
+    //
     console.log(err, result);
   });
 });
