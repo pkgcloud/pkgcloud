@@ -12,16 +12,6 @@ var options = {
   remote: 'test-file.txt'
 };
 
-/*
-client.sendBlockList(options, 3, function(err, res) {
-  if(err) {
-    console.dir(err);
-  } else {
-    console.dir(res);
-  }
-});
-*/
-
 
 var stream = client.upload(options, function(err, res) {
   if(err) {
