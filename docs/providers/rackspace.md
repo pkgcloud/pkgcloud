@@ -7,8 +7,26 @@
 <a name="using-compute"></a>
 ## Using Compute
 
+``` js
+  var rackspace = pkgcloud.compute.createClient({
+    provider: 'rackspace',
+    username: 'nodejitsu',
+    apiKey: 'foobar'
+  });
+```
+
+
 <a name="using-storage"></a>
 ## Using Storage
+
+``` js
+  {
+    provider: 'rackspace', // 'cloudservers'
+    username: 'nodejitsu',
+    apiKey: 'foobar'
+  }
+```
+
 
 <a name="using-databases"></a>
 ## Using Databases
