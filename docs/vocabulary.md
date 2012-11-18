@@ -27,6 +27,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <td>Dataset</td>
     <td>AMI</td>
     <td>Image</td>
+    <td>Image</td>
   </tr>
   <tr>
     <td>Flavor</td>
