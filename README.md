@@ -4,13 +4,13 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 
 * [Getting started](#getting-started)
   * [Basic APIs](#basic-apis)
-  * [Providers](#providers)
+  * [Supported APIs](#supported-apis)
 * [Compute](#compute)
 * [Storage](#storage)
   * [Uploading Files](#uploading)
   * [Downloading Files](#downloading)
 * [Database](#database)
-* Fine Print
+* _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
   * [Roadmap](#roadmap)
@@ -25,9 +25,15 @@ Currently there are three service types which are handled by pkgcloud:
 * [Storage](#storage)
 * [Database](#database)
 
-These services are exposed in two ways:
+In our [Roadmap](#roadmap), we plan to add support for DNS and CDN services, but _these are not currently available._ 
 
-1. **By service type:** For example, if you wanted to create an API client to communicate with a compute service you could simply:
+<a name="basic-apis"></a>
+### Basic APIs for pkgcloud
+
+Services provided by `pkgcloud` are exposed in two ways:
+
+* **By service type:** For example, if you wanted to create an API client to communicate with a compute service you could simply:
+
 ``` js 
   var client = require('pkgcloud').compute.createClient({
     //
@@ -40,7 +46,9 @@ These services are exposed in two ways:
     //
   });
 ```
-2. **By provider name:** For example, if you knew the name of the provider you wished to communicate with you could do so directly:
+
+* **By provider name:** For example, if you knew the name of the provider you wished to communicate with you could do so directly:
+
 ``` js
   var client = require('pkgcloud').providers.joyent.compute.createClient({
     //
@@ -51,124 +59,103 @@ These services are exposed in two ways:
 
 All API clients exposed by `pkgcloud` can be instantiated through `pkgcloud[serviceType].createClient({ ... })` or `pkcloud.providers[provider][serviceType].createClient({ ... })`.
 
+Due to the differences between the vocabulary for each service provider, **[pkgcloud uses its own unified vocabulary](https://github.com/nodejitsu/pkgcloud/blob/master/docs/vocabulary.md).** 
+
+* **Compute:** Server, Image, Flavor
+* **Storage:** Container, File
+
+<a name="supported-apis"></a>
+### Supported APIs
+
+Supporting every API for every cloud service provider in Node.js is a huge undertaking, but _that is the long-term goal of `pkgcloud`_. **Special attention has been made to ensure that each service type has enough providers for a critical mass of portability between providers** (i.e. Each service implemented has multiple providers).
+
+* **[Compute](#compute)**
+  * [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#compute)
+  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#compute)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#compute)
+  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#compute)
+* **[Storage](#storage)**
+  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#storage)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#storage)
+  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#storage)
+* **[Database](#database)**
+  * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md)
+  * [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+  * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
+  * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
+  
+
 <a name="compute"></a>
 ## Compute
 
-<a name="creating-compute-clients"></a>
-### Creating Compute Clients
-The options to be passed to the `pkgcloud.compute.createClient` object should be:
+The `pkgcloud.compute` service is designed to make it easy to provision and work with VMs. To get started with a `pkgcloud.compute` client just create one:
 
-**Rackspace**
-
-``` js
-  var rackspace = pkgcloud.compute.createClient({
-    provider: 'rackspace',
-    username: 'nodejitsu',
-    apiKey: 'foobar'
+```
+  var client = require('pkgcloud').compute.createClient({
+    //
+    // The name of the provider (e.g. "joyent")
+    //
+    provider: 'provider-name',
+  
+    //
+    // ... Provider specific credentials
+    //
   });
 ```
 
-**Amazon**
+Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-``` js
-  var amazon = pkgcloud.compute.createClient({
-    provider: 'amazon',
-    accessKey: 'asdfkjas;dkj43498aj3n',
-    accessKeyId: '98kja34lkj'
-  });
-```
+* [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#compute)
+* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#compute)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#compute)
+* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#compute)
 
-**Joyent**
+Each instance of `pkgcloud.compute.Client` has a set of uniform APIs:
 
-``` js
-  var path = require('path'),
-      fs   = require('fs');
+* [Server](#server)
+* [Image](#image)
+* [Flavor](#flavor)
 
-  //
-  // Joyent requires a username / password or key / keyId combo.
-  // key/keyId should be registered in Joyent servers.
-  // check `test/helpers/index.js` for details on key/keyId works.
-  //
-  var joyent = pkgcloud.compute.createClient({
-    provider: 'joyent',
-    account: 'nodejitsu'
-    keyId: '/nodejitsu1/keys/dscape',
-    key: fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
-  });
-```
+<a name="server"></a>
+### Server
+* `client.getServers(function (err, servers) { })`
+* `client.createServer(options, function (err, server) { })`
+* `client.destroyServer(serverId, function (err, server) { })`
+* `client.getServer(serverId, function (err, server) { })`
+* `client.rebootServer(server, function (err, server) { })`
 
-**Azure**
+<a name="image"></a>
+### Image
+* `client.getImages(function (err, images) { })`
+* `client.getImage(imageId, function (err, image) { })`
+* `client.destroyImage(image, function (err, ok) { })`
+* `client.createImage(options, function (err, image) { })`
 
-``` js
-  var azure = pkgcloud.compute.createClient({
-    provider: 'azure',
-    storageAccount: "test-storage-account",			//name of your storage account
-    storageAccountKey: "test-storage-account-key", 	//access key for storage account
-    managementCertificate: "./test/fixtures/azure/cert/management/management.pem",
-    subscriptionId: "azure-account-subscription-id",
-    azure: {
-        location: "East US",	//azure location for server
-        username: "pkgcloud",	//username for server
-        password: "Pkgcloud!!",	//password for server
-        ssh : {					//ssh settings for linux server
-            port: 22,			//default is 22
-            pem: "./test/fixtures/azure/cert/ssh/mycert.pem",
-            pemPassword: ""
-        },
-        rdp : {					// rdp settings for windows server
-            port: 3389
-        }
-	});
-```
-See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
+<a name="flavor"></a>
+### Flavor
+* `client.getFlavors(function (err, flavors) { })`
+* `client.getFlavor(flavorId, function (err, flavor) { })`
 
 <a name="storage"></a>
 ## Storage
 
-<a name="creating-storage-clients"></a>
-### Creating Storage Clients
-The options to be passed to the `pkgcloud.storage.createClient` object should be:
-
-**Rackspace**
-
-``` js
-  {
-    provider: 'rackspace', // 'cloudservers'
-    username: 'nodejitsu',
-    apiKey: 'foobar'
-  }
-```
-
-**AWS**
-
-``` js
-  {
-    provider: 'amazon', // 'aws', 's3'
-    accessKey: 'asdfkjas;dkj43498aj3n',
-    accessKeyId: '98kja34lkj'
-  }
-```
-
 * `pkgcloud.storage.create(options, callback)`
 * `new pkgcloud.storage.Client(options, callback)`
 
-**Azure**
 
-``` js
-  {
-    provider: 'azure',
-    storageAccount: "test-storage-account",			//name of your storage account
-    storageAccountKey: "test-storage-account-key"	//access key for storage account
-  }
-```
-See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.
+* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#storage)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#storage)
+* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#storage)
 
 <a name="database"></a>
 ## Databases
 
-<a name="creating-databases-clients"></a>
-### Creating Databases Clients
-The options to be passed to the `pkgcloud.database.createClient` object should be:
+* [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md)
+* [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+* [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
+* [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
 
 
 <a name="installation"></a>
