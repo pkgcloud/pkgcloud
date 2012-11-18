@@ -140,7 +140,7 @@ The options to be passed to the `pkgcloud.compute.Client` object should be:
   var azure = pkgcloud.compute.createClient({
     provider: 'azure',
     storageAccount: "test-storage-account",			//name of your storage account
-    storageAccountKey: "test-storage-account-key", 	//access key for storage account
+    storageAccessKey: "test-storage-access-key", 	//access key for storage account
     managementCertificate: "./test/fixtures/azure/cert/management/management.pem",
     subscriptionId: "azure-account-subscription-id",
     azure: {
@@ -216,8 +216,8 @@ The options to be passed to the `pkgcloud.storage.Client` object should be:
 ``` js
   {
     provider: 'azure',
-    storageAccount: "test-storage-account",			//name of your storage account
-    storageAccountKey: "test-storage-account-key"	//access key for storage account
+    storageAccount: "test-storage-account",		//name of your storage account
+    storageAccessKey: "test-storage-access-key"	//access key for storage account
   }
 ```
 See  [azure.md](docs/azure.md) for more information on the Azure configuration settings.

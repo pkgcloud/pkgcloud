@@ -1,6 +1,6 @@
 {
     "storageAccount": "test-storage-account",
-    "storageAccountKey": "test-storage-account-key",
+    "storageAccessKey": "test-storage-access-key",
     "managementCertificate": "./test/fixtures/azure/cert/management/management.pem",
     "subscriptionId": "azure-account-subscription-id",
     "azure": {

@@ -12,8 +12,8 @@
 ``` js
   {
     provider: 'azure',
-    storageAccount: "test-storage-account",			//name of your storage account
-    storageAccountKey: "test-storage-account-key"	//access key for storage account
+    storageAccount: "test-storage-account",		//name of your storage account
+    storageAccessKey: "test-storage-access-key"	//access key for storage account
   }
 ```
 
@@ -21,7 +21,7 @@
 
 1. Azure storage account must already exist. 
 2. Storage account must be in same Azure location as compute servers (East US, West US, etc.). 
-3. storageAccount and storageAccountKey are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
+3. storageAccount and storageAccessKey are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
 <br><br>
 
 
@@ -33,7 +33,7 @@
   var azure = pkgcloud.compute.createClient({
     provider: 'azure',
     storageAccount: "test-storage-account",			//name of your storage account
-    storageAccountKey: "test-storage-account-key", 	//access key for storage account
+    storageAccessKey: "test-storage-access-key", 	//access key for storage account
     managementCertificate: "./test/fixtures/azure/cert/management/management.pem",
     subscriptionId: "azure-account-subscription-id",
     azure: {
@@ -57,14 +57,14 @@
 3. Specify the location of the management.pem file in the azure.managementCertificate field.
 4. Create a [Storage Account](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) if one does not already exist. Storage accounts and Azure VMs will need to be in the same Azure location (East US, West US, etc.).
 5. Obtain the Storage Account name and access key from the [Azure Portal] (https://manage.windowsazure.com/#Workspace/StorageExtension/storage). Click on 'Manage Keys' to view Storage account name and access key.
-6. Specify the Storage account name and access key in the storageAccount and storageAccountKey fields.
+6. Specify the Storage account name and access key in the storageAccount and storageAccessKey fields.
 7. Create a [Azure SSH Certificate](#azure-ssh-cert) if you will be using a Linux compute instance. Specify the path to the certificate pem file in the azure.ssh.pem field. If you used a password when creating the pem file, place the password in the azure.ssh.password field.
 
 **Azure Account Settings**
 
 **storageAccount:** Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount name is obtained from the Storage section of the [Azure Portal] (https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
 
-**storageAccountKey:** Azure storage account access key. storageAccountKey is obtained from the Storage section of the [Azure Portal] (https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
+**storageAccessKey:** Azure storage account access key. storageAccessKey is obtained from the Storage section of the [Azure Portal] (https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
 
 **managementCertificate:** See [Azure Management Certificates](#azure-manage-cert).
 
