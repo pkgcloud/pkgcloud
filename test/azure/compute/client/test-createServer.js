@@ -7,7 +7,7 @@ var pkgcloud = require('../../../../lib/pkgcloud');
 var client = helpers.createClient('azure', 'compute');
 
 var options = {
-  name: 'pkgcloud3',
+  name: 'pkgcloud2',
   flavor: 'Small',
   image: 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd'
 };
