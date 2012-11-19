@@ -139,7 +139,7 @@ Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.creat
 <a name="storage"></a>
 ## Storage
 
-The `pkgcloud.storage` service is designed to make it easy to upload and download files to various infrastructure providers. **_Special attention has been paid so that methods are stream-capable._**
+The `pkgcloud.storage` service is designed to make it easy to upload and download files to various infrastructure providers. **_Special attention has been paid so that methods are streams and pipe-capable._**
 
 To get started with a `pkgcloud.storage` client just create one:
 
@@ -210,11 +210,41 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 <a name="database"></a>
 ## Databases
 
-* [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md)
-* [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
-* [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
-* [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
+The `pkgcloud.database` service is designed to consistently work with a variety of Database-as-a-Service (DBaaS) providers. 
+
+To get started with a `pkgcloud.storage` client just create one:
+
+``` js
+  var client = require('pkgcloud').database.createClient({
+    //
+    // The name of the provider (e.g. "joyent")
+    //
+    provider: 'provider-name',
+  
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+Each database provider takes different credentials to authenticate; these details about each specific provider can be found below:
+
+* **CouchDB**
+  * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md#couchdb)
+* **MongoDB**
+  * [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
+  * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
+* **Redis**
+  * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md#redis)
+  * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
+* **MySQL**
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+
+Due to the various differences in how these DBaaS providers provision databases only a small surface area of the API for instances of `pkgcloud.database.Client` returned from `pkgcloud.database.createClient` is consistent across all providers:
+
+* `client.create(options, callback)`
+
+All of the individual methods are documented for each DBaaS provider listed above.
 
 <a name="installation"></a>
 ## Installation
