@@ -1,6 +1,6 @@
 # Using MongoLab with `pkgcloud`
 
-The MongoLab API has a better aproach for manage the databases, they have implemented accounts for users, and each account could be provision databases. For create a database with MongoLab you will need first create an account and then use the created account as "owner" of the database.
+The MongoLab API has a slightly different approach for managing databases: they have implemented accounts, and each account can provision databases. **To create a database with MongoLab you will need first create an account and then use the created account as "owner" of the database.**
 
 ``` js
   //

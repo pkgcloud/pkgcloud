@@ -272,7 +272,8 @@ We are pretty flexible about these guidelines, but the closer you follow them th
 
 1. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
 2. Include `CDN` and `DNS` services.
-
+3. Implement `fs` compatible file API.
+4. Support additional service providers.
 
 #### Author: [Nodejitsu Inc.](http://nodejitsu.com)
 #### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), [Daniel Aristizabal](https://github.com/cronopio), [Marak Squires](https://github.com/marak), [Dale Stammen](https://github.com/stammen)
