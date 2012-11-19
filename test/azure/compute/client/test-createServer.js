@@ -7,16 +7,22 @@ var pkgcloud = require('../../../../lib/pkgcloud');
 var client = helpers.createClient('azure', 'compute');
 
 var options = {
-  name: 'pkgcloud8',
+  name: 'pkgcloud3',
   flavor: 'Small',
   image: 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd'
 };
 
-client.createServer(options, function(err, result) {
+client.createServer(options, function(err, server) {
   if(err) {
     console.log(err);
   } else {
-    console.dir(result);
+    server.setWait({ status: 'RUNNING' }, 5000, function (err, srv) {
+       if(err) {
+         console.log(err);
+       } else {
+         console.log(srv);
+       }
+     });
   }
 });
 
