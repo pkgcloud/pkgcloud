@@ -50,6 +50,7 @@
 6. Specify the Storage account name and access key in the storageAccount and storageAccountKey fields.
 7. Create a [Azure SSH Certificate](#azure-ssh-cert) if you will be using a Linux compute instance. Specify the path to the certificate pem file in the azure.ssh.pem field. If you used a password when creating the pem file, place the password in the azure.ssh.password field.
 
+<br/>
 <a name="using-storage"></a>
 ## Using Storage
 
@@ -68,6 +69,7 @@
 2. Storage account must be in same Azure location as compute servers (East US, West US, etc.). 
 3. storageAccount and storageAccountKey are obtained from the [Storage](https://manage.windowsazure.com/#Workspace/StorageExtension/storage) section of the Azure Portal.
 
+<br/>
 <a name="all-azure-options"></a>
 ## All Azure Options
 
@@ -88,6 +90,7 @@
 * `azure.ssh.pemPassword`: The password/pass phrase used when creating the pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
 * `azure.rdp.port`: The port to use for RDP on Windows servers.
 
+<br/>
 <a name="azure-manage-cert"></a>
 ## Azure Management Certificates
 
@@ -119,11 +122,12 @@
 	chmod 600 *.*
 ```
 
+<br/>
 ### Create an Azure Service Management certificate from a .publishsettings file:
 
 For more information about this [read the article on windowsazure.com:](https://www.windowsazure.com/en-us/manage/linux/common-tasks/manage-certificates/) https://www.windowsazure.com/en-us/manage/linux/common-tasks/manage-certificates/
 
-	
+<br/>
 ### Create an Azure Service Management certificate on Windows:
 
 For more information about this [read the article on MSDN:](http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx) http://msdn.microsoft.com/en-us/library/windowsazure/gg551722.aspx.
