@@ -9,7 +9,7 @@ If you are interested in contributing to pkgcloud, **here is how you can help.**
 The only issues we accept are bug reports or feature requests. Bugs must be isolated and reproducible problems which we can fix within the code base. Before opening any issues, please read the following guidelines.
 
 1. **Search for existing issues.** First of all, please check if someone else has already reported the issue. If the issue has already been, a fix may already be in progress. 
-2. **Create an isolated and reproducible test case.** We use [vows](http://vowsjs.org/) to make test cases, and the whole test suite already has a variety of helpers and utils to make a complete test. Check the `test/` directory to find examples of tests and info on how to use the available helpers. Then try to make and submit a valid vows test. This will help us find the problem, make is easier to make feature request, and help us understand what really you want. It is very possible that your test will eventually added to the test suite.
+2. **Create an isolated and reproducible test case.** We use [vows](http://vowsjs.org/) to make test cases, and the whole test suite already has a variety of helpers and utils to make a complete test. Check the `test/` directory to find examples of tests and info on how to use the available helpers. Then try to make and submit a valid vows test. This will help us find the problem, make it easier to make feature requests, and help us understand what you really want. It is very possible that your test will eventually be added to the test suite.
 3. **Include logs and backtraces** Please try to include some logs or backtrace of your problem or error.
 4. **Share as much information as possible.** Include operating system and version, `node` and `npm` version, version of Pkgcloud. Also include steps to reproduce the bug and any further information about your environment
 
@@ -41,7 +41,7 @@ The only issues we accept are bug reports or feature requests. Bugs must be isol
 - Never declare a function within a block.
 - Braces `{ }` must be used in all circumstances.
 - When it comes to Strings remember: Always use single quotes and Never use multi-line string literals.
-- Try to be "Elegant" (no mandatory)
+- Try to be "Elegant" 
 
 
 ## License
