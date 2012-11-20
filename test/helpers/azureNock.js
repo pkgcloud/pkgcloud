@@ -24,10 +24,14 @@
 
 var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
   _ = require('underscore'),
-  requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5';
+  requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5',
+  PATH = require('path'),
+  helpers;
 
-exports.serverTest = function(nock, helpers) {
+exports.serverTest = function(nock, testHelpers) {
 
+  helpers = testHelpers;
+  
   // Images
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
@@ -61,27 +65,27 @@ exports.serverTest = function(nock, helpers) {
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','ReadyRole', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','ReadyRole', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','VMStopped', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','VMStopped'))
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','ReadyRole', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','VMStopped', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','VMStopped'))
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','ReadyRole', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-    .reply(200, serverStatusReply('create-test-ids2','ReadyRole', helpers))
+    .reply(200, serverStatusReply('create-test-ids2','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/test-reboot?embed-detail=true')
-    .reply(200, serverStatusReply('test-reboot','VMStopped', helpers))
+    .reply(200, serverStatusReply('test-reboot','VMStopped'))
     .get('/azure-account-subscription-id/services/hostedservices/test-reboot?embed-detail=true')
-    .reply(200, serverStatusReply('test-reboot','ReadyRole', helpers))
+    .reply(200, serverStatusReply('test-reboot','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/test-reboot?embed-detail=true')
-    .reply(200, serverStatusReply('test-reboot','ReadyRole', helpers))
+    .reply(200, serverStatusReply('test-reboot','ReadyRole'))
     .get('/azure-account-subscription-id/services/hostedservices/test-reboot?embed-detail=true')
-    .reply(200, serverStatusReply('test-reboot','ReadyRole', helpers));
+    .reply(200, serverStatusReply('test-reboot','ReadyRole'));
 
   // HostedServices
   nock('https://management.core.windows.net')
@@ -185,12 +189,22 @@ exports.serverTest = function(nock, helpers) {
  * @param helpers - test helper object
  * @return {String} - the xml reply containing the server name and status
  */
-var serverStatusReply = function(name, status, helpers) {
+var serverStatusReply = function(name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
     params = {NAME: name, STATUS: status};
 
   var result = _.template(template, params);
-  console.log(result);
   return result;
 };
+
+var filterPath = function(path) {
+  var name = PATH.basename(path);
+  if(path.search('embed-detail=true') !== -1) {
+    return '/getStatus?name=' + name;
+  }
+
+  return path;
+};
+
+
