@@ -57,7 +57,7 @@ exports.serverTest = function(nock, helpers) {
     .post('/azure-account-subscription-id/services/hostedservices/test-reboot/deployments/test-reboot/roleInstances/test-reboot/Operations', '<RestartRoleOperation xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><OperationType>RestartRoleOperation</OperationType></RestartRoleOperation>')
     .reply(202, "", {});
 
-  // getServer()
+  // getServer() status
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
@@ -113,7 +113,7 @@ exports.serverTest = function(nock, helpers) {
     .delete('/vhd/create-test-ids2.vhd')
     .reply(202, "", helpers.azureDeleteResponseHeaders());
 
-  // certificates
+  // Certificates
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     // need to filter request body because base64 of cert is different on mac/windows
@@ -171,13 +171,20 @@ exports.serverTest = function(nock, helpers) {
     .reply(200,helpers.loadFixture('azure/operation-succeeded.xml'),{});
 };
 
-// fills in the xml reply from the server with server name and status
-// status should be:
-// ReadyRole - server is RUNNING
-// VMStopped - server is still PROVISIONING
-// Provisioning - server is still PROVISIONING
-// see lib/pkgcloud/azure/computer/server.js for more server states
-
+/**
+ * serverStatusReply()
+ * fills in the nock xml reply from the server with server name and status
+ * @param name - name of the server
+ * @param status - status to be returned in reply
+ *  status should be:
+ *      ReadyRole - server is RUNNING
+ *      VMStopped - server is still PROVISIONING
+ *      Provisioning - server is still PROVISIONING
+ *      see lib/pkgcloud/azure/compute/server.js for more status values
+ *
+ * @param helpers - test helper object
+ * @return {String} - the xml reply containing the server name and status
+ */
 var serverStatusReply = function(name, status, helpers) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
