@@ -261,6 +261,27 @@ For run the tests you will need `vows@0.7.0` or higher, please install it and th
  $ npm test
 ```
 
+The tests use the [`nock`](https://github.com/flatiron/nock) library for mock up the response of providers, so the tests run without do any connection to the providers, there is a notorius advantage of speed on that, also you can run the tests without Internet connection and also can highlight a change of API just disabling `nock`.
+
+By default the `npm test` command run the tests enabling `nock` for disable it (we dont recommend this because can take a long time) just run the tests using `vows` directly:
+
+``` bash
+ $ vows --spec --isolate test/**/*-test.js
+```
+
+Also you can run the tests directly using `vows` with `nock` enabled:
+
+``` bash
+ $ NOCK=on vows --spec --isolate test/**/*-test.js
+```
+
+Even better, you can run the tests for some specific provider:
+
+``` bash
+ $ NOCK=on vows --spec --isolate test/iriscouch/**/*-test.js
+```
+
+
 <a name="contributing"></a>
 ## Contribute!
 We welcome contribution to `pkgcloud` by any and all individuals or organizations. Before contributing please take a look at the [Contribution Guidelines in CONTRIBUTING.md](https://github.com/nodejitsu/pkgcloud/blob/master/CONTRIBUTING.md).
