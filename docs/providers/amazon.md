@@ -9,8 +9,8 @@
 ``` js
   var amazon = pkgcloud.compute.createClient({
     provider: 'amazon',
-    accessKey: 'asdfkjas;dkj43498aj3n',
-    accessKeyId: '98kja34lkj'
+    key: 'asdfkjas;dkj43498aj3n',
+    keyId: '98kja34lkj'
   });
 ```
 
@@ -20,7 +20,7 @@
 ``` js
   var amazon = pkgcloud.storage.createClient({
     provider: 'amazon', // 'aws', 's3'
-    accessKey: 'asdfkjas;dkj43498aj3n',
-    accessKeyId: '98kja34lkj'
+    key: 'asdfkjas;dkj43498aj3n',
+    keyId: '98kja34lkj'
   });
 ```
