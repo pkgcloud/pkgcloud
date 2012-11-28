@@ -1,20 +1,122 @@
-//TODO: Make this a vows test
+/*
+ * create-server-test.js: Azure specific create server test
+ *
+ * (C) 2012 MSOpenTech Inc.
+ *
+ */
 
-var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
-var helpers = require('../../../helpers');
+var fs = require('fs'),
+  path = require('path'),
+  vows = require('vows'),
+  assert = require('../../../helpers/assert'),
+  helpers = require('../../../helpers'),
+  azureNock = require('../../../helpers/azureNock'),
+  nock   = require('nock');
+
+var options = {
+  name: 'test-reboot',
+  flavor: 'ExtraSmall',
+  image: 'CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd'
+};
+
+function testCreateServer (client) {
+  var name   = 'azure',
+    test   = {};
+
+  test["The pkgcloud " + name + " compute client"] = {
+    "the createServer() method": {
+      "with image and flavor ids": {
+        topic: function () {
+          client.createServer({
+            name: options.name,
+            image: options.image,
+            flavor: options.flavor
+          }, this.callback);
+        },
+        "should return a valid server": function (err, server) {
+
+          testContext.server = server;
+          assert.isNull(err);
+          if(err === null) {
+            assert.equal(server.name, options.name);
+            assert.equal(server.imageId, options.image);
+            assert.assertServerDetails(server);
+          }
+        }
+      }
+    }
+  };
+
+  return test;
+}
+
+function testSetWait (client) {
+  var name   = 'azure',
+    test   = {};
+
+  test["The pkgcloud " + name + " compute client"] = {
+    "the setWait() method": {
+      "with setWait({ status: 'RUNNING' },": {
+        topic: function () {
+          testContext.server.setWait({ status: 'RUNNING' }, 1000, this.callback);
+        },
+        "should return a running server": function (err, server) {
+          testContext.server = server;
+          assert.isNull(err);
+          if(err === null) {
+            assert.equal(server.name, options.name);
+            assert.equal(server.status, 'RUNNING');
+            assert.equal(server.imageId, options.image);
+            assert.assertServerDetails(server);
+          }
+        }
+      }
+    }
+  };
+
+  return test;
+}
+
+function testRebootServer (client) {
+  var name   = 'azure',
+    test   = {};
+
+  test["The pkgcloud " + name + " compute client"] = {
+    "the rebootServer() method": {
+      "rebooting server": {
+        topic: function () {
+          client.rebootServer(testContext.server, this.callback);
+        },
+        "should return a valid server": function (err, res) {
+
+          assert.isNull(err);
+          if(err === null) {
+            assert.equal(res.ok, options.name);
+          }
+        }
+      }
+    }
+  };
+
+  return test;
+}
+
+
 
 var client = helpers.createClient('azure', 'compute');
 
-var options = {};
+var testContext = {};
 
-client.rebootServer('pkgcloud8', function(err, result) {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log(ok);
-  }
-});
+if (process.env.NOCK) {
+  azureNock.serverTest(nock, helpers);
+}
 
-
+vows
+  .describe('pkgcloud/azure/compute/createServer')
+  .addBatch(testCreateServer(client))
+    .addBatch(testSetWait(client))
+    .addBatch(testRebootServer(client))
+    .addBatch(testSetWait(client))
+  ["export"](module);
 
 
