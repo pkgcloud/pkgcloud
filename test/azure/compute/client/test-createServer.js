@@ -5,7 +5,6 @@
  *
  */
 
-
 var fs = require('fs'),
   path = require('path'),
   vows = require('vows'),
