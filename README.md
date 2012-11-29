@@ -266,20 +266,50 @@ The tests use the [`nock`](https://github.com/flatiron/nock) library for mock up
 By default the `npm test` command run the tests enabling `nock` for disable it (we dont recommend this because can take a long time) just run the tests using `vows` directly:
 
 ``` bash
- $ vows --spec --isolate test/**/*-test.js
+Vows installed globally
+ $ vows --spec --isolate test/*/*/*-test.js
+
+Linux/Mac - Vows installed locally
+ $ ./node_modules/.bin/vows --spec --isolate test/*/*/*-test.js		
+
+Windows - Vows installed locally:
+ $ node_modules\.bin\vows.cmd --spec --isolate test/*/*/*-test.js	
+
 ```
 
 Also you can run the tests directly using `vows` with `nock` enabled:
 
 ``` bash
- $ NOCK=on vows --spec --isolate test/**/*-test.js
+Linux/Mac - Vows installed globally:
+ $ NOCK=on vows --spec --isolate test/*/*/*-test.js	
+ 
+Linux/Mac - Vows installed locally:
+ $ NOCK=on ./node_modules/.bin/vows.cmd --spec --isolate test/*/*/*-test.js		
+
+Windows - Vows installed globally:
+ $ set NOCK=on&vows --spec --isolate test/*/*/*-test.js	
+ 
+Windows - Vows installed locally:
+ $ set NOCK=on&node_modules\.bin\vows.cmd --spec --isolate test/*/*/*-test.js	
 ```
 
 Even better, you can run the tests for some specific provider:
 
 ``` bash
- $ NOCK=on vows --spec --isolate test/iriscouch/**/*-test.js
+Linux/Mac - Vows installed globally:
+ $ NOCK=on vows --spec --isolate test/iriscouch/*/*-test.js
+
+Linux/Mac - Vows installed locally:
+ $ NOCK=on ./node_modules/.bin/vows --spec --isolate test/iriscouch/*/*-test.js
+
+Windows - Vows installed globally:
+ $ set NOCK=on&vows --spec --isolate test/iriscouch/*/*-test.js
+ 
+Windows - Vows installed locally:
+ $ set NOCK=on&node_modules\.bin\vows.cmd --spec --isolate test/iriscouch/*/*-test.js
+
 ```
+
 
 
 <a name="contributing"></a>
