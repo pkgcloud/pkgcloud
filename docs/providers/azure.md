@@ -117,6 +117,9 @@
 	openssl pkcs12 -export -out management.pfx -in temp.pem -inkey management.key -name "My Certificate"
 ```
 6. Create management cer. This will be the managementCertificate .cer file you need to upload to the [Management Certificates section](https://manage.windowsazure.com/#Workspace/AdminTasks/ListManagementCertificates) of the Azure portal. 
+``` bash
+    openssl x509 -inform pem -in management.pem -outform der -out management.cer
+```
 7. Secure files
 ``` bash
 	chmod 600 *.*
