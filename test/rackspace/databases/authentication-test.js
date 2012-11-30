@@ -21,8 +21,8 @@ if (process.env.NOCK) {
     .reply(203, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {});
 
   var credentials = {
-     username: client.config.auth.username,
-     key: client.config.auth.apiKey
+     username: client.config.username,
+     key: client.config.apiKey
   };
 
   nock('https://' + client.authUrl)
@@ -62,10 +62,8 @@ function shouldNotAuthNew (service) {
   return {
     topic: function () {
       var badClient = helpers.createClient('rackspace', service, {
-        "auth": {
           "username": "fake",
           "apiKey": "data"
-        }
       });
 
       badClient.auth(this.callback);

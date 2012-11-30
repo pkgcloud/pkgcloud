@@ -16,8 +16,8 @@ var client = helpers.createClient('rackspace', 'database'),
 
 if (process.env.NOCK) {
   var credentials = {
-     username: client.config.auth.username,
-     key: client.config.auth.apiKey
+     username: client.config.username,
+     key: client.config.apiKey
   };
   
   nock('https://' + client.authUrl)

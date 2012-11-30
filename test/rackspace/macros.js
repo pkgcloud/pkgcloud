@@ -12,9 +12,9 @@ var fs = require('fs'),
 
 exports.shouldHaveCreds = function (client) {
   return function () {
-    assert.isObject(client.config.auth);
-    assert.include(client.config.auth, 'username');
-    assert.include(client.config.auth, 'apiKey');
+    assert.isObject(client.config);
+    assert.include(client.config, 'username');
+    assert.include(client.config, 'apiKey');
 
     assert.isFunction(client.auth);
   } 
