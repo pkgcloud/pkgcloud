@@ -62,8 +62,8 @@ function shouldNotAuthNew (service) {
   return {
     topic: function () {
       var badClient = helpers.createClient('rackspace', service, {
-          "username": "fake",
-          "apiKey": "data"
+        "username": "fake",
+        "apiKey": "data"
       });
 
       badClient.auth(this.callback);
