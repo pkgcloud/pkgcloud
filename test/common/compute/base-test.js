@@ -267,7 +267,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     }
 
     vows
-      .describe('pkgcloud/common/compute/flavor [' + provider + ']')
+      .describe('pkgcloud/common/compute/base [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
