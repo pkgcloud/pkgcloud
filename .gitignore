@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 *.log
-test/fixtures/testkey*
 test/fixtures/test-download*
 *.notes
 *.swp
