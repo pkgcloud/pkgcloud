@@ -325,7 +325,61 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       if (provider === 'joyent') {
         return;
       } else if (provider === 'rackspace') {
-        return;
+        nock('https://' + client.authUrl)
+          .get('/v1.0')
+          .reply(204, '',
+            helpers.loadFixture('rackspace/auth.json', 'json'))
+        ;
+
+        /*
+        nock('https://' + client.serversUrl)
+          .get('/')
+            .reply(200,
+              "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
+        ;*/
+
+        nock('https://storage101.ord1.clouddrive.com')
+          .defaultReplyHeaders(helpers.rackspaceResponseHeaders())
+          .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
+            .reply(201)
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41?format=json')
+            .reply(200, helpers.loadFixture('rackspace/postContainers.json'))
+          .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt', fillerama)
+            .reply(200)
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
+            .reply(200, fillerama, { 'content-length': fillerama.length + 2})
+          .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt', fillerama)
+            .reply(200)
+          .head('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt?format=json')
+            .reply(200, '', { 'content-length': fillerama.length + 2})
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container?format=json')
+            .reply(200, [{
+              bytes: fillerama.length
+              ,name: 'test-file.txt'
+              ,content_type: 'text/plain'
+            }])
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container?format=json')
+            .reply(200, [{
+              bytes: fillerama.length
+              ,name: 'test-file.txt'
+              ,content_type: 'text/plain'
+            }])
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/test-file.txt')
+            .reply(200, fillerama, { 'content-length': fillerama.length + 2})
+          .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-containter/test-file.txt')
+            .reply(204, '')
+          .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
+            .reply(204, '')
+          .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
+            .reply(204, '')
+            /*
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container?format=json')
+            .reply(200, [])*/
+          .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
+            .reply(204)
+          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41?format=json')
+            .reply(200, helpers.loadFixture('rackspace/preContainers.json'))
+        ;
       } else if (provider === 'amazon') {
         nock('https://pkgcloud-test-container.' + client.serversUrl)
           .put('/')
@@ -385,12 +439,15 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       .addBatch(batchThree(clients[provider], provider, nock))
       .addBatch(batchFour(clients[provider], provider, nock))
       .addBatch(batchFive(clients[provider], provider, nock))
-      
+    ;
+
     if (!process.env.NOCK) {
-      suite.addBatch(batchSix(clients[provider], provider, nock))
-        .addBatch(batchSeven(clients[provider], provider, nock))      
+      suite
+        .addBatch(batchSix(clients[provider], provider, nock))
+        .addBatch(batchSeven(clients[provider], provider, nock))
+      ;
     }
-    
+
     suite.addBatch(batchEight(clients[provider], provider, nock))
       .addBatch(batchNine(clients[provider], provider, nock))
       ["export"](module);
