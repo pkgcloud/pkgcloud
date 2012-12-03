@@ -31,7 +31,7 @@ helpers.createClient = function createClient(provider, service, config) {
           config.keyId = 'id_rsa';
         }
       }
-      
+
       if (config.account) {
         config.keyId = '/' + config.account + '/keys/' + config.keyId;
         config.key   = fs.readFileSync(config.identity,'ascii');
@@ -79,12 +79,12 @@ helpers.loadFixture = function loadFixture(path, json) {
 };
 
 helpers.personalityPost = function persPost(pubkey) {
-  return JSON.stringify({ 
-    "server": { 
+  return JSON.stringify({
+    "server": {
       "name": "create-personality-test",
       "image": 49,
       "flavor": 1,
-      "personality": [{ 
+      "personality": [{
         "path": "/root/.ssh/authorized_keys",
         "contents": pubkey.toString('base64')
       }],
@@ -104,7 +104,7 @@ helpers.selectInstance = function selectInstance (client, callback) {
     }
     return ready[0];
   }
-  
+
   client.getInstances(function (err, instances) {
     if (err) throw new Error(err);
     if (instances.length === 0) {
@@ -160,6 +160,13 @@ helpers.azureGetFileResponseHeaders = function azureHeaders(headers) {
   headers['x-ms-version'] = '2011-08-18';
   headers.etag = '"0x8CF8D64FD4A4B45"';
   headers.server = 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0';
+  headers.date =  new Date().toUTCString();
+  return headers;
+};
+
+helpers.rackspaceResponseHeaders = function rackspaceHeaders(headers) {
+  var headers = headers || {};
+  headers['X-Trans-Id'] = 'tx30f4a35cd9c8491abd4d5bd484a437eb';
   headers.date =  new Date().toUTCString();
   return headers;
 };
