@@ -331,13 +331,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             helpers.loadFixture('rackspace/auth.json', 'json'))
         ;
 
-        /*
-        nock('https://' + client.serversUrl)
-          .get('/')
-            .reply(200,
-              "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
-        ;*/
-
         nock('https://storage101.ord1.clouddrive.com')
           .defaultReplyHeaders(helpers.rackspaceResponseHeaders())
           .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
@@ -372,9 +365,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(204, '')
           .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
             .reply(204, '')
-            /*
-          .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container?format=json')
-            .reply(200, [])*/
           .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
             .reply(204)
           .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41?format=json')
@@ -434,21 +424,23 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     }
 
     var suite = vows.describe('pkgcloud/common/storage [' + provider + ']')
-      .addBatch(batchOne(clients[provider], provider, nock))
-      .addBatch(batchTwo(clients[provider], provider, nock))
-      .addBatch(batchThree(clients[provider], provider, nock))
-      .addBatch(batchFour(clients[provider], provider, nock))
-      .addBatch(batchFive(clients[provider], provider, nock))
+      .addBatch(batchOne(client, provider, nock))
+      .addBatch(batchTwo(client, provider, nock))
+      .addBatch(batchThree(client, provider, nock))
+      .addBatch(batchFour(client, provider, nock))
+      .addBatch(batchFive(client, provider, nock))
     ;
 
     if (!process.env.NOCK) {
       suite
-        .addBatch(batchSix(clients[provider], provider, nock))
-        .addBatch(batchSeven(clients[provider], provider, nock))
+        .addBatch(batchSix(client, provider, nock))
+        .addBatch(batchSeven(client, provider, nock))
       ;
     }
 
-    suite.addBatch(batchEight(clients[provider], provider, nock))
-      .addBatch(batchNine(clients[provider], provider, nock))
-      ["export"](module);
+    suite
+      .addBatch(batchEight(client, provider, nock))
+      .addBatch(batchNine(client, provider, nock))
+      .export(module)
+    ;
   });
