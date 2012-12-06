@@ -144,7 +144,7 @@ The `pkgcloud.storage` service is designed to make it easy to upload and downloa
 To get started with a `pkgcloud.storage` client just create one:
 
 ``` js
-  var client = require('pkgcloud').compute.createClient({
+  var client = require('pkgcloud').storage.createClient({
     //
     // The name of the provider (e.g. "joyent")
     //
