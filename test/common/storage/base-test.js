@@ -87,6 +87,11 @@ function batchThree (providerClient, providerName, nock) {
             name: 'test-file.txt',
             size: Buffer.byteLength(helpers.loadFixture('fillerama.txt'))
           };
+        },
+        "should pass response": function (err, ok, response) {
+          assert.ok(response);
+          assert.ok('statusCode' in response);
+          assert.ok('headers' in response);
         }
       }
     }
