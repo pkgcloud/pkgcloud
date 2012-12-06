@@ -24,4 +24,5 @@ var azure = pkgcloud.compute.createClient({
     rdp: {	
       port: 3389
     }
+  }
 });

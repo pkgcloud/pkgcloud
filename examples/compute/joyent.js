@@ -7,7 +7,7 @@ var pkgcloud = require('../../lib/pkgcloud');
 //
 var client = pkgcloud.compute.createClient({
   provider: 'joyent',
-  account: 'nodejitsu'
+  account: 'nodejitsu',
   keyId: '/nodejitsu1/keys/dscape',
   key: fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
 });
