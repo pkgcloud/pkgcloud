@@ -14,8 +14,8 @@ var params = {
   SSH_CERTIFICATE_FINGERPRINT: '123456789'
 };
 
-templates.load('linuxConfigSet.xml', function(err, template) {
-  if(err) {
+templates.load('linuxConfigSet.xml', function (err, template) {
+  if (err) {
     console.dir(err);
   } else {
 
