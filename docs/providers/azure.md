@@ -31,6 +31,17 @@
         pemPassword: ""
       },
       //
+      // ports setting for linux server
+      //
+	  "ports" : [
+		{
+		  "name" : "foo",			// name of port
+		  "protocol" : "tcp",		// tcp or udp
+		  "port" : "12333",			// external port number
+		  "localPort" : "12333"		// internal port number
+		}
+      ],
+      //
       // RDP settings for windows server
       //
       rdp: {	
@@ -88,7 +99,13 @@
 * `azure.ssh.port`: The port to use for SSH on Linux servers.
 * `azure.ssh.pem`: The X509 certificate with a 2048-bit RSA keypair. Specify the path to this pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
 * `azure.ssh.pemPassword`: The password/pass phrase used when creating the pem file. See [Azure x.509 SSH Certificates](#azure-ssh-cert).
-* `azure.rdp.port`: The port to use for RDP on Windows servers.
+* `azure.ports`: An array of ports to open on the vm. For each port, specify the port information using a port object with the following members.
+	* `name`: the name of the port.
+	* `port`:  the external/public port to use for the endpoint.
+	* `localPort`: specifies the internal/private port on which the vm is listening to serve the endpoint.
+	* `protocol`: specifies the transport protocol for the endpoint.
+
+* `azure.rdp.port`: (Optional Windows servers only)The port to use for RDP on Windows servers.
 
 <br/>
 <a name="azure-manage-cert"></a>
