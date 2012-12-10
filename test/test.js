@@ -38,7 +38,7 @@ vowsCmd = (process.platform === 'win32') ? path.resolve('./node_modules/.bin/vow
   : path.resolve('./node_modules/.bin/vows');
 
 // check if vows exists and is properly installed in ./node_modules
-if(!fs.existsSync(vowsCmd)) {
+if (!fs.existsSync(vowsCmd)) {
   throw(errs.create("vows is not installed in ./node_modules. Please run npm install -d to install testing modules."));
 };
 

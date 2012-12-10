@@ -21,7 +21,7 @@ client.create({
   //
   // Now delete that same MongoDB
   //
-  client.remove(result.id, function(err, result) {
+  client.remove(result.id, function (err, result) {
     //
     // Check the result
     //

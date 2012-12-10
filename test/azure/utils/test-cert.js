@@ -7,8 +7,8 @@ var azureCert = require('../../../lib/pkgcloud/azure/utils/cert.js');
 var config = JSON.parse(fs.readFileSync("../configs/azure.json",'utf8'));
 
 
-azureCert.getAzureCert('../../fixtures/azure/cert/management/management.pem', function(err, result) {
-  if(err) {
+azureCert.getAzureCert('../../fixtures/azure/cert/management/management.pem', function (err, result) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(result);

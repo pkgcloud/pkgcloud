@@ -8,8 +8,8 @@ var client = helpers.createClient('azure', 'compute');
 var options = {};
 
 /*
-client.getImages(options, function(err, result) {
-  if(err) {
+client.getImages(options, function (err, result) {
+  if (err) {
     console.log(err);
   } else {
     console.dir(result);
@@ -17,8 +17,8 @@ client.getImages(options, function(err, result) {
 });
 */
 
-client.getImage('SUSE__SUSE-Linux-Enterprise-Server-11SP2-20120601-en-us-30GB.vhd', function(err, result) {
-  if(err) {
+client.getImage('SUSE__SUSE-Linux-Enterprise-Server-11SP2-20120601-en-us-30GB.vhd', function (err, result) {
+  if (err) {
     console.log(err);
   } else {
     console.dir(result);

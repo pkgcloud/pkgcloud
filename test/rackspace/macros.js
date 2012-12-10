@@ -16,7 +16,7 @@ exports.shouldHaveCreds = function (client) {
     assert.include(client.config, 'username');
     assert.include(client.config, 'apiKey');
 
-    assert.isFunction(client.auth);
+    assert.isfunction (client.auth);
   } 
 };
 

@@ -37,7 +37,7 @@ function testCreateServer (client) {
 
           testContext.server = server;
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(server.name, options.name);
             assert.equal(server.imageId, options.image);
             assert.assertServerDetails(server);
@@ -63,7 +63,7 @@ function testSetWait (client) {
         "should return a running server": function (err, server) {
           testContext.server = server;
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(server.name, options.name);
             assert.equal(server.status, 'RUNNING');
             assert.equal(server.imageId, options.image);
@@ -90,7 +90,7 @@ function testRebootServer (client) {
         "should return a valid server": function (err, res) {
 
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(res.ok, options.name);
           }
         }
