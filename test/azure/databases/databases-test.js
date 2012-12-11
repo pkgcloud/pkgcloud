@@ -14,12 +14,14 @@ var client = helpers.createClient('azure', 'database'),
     testContext = {};
 
 if (process.env.NOCK) {
-  nock('https://providers.azure.com')
-    .post('/provider/resources', "app_id=testDatabase&plan=free")
-      .reply(200, helpers.loadFixture('azure/database.json'))
-
-    .delete('/provider/resources/63562')
-      .reply(200, "OK");
+  nock('http://test-storage-account.table.core.windows.net')
+    .filteringRequestBody(/.*/, '*')
+    .post('/Tables', '*')
+    .reply(201, helpers.loadFixture('azure/database/createTableResponse.xml'))
+    .get('/Tables')
+    .reply(201, helpers.loadFixture('azure/database/listTables.xml'))
+    .delete("/Tables%28%27testDatabase%27%29")
+    .reply(204, "", {'content-length': '0'});
 }
 
 vows.describe('pkgcloud/azure/databases').addBatch({
@@ -28,7 +30,7 @@ vows.describe('pkgcloud/azure/databases').addBatch({
       "with correct options": {
         topic: function () {
           client.create({
-            name: 'food6'
+            name: 'testDatabase'
           }, this.callback);
         },
         "should respond correctly": function (err, database) {
