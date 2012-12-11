@@ -1,19 +1,31 @@
 //TODO: Make this a vows test
 
-var Client = new require('../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../helpers');
+
+var options = {
+  name: 'test10'
+}
 
 var client = helpers.createClient('azure', 'database');
 
-var options = {
-  name: 'test3'
-}
+//
+// Create an Azure Table
+//
+client.create(options, function (err, result) {
+  //
+  // Check the result
+  //
+  console.log(err, result);
 
-client.create(options, function(err, res) {
-  if(err) {
-    console.dir(err);
-  } else {
-    console.dir(res);
+  //
+  // Now delete that same Azure Table
+  //
+  if(err === null) {
+    client.remove(result.id, function(err, result) {
+      //
+      // Check the result
+      //
+      console.log(err, result);
+    });
   }
 });
-
