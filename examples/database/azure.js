@@ -10,22 +10,24 @@ var client = pkgcloud.database.createClient({
 // Create an Azure Table
 //
 client.create({
-  name: "testing123",
+  name: "testing123"
 }, function (err, result) {
   //
   // Check the result
   //
   console.log(err, result);
-  
+
   //
   // Now delete that same Azure Table
   //
-  client.remove(result.id, function(err, result) {
-    //
-    // Check the result
-    //
-    console.log(err, result);
-  });
+  if(err === null) {
+    client.remove(result.id, function(err, result) {
+      //
+      // Check the result
+      //
+      console.log(err, result);
+    });
+  }
 });
 
 // Use the azure-sdk-for-node to create, query, insert, update, merge, and delete Table entities.
