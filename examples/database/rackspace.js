@@ -26,7 +26,7 @@ client.getFlavors(function (err, flavors) {
       // Optional, you can choose the disk size for the instance 
       // (1 - 8) in GB. Default to 1
       //
-      size: 3 
+      size: 3,
       //
       // Optional, you can give an array of database names for initialize 
       // when the instace is ready
