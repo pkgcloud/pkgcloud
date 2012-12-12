@@ -7,6 +7,7 @@
 * [Certificates](#azure-manage-cert)
   * [Azure Management Certificates](#azure-manage-cert)
   * [Azure SSH Certificates](#azure-ssh-cert)
+* [Using Databases](#using-databases)
 
 <a name="using-compute"></a>
 ## Using Compute
@@ -176,3 +177,45 @@ For more information about this [read the article on MSDN:](http://msdn.microsof
 	ssh -i  myPrivateKey.key -p <port> username@servicename.cloudapp.net
 
 For more info: https://www.windowsazure.com/en-us/manage/linux/how-to-guides/ssh-into-linux/
+
+<a name="using-databases"></a>
+## Using Databases
+Azure Tables is available in `pkgcloud` as a `pkgcloud.databases` target. Here is an example of how to use it:
+
+``` js
+  var client = pkgcloud.database.createClient({
+    provider: 'azure',
+    storageAccount: "test-storage-account",		// Name of your Azure storage account
+    storageAccessKey: "test-storage-access-key" // Access key for storage account
+  });
+
+  //
+  // Create an Azure Table
+  //
+  client.create({
+    name: "test"
+  }, function (err, result) {
+    //
+    // Check the result
+    //
+    console.log(err, result);
+
+    //
+    // Now delete that same Azure Table
+    //
+    client.remove(result.id, function(err, result) {
+      //
+      // Check the result
+      //
+      console.log(err, result);
+    });
+  });
+```
+
+The `client` instance returned by `pkgcloud.database.createClient` has the following methods for Azure Tables:
+
+* `client.create(options, callback)`
+* `client.remove(id, callback)`
+* `client.list(callback)	// lists all of the Tables in your Azure Storage account`
+
+Use the azure-sdk-for-node to create, query, insert, update, merge, and delete Table entities. For more info: https://github.com/WindowsAzure/azure-sdk-for-node
