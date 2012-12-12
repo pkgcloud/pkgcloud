@@ -239,6 +239,8 @@ Each database provider takes different credentials to authenticate; these detail
   * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
 * **MySQL**
   * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+* **Azure Tables**
+  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#database)
 
 Due to the various differences in how these DBaaS providers provision databases only a small surface area of the API for instances of `pkgcloud.database.Client` returned from `pkgcloud.database.createClient` is consistent across all providers:
 
