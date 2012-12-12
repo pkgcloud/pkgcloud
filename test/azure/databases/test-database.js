@@ -20,8 +20,8 @@ client.create(options, function (err, result) {
   //
   // Now delete that same Azure Table
   //
-  if(err === null) {
-    client.remove(result.id, function(err, result) {
+  if (err === null) {
+    client.remove(result.id, function (err, result) {
       //
       // Check the result
       //
