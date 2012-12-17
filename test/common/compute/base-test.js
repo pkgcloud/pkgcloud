@@ -17,7 +17,7 @@ var clients     = {},
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
+      client = providerClient || clients['rackspace'],
       test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
@@ -44,7 +44,7 @@ function batchOne (providerClient, providerName) {
 
 function batchTwo (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
+      client = providerClient || clients['rackspace'],
       test   = {},
       m      = process.env.NOCK ? 1 : 100;
 
@@ -78,7 +78,7 @@ function batchTwo (providerClient, providerName) {
 
 function batchThree (providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
+      client = providerClient || clients['rackspace'],
       test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
@@ -103,7 +103,7 @@ function batchThree (providerClient, providerName, nock) {
 
 function batchFour (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
+      client = providerClient || clients['rackspace'],
       test   = {},
       m      = process.env.NOCK ? 1 : 100;
 
@@ -128,7 +128,29 @@ function batchFour (providerClient, providerName) {
           assert.equal(server.name, 'create-test-setWait');
           assert.equal(server.status, 'RUNNING');
           assert.assertServerDetails(server);
+          testContext.serverId = server.id;
         }
+      }
+    }
+  };
+
+  return test;
+}
+
+function batchFive (providerClient, providerName) {
+  var name   = providerName   || 'rackspace',
+      client = providerClient || clients['rackspace'],
+      test   = {};
+
+  test["The pkgcloud " + name + " compute client"] = {
+    "the destroyServer() method": {
+      topic: function () {
+        client.destroyServer(testContext.serverId, this.callback);
+      },
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.ok(response.ok);
+        assert.equal(response.ok, testContext.serverId);
       }
     }
   };
@@ -266,11 +288,22 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       }
     }
 
-    vows
-      .describe('pkgcloud/common/compute/base [' + provider + ']')
+    var suite = vows.describe('pkgcloud/common/compute/base [' + provider + ']')
       .addBatch(batchOne(clients[provider], provider, nock))
       .addBatch(batchTwo(clients[provider], provider, nock))
       .addBatch(batchThree(clients[provider], provider, nock))
       .addBatch(batchFour(clients[provider], provider, nock))
-       ["export"](module);
+    ;
+
+    // Due the limit of one instance running, we need to clean up
+    // the servers and destroy them.
+    if (provider === 'openstack') {
+      suite
+        .addBatch(batchFive(clients[provider], provider, nock))
+      ;
+    }
+
+    suite
+       .export(module)
+    ;
   });
