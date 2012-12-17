@@ -13,15 +13,16 @@
     "url" : "http://github.com/nodejitsu/pkgcloud.git"
   },
   "keywords": [
-    "cloud",
-    "cloud computing",
-    "api",
-    "rackspace",
-    "joyent",
-    "aws",
-    "amazon",
-    "azure",
-    "iaas"
+    "cloud", "cloud computing",
+    "api", "rackspace",
+    "joyent", "aws",
+    "amazon", "azure",
+    "iaas", "servers",
+    "compute", "storage",
+    "databases", "client",
+    "mongolab", "iriscouch",
+    "mongohq", "openstack",
+    "redistogo"
   ],
   "dependencies": {
     "async":         "0.1.x",
