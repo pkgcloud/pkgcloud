@@ -265,7 +265,14 @@ For run the tests you will need `vows@0.7.0` or higher, please install it and th
 
 The tests use the [`nock`](https://github.com/flatiron/nock) library for mock up the response of providers, so the tests run without do any connection to the providers, there is a notorius advantage of speed on that, also you can run the tests without Internet connection and also can highlight a change of API just disabling `nock`.
 
-By default the `npm test` command run the tests enabling `nock` for disable it (we dont recommend this because can take a long time) just run the tests using `vows` directly:
+
+### Running tests without mocks
+By default the `npm test` command run the tests enabling `nock`. And sometimes you will want to test against the live provider, so you need to do this steps, in order to test without mocks.
+
+1. Copy a provider config file from `test/configs/mock` to `test/configs`
+2. Fill in with your own credentials for the provider.
+3. (Optional) The compute test suite run the common tests for all providers listed on `test/configs/providers.json`, there you can enable or disable providers.
+4. Run the tests using vows.
 
 ``` bash
 Vows installed globally
@@ -279,6 +286,7 @@ Windows - Vows installed locally:
 
 ```
 
+### Other ways to run the tests
 Also you can run the tests directly using `vows` with `nock` enabled:
 
 ``` bash
