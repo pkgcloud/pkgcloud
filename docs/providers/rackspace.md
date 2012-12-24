@@ -20,7 +20,7 @@
 ## Using Storage
 
 ``` js
-  var rackspace = pkgcloud.storage.create({
+  var rackspace = pkgcloud.storage.createClient({
     provider: 'rackspace', // 'cloudservers'
     username: 'nodejitsu',
     apiKey: 'foobar'
