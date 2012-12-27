@@ -1,1 +1,1 @@
-{"server": {"name":"create-test-ids2","image":112,"flavor":1,"flavorId":1,"imageId":112,"personality":[],"id":20592449,"addresses":{"public":["108.166.124.26"],"private":["10.182.100.213"]}}}
+{"server": {"name":"create-test-ids2","status":"ACTIVE","image":112,"flavor":1,"flavorId":1,"imageId":112,"personality":[],"id":20592449,"addresses":{"public":["108.166.124.26"],"private":["10.182.100.213"]}}}
