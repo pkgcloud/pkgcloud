@@ -18,7 +18,7 @@ var testData    = {},
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
+      client = providerClient || clients['rackspace'],
       test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
@@ -60,18 +60,25 @@ function batchOne (providerClient, providerName) {
 
 function batchTwo (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
-      test   = {};
+      client = providerClient || clients['rackspace'],
+      test   = {},
+      m      = process.env.NOCK ? 1 : 100;
 
   test["The pkgcloud " + name + " compute client"] = {
     "the createServer() method": {
       "with image and flavor ids": {
         topic: function () {
+          var self = this;
           client.createServer({
             name: 'create-test-ids2',
             image: testContext.images[0].id,
             flavor: testContext.flavors[0].id
-          }, this.callback);
+          }, function (err, server) {
+            if (err) { return self.callback(err); }
+            server.setWait({ status: 'RUNNING' }, 100*m, function (err, srv) {
+              self.callback(null, srv);
+            });
+          });
         },
         "should return a valid server": function (err, server) {
           testContext.servers = [server];
@@ -89,7 +96,7 @@ function batchTwo (providerClient, providerName) {
 
 function batchThree (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
-      client = providerClient || rackspace,
+      client = providerClient || clients['rackspace'],
       test   = {};
 
   test["The pkgcloud " + name + " compute client"] = {
@@ -113,6 +120,7 @@ function batchThree (providerClient, providerName) {
         client.destroyServer(server);
         assert.isNull(err);
         assert.assertServerDetails(server);
+        console.log(server.addresses);
         assert.ok(Array.isArray(server.addresses["public"]));
         assert.ok(Array.isArray(server.addresses["private"]));
         assert.ok(typeof server.addresses["private"][0] === 'string');
@@ -126,7 +134,7 @@ function batchThree (providerClient, providerName) {
 
 function batchReboot(providerClient, providerName, nock) {
   var name    = providerName   || 'rackspace',
-      client  = providerClient || rackspace,
+      client  = providerClient || clients['rackspace'],
       timeout = process.env.NOCK ? 1 : 10000,
       test    = {};
 
@@ -187,13 +195,34 @@ function batchReboot(providerClient, providerName, nock) {
   return test;
 }
 
+function batchDestroy (providerClient, providerName) {
+  var name   = providerName   || 'rackspace',
+      client = providerClient || clients['rackspace'],
+      test   = {};
+
+  test["The pkgcloud " + name + " compute client"] = {
+    "the destroyServer() method": {
+      topic: function () {
+        client.destroyServer(testContext.servers[0].id, this.callback);
+      },
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.ok(response.ok);
+        assert.equal(response.ok, testContext.servers[0].id);
+      }
+    }
+  };
+
+  return test;
+}
+
 JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
   .forEach(function (provider) {
     clients[provider] = helpers.createClient(provider, 'compute');
     
     var client = clients[provider],
         nock   = require('nock');
-    
+
     testData    = {};
     testContext = {};
     
@@ -232,12 +261,20 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         .get('/' + client.account +
             '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
           .reply(200, 
-            helpers.loadFixture('joyent/fe4d8e28.json'), {})
+            helpers.loadFixture('joyent/createdServer.json'), {})
+        .get('/' + client.account +
+            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(200, 
+            helpers.loadFixture('joyent/14186c17.json'), {})
+        .get('/' + client.account +
+            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(200, 
+            helpers.loadFixture('joyent/14186c17.json'), {})
         ["delete"]('/' + client.account +  
          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(204, "", {})
         .post('/' + client.account +
-          '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5', { action: 'stop' })
+          '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9', { action: 'stop' })
           .reply(202, "", {})
         ;
       }
@@ -257,6 +294,8 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
               helpers.loadFixture('rackspace/createServer.json'))
             .reply(202,  helpers.loadFixture('rackspace/createdServer.json'), 
               {})
+          .get('/v1.0/537645/servers/20592449')
+              .reply(200, helpers.loadFixture('rackspace/20592449.json'), {})
           .post('/v1.0/537645/servers',  
               helpers.loadFixture('rackspace/createServer.json'))
             .reply(202,  helpers.loadFixture('rackspace/createdServer.json'), 
@@ -401,11 +440,37 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
       }
     }
     
-    vows
-      .describe('pkgcloud/common/compute/server [' + provider + ']')
+    var suite = vows.describe('pkgcloud/common/compute/server [' + provider + ']')
       .addBatch(batchOne(client, provider))
       .addBatch(batchTwo(client, provider))
+    ;
+
+    // Delete the server created on step two
+    if (provider === 'openstack') {
+      suite
+        .addBatch(batchDestroy(client, provider))
+      ;
+    }
+
+    suite
       .addBatch(batchThree(client, provider))
-      .addBatch(batchReboot(client, provider, nock))
-       ["export"](module);
+    ;
+
+    // Disable reboot test for openstack :(
+    if (provider !== 'openstack') {
+      suite
+        .addBatch(batchReboot(client, provider, nock))
+      ;
+    }
+
+    // Delete the server created for reboot it
+    if (provider === 'openstack') {
+      suite
+        .addBatch(batchDestroy(client, provider))
+      ;
+    }
+
+    suite
+       .export(module)
+    ;
   });
