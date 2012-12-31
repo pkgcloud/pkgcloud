@@ -8,12 +8,14 @@
 var fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
+    utile = require('utile'),
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers');
 
 var clients     = {},
     testContext = {},
-    versions    = JSON.parse(helpers.loadFixture('versions.json'));
+    versions    = JSON.parse(helpers.loadFixture('versions.json')),
+    azureOptions = require('../../fixtures/azure/azure-options.json');
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
@@ -112,11 +114,11 @@ function batchFour (providerClient, providerName) {
       "waiting for a server to be operational": {
         topic: function () {
           var self = this;
-          client.createServer({
+          client.createServer(utile.mixin({
             name: 'create-test-setWait',
             image: testContext.images[0].id,
             flavor: testContext.flavors[0].id
-          }, function (err, server) {
+          }, name === 'azure' ? azureOptions : {}), function (err, server) {
             if (err) { return self.callback(err); }
             server.setWait({ status: 'RUNNING' }, 100*m, function (err, srv) {
               self.callback(null, srv);

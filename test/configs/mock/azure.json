@@ -1,29 +1,7 @@
 {
     "storageAccount": "test-storage-account",
     "storageAccessKey": "test-storage-access-key",
-    "managementCertificate": "./test/fixtures/azure/cert/management/management.pem",
-    "subscriptionId": "azure-account-subscription-id",
-    "azure": {
-        "location": "East US",
-        "username": "pkgcloud",
-        "password": "Pkgcloud!!",
-        "ssh" : {
-            "port": 22,
-            "localPort": 22,
-            "pem": "./test/fixtures/azure/cert/ssh/mycert.pem",
-            "pemPassword": ""
-        },
-        "ports" : [
-            {
-                "name" : "foo",
-                "protocol" : "tcp",
-                "port" : "12333",
-                "localPort" : "12333"
-            }
-        ],
-        "rdp" : {
-            "port": 3389
-        }
-    }
+    "key": "U29NZVRoSW5nRnVOaEVyRWFOZE90aEVyc1JhTmRvTXNDaEFyQXRFcmVz",
+    "cert": "U29NZVRoSW5nRnVOaEVyRWFOZE90aEVyc1JhTmRvTXNDaEFyQXRFcmVz",
+    "subscriptionId": "azure-account-subscription-id"
 }
-
