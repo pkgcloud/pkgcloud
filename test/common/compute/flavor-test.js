@@ -87,6 +87,22 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         // No need in nock here, all flavors are stored in provider's files
       } else if (provider === 'azure') {
         // No need in nock here, all flavors are stored in provider's files
+      } else if (provider === 'openstack') {
+        nock(client.authUrl)
+          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"}}}")
+            .reply(200, helpers.loadFixture('openstack/initialToken.json'))
+          .get('/v2.0/tenants')
+            .reply(200, helpers.loadFixture('openstack/tenantId.json'))
+          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"},\"tenantId\":\"72e90ecb69c44d0296072ea39e537041\"}}")
+            .reply(200, helpers.loadFixture('openstack/realToken.json'));
+
+        nock('http://compute.myownendpoint.org:8774')
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail')
+            .reply(200, helpers.loadFixture('openstack/flavors.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail')
+            .reply(200, helpers.loadFixture('openstack/flavors.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/1')
+            .reply(200, helpers.loadFixture('openstack/flavor1.json'))
       }
     }
 
