@@ -158,7 +158,27 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
           .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>", {})
           .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
           .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>", {});
-      };
+      } else if (provider === 'openstack') {
+        nock(client.authUrl)
+          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"}}}")
+            .reply(200, helpers.loadFixture('openstack/initialToken.json'))
+          .get('/v2.0/tenants')
+            .reply(200, helpers.loadFixture('openstack/tenantId.json'))
+          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"},\"tenantId\":\"72e90ecb69c44d0296072ea39e537041\"}}")
+            .reply(200, helpers.loadFixture('openstack/realToken.json'));
+
+        nock('http://compute.myownendpoint.org:8774')
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
+            .reply(200, "{\"servers\": []}")
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
+            .reply(200, "{\"servers\": []}")
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
+            .reply(200, helpers.loadFixture('openstack/images.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66')
+            .reply(200, helpers.loadFixture('openstack/image1.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66')
+            .reply(200, helpers.loadFixture('openstack/image1.json'))
+      }
     }
 
     vows
