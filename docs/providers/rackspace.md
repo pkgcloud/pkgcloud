@@ -70,6 +70,50 @@ Get the current version of the api returned in a callback `f(err, version)`
 
 Get the current API limits returned in a callback `f(err, limits)`
 
+**flavors**
+
+#### client.getFlavors(callback)
+
+Returns a list of all possible server flavors available in the callback `f(err,
+flavors)`
+
+#### client.getFlavor(flavor, callback)
+Returns the specified rackspace flavor of Rackspace Images by ID or flavor
+object in the callback `f(err, flavor)`
+
+**images**
+
+#### client.getImages(callback)
+Returns a list of the images available for your account
+
+`f(err, images)`
+
+#### client.getImage(image, callback)
+Returns the image specified
+
+`f(err, image)`
+
+#### client.createImage(options, callback)
+Creates an Image based on a server
+
+Options include:
+
+```js
+{
+  name: 'imageName',  // required
+  server: 'serverId'  // required
+}
+```
+
+Returns the newly created image
+
+`f(err, image)`
+
+#### client.destroyImage(image, callback)
+Destroys the specified image and returns a confirmation
+
+`f(err, {ok: imageId})`
+
 <a name="using-storage"></a>
 ## Using Storage
 
