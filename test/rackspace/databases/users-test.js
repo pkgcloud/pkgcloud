@@ -22,6 +22,12 @@ if (process.env.NOCK) {
 
   nock('https://' + client.authUrl)
     .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
       .reply(200, helpers.loadFixture('rackspace/token.json'));
 
   nock('https://ord.databases.api.rackspacecloud.com')
