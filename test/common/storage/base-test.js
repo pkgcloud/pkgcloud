@@ -72,7 +72,8 @@ function batchThree (providerClient, providerName, nock) {
         topic: function () {
           var stream = providerClient.upload({
             container: testContext.container,
-            remote: 'test-file.txt'
+            remote: 'test-file.txt',
+            headers: {'x-amz-acl': 'public-read'}
           }, this.callback);
 
           var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
