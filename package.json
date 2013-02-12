@@ -29,6 +29,7 @@
     "errs":          "0.2.x",
     "eventemitter2": "0.4.x",
     "filed":         "0.0.7",
+    "ip":            "0.0.x",
     "xml2js":        "0.1.x",
     "mime":          "1.2.x",
     "morestreams":   "0.1.x",
