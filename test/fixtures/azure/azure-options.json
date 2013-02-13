@@ -1,0 +1,19 @@
+{
+  "username": "pkgcloud",
+  "password": "Pkgcloud!!",
+  "location": "East US",
+  "ssh": {
+    "cert": "-----BEGIN CERTIFICATE-----\nU29NZVRoSW5nRnVOaEVyRWFOZE90aEVyc1JhTmRvTXNDaEFyQXRFcmVz\n-----END CERTIFICATE-----\n"
+  },
+  "ports": [
+    {
+      "name": "foo",
+      "protocol": "tcp",
+      "port": 12333,
+      "localPort": 12333
+    }
+  ],
+  "rdp": {
+    "port": 3389
+  }
+}
