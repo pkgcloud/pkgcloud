@@ -8,6 +8,7 @@
 var fs = require('fs'),
   path = require('path'),
   vows = require('vows'),
+  utile = require('utile'),
   azureNock = require('../../helpers/azureNock'),
   assert = require('../../helpers/assert'),
   helpers = require('../../helpers');
@@ -15,6 +16,8 @@ var fs = require('fs'),
 var testData    = {},
     testContext = {},
     clients     = {};
+
+var azureOptions = require('../../fixtures/azure/azure-options.json');
 
 function batchOne (providerClient, providerName) {
   var name   = providerName   || 'rackspace',
@@ -69,11 +72,11 @@ function batchTwo (providerClient, providerName) {
       "with image and flavor ids": {
         topic: function () {
           var self = this;
-          client.createServer({
+          client.createServer(utile.mixin({
             name: 'create-test-ids2',
             image: testContext.images[0].id,
-            flavor: testContext.flavors[0].id
-          }, function (err, server) {
+            flavor: testContext.flavors[0].id,
+          }, name === 'azure' ? azureOptions : {}), function (err, server) {
             if (err) { return self.callback(err); }
             server.setWait({ status: 'RUNNING' }, 100*m, function (err, srv) {
               self.callback(null, srv);
@@ -142,11 +145,11 @@ function batchReboot(providerClient, providerName, nock) {
     "the rebootServer() method": {
       topic: function () {
         var self = this;
-        client.createServer({
+        client.createServer(utile.mixin({
             name  : "test-reboot", 
             image : testContext.images[0].id,
             flavor: testContext.flavors[0].id
-          },
+          }, name === 'azure' ? azureOptions : {}),
           function (err, server, response) {
             if (err) { return self.callback(err); }
 

@@ -16,7 +16,24 @@ var fs = require('fs'),
 var options = {
   name: 'create-test-ids2',
   flavor: 'ExtraSmall',
-  image: 'CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd'
+  image: 'CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd',
+  username: 'pkgcloud',
+  password: 'Pkgcloud!!',
+  location: 'East US',
+  ssh: {
+    cert: fs.readFileSync(path.join(__dirname, '..', '..', '..', 'fixtures', 'azure', 'cert', 'ssh', 'mycert.pem'))
+  },
+  ports: [
+    {
+      name: "foo",
+      protocol: "tcp",
+      port: 12333,
+      localPort: 12333
+    }
+  ],
+  rdp: {
+    port: 3389
+  }
 };
 
 function testCreateServer (client) {
@@ -27,11 +44,7 @@ function testCreateServer (client) {
     "the createServer() method": {
       "with image and flavor ids": {
         topic: function () {
-          client.createServer({
-            name: options.name,
-            image: options.image,
-            flavor: options.flavor
-          }, this.callback);
+          client.createServer(options, this.callback);
         },
         "should return a valid server": function (err, server) {
 
