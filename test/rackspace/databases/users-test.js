@@ -19,28 +19,42 @@ if (process.env.NOCK) {
      username: client.config.username,
      key: client.config.apiKey
   };
-  
+
   nock('https://' + client.authUrl)
     .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
+      .reply(200, helpers.loadFixture('rackspace/token.json'))
+    .post('/v1.1/auth', { "credentials": credentials })
       .reply(200, helpers.loadFixture('rackspace/token.json'));
-  
-  nock('https://ord.databases.api.rackspacecloud.com')  
+
+  nock('https://ord.databases.api.rackspacecloud.com')
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
-    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', 
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users',
       "{\"users\":[{\"name\":\"joeTest\",\"password\":\"joepasswd\",\"databases\":[]}]}")
       .reply(202)
 
-    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', 
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users',
       "{\"users\":[{\"name\":\"joeTestTwo\",\"password\":\"joepasswd\",\"databases\":[]}]}")
       .reply(202)
 
-    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', 
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users',
       "{\"users\":[{\"name\":\"joeTestThree\",\"password\":\"joepasswd\",\"databases\":[]}]}")
+      .reply(202)
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users',
+      "{\"users\":[{\"name\":\"joeTestFour\",\"password\":\"joepasswd\",\"databases\":[]},{\"name\":\"joeTestFive\",\"password\":\"joepasswd\",\"databases\":[]}]}")
+      .reply(202)
+
+    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users',
+      "{\"users\":[{\"name\":\"@joeTestSix\",\"password\":\"joepasswd\",\"databases\":[]}]}")
       .reply(202)
 
     .get('/v1.0/537645/instances?')
@@ -54,6 +68,9 @@ if (process.env.NOCK) {
 
     .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?')
       .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'))
+
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
@@ -88,6 +105,8 @@ if (process.env.NOCK) {
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
+    .get('/v1.0/537645/instances?')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
     .get('/v1.0/537645/instances?')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 }
@@ -135,6 +154,45 @@ vows.describe('pkgcloud/rackspace/databases/users').addBatch({
         assert.isNull(err);
         assert.ok(response);
         assert.equal(response.statusCode, 202);
+      }
+    },
+    "create multiple users in one request": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.createUser([{
+            username: 'joeTestFour',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          },{
+            username: 'joeTestFive',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          }], self.callback)
+        });
+      },
+      "should respond correctly": function (err, response) {
+        assert.isNull(err);
+        assert.ok(response);
+        assert.equal(response.statusCode, 202);
+      }
+    },
+    "create user with questionable characters": {
+      topic: function () {
+        var self = this;
+        helpers.selectInstance(client, function (instance) {
+          client.createUser({
+            username: '@joeTestSix',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          }, self.callback)
+        });
+      },
+      "should respond with error": function (err, response) {
+        assert.assertError(err);
       }
     }
   }
