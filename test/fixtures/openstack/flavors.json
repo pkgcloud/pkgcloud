@@ -1,0 +1,23 @@
+{
+  "flavors": [
+    {
+      "vcpus": 4,
+      "disk": 150,
+      "name": "m1.highbank",
+      "links": [
+        {
+          "href": "http://compute.myownendpoint.org:8774/v2/72e90ecb69c44d0296072ea39e537041/flavors/1",
+          "rel": "self"
+        }, {
+          "href": "http://compute.myownendpoint.org:8774/72e90ecb69c44d0296072ea39e537041/flavors/1",
+          "rel": "bookmark"
+        }
+      ],
+      "rxtx_factor": 1.0,
+      "OS-FLV-EXT-DATA:ephemeral": 0,
+      "ram": 3584,
+      "id": "1",
+      "swap": ""
+    }
+  ]
+}

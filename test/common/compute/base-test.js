@@ -287,6 +287,34 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
            .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5')
           .reply(200, helpers.loadFixture('azure/operation-succeeded.xml'),{ });
 
+      } else if (provider === 'openstack') {
+        nock(client.authUrl)
+          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"}}}")
+            .reply(200, helpers.loadFixture('openstack/initialToken.json'))
+          .get('/v2.0/tenants')
+            .reply(200, helpers.loadFixture('openstack/tenantId.json'))
+          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"},\"tenantId\":\"72e90ecb69c44d0296072ea39e537041\"}}")
+            .reply(200, helpers.loadFixture('openstack/realToken.json'));
+
+        nock('http://compute.myownendpoint.org:8774')
+          .get('/v2/')
+            .reply(200, helpers.loadFixture('openstack/versions.json'))
+          .get('/v2/')
+            .reply(200, helpers.loadFixture('openstack/versions.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail')
+            .reply(200, helpers.loadFixture('openstack/flavors.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/1')
+            .reply(200, helpers.loadFixture('openstack/flavor1.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/1')
+            .reply(200, helpers.loadFixture('openstack/flavor1.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
+            .reply(200, helpers.loadFixture('openstack/images.json'))
+          .post('/v2/72e90ecb69c44d0296072ea39e537041/servers', "{\"server\":{\"name\":\"create-test-setWait\",\"flavorRef\":1,\"imageRef\":\"506d077e-66bf-44ff-907a-588c5c79fa66\",\"personality\":[],\"key_name\":null}}")
+            .reply(202, helpers.loadFixture('openstack/creatingServer.json'))
+          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
+            .reply(200, helpers.loadFixture('openstack/serverCreated.json'))
+          .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
+            .reply(204, "");
       }
     }
 

@@ -1,4 +1,5 @@
 {
-  "username": "MOCK-USERNAME",
-  "apiKey": "MOCK-API-KEY"
+  "username":"MOCK-USERNAME",
+  "password":"MOCK-PASSWORD",
+  "authUrl":"http://auth.myownendpoint.org"
 }

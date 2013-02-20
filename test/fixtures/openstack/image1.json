@@ -1,0 +1,26 @@
+{
+  "image": {
+    "status": "ACTIVE",
+    "updated": "2012-07-13T15:37:58Z",
+    "name": "Ubuntu 12.04",
+    "links": [
+      {
+        "href": "http://208.123.85.197:8774/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66",
+        "rel": "self"
+      }, {
+        "href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66",
+        "rel": "bookmark"
+      }, {
+        "href": "http://10.225.0.9:9292/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66",
+        "type": "application/vnd.openstack.image",
+        "rel": "alternate"
+      }
+    ],
+    "created": "2012-07-13T15:37:54Z",
+    "progress": 100,
+    "minRam": 0,
+    "minDisk": 0,
+    "id": "506d077e-66bf-44ff-907a-588c5c79fa66",
+    "metadata": {}
+  }
+}
