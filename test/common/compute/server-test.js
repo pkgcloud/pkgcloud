@@ -123,7 +123,6 @@ function batchThree (providerClient, providerName) {
         client.destroyServer(server);
         assert.isNull(err);
         assert.assertServerDetails(server);
-        console.log(server.addresses);
         assert.ok(Array.isArray(server.addresses["public"]));
         assert.ok(Array.isArray(server.addresses["private"]));
         assert.ok(typeof server.addresses["private"][0] === 'string');
@@ -343,7 +342,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'InstanceId': 'i-1d48637b'
           })
             .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+                   helpers.loadFixture('amazon/running-server-attr2.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
