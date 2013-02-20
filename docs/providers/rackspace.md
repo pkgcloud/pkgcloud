@@ -190,3 +190,25 @@ Also you can manage users across your instances and each instance can handle sev
     })
   });
 ```
+
+### API Methods ###
+
+#### client.createUser(options, callback)
+
+Allows the creation of specific users to have access to any database you create.
+
+Accepts one user object as the `options` argument or an array of user objects.
+
+A user object is defined as follows:
+
+```js
+{
+  username: 'nodejitsu',              // required
+  password: 'foobar',                 // required
+  databases: ['first-db, second-db'], // required (Can be either string or array)
+  instance: instance                  // required (instance or instanceId)
+}
+```
+
+**note**: If creating multiple users, the instance provided must be the same for
+both.
