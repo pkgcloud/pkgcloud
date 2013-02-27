@@ -20,8 +20,8 @@ client.getVersion(function (err, version) {
 
 //createServer
 var options = {
-  hostname: 'tests.tests.com',
-  template_id: '6',
+  name: 'tests.tests.com',
+  image: '6'
 };
 
 client.createServer(options, function (err, server) {
