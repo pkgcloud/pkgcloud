@@ -3,7 +3,7 @@ node_modules
 *.log
 test/fixtures/test-download*
 *.notes
-*.swp
+.*.sw[op]
 .project
 test/configs/*.json
 !test/configs/providers.json
