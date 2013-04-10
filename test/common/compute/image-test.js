@@ -103,7 +103,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
-          .get('/' + client.account + '/machines?')
+          .get('/' + client.account + '/machines')
           .reply(200, "[]", {})
           .get('/' + client.account + '/datasets')
           .reply(200, helpers.loadFixture('joyent/images.json'), {})

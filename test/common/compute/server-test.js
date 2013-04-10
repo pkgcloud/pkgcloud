@@ -125,8 +125,14 @@ function batchThree (providerClient, providerName) {
         assert.assertServerDetails(server);
         assert.ok(Array.isArray(server.addresses["public"]));
         assert.ok(Array.isArray(server.addresses["private"]));
-        assert.ok(typeof server.addresses["private"][0] === 'string');
-        assert.ok(typeof server.addresses["public"][0] === 'string');
+        if (name === 'openstack') {
+          assert.ok(typeof server.addresses["private"][0] === 'object');
+          assert.ok(typeof server.addresses["public"][0] === 'object');
+        }
+        else {
+          assert.ok(typeof server.addresses["private"][0] === 'string');
+          assert.ok(typeof server.addresses["public"][0] === 'string');
+        }
       }
     }
   };
@@ -231,7 +237,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
-          .get('/' + client.account + '/machines?')
+          .get('/' + client.account + '/machines')
             .reply(200, "[]", {})
           .get('/' + client.account + '/datasets')
             .reply(200, helpers.loadFixture('joyent/images.json'), {})
@@ -487,13 +493,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     if (provider !== 'openstack') {
       suite
         .addBatch(batchReboot(client, provider, nock))
-      ;
-    }
-
-    // Delete the server created for reboot it
-    if (provider === 'openstack') {
-      suite
-        .addBatch(batchDestroy(client, provider))
       ;
     }
 
