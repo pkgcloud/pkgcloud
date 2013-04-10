@@ -1,4 +1,4 @@
-# pkgcloud 
+# pkgcloud [![Build Status](https://secure.travis-ci.org/nodejitsu/pkgcloud.png?branch=master)](http://travis-ci.org/nodejitsu/pkgcloud)
 
 pkgcloud is a standard library for node.js that abstracts away differences among multiple cloud providers.
 
