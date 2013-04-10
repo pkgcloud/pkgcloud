@@ -1,7 +1,6 @@
 {
   "username":"MOCK-USERNAME",
   "password":"MOCK-PASSWORD",
-  "tenantId": "72e90ecb69c44d0296072ea39e537041",
   "authUrl":"http://auth.myownendpoint.org",
   "region": "Calxeda-AUS1"
 }
