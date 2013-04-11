@@ -60,4 +60,7 @@ vows.stderr.on('data', function (data) {
 
 vows.on('exit', function (code) {
   console.log('vows exited with code ' + code);
+
+  // propagate our exit code through for travis-ci
+  process.exit(code);
 });
