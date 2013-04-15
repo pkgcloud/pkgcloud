@@ -3,7 +3,7 @@ var identity = require('../../../lib/pkgcloud/openstack/identity'),
     assert = require('assert'),
     nock = require('nock');
 
-vows.describe('createIdentity').addBatch({
+vows.describe('the pkgcloud openstack identity.createIdentity() function').addBatch({
   'with no options': {
     topic: function() {
       identity.createIdentity();
