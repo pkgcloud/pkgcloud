@@ -36,7 +36,8 @@
     "pkginfo":       "0.2.x",
     "request":       "2.x.x",
     "underscore":    "1.4.x",
-    "utile":         "0.x.x"
+    "utile":         "0.x.x",
+    "url-join":      "*"
   },
   "devDependencies": {
     "vows": "0.7.x",
