@@ -1,0 +1,71 @@
+{
+  "access": {
+    "token": {
+      "expires": "2012-12-26T18:25:46Z",
+      "id": "4bc7c5dabf3e4a49918683437d386b8a",
+      "tenant": {
+        "enabled": true,
+        "id": "72e90ecb69c44d0296072ea39e537041",
+        "name": "MOCK-USERNAME",
+        "description": "MOCK-USERNAME"
+      }
+    },
+    "serviceCatalog": [
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.8:8776/v1/72e90ecb69c44d0296072ea39e537041",
+            "internalURL": "http://10.225.0.8:8776/v1/72e90ecb69c44d0296072ea39e537041",
+            "publicURL": "http://volume.myownendpoint.org:8776/v1/72e90ecb69c44d0296072ea39e537041"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "volume",
+        "name": "volume"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.8:9292/v1",
+            "internalURL": "http://10.225.0.8:9292/v1",
+            "publicURL": "http://image.myownendpoint.org:9292/v1"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
+            "internalURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
+            "publicURL": "http://compute.myownendpoint.org:8774/v2/72e90ecb69c44d0296072ea39e537041"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.8:35357/v2.0",
+            "internalURL": "http://10.225.0.8:5000/v2.0",
+            "publicURL": "http://identity.myownendpoint.org:5000/v2.0"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "identity",
+        "name": "keystone"
+      }
+    ],
+    "user": {
+      "username": "MOCK-USERNAME",
+      "roles_links": [],
+      "id": "bf3b85477d06430c8044d5b2e5e6dc5f",
+      "roles": [],
+      "name": "MOCK-USERNAME"
+    }
+  }
+}
