@@ -6,7 +6,7 @@ var pkgcloud = require('../../../../lib/pkgcloud');
 
 var client = helpers.createClient('azure', 'compute');
 
-client.destroyServer('test-reboot', function(err, result) {
+client.destroyServer('test-reboot', function (err, result) {
   if(err) {
     console.log(err);
   } else {

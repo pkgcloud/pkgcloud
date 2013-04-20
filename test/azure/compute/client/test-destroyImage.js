@@ -9,7 +9,7 @@ var async = require('async');
 var client = helpers.createClient('azure', 'compute');
 
 
-client.destroyImage('pkgcloud1', function(err, result) {
+client.destroyImage('pkgcloud1', function (err, result) {
   if(err) {
     console.dir(err);
   } else {

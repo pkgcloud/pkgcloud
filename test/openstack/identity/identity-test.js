@@ -5,19 +5,19 @@ var identity = require('../../../lib/pkgcloud/openstack/identity'),
 
 vows.describe('the pkgcloud openstack identity.createIdentity() function').addBatch({
   'with no options': {
-    topic: function() {
+    topic: function () {
       identity.createIdentity();
     },
-    'should throw an error': function(topic) {
+    'should throw an error': function (topic) {
       assert.instanceOf(topic, Error);
       assert.equal(topic.message, 'options is a required argument');
     }
   },
   'with only a callback': {
-    topic: function() {
+    topic: function () {
       identity.createIdentity(this.callback);
     },
-    'should throw an error': function(topic) {
+    'should throw an error': function (topic) {
       assert.instanceOf(topic, Error);
       assert.equal(topic.message, 'options is a required argument');
     }

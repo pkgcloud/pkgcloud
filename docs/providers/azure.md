@@ -64,7 +64,7 @@ options = {
 
 console.log("creating server...");
 
-client.createServer(options, function(err, server) {
+client.createServer(options, function (err, server) {
   if(err) {
     console.log(err);
   } else {
@@ -251,7 +251,7 @@ Azure Tables is available in `pkgcloud` as a `pkgcloud.databases` target. Here i
     //
     // Now delete that same Azure Table
     //
-    client.remove(result.id, function(err, result) {
+    client.remove(result.id, function (err, result) {
       //
       // Check the result
       //

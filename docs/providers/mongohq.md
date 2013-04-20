@@ -24,7 +24,7 @@ MongoHQ is available in `pkgcloud` as a `pkgcloud.databases` target. Here is an 
     //
     // Now delete that same MongoDB
     //
-    client.remove(result.id, function(err, result) {
+    client.remove(result.id, function (err, result) {
       //
       // Check the result
       //

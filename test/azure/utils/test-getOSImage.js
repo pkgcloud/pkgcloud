@@ -7,7 +7,7 @@ var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 
-azureApi.getOSImage(client, 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd', function(err, result) {
+azureApi.getOSImage(client, 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd', function (err, result) {
   if(err) {
     console.log(err);
   } else {

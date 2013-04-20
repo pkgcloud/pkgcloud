@@ -49,7 +49,7 @@ options = {
 
 console.log("creating server...");
 
-client.createServer(options, function(err, server) {
+client.createServer(options, function (err, server) {
   if(err) {
     console.log(err);
   } else {

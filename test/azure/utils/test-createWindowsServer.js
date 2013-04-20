@@ -11,7 +11,7 @@ var options = {
   image: 'MSFT__Windows-Server-2012-Datacenter-201208.01-en.us-30GB.vhd'
 };
 
-azureApi.createServer(client, options, function(err, result) {
+azureApi.createServer(client, options, function (err, result) {
   if(err) {
     console.log(err);
   } else {

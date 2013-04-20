@@ -7,7 +7,7 @@ var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 
-azureApi.createHostedService(client, 'pkgcloud4', function(err, result) {
+azureApi.createHostedService(client, 'pkgcloud4', function (err, result) {
   if(err) {
     console.log(err);
   } else {

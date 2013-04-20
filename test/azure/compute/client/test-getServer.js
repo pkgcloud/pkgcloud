@@ -7,7 +7,7 @@ var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 
-client.getServer('pkgcloud2', function(err, result) {
+client.getServer('pkgcloud2', function (err, result) {
   if(err) {
     console.log(err);
   } else {

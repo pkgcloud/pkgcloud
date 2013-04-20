@@ -11,7 +11,7 @@ var options = {
   image: 'OpenLogic__OpenLogic-CentOS-62-20120531-en-us-30GB.vhd'
 };
 
-azureApi.createServer(client, options, function(err, result) {
+azureApi.createServer(client, options, function (err, result) {
   if(err) {
     console.log(err);
   } else {

@@ -15,7 +15,7 @@ var options = {
 
 
 
-var stream = client.download(options, function(err, res) {
+var stream = client.download(options, function (err, res) {
   if(err) {
     console.dir(err);
   } else {
@@ -23,7 +23,7 @@ var stream = client.download(options, function(err, res) {
   }
 });
 
-stream.on('data', function(data) {
+stream.on('data', function (data) {
   console.log(data.toString());
 });
 
