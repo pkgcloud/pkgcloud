@@ -1,5 +1,6 @@
 {
   "username":"MOCK-USERNAME",
   "password":"MOCK-PASSWORD",
-  "authUrl":"http://auth.myownendpoint.org"
+  "authUrl":"http://auth.myownendpoint.org",
+  "region": "Calxeda-AUS1"
 }
