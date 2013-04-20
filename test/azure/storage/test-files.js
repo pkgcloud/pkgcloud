@@ -8,7 +8,7 @@ var client = helpers.createClient('azure', 'storage');
 
 
 client.getFile('pkgcloud-test-container', 'test-file.txt', function (err, res) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(res);
@@ -16,7 +16,7 @@ client.getFile('pkgcloud-test-container', 'test-file.txt', function (err, res) {
 });
 
 client.getFiles('pkgcloud-test-container', false, function (err, res) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(res);

@@ -16,7 +16,7 @@ var options = {
 
 
 var stream = client.download(options, function (err, res) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(res);

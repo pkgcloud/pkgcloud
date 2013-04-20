@@ -12,7 +12,7 @@ var options = {
 };
 
 azureApi.createServer(client, options, function (err, result) {
-  if(err) {
+  if (err) {
     console.log(err);
   } else {
     console.dir(result);

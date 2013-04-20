@@ -14,7 +14,7 @@ var options = {
 
 
 var stream = client.upload(options, function (err, res) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(res);
@@ -26,7 +26,7 @@ file.pipe(stream);
 
 options.remote = 'bigfile.raw'
 var stream2 = client.upload(options, function (err, res) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(res);

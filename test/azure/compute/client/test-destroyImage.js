@@ -10,7 +10,7 @@ var client = helpers.createClient('azure', 'compute');
 
 
 client.destroyImage('pkgcloud1', function (err, result) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
     console.dir(result);

@@ -443,7 +443,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-      } else if(provider === 'azure') {
+      } else if (provider === 'azure') {
         azureNock.serverTest(nock, helpers);
       } else if (provider === 'openstack') {
         nock(client.authUrl)

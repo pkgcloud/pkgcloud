@@ -15,7 +15,7 @@ var params = {
 };
 
 templates.load('linuxConfigSet.xml', function (err, template) {
-  if(err) {
+  if (err) {
     console.dir(err);
   } else {
 

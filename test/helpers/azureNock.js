@@ -200,7 +200,7 @@ var serverStatusReply = function (name, status) {
 
 var filterPath = function (path) {
   var name = PATH.basename(path);
-  if(path.search('embed-detail=true') !== -1) {
+  if (path.search('embed-detail=true') !== -1) {
     return '/getStatus?name=' + name;
   }
 
