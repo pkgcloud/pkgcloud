@@ -32,7 +32,7 @@ if (process.env.NOCK) {
       .reply(401, "{\"unauthorized\":{\"message\":\"Username or api key is invalid\", \"code\":401}}");
 }
 
-function shouldAuthNew (client) {
+function shouldAuthNew(client) {
   return {
     topic: function () {
       client.auth(this.callback);
@@ -58,7 +58,7 @@ function shouldAuthNew (client) {
   };
 }
 
-function shouldNotAuthNew (service) {
+function shouldNotAuthNew(service) {
   return {
     topic: function () {
       var badClient = helpers.createClient('rackspace', service, {

@@ -19,7 +19,7 @@ var options = {
   image: 'CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd'
 };
 
-function testCreateServer (client) {
+function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
 
@@ -50,7 +50,7 @@ function testCreateServer (client) {
   return test;
 }
 
-function testSetWait (client) {
+function testSetWait(client) {
   var name   = 'azure',
     test   = {};
 
@@ -77,7 +77,7 @@ function testSetWait (client) {
   return test;
 }
 
-function testRebootServer (client) {
+function testRebootServer(client) {
   var name   = 'azure',
     test   = {};
 

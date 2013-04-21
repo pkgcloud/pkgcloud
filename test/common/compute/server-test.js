@@ -19,7 +19,7 @@ var testData    = {},
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
-function batchOne (providerClient, providerName) {
+function batchOne(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -61,7 +61,7 @@ function batchOne (providerClient, providerName) {
   return test;
 }
 
-function batchTwo (providerClient, providerName) {
+function batchTwo(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {},
@@ -97,7 +97,7 @@ function batchTwo (providerClient, providerName) {
   return test;
 }
 
-function batchThree (providerClient, providerName) {
+function batchThree(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -203,7 +203,7 @@ function batchReboot(providerClient, providerName, nock) {
   return test;
 }
 
-function batchDestroy (providerClient, providerName) {
+function batchDestroy(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};

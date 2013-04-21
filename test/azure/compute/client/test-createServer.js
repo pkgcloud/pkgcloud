@@ -36,7 +36,7 @@ var options = {
   }
 };
 
-function testCreateServer (client) {
+function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
 
@@ -63,7 +63,7 @@ function testCreateServer (client) {
   return test;
 }
 
-function testSetWait (client) {
+function testSetWait(client) {
   var name   = 'azure',
     test   = {};
 

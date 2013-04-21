@@ -17,7 +17,7 @@ var clients     = {},
     versions    = JSON.parse(helpers.loadFixture('versions.json')),
     azureOptions = require('../../fixtures/azure/azure-options.json');
 
-function batchOne (providerClient, providerName) {
+function batchOne(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -44,7 +44,7 @@ function batchOne (providerClient, providerName) {
   return test;
 }
 
-function batchTwo (providerClient, providerName) {
+function batchTwo(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {},
@@ -78,7 +78,7 @@ function batchTwo (providerClient, providerName) {
   return test;
 }
 
-function batchThree (providerClient, providerName, nock) {
+function batchThree(providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -103,7 +103,7 @@ function batchThree (providerClient, providerName, nock) {
   return test;
 }
 
-function batchFour (providerClient, providerName) {
+function batchFour(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {},
@@ -139,7 +139,7 @@ function batchFour (providerClient, providerName) {
   return test;
 }
 
-function batchFive (providerClient, providerName) {
+function batchFive(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
