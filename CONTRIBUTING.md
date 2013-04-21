@@ -20,7 +20,7 @@ The only issues we accept are bug reports or feature requests. Bugs must be isol
 
 ## Pull requests
  
-- Please follow the style guide being used in the pkgcloud code base.
+- Please follow the style guide being used in the pkgcloud code base (See: https://gist.github.com/indexzero/5368926)
 - If you are adding new methods please include documentation above the function definition.
 - If you are adding a new provider or new service please add the complete documentation to the `docs/` directory.
 - Please tag your commit depending what it does (`[misc]`, `[docs]`, `[database]`, `[compute]`)
@@ -41,7 +41,8 @@ The only issues we accept are bug reports or feature requests. Bugs must be isol
 - Never declare a function within a block.
 - Braces `{ }` must be used in all circumstances.
 - When it comes to Strings remember: Always use single quotes and Never use multi-line string literals.
-- Try to be "Elegant" 
+- Try to be "Elegant"
+- Everything here: https://gist.github.com/indexzero/5368926
 
 ## Adding tests to my pull requests
 
