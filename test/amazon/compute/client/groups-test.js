@@ -105,18 +105,18 @@ nock('https://' + client.serversUrl)
     .reply(200, helpers.loadFixture('amazon/list-group.xml'), {})
     .post('/?Action=AuthorizeSecurityGroupIngress', {
         GroupName: 'unit test',
-        'IpPermissions.1.FromPort': 0,
+        'IpPermissions.1.FromPort': '0',
         'IpPermissions.1.Groups.1.GroupName': 'unit test',
         'IpPermissions.1.IpProtocol': 'tcp',
-        'IpPermissions.1.ToPort': 65535
+        'IpPermissions.1.ToPort': '65535'
     })
     .reply(200, helpers.loadFixture('amazon/add-rules.xml'), {})
     .post('/?Action=RevokeSecurityGroupIngress', {
         GroupName: 'unit test',
-        'IpPermissions.1.FromPort': 0,
+        'IpPermissions.1.FromPort': '0',
         'IpPermissions.1.Groups.1.GroupName': 'unit test',
         'IpPermissions.1.IpProtocol': 'tcp',
-        'IpPermissions.1.ToPort': 65535
+        'IpPermissions.1.ToPort': '65535'
     })
     .reply(200, helpers.loadFixture('amazon/destroy-rules.xml'), {})
 
