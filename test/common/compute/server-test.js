@@ -19,7 +19,7 @@ var testData    = {},
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
-function batchOne (providerClient, providerName) {
+function batchOne(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -61,7 +61,7 @@ function batchOne (providerClient, providerName) {
   return test;
 }
 
-function batchTwo (providerClient, providerName) {
+function batchTwo(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {},
@@ -97,7 +97,7 @@ function batchTwo (providerClient, providerName) {
   return test;
 }
 
-function batchThree (providerClient, providerName) {
+function batchThree(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -125,8 +125,14 @@ function batchThree (providerClient, providerName) {
         assert.assertServerDetails(server);
         assert.ok(Array.isArray(server.addresses["public"]));
         assert.ok(Array.isArray(server.addresses["private"]));
-        assert.ok(typeof server.addresses["private"][0] === 'string');
-        assert.ok(typeof server.addresses["public"][0] === 'string');
+        if (name === 'openstack') {
+          assert.ok(typeof server.addresses["private"][0] === 'object');
+          assert.ok(typeof server.addresses["public"][0] === 'object');
+        }
+        else {
+          assert.ok(typeof server.addresses["private"][0] === 'string');
+          assert.ok(typeof server.addresses["public"][0] === 'string');
+        }
       }
     }
   };
@@ -197,7 +203,7 @@ function batchReboot(providerClient, providerName, nock) {
   return test;
 }
 
-function batchDestroy (providerClient, providerName) {
+function batchDestroy(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || clients['rackspace'],
       test   = {};
@@ -231,7 +237,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
-          .get('/' + client.account + '/machines?')
+          .get('/' + client.account + '/machines')
             .reply(200, "[]", {})
           .get('/' + client.account + '/datasets')
             .reply(200, helpers.loadFixture('joyent/images.json'), {})
@@ -437,7 +443,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-      } else if(provider === 'azure') {
+      } else if (provider === 'azure') {
         azureNock.serverTest(nock, helpers);
       } else if (provider === 'openstack') {
         nock(client.authUrl)
@@ -462,7 +468,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             .reply(200, helpers.loadFixture('openstack/serverList.json'))
           .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
             .reply(200, helpers.loadFixture('openstack/serverCreated2.json'))
-          .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
+          ["delete"]('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
             .reply(204, "");
       }
     }
@@ -487,13 +493,6 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     if (provider !== 'openstack') {
       suite
         .addBatch(batchReboot(client, provider, nock))
-      ;
-    }
-
-    // Delete the server created for reboot it
-    if (provider === 'openstack') {
-      suite
-        .addBatch(batchDestroy(client, provider))
       ;
     }
 

@@ -15,7 +15,7 @@ var testData    = {},
     testContext = {},
     clients     = {};
 
-function batchOne (providerClient, providerName) {
+function batchOne(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || rackspace,
       test   = {};
@@ -39,7 +39,7 @@ function batchOne (providerClient, providerName) {
   return test;
 }
 
-function batchTwo (providerClient, providerName) {
+function batchTwo(providerClient, providerName) {
   var name   = providerName   || 'rackspace',
       client = providerClient || rackspace,
       test   = {};

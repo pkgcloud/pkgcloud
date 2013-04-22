@@ -36,7 +36,7 @@ var options = {
   }
 };
 
-function testCreateServer (client) {
+function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
 
@@ -50,7 +50,7 @@ function testCreateServer (client) {
 
           testContext.server = server;
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(server.name, options.name);
             assert.equal(server.imageId, options.image);
             assert.assertServerDetails(server);
@@ -63,7 +63,7 @@ function testCreateServer (client) {
   return test;
 }
 
-function testSetWait (client) {
+function testSetWait(client) {
   var name   = 'azure',
     test   = {};
 
@@ -76,7 +76,7 @@ function testSetWait (client) {
         "should return a running server": function (err, server) {
           testContext.server = server;
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(server.name, options.name);
             assert.equal(server.status, 'RUNNING');
             assert.equal(server.imageId, options.image);

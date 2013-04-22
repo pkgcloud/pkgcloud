@@ -94,8 +94,8 @@ helpers.personalityPost = function persPost(pubkey) {
   });
 };
 
-helpers.selectInstance = function selectInstance (client, callback) {
-  function filterInstances (instances) {
+helpers.selectInstance = function selectInstance(client, callback) {
+  function filterInstances(instances) {
     var ready = instances.filter(function (instance) {
       return (instance.status == 'RUNNING');
     });

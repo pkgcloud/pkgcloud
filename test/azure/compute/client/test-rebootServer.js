@@ -19,7 +19,7 @@ var options = {
   image: 'CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd'
 };
 
-function testCreateServer (client) {
+function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
 
@@ -37,7 +37,7 @@ function testCreateServer (client) {
 
           testContext.server = server;
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(server.name, options.name);
             assert.equal(server.imageId, options.image);
             assert.assertServerDetails(server);
@@ -50,7 +50,7 @@ function testCreateServer (client) {
   return test;
 }
 
-function testSetWait (client) {
+function testSetWait(client) {
   var name   = 'azure',
     test   = {};
 
@@ -63,7 +63,7 @@ function testSetWait (client) {
         "should return a running server": function (err, server) {
           testContext.server = server;
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(server.name, options.name);
             assert.equal(server.status, 'RUNNING');
             assert.equal(server.imageId, options.image);
@@ -77,7 +77,7 @@ function testSetWait (client) {
   return test;
 }
 
-function testRebootServer (client) {
+function testRebootServer(client) {
   var name   = 'azure',
     test   = {};
 
@@ -90,7 +90,7 @@ function testRebootServer (client) {
         "should return a valid server": function (err, res) {
 
           assert.isNull(err);
-          if(err === null) {
+          if (err === null) {
             assert.equal(res.ok, options.name);
           }
         }

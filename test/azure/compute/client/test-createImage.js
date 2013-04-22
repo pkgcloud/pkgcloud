@@ -13,8 +13,8 @@ var options = {
   server: "pkgcloud1"
 };
 
-client.createImage(options, function(err, result) {
-  if(err) {
+client.createImage(options, function (err, result) {
+  if (err) {
     console.log(err);
   } else {
     console.dir(result);

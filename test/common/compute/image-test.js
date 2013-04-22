@@ -14,7 +14,7 @@ var fs          = require('fs'),
   testContext = {},
   clients     = {};
 
-function batchOne (providerClient, providerName, nock) {
+function batchOne(providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
     client = providerClient || rackspace,
     test   = {};
@@ -39,7 +39,7 @@ function batchOne (providerClient, providerName, nock) {
   return test;
 }
 
-function batchTwo (providerClient, providerName, nock) {
+function batchTwo(providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
     client = providerClient || rackspace,
     test   = {};
@@ -64,7 +64,7 @@ function batchTwo (providerClient, providerName, nock) {
   return test;
 }
 
-function batchThree (providerClient, providerName, nock) {
+function batchThree(providerClient, providerName, nock) {
   var name   = providerName   || 'rackspace',
     client = providerClient || rackspace,
     test   = {};
@@ -103,7 +103,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
     if (process.env.NOCK) {
       if (provider === 'joyent') {
         nock('https://' + client.serversUrl)
-          .get('/' + client.account + '/machines?')
+          .get('/' + client.account + '/machines')
           .reply(200, "[]", {})
           .get('/' + client.account + '/datasets')
           .reply(200, helpers.loadFixture('joyent/images.json'), {})

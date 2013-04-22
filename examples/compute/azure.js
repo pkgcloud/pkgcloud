@@ -49,15 +49,15 @@ options = {
 
 console.log("creating server...");
 
-client.createServer(options, function(err, server) {
-  if(err) {
+client.createServer(options, function (err, server) {
+  if (err) {
     console.log(err);
   } else {
     // Wait for the server to reach the RUNNING state.
     // This may take several minutes.
     console.log("waiting for server RUNNING state...");
     server.setWait({ status: 'RUNNING' }, 10000, function (err, server) {
-      if(err) {
+      if (err) {
         console.log(err);
       } else {
         console.dir(server);

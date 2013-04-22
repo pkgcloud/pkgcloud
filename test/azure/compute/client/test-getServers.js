@@ -7,8 +7,8 @@ var client = helpers.createClient('azure', 'compute');
 
 var options = {};
 
-client.getServers(function(err, result) {
-  if(err) {
+client.getServers(function (err, result) {
+  if (err) {
     console.log(err);
   } else {
     console.dir(result);

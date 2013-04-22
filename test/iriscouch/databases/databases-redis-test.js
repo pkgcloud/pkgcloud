@@ -85,7 +85,7 @@ vows.describe('pkgcloud/iriscouch/databases-redis').addBatch({
 //
 // Just a quick and lazy random password generator
 //
-function randomPassword (length) {
+function randomPassword(length) {
   if (length == 1) {
     return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48);
   }

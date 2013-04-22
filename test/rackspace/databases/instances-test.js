@@ -98,7 +98,7 @@ if (process.env.NOCK) {
       .reply(202);
 }
 
-function assertLinks (links) {
+function assertLinks(links) {
   assert.isArray(links);
   links.forEach(function (link) {
     assert.ok(link.href);

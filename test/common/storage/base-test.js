@@ -16,7 +16,7 @@ var clients     = {},
     testContext = {},
     versions    = JSON.parse(helpers.loadFixture('versions.json'));
 
-function batchOne (providerClient, providerName, nock) {
+function batchOne(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -38,7 +38,7 @@ function batchOne (providerClient, providerName, nock) {
   return test;
 }
 
-function batchTwo (providerClient, providerName, nock) {
+function batchTwo(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -63,7 +63,7 @@ function batchTwo (providerClient, providerName, nock) {
   return test;
 }
 
-function batchThree (providerClient, providerName, nock) {
+function batchThree(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -101,7 +101,7 @@ function batchThree (providerClient, providerName, nock) {
   return test;
 }
 
-function batchFour (providerClient, providerName, nock) {
+function batchFour(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -171,7 +171,7 @@ function batchFour (providerClient, providerName, nock) {
   return test;
 }
 
-function batchFive (providerClient, providerName, nock) {
+function batchFive(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -195,7 +195,7 @@ function batchFive (providerClient, providerName, nock) {
   return test;
 }
 
-function batchSix (providerClient, providerName, nock) {
+function batchSix(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -227,7 +227,7 @@ function batchSix (providerClient, providerName, nock) {
   return test;
 }
 
-function batchSeven (providerClient, providerName, nock) {
+function batchSeven(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -271,7 +271,7 @@ function batchSeven (providerClient, providerName, nock) {
   return test;
 }
 
-function batchEight (providerClient, providerName, nock) {
+function batchEight(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
@@ -294,7 +294,7 @@ function batchEight (providerClient, providerName, nock) {
   return test;
 }
 
-function batchNine (providerClient, providerName, nock) {
+function batchNine(providerClient, providerName, nock) {
   var test   = {};
 
   test["The pkgcloud " + providerName + " storage client"] = {
