@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DescribeKeyPairsResponse xmlns="http://ec2.amazonaws.com/doc/2012-04-01/">
+    <requestId>79917694-9c16-426f-b339-fda321750781</requestId>
+    <keySet>
+        <item>
+            <keyName>unittest</keyName>
+            <keyFingerprint>38:e2:54:d4:97:07:98:fd:3a:27:15:1a:e9:29:03:e1</keyFingerprint>
+        </item>
+    </keySet>
+</DescribeKeyPairsResponse>

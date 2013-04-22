@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ImportKeyPairResponse xmlns="http://ec2.amazonaws.com/doc/2012-04-01/">
+    <requestId>623724d3-0926-4aaf-807d-c301a19a7e7e</requestId>
+    <keyName>unittest</keyName>
+    <keyFingerprint>38:e2:54:d4:97:07:98:fd:3a:27:15:1a:e9:29:03:e1</keyFingerprint>
+</ImportKeyPairResponse>
