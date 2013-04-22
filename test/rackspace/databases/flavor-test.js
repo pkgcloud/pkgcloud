@@ -1,8 +1,8 @@
 /*
  * flavor-test.js: Test for pkgcloud Rackspace database flavor requests
- * 
+ *
  * (C) 2010 Nodejitsu Inc.
- * 
+ *
  */
 
 var vows = require('vows'),

@@ -20,7 +20,7 @@ if (process.env.NOCK) {
     .reply(200, "{\"versions\":[{\"id\":\"v1.0\",\"status\":\"BETA\"}]}", {})
   .get('/v1.0/537645/limits')
     .reply(200, "{\"limits\":{\"absolute\":{\"maxPrivateIPs\":0},\"rate\":[]}}", {});
-    
+
   nock('https://' + client.authUrl)
     .get('/v1.0')
       .reply(204, "", JSON.parse(helpers.loadFixture('rackspace/auth.json')))

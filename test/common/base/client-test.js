@@ -30,7 +30,7 @@ vows.describe('pkgcloud/core/base/client').addBatch({
         topic: function () {
           var self = this,
               cli = new Client();
-              
+
           cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           var stream = cli.request('/');
@@ -60,7 +60,7 @@ vows.describe('pkgcloud/core/base/client').addBatch({
         topic: function () {
           var self = this,
               cli = new Client();
-              
+
           cli.url = function () { return "badurl"; };
           cli.failCodes = {};
           var stream = cli.request('/');

@@ -25,13 +25,13 @@ if (process.env.NOCK) {
 
 vows.describe('pkgcloud/rackspace/storage/containers').addBatch(
   macros.shouldCreateContainer(
-    client, 
+    client,
     'test_container'
   )
 ).addBatch(
   macros.shouldCreateContainer(
-    client, 
-    'test_container', 
+    client,
+    'test_container',
     'when creating a container that already exists'
   )
 ).addBatch({
@@ -45,7 +45,7 @@ vows.describe('pkgcloud/rackspace/storage/containers').addBatch(
         assert.equal(containers.filter(function (container) {
           return /test_container/.test(container.name);
         }).length, 1);
-        
+
         containers.forEach(function (container) {
           assert.assertContainer(container);
         });

@@ -15,10 +15,10 @@ var fs = require('fs'),
     assert = require('../../helpers/assert'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers');
-    
+
 var keyBuffer = fs.readFileSync(__dirname + '/../../fixtures/testkey.pub'),
     client = helpers.createClient('rackspace', 'compute'),
-    testData = {}, 
+    testData = {},
     testServer;
 
 if (process.env.NOCK) {
@@ -52,7 +52,7 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
     topic: function () {
       var that = this,
           data = '';
-          
+
       testServer.setWait({ status: 'RUNNING' }, 5000, function () {
         var ssh  = spawn('ssh', [
           '-i',
@@ -63,18 +63,18 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
           'root@' + testServer.addresses["public"][0],
           'cat /root/.ssh/authorized_keys'
         ]);
-        
+
         function onError(err) {
           console.log(err);
         }
-        
+
         ssh.stderr.on('error', onError);
         ssh.stderr.on('data', function (chunk) {});
         ssh.stdout.on('error', onError);
         ssh.stdout.on('data', function (chunk) {
           data += chunk;
         });
-        
+
         ssh.on('error', onError);
         ssh.on('exit', function () {
           that.callback(null, data);
@@ -94,7 +94,7 @@ vows.describe('pkgcloud/rackspace/compute/personality').addBatch({
       });
     },
     "should respond with 202": function (err, res) {
-      assert.equal(res.statusCode, 202); 
+      assert.equal(res.statusCode, 202);
     }
-  } 
+  }
 })["export"](module);

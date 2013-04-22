@@ -38,7 +38,7 @@ vows.describe('pkgcloud/rackspace/storage/file').addBatch(
         local: path.join(fixturesDir, 'fillerama.txt')
       }),
       "with a ReadStream instance": macros.upload.stream(
-        client, 
+        client,
         'test_storage_objects',
         path.join(fixturesDir, 'fillerama.txt'),
         'file3.txt'
@@ -88,7 +88,7 @@ vows.describe('pkgcloud/rackspace/storage/file').addBatch(
           remote: 'file3.txt',
           local: path.join(__dirname, '..', '..', 'fixtures', 'test-download3.txt')
         }, function () { });
-        
+
         dstream.on('end', function () {
           //
           // TODO: Check fs.stat on the file we just saved.

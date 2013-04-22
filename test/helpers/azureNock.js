@@ -31,7 +31,7 @@ var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
 exports.serverTest = function (nock, testHelpers) {
 
   helpers = testHelpers;
-  
+
   // Images
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})

@@ -17,7 +17,7 @@ exports.shouldHaveCreds = function (client) {
     assert.include(client.config, 'apiKey');
 
     assert.isFunction(client.auth);
-  } 
+  }
 };
 
 exports.shouldAuthenticate = function (client) {
@@ -63,7 +63,7 @@ exports.shouldNotAuthenticate = function (service) {
 
 exports.shouldCreateContainer = function (client, name, message) {
   message = message || "when creating a container";
-  
+
   var context = {};
   context[message] = {
     topic: function () {
@@ -74,7 +74,7 @@ exports.shouldCreateContainer = function (client, name, message) {
       assert.assertContainer(container);
     }
   };
-  
+
   return {
     "The pkgcloud Rackspace storage client": {
       "the createContainer() method": context
@@ -118,8 +118,8 @@ exports.upload.stream = function (client, container, local, remote) {
         container: container,
         remote: remote,
         stream: fs.createReadStream(local),
-        headers: { 
-          'content-length': fs.statSync(local).size 
+        headers: {
+          'content-length': fs.statSync(local).size
         }
       }, function () { }).on('end', this.callback);
     },

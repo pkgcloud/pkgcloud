@@ -52,7 +52,7 @@ vows.describe('pkgcloud/rackspace/compute/images').addBatch({
     "the createImage() method": {
       "with a server id": {
         topic: function () {
-          client.createImage({ name: 'test-img-id', 
+          client.createImage({ name: 'test-img-id',
             server:  testContext.servers[0].id
           }, this.callback);
         },
