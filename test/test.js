@@ -43,7 +43,7 @@ if (!fs.existsSync(vowsCmd)) {
 };
 
 // add vows args. Needed to add --color to get typical vows output text colors
-vowsCmd += ' -i --spec --color ./test/*/*/*-test.js';
+vowsCmd += ' -i --spec --color ./test/*/*/*-test.js ./test/*/*/*/*-test.js';
 
 // run vows
 vows = exec(vowsCmd, options);

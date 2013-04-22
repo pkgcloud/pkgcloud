@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DescribeSecurityGroupsResponse xmlns="http://ec2.amazonaws.com/doc/2012-04-01/">
+    <requestId>50c3b54e-546f-42a6-9a15-ea4ffc8fa78c</requestId>
+    <securityGroupInfo>
+        <item>
+            <ownerId>622357407493</ownerId>
+            <groupId>sg-a6e01ccd</groupId>
+            <groupName>unit test</groupName>
+            <groupDescription>unit test</groupDescription>
+            <ipPermissions>
+                <item>
+                    <ipProtocol>tcp</ipProtocol>
+                    <fromPort>22</fromPort>
+                    <toPort>22</toPort>
+                    <groups/>
+                    <ipRanges>
+                        <item>
+                            <cidrIp>0.0.0.0/0</cidrIp>
+                        </item>
+                    </ipRanges>
+                </item>
+                <item>
+                    <ipProtocol>icmp</ipProtocol>
+                    <fromPort>-1</fromPort>
+                    <toPort>-1</toPort>
+                    <groups/>
+                    <ipRanges>
+                        <item>
+                            <cidrIp>0.0.0.0/0</cidrIp>
+                        </item>
+                    </ipRanges>
+                </item>
+            </ipPermissions>
+            <ipPermissionsEgress/>
+        </item>
+    </securityGroupInfo>
+</DescribeSecurityGroupsResponse>
