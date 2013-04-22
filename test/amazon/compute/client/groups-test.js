@@ -89,8 +89,8 @@ var nock = require('nock');
 nock('https://' + client.serversUrl)
     .filteringRequestBody(helpers.authFilter)
     .post('/?Action=CreateSecurityGroup', {
-        GroupName: 'unit test',
-        GroupDescription: 'unit test'
+        GroupDescription: 'unit test',
+        GroupName: 'unit test'
     })
     .reply(200, helpers.loadFixture('amazon/add-group.xml'), {})
     .post('/?Action=DeleteSecurityGroup', {
