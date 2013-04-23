@@ -18,12 +18,12 @@ vows.describe('pkgcloud/core/base/client').addBatch({
       "with a wrong request with a cb": {
         topic: function () {
           var cli = new Client();
-          cli.url = function () { return "badurl"; };
+          cli.getUrl = function () { return "badurl"; };
           cli.failCodes = {};
-          cli.request('/', this.callback, this.callback);
+          cli.request({ path: '/' }, this.callback);
         },
         "should return the error on the cb": function (err, response) {
-          assert.ok(err.message);
+          assert.assertError(err);
         }
       },
       "with a wrong request without a cb": {
@@ -31,9 +31,9 @@ vows.describe('pkgcloud/core/base/client').addBatch({
           var self = this,
               cli = new Client();
 
-          cli.url = function () { return "badurl"; };
+          cli.getUrl = function () { return "badurl"; };
           cli.failCodes = {};
-          var stream = cli.request('/');
+          var stream = cli.request({ path: '/' });
           stream.on('error', function () { return self.callback(null, true); });
           stream.on('end', function () { return self.callback(null, false); });
         },
@@ -46,7 +46,7 @@ vows.describe('pkgcloud/core/base/client').addBatch({
       "throwing an error with a cb": {
         topic: function () {
           var cli = new Client();
-          cli.url = function () { return "badurl"; };
+          cli.getUrl = function () { return "badurl"; };
           cli.failCodes = {};
           cli.before = [function () { throw new Error('Foo!'); }];
           cli.request('/', this.callback, this.callback);
@@ -61,9 +61,9 @@ vows.describe('pkgcloud/core/base/client').addBatch({
           var self = this,
               cli = new Client();
 
-          cli.url = function () { return "badurl"; };
+          cli.getUrl = function () { return "badurl"; };
           cli.failCodes = {};
-          var stream = cli.request('/');
+          var stream = cli.request({ path: '/' });
           stream.on('error', function () { return self.callback(null, true); });
           stream.on('end', function () { return self.callback(null, false); });
         },

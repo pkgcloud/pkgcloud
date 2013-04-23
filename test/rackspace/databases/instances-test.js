@@ -41,10 +41,10 @@ if (process.env.NOCK) {
     .get('/v1.0/537645/instances?limit=2')
       .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
     .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
@@ -62,7 +62,7 @@ if (process.env.NOCK) {
     .get('/v1.0/537645/flavors/1')
       .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
     .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', "{\"restart\":{}}")
@@ -71,10 +71,10 @@ if (process.env.NOCK) {
     .get('/v1.0/537645/flavors/2')
       .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
     .get('/v1.0/537645/flavors/2')
@@ -84,13 +84,13 @@ if (process.env.NOCK) {
       "{\"resize\":{\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2\"}}")
       .reply(202)
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
-    .get('/v1.0/537645/instances?')
+    .get('/v1.0/537645/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
 
     .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action',
