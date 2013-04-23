@@ -37,9 +37,9 @@ exports.serverTest = function (nock, testHelpers) {
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     .get('/azure-account-subscription-id/services/images')
     .reply(200, helpers.loadFixture('azure/images.xml'),{})
-    .get('//azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+    .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
     .reply(200,helpers.loadFixture('azure/image-1.xml'),{})
-    .get('//azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
+    .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd')
     .reply(200,helpers.loadFixture('azure/image-1.xml'),{});
 
   // Servers

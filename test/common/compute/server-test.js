@@ -273,17 +273,21 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         .get('/' + client.account +
             '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
           .reply(200,
-            helpers.loadFixture('joyent/14186c17.json'), {})
-        .get('/' + client.account +
+          helpers.loadFixture('joyent/14186c17.json'), {})
+          .get('/' + client.account +
             '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
           .reply(200,
-            helpers.loadFixture('joyent/14186c17.json'), {})
-        ["delete"]('/' + client.account +
-         '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
+          helpers.loadFixture('joyent/14186c17.json'), {})
+          ["delete"]('/' + client.account +
+            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
           .reply(204, "", {})
-        .post('/' + client.account +
+          .post('/' + client.account +
           '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9', { action: 'stop' })
           .reply(202, "", {})
+          .get('/' + client.account +
+            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
+          .reply(200,
+          helpers.loadFixture('joyent/14186c17.json'), {})
         ;
       }
       else if (provider === 'rackspace') {
@@ -332,7 +336,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
         nock('https://' + client.serversUrl)
           .filteringRequestBody(helpers.authFilter)
           .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
-            .reply(200, helpers.loadFixture('amazon/images.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/images.xml'), {})
           .post('/?Action=RunInstances', {
             'ImageId': 'ami-85db1cec',
             'InstanceType': 'm1.small',
@@ -340,15 +344,15 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'MinCount': '1',
             'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3QtaWRzMiJ9'
           })
-            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
           .post('/?Action=DescribeInstances', {})
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr2.xml', {}))
+          .reply(200,
+            helpers.loadFixture('amazon/running-server-attr2.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -358,17 +362,17 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+            helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=TerminateInstances', {
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200, 'doesn\'t matter', {})
+          .reply(200, 'doesn\'t matter', {})
           .post('/?Action=RunInstances', {
             'ImageId': 'ami-85db1cec',
             'InstanceType': 'm1.small',
@@ -376,7 +380,7 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'MinCount': '1',
             'UserData': 'eyJuYW1lIjoidGVzdC1yZWJvb3QifQ=='
           })
-            .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -386,13 +390,13 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+            helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -402,17 +406,17 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+            helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=RebootInstances', {
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/reboot-server.xml', {}))
+          .reply(200, helpers.loadFixture('amazon/reboot-server.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -422,13 +426,13 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
-            .reply(200,
-                   helpers.loadFixture('amazon/running-server-attr.xml', {}))
+          .reply(200,
+            helpers.loadFixture('amazon/running-server-attr.xml', {}))
           .post('/?Action=DescribeInstances', {
             'Filter.1.Name': 'instance-state-code',
             'Filter.1.Value.1': '0',
@@ -438,21 +442,22 @@ JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
             'Filter.1.Value.5': '80',
             'InstanceId.1': 'i-1d48637b'
           })
-            .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
+          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
           .post('/?Action=DescribeInstanceAttribute', {
             'Attribute': 'userData',
             'InstanceId': 'i-1d48637b'
           })
+          .reply(200, helpers.loadFixture('amazon/running-server-attr.xml'), {})
       } else if (provider === 'azure') {
         azureNock.serverTest(nock, helpers);
       } else if (provider === 'openstack') {
         nock(client.authUrl)
           .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"}}}")
-            .reply(200, helpers.loadFixture('openstack/initialToken.json'))
+          .reply(200, helpers.loadFixture('openstack/initialToken.json'))
           .get('/v2.0/tenants')
-            .reply(200, helpers.loadFixture('openstack/tenantId.json'))
+          .reply(200, helpers.loadFixture('openstack/tenantId.json'))
           .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"},\"tenantId\":\"72e90ecb69c44d0296072ea39e537041\"}}")
-            .reply(200, helpers.loadFixture('openstack/realToken.json'));
+          .reply(200, helpers.loadFixture('openstack/realToken.json'));
 
         nock('http://compute.myownendpoint.org:8774')
           .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
