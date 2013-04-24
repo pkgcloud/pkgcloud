@@ -34,14 +34,14 @@
     "mime":          "1.2.x",
     "morestreams":   "0.1.x",
     "pkginfo":       "0.2.x",
-    "request":       "2.x.x",
+    "request":       "2.20.x",
     "underscore":    "1.4.x",
     "url-join":      "0.0.x",
     "utile":         "0.x.x"
   },
   "devDependencies": {
     "vows": "0.7.x",
-    "nock": "0.13.x"
+    "nock": "0.17.x"
   },
   "main":    "./lib/pkgcloud",
   "scripts": { "test": "node ./test/test.js"},
