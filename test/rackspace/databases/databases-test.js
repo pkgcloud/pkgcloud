@@ -260,7 +260,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
-          .reply(202)
+          .reply(202);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -273,13 +273,13 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     });
 
     it('the destroyDatabase() method with last db should respond correctly', function (done) {
-      
+
       if (mock) {
         nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
-          .reply(202)
+          .reply(202);
       }
 
       helpers.selectInstance(client, function (instance) {
