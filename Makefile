@@ -1,5 +1,5 @@
 MOCHA_OPTS=-t 120000 test/*/*/*-test.js test/*/*/*/*-test.js
-REPORTER = spec
+REPORTER = list
 
 check: test
 
