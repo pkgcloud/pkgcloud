@@ -25,14 +25,15 @@ describe('pkgcloud/rackspace/database/authentication', function() {
     });
 
     it('the getVersion() method should return the proper version', function(done) {
-
       if (mock) {
         nock('https://' + client.serversUrl)
           .get('/')
-          .reply(203, {versions:[{id: 'v1.0', status: 'BETA' }]}, {});
+          .reply(203, {versions: [
+            {id: 'v1.0', status: 'BETA' }
+          ]}, {});
       }
 
-      client.getVersion(function(err, versions) {
+      client.getVersion(function (err, versions) {
         should.not.exist(err);
         should.exist(versions);
         versions.should.be.instanceOf(Array);
@@ -42,7 +43,6 @@ describe('pkgcloud/rackspace/database/authentication', function() {
     });
 
     describe('the auth() method with a valid username and api key', function() {
-
       var client = helpers.createClient('rackspace', 'database'),
           err, res;
 
