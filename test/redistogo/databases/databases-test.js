@@ -1,112 +1,103 @@
-///*
-// * databases-test.js: Tests for Redistogo databases service
-// *
-// * (C) 2012 Nodejitsu Inc.
-// * MIT LICENSE
-// *
-// */
-//
-//var vows    = require('vows'),
-//    helpers = require('../../helpers'),
-//    assert  = require('../../helpers/assert'),
-//    nock    = require('nock');
-//
-//var client = helpers.createClient('redistogo', 'database'),
-//    testContext = {};
-//
-//if (process.env.NOCK) {
-//  nock('https://redistogo.com')
-//    .post('/instances.json', "instance%5Bplan%5D=nano")
-//      .reply(201, helpers.loadFixture('redistogo/database.json'))
-//
-//    .get('/instances/253739.json')
-//      .reply(200, helpers.loadFixture('redistogo/database.json'))
-//
-//    .delete('/instances/253739.json')
-//      .reply(200);
-//}
-//
-//vows.describe('pkgcloud/redistogo/databases').addBatch({
-//  "The pkgcloud Redistogo client": {
-//    "the create() method": {
-//      "with correct options": {
-//        topic: function () {
-//          client.create({
-//            plan: 'nano',
-//          }, this.callback);
-//        },
-//        "should respond correctly": function (err, database) {
-//          assert.isNull(err);
-//          assert.ok(database.id);
-//          assert.ok(database.uri);
-//          assert.ok(database.username);
-//          assert.ok(database.password);
-//          testContext.databaseId = database.id;
-//        }
-//      },
-//      "with invalid options like": {
-//        "no options": {
-//          topic: function () {
-//            client.create(this.callback);
-//          },
-//          "should respond with errors": assert.assertError
-//        },
-//        // "invalid options": {
-//        //   topic: function () {
-//        //     client.create({ invalid:'keys' }, this.callback);
-//        //   },
-//        //   "should respond with errors": assert.assertError
-//        // },
-//        // "no plan": {
-//        //   topic: function () {
-//        //     client.create({ name:'testDatabase' }, this.callback);
-//        //   },
-//        //   "should respond with errors": assert.assertError
-//        // }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Redistogo client": {
-//    "the get() method": {
-//      "with correct options": {
-//        topic: function () {
-//          client.get(testContext.databaseId, this.callback);
-//        },
-//        "should respond correctly": function (err, database) {
-//          assert.isNull(err);
-//          assert.ok(database.id);
-//          assert.ok(database.uri);
-//          assert.ok(database.username);
-//          assert.ok(database.password);
-//        }
-//      },
-//      "without options": {
-//        topic: function () {
-//          client.get(this.callback);
-//        },
-//        "should respond with errors": assert.assertError
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Redistogo client": {
-//    "the remove() method": {
-//      "with correct options": {
-//        topic: function () {
-//          client.remove(testContext.databaseId, this.callback);
-//        },
-//        "should respond correctly": function (err, confirm) {
-//          assert.isNull(err);
-//          assert.equal(confirm, 'deleted');
-//        }
-//      },
-//      "without options": {
-//        topic: function () {
-//          client.create(this.callback);
-//        },
-//        "should respond with errors": assert.assertError
-//      }
-//    }
-//  }
-//}).export(module);
+/*
+* databases-test.js: Tests for Redistogo databases service
+*
+* (C) 2012 Nodejitsu Inc.
+* MIT LICENSE
+*
+*/
+
+var should  = require('should'),
+    helpers = require('../../helpers'),
+    nock    = require('nock'),
+    mock    = !!process.env.NOCK;
+
+describe('pkgcloud/redistogo/databases', function () {
+  var testContext = {},
+      client = helpers.createClient('redistogo', 'database');
+
+  describe('The pkgcloud RedisToGo Database client', function () {
+    describe('the create method()', function() {
+      it('with correct options should respond correctly', function(done) {
+
+        if (mock) {
+          nock('https://redistogo.com')
+            .post('/instances.json', "instance%5Bplan%5D=nano")
+            .reply(201, helpers.loadFixture('redistogo/database.json'))
+        }
+
+        client.create({ plan: 'nano' }, function(err, database) {
+          should.not.exist(err);
+          should.exist(database);
+          should.exist(database.id);
+          should.exist(database.uri);
+          should.exist(database.username);
+          should.exist(database.password);
+          testContext.databaseId = database.id;
+          done();
+        });
+      });
+
+      it('with no options should respond with errors', function (done) {
+        client.create(function (err, database) {
+          should.exist(err);
+          should.not.exist(database);
+          done();
+        });
+      });
+    });
+
+    describe('the get() method', function() {
+      it('with correct options should respond correctly', function(done) {
+        if (mock) {
+          nock('https://redistogo.com')
+            .get('/instances/253739.json')
+            .reply(200, helpers.loadFixture('redistogo/database.json'))
+        }
+
+        client.get(testContext.databaseId, function (err, database) {
+          should.not.exist(err);
+          should.exist(database);
+          should.exist(database.id);
+          should.exist(database.uri);
+          should.exist(database.username);
+          should.exist(database.password);
+          done();
+        });
+      });
+
+      it('with options should respond with an error', function(done) {
+        client.get(function(err, database) {
+          should.exist(err);
+          should.not.exist(database);
+          done();
+        });
+      });
+    });
+
+    describe('the remove() method', function () {
+      it('with correct options should respond correctly', function (done) {
+        if (mock) {
+          nock('https://redistogo.com')
+            .delete('/instances/253739.json')
+            .reply(200);
+        }
+
+        client.remove(testContext.databaseId, function (err, confirm) {
+          should.not.exist(err);
+          should.exist(confirm);
+          confirm.should.equal('deleted');
+          done();
+        });
+      });
+
+      it('with options should respond with an error', function (done) {
+        client.remove(function (err, confirm) {
+          should.exist(err);
+          should.not.exist(confirm);
+          done();
+        });
+      });
+    });
+  });
+});
+
