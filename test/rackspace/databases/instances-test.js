@@ -13,7 +13,7 @@ var should = require('should'),
     Instance = require('../../../lib/pkgcloud/rackspace/database/instance').Instance,
     mock = !!process.env.NOCK;
 
-describe('pkgcloud/rackspace/databases/errors', function () {
+describe('pkgcloud/rackspace/databases/instances', function () {
   var testContext = {},
       client = helpers.createClient('rackspace', 'database');
 
