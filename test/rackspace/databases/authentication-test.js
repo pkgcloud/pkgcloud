@@ -54,7 +54,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         };
 
         nock('https://' + client.authUrl)
-          .post('/v1.1/auth', { "credentials": credentials })
+          .post('/v1.1/auth', { credentials: credentials })
           .reply(200, helpers.loadFixture('rackspace/token.json'))
 
         client.auth(function (e, r) {

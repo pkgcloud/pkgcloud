@@ -6,6 +6,8 @@
 // *
 // */
 //
+// TODO Enable all rackspace storage client tests with mocks
+
 //var path = require('path'),
 //    vows = require('vows'),
 //    fs = require('fs'),

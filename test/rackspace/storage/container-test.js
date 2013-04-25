@@ -1,27 +1,31 @@
-///*
-// * container-test.js: Tests for Rackspace Cloudfiles containers
-// *
-// * (C) 2010 Nodejitsu Inc.
-// * MIT LICENSE
-// *
-// */
+/*
+* container-test.js: Tests for Rackspace Cloudfiles containers
+*
+* (C) 2010 Nodejitsu Inc.
+* MIT LICENSE
+*
+*/
+
+// TODO Enable all rackspace storage client tests with mocks
+//
 //
 //var path = require('path'),
 //    fs = require('fs'),
-//    vows = require('vows'),
+//    should = require('should'),
 //    pkgcloud = require('../../../lib/pkgcloud'),
 //    macros = require('../macros'),
-//    assert = require('../../helpers/assert'),
-//    helpers = require('../../helpers');
+//    helpers = require('../../helpers'),
+//    nock = require('nock'),
+//    mock = !!process.env.NOCK;
+//
+//if (mock) {
+//  return;
+//}
 //
 //var testData = {},
 //    client = helpers.createClient('rackspace', 'storage'),
 //    fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
 //    sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8');
-//
-//if (process.env.NOCK) {
-//  return;
-//}
 //
 //vows.describe('pkgcloud/rackspace/storage/containers').addBatch(
 //  macros.shouldCreateContainer(
