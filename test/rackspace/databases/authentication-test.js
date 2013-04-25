@@ -13,7 +13,7 @@ var should = require('should'),
     mock = process.env.NOCK;
 
 describe('pkgcloud/rackspace/database/authentication', function() {
-  var client, testContext = {};
+  var client, testContext = {}, n;
 
   before(function() {
     client = helpers.createClient('rackspace', 'database');
@@ -26,7 +26,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
     it('the getVersion() method should return the proper version', function(done) {
       if (mock) {
-        nock('https://' + client.serversUrl)
+        n = nock('https://' + client.serversUrl)
           .get('/')
           .reply(203, {versions: [
             {id: 'v1.0', status: 'BETA' }
@@ -38,28 +38,33 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         should.exist(versions);
         versions.should.be.instanceOf(Array);
         versions.should.have.length(1);
+        n.done();
         done();
       });
     });
 
     describe('the auth() method with a valid username and api key', function() {
+
       var client = helpers.createClient('rackspace', 'database'),
           err, res;
 
       beforeEach(function(done) {
 
-        var credentials = {
-          username: client.config.username,
-          key: client.config.apiKey
-        };
+        if (mock) {
+          var credentials = {
+            username: client.config.username,
+            key: client.config.apiKey
+          };
 
-        nock('https://' + client.authUrl)
-          .post('/v1.1/auth', { credentials: credentials })
-          .reply(200, helpers.loadFixture('rackspace/token.json'))
+          nock('https://' + client.authUrl)
+            .post('/v1.1/auth', { credentials: credentials })
+            .reply(200, helpers.loadFixture('rackspace/token.json'));
+        }
 
         client.auth(function (e, r) {
           err = e;
           res = r;
+          n.done();
           done();
         });
 
@@ -100,20 +105,23 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
       beforeEach(function (done) {
 
-        nock('https://' + client.authUrl)
-          .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
-          .reply(401, {
-            unauthorized: {
-              message: 'Username or api key is invalid', code: 401
-            }
-          });
+        if (mock) {
+          n = nock('https://' + client.authUrl)
+            .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
+            .reply(401, {
+              unauthorized: {
+                message: 'Username or api key is invalid', code: 401
+              }
+            });
+        }
+
 
         badClient.auth(function (e, r) {
           err = e;
           res = r;
+          n.done();
           done();
         });
-
       });
 
       it('should respond with Error code 401', function () {

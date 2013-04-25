@@ -12,28 +12,30 @@ var should = require('should'),
     mock = !!process.env.NOCK;
 
 describe('pkgcloud/rackspace/storage/authentication', function () {
-
-  var client = helpers.createClient('rackspace', 'storage');
-
   describe('The pkgcloud Rackspace Storage client', function () {
     it('should have core methods defined', function() {
+      var client = helpers.createClient('rackspace', 'storage');
       macros.shouldHaveCreds(client);
     });
 
     describe('the auth() method', function() {
       describe('with a valid user name and api key', function() {
-        var client = helpers.createClient('rackspace', 'storage'),
-            err, res;
+        var client, err, res, n;
 
         beforeEach(function (done) {
-          nock('https://' + client.authUrl)
-            .get('/v1.0')
-            .reply(204, '',
-              helpers.loadFixture('rackspace/auth.json', 'json'))
+          client = helpers.createClient('rackspace', 'storage');
+
+          if (mock) {
+            n = nock('https://' + client.authUrl)
+              .get('/v1.0')
+              .reply(204, '',
+                helpers.loadFixture('rackspace/auth.json', 'json'));
+          }
 
           client.auth(function (e, r) {
             err = e;
             res = r;
+            n.done();
             done();
           });
         });
@@ -56,16 +58,20 @@ describe('pkgcloud/rackspace/storage/authentication', function () {
 
       describe('with an invalid user name and api key shouldn\'t authenticate', function (done) {
         var client = helpers.createClient('rackspace', 'storage'),
-            err, res;
+            err, res, n;
 
         beforeEach(function (done) {
-          nock('https://' + client.authUrl)
-            .get('/v1.0')
-            .reply(401)
+
+          if (mock) {
+            n = nock('https://' + client.authUrl)
+              .get('/v1.0')
+              .reply(401)
+          }
 
           client.auth(function (e, r) {
             err = e;
             res = r;
+            n.done();
             done();
           });
         });

@@ -12,7 +12,8 @@ var should = require('should'),
     mock = !!process.env.NOCK;
 
 describe('pkgcloud/rackspace/compute/authentication', function () {
-  var client = helpers.createClient('rackspace', 'compute');
+  var client = helpers.createClient('rackspace', 'compute'),
+      n;
 
   describe('The pkgcloud Rackspace Compute client', function () {
     it('should have core methods defined', function() {
@@ -21,7 +22,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
     it('the getVersion() method should return the proper version', function (done) {
       if (mock) {
-        nock('https://' + client.serversUrl)
+        n = nock('https://' + client.serversUrl)
           .get('/')
           .reply(200, { versions: [{ id: 'v1.0', status: 'BETA' }]}, {})
       }
@@ -29,7 +30,8 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       client.getVersion(function (err, version) {
         should.not.exist(err);
         should.exist(version);
-        version.should.equal('v1.0')
+        version.should.equal('v1.0');
+        n.done();
         done();
       });
     });
@@ -42,21 +44,23 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       beforeEach(function (done) {
 
-        var credentials = {
-          username: client.config.username,
-          key: client.config.apiKey
-        };
+        if (mock) {
+          var credentials = {
+            username: client.config.username,
+            key: client.config.apiKey
+          };
 
-        nock('https://' + client.authUrl)
-          .get('/v1.0')
-          .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+          n = nock('https://' + client.authUrl)
+            .get('/v1.0')
+            .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+        }
 
         client.auth(function (e, r) {
           err = e;
           res = r;
+          n.done();
           done();
         });
-
       });
 
       it('should respond with 200 and appropriate info', function () {
@@ -76,7 +80,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       it('the getLimits() method should return the proper limits', function (done) {
         if (mock) {
-          nock('https://' + client.serversUrl)
+          n = nock('https://' + client.serversUrl)
             .get('/v1.0/537645/limits')
             .reply(200, { limits: { absolute: { maxPrivateIPs: 0 }, rate: [] } }, {});
         }
@@ -87,6 +91,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
           should.exist(limits.absolute);
           should.exist(limits.rate);
           limits.rate.should.be.instanceOf(Array);
+          n.done();
           done();
         });
       });
@@ -103,17 +108,20 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       beforeEach(function (done) {
 
-        nock('https://' + client.authUrl)
-          .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
-          .reply(401, {
-            unauthorized: {
-              message: 'Username or api key is invalid', code: 401
-            }
-          });
+        if (mock) {
+          n = nock('https://' + client.authUrl)
+            .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
+            .reply(401, {
+              unauthorized: {
+                message: 'Username or api key is invalid', code: 401
+              }
+            });
+        }
 
         badClient.auth(function (e, r) {
           err = e;
           res = r;
+          n.done();
           done();
         });
 

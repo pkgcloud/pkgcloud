@@ -15,17 +15,19 @@ var fs = require('fs'),
 
 describe('pkgcloud/rackspace/compute/images', function () {
   var client = helpers.createClient('rackspace', 'compute'),
-      testContext = {};
+      testContext = {}, n;
 
   describe('The pkgcloud Rackspace Compute client', function () {
     before(function(done) {
 
+      var a, b;
+
       if (mock) {
-        nock('https://' + client.authUrl)
+        a = nock('https://' + client.authUrl)
           .get('/v1.0')
           .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
 
-        nock('https://' + client.serversUrl)
+        b = nock('https://' + client.serversUrl)
           .get('/v1.0/537645/servers/detail.json')
           .reply(204, helpers.loadFixture('rackspace/servers.json'), {});
       }
@@ -35,13 +37,15 @@ describe('pkgcloud/rackspace/compute/images', function () {
         should.exist(servers);
         servers.should.be.instanceOf(Array);
         testContext.servers = servers;
+        a.done();
+        b.done();
         done();
       });
     });
 
     it('the createImage() method with a serverId should create a new image', function(done) {
       if (mock) {
-        nock('https://' + client.serversUrl)
+        n = nock('https://' + client.serversUrl)
           .post('/v1.0/537645/images', { image: { name: 'test-img-id', serverId: 20578901 } })
           .reply(202, helpers.loadFixture('rackspace/queued_image.json'), {});
       }
@@ -52,6 +56,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
         should.not.exist(err);
         should.exist(image);
         testContext.image = image;
+        n.done();
         done();
       });
     });
@@ -59,13 +64,14 @@ describe('pkgcloud/rackspace/compute/images', function () {
     after(function(done) {
 
       if (mock) {
-        nock('https://' + client.serversUrl)
+        n = nock('https://' + client.serversUrl)
           .delete('/v1.0/537645/images/18753753')
           .reply(204, '', {});
       }
 
       client.destroyImage(testContext.image, function(err) {
         should.not.exist(err);
+        n.done();
         done();
       });
     });

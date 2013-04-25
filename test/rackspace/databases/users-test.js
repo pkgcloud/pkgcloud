@@ -14,10 +14,12 @@ var should = require('should'),
 
 describe('pkgcloud/rackspace/databases/users', function () {
   var testContext = {},
-    client = helpers.createClient('rackspace', 'database');
+    client = helpers.createClient('rackspace', 'database'), n;
 
   describe('The pkgcloud Rackspace Database client', function () {
     it('the createUser() method should respond correctly', function (done) {
+
+      var a, b;
 
       if (mock) {
         var credentials = {
@@ -25,11 +27,11 @@ describe('pkgcloud/rackspace/databases/users', function () {
           key: client.config.apiKey
         };
 
-        nock('https://' + client.authUrl)
+        a = nock('https://' + client.authUrl)
           .post('/v1.1/auth', { credentials: credentials })
           .reply(200, helpers.loadFixture('rackspace/token.json'));
 
-        nock('https://ord.databases.api.rackspacecloud.com')
+        b = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -54,6 +56,8 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
+          a.done();
+          b.done();
           done();
         });
       });
@@ -63,7 +67,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('create an other user for test pagination should response correctly', function (done) {
 
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -104,6 +108,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             should.not.exist(err);
             should.exist(response);
             response.statusCode.should.equal(202);
+            n.done();
             done();
           });
         });
@@ -113,7 +118,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('create multiple users in one request should response correctly', function (done) {
 
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -151,27 +156,18 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
+          n.done();
           done();
         });
       });
     });
 
-    it('create users with questionable characters should responsd with error', function (done) {
+    it('create users with questionable characters should respond with error', function (done) {
 
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
-            users: [
-              {
-                name: '@joeTestSix',
-                password: 'joepasswd',
-                databases: []
-              }
-            ]
-          })
-          .reply(202);
+          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -183,6 +179,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
         }, function (err, response) {
           should.exist(err);
           should.not.exist(response);
+          n.done();
           done();
         });
       });
@@ -191,7 +188,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('the getUsers() method should get the list of users', function (done) {
 
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
@@ -206,6 +203,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           list.forEach(function (user) {
             user.should.be.instanceOf(User);
           });
+          n.done();
           done();
         });
       });
@@ -218,7 +216,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       before(function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
@@ -230,6 +228,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             err = e;
             list = l;
             offset = o;
+            n.done();
             done();
           });
         });
@@ -249,7 +248,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('with offset should respond less quantity', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest')
@@ -268,6 +267,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             list.should.be.instanceOf(Array);
             list.should.have.length(2);
             should.not.exist(offset);
+            n.done();
             done();
           });
         });
@@ -276,7 +276,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('with limit and offset should responsd with just result with more next points', function(done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1&marker=joeTest')
@@ -293,6 +293,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             list.should.be.instanceOf(Array);
             list.should.have.length(1);
             should.exist(offset);
+            n.done();
             done();
           });
         });
@@ -303,7 +304,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('should respond correctly', function(done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
@@ -315,6 +316,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             should.not.exist(err);
             should.exist(response);
             response.statusCode.should.equal(202);
+            n.done();
             done();
           });
         });
@@ -323,7 +325,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('should destroy the user used for pagination', function(done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
@@ -335,6 +337,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             should.not.exist(err);
             should.exist(response);
             response.statusCode.should.equal(202);
+            n.done();
             done();
           });
         });
@@ -344,7 +347,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('the enableRoot() method should respond correctly', function(done) {
 
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
@@ -366,6 +369,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           response.body.user.should.be.a('object');
           should.exist(response.body.user.password);
           response.body.user.name.should.equal('root');
+          n.done();
           done();
         });
       });
@@ -374,7 +378,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('the enableRoot() method should respond correctly', function (done) {
 
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
@@ -387,6 +391,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.exist(root);
           should.exist(response);
           response.statusCode.should.equal(200);
+          n.done();
           done();
         });
       });

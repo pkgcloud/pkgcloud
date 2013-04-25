@@ -15,12 +15,12 @@ var should = require('should'),
 
 describe('pkgcloud/rackspace/databases/instances', function () {
   var testContext = {},
-      client = helpers.createClient('rackspace', 'database');
+      client = helpers.createClient('rackspace', 'database'), n;
 
   describe('The pkgcloud Rackspace Database client', function () {
     describe('the create() method', function() {
 
-      var err, instance;
+      var err, instance, a, b;
 
       before(function(done) {
         
@@ -30,11 +30,11 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             key: client.config.apiKey
           };
 
-          nock('https://' + client.authUrl)
+          a = nock('https://' + client.authUrl)
             .post('/v1.1/auth', { credentials: credentials })
             .reply(200, helpers.loadFixture('rackspace/token.json'));
 
-          nock('https://ord.databases.api.rackspacecloud.com')
+          b = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
 
@@ -62,6 +62,8 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           }, function(e, i) {
             err = e;
             instance = i;
+            a.done();
+            b.done();
             done();
           });
         });
@@ -89,7 +91,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         before(function(done) {
 
           if (mock) {
-            nock('https://ord.databases.api.rackspacecloud.com')
+            n = nock('https://ord.databases.api.rackspacecloud.com')
               .get('/v1.0/537645/instances')
               .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           }
@@ -98,6 +100,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             err = e;
             instances = i;
             offset = o;
+            n.done();
             done();
           });
         });
@@ -152,7 +155,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         before(function (done) {
 
           if (mock) {
-            nock('https://ord.databases.api.rackspacecloud.com')
+            n = nock('https://ord.databases.api.rackspacecloud.com')
               .get('/v1.0/537645/instances?limit=2')
               .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
           }
@@ -161,6 +164,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             err = e;
             instances = i;
             offset = o;
+            n.done();
             done();
           });
         });
@@ -183,7 +187,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('should respond correctly', function(done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
@@ -196,6 +200,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             should.not.exist(err);
             should.exist(result);
             result.statusCode.should.equal(202);
+            n.done();
             done();
           });
         });
@@ -206,7 +211,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('should response with details', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
             .reply(200, helpers.loadFixture('rackspace/databaseInstance.json'))
         }
@@ -216,6 +221,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           should.exist(instance);
           instance.should.be.instanceOf(Instance);
           instance.id.should.equal(testContext.Instance.id);
+          n.done();
           done();
         });
       });
@@ -225,7 +231,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with offset should respond less quantity', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
             .reply(200, helpers.loadFixture('rackspace/databaseInstanceOffset.json'))
         }
@@ -236,6 +242,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           instances.should.be.instanceOf(Array);
           should.ok(instances.length >= 2
             && instances.length < testContext.instancesQuantity);
+          n.done();
           done();
         });
 
@@ -244,7 +251,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with limit and offset should respond just one result with more next points', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
             .reply(200, helpers.loadFixture('rackspace/databaseInstanceLimitOffset.json'))
         }
@@ -255,6 +262,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           instances.should.be.instanceOf(Array);
           should.exist(offset);
           instances.should.have.length(1);
+          n.done();
           done();
         });
       });
@@ -271,7 +279,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without flavor parameter should get errors', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
@@ -279,6 +287,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.setFlavor(instance, function (err) {
             should.exist(err);
+            n.done();
             done();
           });
         });
@@ -287,7 +296,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without instance parameter should get errors', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/flavors/2')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
         }
@@ -298,6 +307,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           client.setFlavor(flavor, function(err) {
             should.exist(err);
+            n.done();
             done();
           });
         });
@@ -306,7 +316,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with correct inputs should respond correctly', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/537645/flavors/2')
@@ -326,6 +336,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             should.exist(flavor);
             client.setFlavor(instance, flavor, function (err) {
               should.not.exist(err);
+              n.done();
               done();
             });
           });
@@ -344,7 +355,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without size parameter should get errors', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
@@ -352,6 +363,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.setVolumeSize(instance, function (err) {
             should.exist(err);
+            n.done();
             done();
           });
         });
@@ -360,7 +372,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without invalid size parameter should get errors', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
@@ -368,6 +380,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.setVolumeSize(instance, 12, function (err) {
             should.exist(err);
+            n.done();
             done();
           });
         });
@@ -376,7 +389,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with correct inputs should respond correctly', function (done) {
 
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
@@ -394,6 +407,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           client.setVolumeSize(instance, newSize, function (err) {
             should.not.exist(err);
+            n.done();
             done();
           });
         });
@@ -417,7 +431,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
       it('with invalid size should respond with errors', function (done) {
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
         }
@@ -429,6 +443,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             size: '1'
           }, function(err) {
             should.exist(err);
+            n.done();
             done();
           });
         });
@@ -445,7 +460,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
       it('with valid instance should restart', function (done) {
         if (mock) {
-          nock('https://ord.databases.api.rackspacecloud.com')
+          n = nock('https://ord.databases.api.rackspacecloud.com')
             .get('/v1.0/537645/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
@@ -455,6 +470,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.restartInstance(instance, function (err) {
             should.not.exist(err);
+            n.done();
             done();
           });
         });

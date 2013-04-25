@@ -13,9 +13,11 @@ var should = require('should'),
 
 describe('pkgcloud/rackspace/databases/errors', function () {
   var testContext = {},
-      client = helpers.createClient('rackspace', 'database');
+      client = helpers.createClient('rackspace', 'database'), n;
 
   describe('The pkgcloud Rackspace Database client', function () {
+
+    var a;
 
     function getFlavors(auth, callback) {
       if (mock) {
@@ -25,12 +27,12 @@ describe('pkgcloud/rackspace/databases/errors', function () {
         };
 
         if (auth) {
-          nock('https://' + client.authUrl)
+          a = nock('https://' + client.authUrl)
             .post('/v1.1/auth', { credentials: credentials })
             .reply(200, helpers.loadFixture('rackspace/token.json'));
         }
 
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/flavors')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'))
       }
@@ -47,6 +49,8 @@ describe('pkgcloud/rackspace/databases/errors', function () {
           flavor.should.be.instanceOf(Flavor);
         });
 
+        a.done();
+        n.done();
         testContext.flavors = flavors;
         done();
       });
@@ -61,13 +65,14 @@ describe('pkgcloud/rackspace/databases/errors', function () {
           flavor.ram.should.be.a('number');
           flavor.href.should.be.a('string');
         });
+        n.done();
         done();
       });
     });
 
     it('the getFlavor() method should return a valid flavor', function(done) {
       if (mock) {
-        nock('https://ord.databases.api.rackspacecloud.com')
+        n = nock('https://ord.databases.api.rackspacecloud.com')
           .get('/v1.0/537645/flavors/3')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
       }
@@ -77,6 +82,7 @@ describe('pkgcloud/rackspace/databases/errors', function () {
         should.exist(flavor);
         flavor.should.be.instanceOf(Flavor);
         flavor.id.should.equal(testContext.flavors[2].id);
+        n.done();
         done();
       });
     });

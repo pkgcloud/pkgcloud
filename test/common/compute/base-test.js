@@ -1,83 +1,155 @@
-///*
-// * flavor-test.js: Test that should be common to all providers.
-// *
-// * (C) 2012 Nodejitsu Inc.
-// *
-// */
-//
-//var fs = require('fs'),
-//    path = require('path'),
-//    vows = require('vows'),
-//    utile = require('utile'),
-//    assert = require('../../helpers/assert'),
-//    helpers = require('../../helpers');
-//
-//var clients     = {},
-//    testContext = {},
-//    versions    = JSON.parse(helpers.loadFixture('versions.json')),
-//    azureOptions = require('../../fixtures/azure/azure-options.json');
-//
-//function batchOne(providerClient, providerName) {
-//  var name   = providerName   || 'rackspace',
-//      client = providerClient || clients['rackspace'],
-//      test   = {};
-//
-//  test["The pkgcloud " + name + " compute client"] = {
-//    "the getVersion() method": {
-//      "with no arguments": {
-//        topic: function () {
-//          client.getVersion(this.callback);
-//        },
-//        "should return the version": function (err, version) {
-//          assert.ok(typeof version === 'string');
-//          if (version !== versions[name]) {
-//            console.error(
-//              '!! API Version for ' + name + ' is ' + version + '.'+
-//              ' we were expecting it to be ' + versions[name]
-//            );
-//          }
-//        }
-//      }
-//    }
-//  };
-//
-//  return test;
-//}
-//
-//function batchTwo(providerClient, providerName) {
-//  var name   = providerName   || 'rackspace',
-//      client = providerClient || clients['rackspace'],
-//      test   = {},
-//      m      = process.env.NOCK ? 1 : 100;
-//
-//  test["The pkgcloud " + name + " compute client"] = {
-//    "the setWait() method": {
-//      "on flavors waiting for flavor with name crazyflavah": {
-//        topic: function () {
-//          var self = this;
-//          client.getFlavors(function (err, flavors) {
-//            if (err) { return self.callback(err); }
-//            testContext.flavors = flavors;
-//
-//            var flavor = flavors[0];
-//            var now    = Date.now();
-//
-//            flavor.until({ name: 'crazyFlavah' }, 50*m, 50*m, function () {
-//              self.callback(null, Date.now() - now);
-//            });
-//          });
-//        },
-//        "should timeout": function (err, duration) {
-//          assert.ok(duration);
-//          assert.ok(duration > 50);
-//        }
-//      }
-//    }
-//  };
-//
-//  return test;
-//}
-//
+/*
+* base-test.js: Test that should be common to all providers.
+*
+* (C) 2012 Nodejitsu Inc.
+*
+*/
+
+var fs = require('fs'),
+    path = require('path'),
+    should = require('should'),
+    utile = require('utile'),
+    helpers = require('../../helpers'),
+    nock = require('nock'),
+    async = require('async'),
+    providers = require('../../configs/providers.json'),
+    versions = require('../../fixtures/versions.json'),
+    mock = !!process.env.NOCK;
+
+var clients     = {},
+    testContext = {},
+    azureOptions = require('../../fixtures/azure/azure-options.json');
+
+providers.forEach(function(provider) {
+  describe('pkgcloud/common/compute/base [' + provider + ']', function (foo) {
+    var client = helpers.createClient(provider, 'compute'), mocks;
+
+    it('the getVersion() method with no arguments should return the version', function (done) {
+      if (mock) {
+        mocks = setupVersionMock(client, provider);
+      }
+
+      client.getVersion(function (err, version) {
+        should.not.exist(err);
+        should.exist(version);
+        version.should.equal(versions[provider]);
+
+        mocks && mocks.forEach(function(m) {
+          m.done();
+        });
+        done();
+      });
+    });
+
+    it('the setWait() method on a flavor should timeout', function (done) {
+      var m = process.env.NOCK ? 1 : 100;
+
+      if (mock) {
+        mocks = setupFlavorMock(client, provider);
+      }
+
+      client.getFlavors(function (err, flavors) {
+        should.not.exist(err);
+        should.exist(flavors);
+
+        testContext.flavors = flavors;
+
+        var flavor = flavors[0];
+        var now    = Date.now();
+
+        flavor.until({ name: 'crazyFlavah' }, 50*m, 50*m, function () {
+          var duration = Date.now() - now;
+          duration.should.be.above(50);
+          mocks.forEach(function (m) {
+            m.done();
+          });
+          done();
+        });
+      });
+    });
+  });
+});
+
+function setupVersionMock(client, provider) {
+  var a, b;
+
+  if (provider === 'rackspace') {
+    a = nock('https://' + client.serversUrl)
+      .get('/')
+      .reply(200,
+      { versions: [{ id: 'v1.0', status: 'BETA'}]});
+  }
+  else if (provider === 'openstack') {
+    a = nock(client.authUrl)
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          }
+        }
+      })
+      .reply(200, helpers.loadFixture('openstack/initialToken.json'))
+      .get('/v2.0/tenants')
+      .reply(200, helpers.loadFixture('openstack/tenantId.json'))
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          },
+          tenantId: '72e90ecb69c44d0296072ea39e537041'
+        }
+      })
+      .reply(200, helpers.loadFixture('openstack/realToken.json'));
+
+    b = nock('http://compute.myownendpoint.org:8774')
+      .get('/v2/')
+      .reply(200, helpers.loadFixture('openstack/versions.json'));
+  }
+  else if (provider === 'joyent') {
+    a = nock('https://' + client.serversUrl)
+      .get('/' + client.account + '/datacenters')
+      .reply(200, '', { 'x-api-version': '6.5.0' });
+  }
+
+  return a ? (b ? [a,b] : [a]) : [];
+}
+
+function setupFlavorMock(client, provider) {
+
+  var a, b
+
+  if (provider === 'rackspace') {
+    a = nock('https://' + client.authUrl)
+      .get('/v1.0')
+      .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+
+    b = nock('https://' + client.serversUrl)
+      .get('/v1.0/537645/flavors/detail.json')
+      .reply(200, helpers.loadFixture('rackspace/serverFlavors.json'), {})
+      .get('/v1.0/537645/flavors/1')
+      .reply(200, helpers.loadFixture('rackspace/flavor.json'), {});
+  }
+  else if (provider === 'openstack') {
+    a = nock('http://compute.myownendpoint.org:8774')
+      .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail')
+      .reply(200, helpers.loadFixture('openstack/flavors.json'))
+      .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/1')
+      .reply(200, helpers.loadFixture('openstack/flavor1.json'));
+  }
+  else if (provider === 'joyent') {
+    a = nock('https://' + client.serversUrl)
+      .get('/' + client.account + '/packages')
+      .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
+      .get('/' + client.account + '/packages/Small%201GB')
+      .reply(200, helpers.loadFixture('joyent/flavor.json'), {});
+  }
+
+  return a ? (b ? [a, b] : [a]) : [];
+}
+
+
 //function batchThree(providerClient, providerName, nock) {
 //  var name   = providerName   || 'rackspace',
 //      client = providerClient || clients['rackspace'],
