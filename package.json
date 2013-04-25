@@ -41,9 +41,10 @@
   },
   "devDependencies": {
     "vows": "0.7.x",
-    "nock": "0.17.x"
+    "nock": "0.17.x",
+    "mocha": "*"
   },
   "main":    "./lib/pkgcloud",
-  "scripts": { "test": "node ./test/test.js"},
+  "scripts": { "test": "make test"},
   "engines": { "node": "0.8.x" }
 }
