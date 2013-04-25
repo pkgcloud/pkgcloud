@@ -6,8 +6,7 @@
  *
  */
 
-var vows = require('vows'),
-    assert = require('../../helpers/assert'),
+var should = require('should'),
     nock = require('nock'),
     helpers = require('../../helpers'),
     mock = !!process.env.NOCK;
@@ -49,8 +48,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.createDatabase({name: 'TestDatabase', instance: instance}, function(err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 202);
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
           done();
         });
       });
@@ -73,8 +73,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.createDatabase({name: 'TestDatabaseTwo', instance: instance}, function(err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 202);
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
           done();
         });
       });
@@ -97,8 +98,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.create({name: 'TestDatabaseThree', instance: instance}, function (err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 202);
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
           done();
         });
       });
@@ -106,18 +108,18 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
     it('the createDatabase() method with no name should get an error for name', function(done) {
       client.createDatabase({}, function(err, response) {
-        assert.isObject(err);
-        assert.isString(err.message);
-        assert.isUndefined(response);
+        should.exist(err);
+        should.not.exist(response);
+        err.message.should.equal('options. Name is a required argument');
         done();
       });
     });
 
     it('the createDatabase() method with no instance should get an error for instance', function (done) {
       client.createDatabase({ name: 'NotCreated' }, function (err, response) {
-        assert.isObject(err);
-        assert.isString(err.message);
-        assert.isUndefined(response);
+        should.exist(err);
+        should.not.exist(response);
+        err.message.should.equal('options. Instance is a required argument');
         done();
       });
     });
@@ -134,9 +136,10 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.getDatabases({ instance: instance }, function(err, list) {
-          assert.isNull(err);
-          assert.isArray(list);
-          assert.ok(list.length > 0);
+          should.not.exist(err);
+          should.exist(list);
+          list.should.be.an.instanceOf(Array);
+          list.should.have.length(2);
           done();
         });
       });
@@ -157,9 +160,11 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.getDatabases({ instance: instance }, function (err, list) {
-          assert.ok(list[0]);
-          assert.ok(list[0].name);
-          assert.isString(list[0].name);
+          should.not.exist(err);
+          should.exist(list);
+          should.exist(list[0])
+          list[0].name.should.equal('TestDatabase');
+          list[0].name.should.be.a('string');
           done();
         });
       });
@@ -179,9 +184,10 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.getDatabases({ instance: instance, limit: 1 }, function (err, instances) {
-          assert.isNull(err);
-          assert.isArray(instances);
-          assert.equal(instances.length, 1);
+          should.not.exist(err);
+          should.exist(instances);
+          instances.should.be.an.instanceOf(Array);
+          instances.should.have.length(1);
           done();
         });
       });
@@ -199,9 +205,10 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.getDatabases({ instance: instance, limit: 1 }, function (err, instances, offset) {
-          assert.isNull(err);
-          assert.isNotNull(offset);
-          assert.ok(offset);
+          should.not.exist(err);
+          should.exist(instances);
+          should.exist(offset);
+          offset.should.equal('TestDatabase');
           testContext.marker = offset;
           done();
         });
@@ -221,10 +228,10 @@ describe('pkgcloud/rackspace/databases/databases', function() {
       helpers.selectInstance(client, function (instance) {
         client.getDatabases({ instance: instance, offset: testContext.marker },
           function(err, instances, offset) {
-            assert.isNull(err);
-            assert.isArray(instances);
-            assert.equal(instances.length, 1);
-            assert.isNull(offset);
+            should.not.exist(err);
+            should.exist(instances);
+            instances.should.have.length(1);
+            should.not.exist(offset);
             done();
         });
       });
@@ -244,10 +251,11 @@ describe('pkgcloud/rackspace/databases/databases', function() {
       helpers.selectInstance(client, function (instance) {
         client.getDatabases({ instance: instance, limit: 1, offset: testContext.marker },
           function (err, instances, offset) {
-            assert.isNull(err);
-            assert.isArray(instances);
-            assert.equal(instances.length, 1);
-            assert.isNull(offset);
+            should.not.exist(err);
+            should.exist(instances);
+            instances.should.be.instanceOf(Array);
+            instances.should.have.length(1);
+            should.not.exist(offset);
             done();
           });
       });
@@ -265,8 +273,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.destroyDatabase('TestDatabase', instance, function(err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 202);
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
           done();
         });
       });
@@ -284,8 +293,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       helpers.selectInstance(client, function (instance) {
         client.destroyDatabase('TestDatabaseTwo', instance, function (err, response) {
-          assert.isNull(err);
-          assert.equal(response.statusCode, 202);
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
           done();
         });
       });
