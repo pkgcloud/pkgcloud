@@ -1,5 +1,5 @@
 /*
- * rackspace-base-test.js: Test that should be common to all providers.
+ * joyent-base-test.js: Test that should be common to all providers.
  *
  * (C) 2013 Nodejitsu Inc.
  *
@@ -9,26 +9,27 @@ var fs = require('fs'),
   path = require('path'),
   should = require('should'),
   utile = require('utile'),
+  helpers = require('../../helpers'),
   nock = require('nock'),
-  helpers = require('../../../helpers'),
   async = require('async'),
   _ = require('underscore'),
-  providers = require('../../../configs/providers.json'),
-  versions = require('../../../fixtures/versions.json'),
-  Flavor = require('../../../../lib/pkgcloud/core/compute/flavor').Flavor,
-  Image = require('../../../../lib/pkgcloud/core/compute/image').Image,
-  Server = require('../../../../lib/pkgcloud/core/compute/server').Server,
-  baseTests = require('../base-definitions'),
+  providers = require('../../configs/providers.json'),
+  versions = require('../../fixtures/versions.json'),
+  Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
+  Image = require('../../../lib/pkgcloud/core/compute/image').Image,
+  Server = require('../../../lib/pkgcloud/core/compute/server').Server,
+  baseTests = require('./base-definitions'),
+  serverTests = require('./server-definitions'),
   mock = !!process.env.NOCK;
 
-var provider = 'rackspace';
+var provider = 'joyent';
 
 if (_.indexOf(providers, provider) === -1) {
   console.log('Provider ' + provider + ' is disabled, skipping');
   return;
 }
 
-describe('pkgcloud/common/compute/base [' + provider + ']', function () {
+describe('pkgcloud/common/compute [' + provider + ']', function () {
 
   var testContext = {},
       client = helpers.createClient(provider, 'compute');
@@ -38,4 +39,10 @@ describe('pkgcloud/common/compute/base [' + provider + ']', function () {
   it(baseTests.getImages.description, baseTests.getImages.test(provider, client, testContext));
   it(baseTests.createServer.description, baseTests.createServer.test(provider, client, testContext));
   it(baseTests.destroyServer.description, baseTests.destroyServer.test(provider, client, testContext));
+
+  testContext = {};
+
+  it(serverTests.getImages.description, serverTests.getImages.test(provider, client, testContext));
+  it(serverTests.getFlavors.description, serverTests.getFlavors.test(provider, client, testContext));
+  it(serverTests.createServer.description, serverTests.createServer.test(provider, client, testContext));
 });

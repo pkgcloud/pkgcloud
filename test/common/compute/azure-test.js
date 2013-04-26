@@ -9,16 +9,17 @@ var fs = require('fs'),
   path = require('path'),
   should = require('should'),
   utile = require('utile'),
-  helpers = require('../../../helpers'),
+  helpers = require('../../helpers'),
   nock = require('nock'),
   async = require('async'),
   _ = require('underscore'),
-  providers = require('../../../configs/providers.json'),
-  versions = require('../../../fixtures/versions.json'),
-  Flavor = require('../../../../lib/pkgcloud/core/compute/flavor').Flavor,
-  Image = require('../../../../lib/pkgcloud/core/compute/image').Image,
-  Server = require('../../../../lib/pkgcloud/core/compute/server').Server,
-  baseTests = require('../base-definitions'),
+  providers = require('../../configs/providers.json'),
+  versions = require('../../fixtures/versions.json'),
+  Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
+  Image = require('../../../lib/pkgcloud/core/compute/image').Image,
+  Server = require('../../../lib/pkgcloud/core/compute/server').Server,
+  baseTests = require('./base-definitions'),
+  serverTests = require('./server-definitions'),
   mock = !!process.env.NOCK;
 
 var provider = 'azure';
@@ -28,10 +29,10 @@ if (_.indexOf(providers, provider) === -1) {
   return;
 }
 
-describe('pkgcloud/common/compute/base [' + provider + ']', function () {
+describe('pkgcloud/common/compute [' + provider + ']', function () {
 
   var testContext = {},
-    client = helpers.createClient(provider, 'compute');
+      client = helpers.createClient(provider, 'compute');
 
   it(baseTests.getVersion.description, baseTests.getVersion.test(provider, client, testContext));
   it(baseTests.getFlavors.description, baseTests.getFlavors.test(provider, client, testContext));
@@ -39,4 +40,9 @@ describe('pkgcloud/common/compute/base [' + provider + ']', function () {
   it(baseTests.createServer.description, baseTests.createServer.test(provider, client, testContext));
   it(baseTests.destroyServer.description, baseTests.destroyServer.test(provider, client, testContext));
 
+  testContext = {};
+
+  it(serverTests.getImages.description, serverTests.getImages.test(provider, client, testContext));
+  it(serverTests.getFlavors.description, serverTests.getFlavors.test(provider, client, testContext));
+//  it(serverTests.createServer.description, serverTests.createServer.test(provider, client, testContext));
 });

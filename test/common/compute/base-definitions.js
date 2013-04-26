@@ -1,7 +1,7 @@
 /*
- * base-test.js: Test that should be common to all providers.
+ * base-definitions.js: Test that should be common to all providers.
  *
- * (C) 2012 Nodejitsu Inc.
+ * (C) 2013 Nodejitsu Inc.
  *
  */
 

@@ -19,47 +19,6 @@
 //
 //var azureOptions = require('../../fixtures/azure/azure-options.json');
 //
-//function batchOne(providerClient, providerName) {
-//  var name   = providerName   || 'rackspace',
-//      client = providerClient || clients['rackspace'],
-//      test   = {};
-//
-//  test["The pkgcloud " + name + " compute client"] = {
-//    "the getImages() method": {
-//      "with details": {
-//        topic: function () {
-//          client.getImages(this.callback);
-//        },
-//        "should return the list of images": function (err, images) {
-//          assert.isNull(err);
-//          testContext.images = images;
-//          images.forEach(function (image) {
-//            assert.assertImageDetails(image);
-//          });
-//        }
-//      }
-//    },
-//    "the getFlavors() method": {
-//      "with details": {
-//        topic: function () {
-//          var that = this;
-//          setTimeout(function () {
-//            client.getFlavors(that.callback);
-//          }, 1000);
-//        },
-//        "should return the list of flavors": function (err, flavors) {
-//          assert.isNull(err);
-//          testContext.flavors = flavors;
-//          flavors.forEach(function (flavor) {
-//            assert.assertFlavor(flavor);
-//          });
-//        }
-//      }
-//    }
-//  };
-//
-//  return test;
-//}
 //
 //function batchTwo(providerClient, providerName) {
 //  var name   = providerName   || 'rackspace',
@@ -243,9 +202,8 @@
 //            .reply(200, helpers.loadFixture('joyent/images.json'), {})
 //          .get('/' + client.account + '/packages')
 //            .reply(200, helpers.loadFixture('joyent/flavors.json'), {})
-//        .post('/' + client.account + '/machines',
-//          helpers.loadFixture('joyent/createServer.json'))
-//        .reply(201, helpers.loadFixture('joyent/createdServer.json'), {})
+
+
 //        ["delete"]('/' + client.account +
 //         '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
 //          .reply(204, "", {})
@@ -266,10 +224,7 @@
 //            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
 //          .reply(200,
 //            helpers.loadFixture('joyent/fe4d8e28.json'), {})
-//        .get('/' + client.account +
-//            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-//          .reply(200,
-//            helpers.loadFixture('joyent/createdServer.json'), {})
+//
 //        .get('/' + client.account +
 //            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
 //          .reply(200,
@@ -302,12 +257,8 @@
 //            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
 //          .get('/v1.0/537645/images/detail.json')
 //            .reply(200, helpers.loadFixture('rackspace/images.json'), {})
-//          .post('/v1.0/537645/servers',
-//              helpers.loadFixture('rackspace/createServer.json'))
-//            .reply(202,  helpers.loadFixture('rackspace/createdServer.json'),
-//              {})
-//          .get('/v1.0/537645/servers/20592449')
-//              .reply(200, helpers.loadFixture('rackspace/20592449.json'), {})
+//
+
 //          .post('/v1.0/537645/servers',
 //              helpers.loadFixture('rackspace/createServer.json'))
 //            .reply(202,  helpers.loadFixture('rackspace/createdServer.json'),
@@ -335,40 +286,8 @@
 //      } else if (provider === 'amazon') {
 //        nock('https://' + client.serversUrl)
 //          .filteringRequestBody(helpers.authFilter)
-//          .post('/?Action=DescribeImages', { 'Owner.0': 'self' })
-//          .reply(200, helpers.loadFixture('amazon/images.xml'), {})
-//          .post('/?Action=RunInstances', {
-//            'ImageId': 'ami-85db1cec',
-//            'InstanceType': 'm1.small',
-//            'MaxCount': '1',
-//            'MinCount': '1',
-//            'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3QtaWRzMiJ9'
-//          })
-//          .reply(200, helpers.loadFixture('amazon/run-instances.xml'), {})
-//          .post('/?Action=DescribeInstances', {})
-//          .reply(200, helpers.loadFixture('amazon/pending-server.xml'), {})
-//          .post('/?Action=DescribeInstanceAttribute', {
-//            'Attribute': 'userData',
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200,
-//            helpers.loadFixture('amazon/running-server-attr2.xml', {}))
-//          .post('/?Action=DescribeInstances', {
-//            'Filter.1.Name': 'instance-state-code',
-//            'Filter.1.Value.1': '0',
-//            'Filter.1.Value.2': '16',
-//            'Filter.1.Value.3': '32',
-//            'Filter.1.Value.4': '64',
-//            'Filter.1.Value.5': '80',
-//            'InstanceId.1': 'i-1d48637b'
-//          })
-//          .reply(200, helpers.loadFixture('amazon/running-server.xml'), {})
-//          .post('/?Action=DescribeInstanceAttribute', {
-//            'Attribute': 'userData',
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200,
-//            helpers.loadFixture('amazon/running-server-attr.xml', {}))
+
+//
 //          .post('/?Action=TerminateInstances', {
 //            'InstanceId': 'i-1d48637b'
 //          })
@@ -452,23 +371,11 @@
 //        azureNock.serverTest(nock, helpers);
 //      } else if (provider === 'openstack') {
 //        nock(client.authUrl)
-//          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"}}}")
-//          .reply(200, helpers.loadFixture('openstack/initialToken.json'))
-//          .get('/v2.0/tenants')
-//          .reply(200, helpers.loadFixture('openstack/tenantId.json'))
-//          .post('/v2.0/tokens', "{\"auth\":{\"passwordCredentials\":{\"username\":\"MOCK-USERNAME\",\"password\":\"MOCK-PASSWORD\"},\"tenantId\":\"72e90ecb69c44d0296072ea39e537041\"}}")
-//          .reply(200, helpers.loadFixture('openstack/realToken.json'));
+
 //
 //        nock('http://compute.myownendpoint.org:8774')
-//          .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
-//            .reply(200, helpers.loadFixture('openstack/images.json'))
-//          .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail')
-//            .reply(200, helpers.loadFixture('openstack/flavors.json'))
-//          .post('/v2/72e90ecb69c44d0296072ea39e537041/servers',
-//            "{\"server\":{\"name\":\"create-test-ids2\",\"flavorRef\":1,\"imageRef\":\"506d077e-66bf-44ff-907a-588c5c79fa66\",\"personality\":[],\"key_name\":null}}")
-//            .reply(202, helpers.loadFixture('openstack/creatingServer.json'))
-//          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
-//            .reply(200, helpers.loadFixture('openstack/serverCreated2.json'))
+
+//
 //          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
 //            .reply(200, helpers.loadFixture('openstack/serverList.json'))
 //          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
