@@ -43,7 +43,8 @@
     "vows": "0.7.x",
     "nock": "0.17.x",
     "mocha": "1.9.x",
-    "should": "1.2.x"
+    "should": "1.2.x",
+    "hock" : "0.0.x"
   },
   "main":    "./lib/pkgcloud",
   "scripts": { "test": "make test"},

@@ -9,20 +9,34 @@
 var should  = require('should'),
     helpers = require('../../helpers'),
     nock    = require('nock'),
+    hock    = require('hock'),
     mock    = !!process.env.NOCK;
 
 describe('pkgcloud/redistogo/databases', function () {
-  var testContext = {}, n,
-      client = helpers.createClient('redistogo', 'database');
+  var testContext = {},
+      client = helpers.createClient('redistogo', 'database'),
+      server = null;
+
+  before(function(done) {
+    if (!mock) {
+      return done();
+    }
+
+    hock.createHock(12345, function(err, hockClient) {
+      server = hockClient;
+      done();
+    });
+
+  });
 
   describe('The pkgcloud RedisToGo Database client', function () {
     describe('the create method()', function() {
       it('with correct options should respond correctly', function(done) {
 
         if (mock) {
-          n = nock('https://redistogo.com')
+          server
             .post('/instances.json', "instance%5Bplan%5D=nano")
-            .reply(201, helpers.loadFixture('redistogo/database.json'))
+            .replyWithFile(201, __dirname + '/../../fixtures/redistogo/database.json');
         }
 
         client.create({ plan: 'nano' }, function(err, database) {
@@ -33,7 +47,7 @@ describe('pkgcloud/redistogo/databases', function () {
           should.exist(database.username);
           should.exist(database.password);
           testContext.databaseId = database.id;
-          n.done();
+          server && server.done();
           done();
         });
       });
@@ -50,9 +64,9 @@ describe('pkgcloud/redistogo/databases', function () {
     describe('the get() method', function() {
       it('with correct options should respond correctly', function(done) {
         if (mock) {
-          n = nock('https://redistogo.com')
+          server
             .get('/instances/253739.json')
-            .reply(200, helpers.loadFixture('redistogo/database.json'))
+            .replyWithFile(200, __dirname + '/../../fixtures/redistogo/database.json');
         }
 
         client.get(testContext.databaseId, function (err, database) {
@@ -62,7 +76,7 @@ describe('pkgcloud/redistogo/databases', function () {
           should.exist(database.uri);
           should.exist(database.username);
           should.exist(database.password);
-          n.done();
+          server && server.done();
           done();
         });
       });
@@ -79,7 +93,7 @@ describe('pkgcloud/redistogo/databases', function () {
     describe('the remove() method', function () {
       it('with correct options should respond correctly', function (done) {
         if (mock) {
-          n = nock('https://redistogo.com')
+          server
             .delete('/instances/253739.json')
             .reply(200);
         }
@@ -88,7 +102,7 @@ describe('pkgcloud/redistogo/databases', function () {
           should.not.exist(err);
           should.exist(confirm);
           confirm.should.equal('deleted');
-          n.done();
+          server && server.done();
           done();
         });
       });
@@ -102,5 +116,16 @@ describe('pkgcloud/redistogo/databases', function () {
       });
     });
   });
+
+  after(function(done) {
+    if (server) {
+      server.close(function() {
+        done();
+      });
+    }
+    else {
+      done();
+    }
+  })
 });
 

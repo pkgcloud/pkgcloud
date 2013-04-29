@@ -1,4 +1,6 @@
 {
   "keyId": "MOCK-KEYID",
-  "key": "MOCK-KEY"
+  "key": "MOCK-KEY",
+  "serversUrl": "localhost:12345",
+  "protocol": "http://"
 }

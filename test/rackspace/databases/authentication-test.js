@@ -8,15 +8,42 @@
 
 var should = require('should'),
     macros = require('../macros'),
-    nock = require('nock'),
+    async = require('async'),
+    hock = require('hock'),
     helpers = require('../../helpers'),
     mock = process.env.NOCK;
 
 describe('pkgcloud/rackspace/database/authentication', function() {
-  var client, testContext = {}, n;
+  var client, testContext = {}, authServer, server;
 
-  before(function() {
+  before(function(done) {
     client = helpers.createClient('rackspace', 'database');
+
+    if (!mock) {
+      return done();
+    }
+
+    async.parallel([
+      function(next) {
+        hock.createHock(12346, function (err, hockClient) {
+          should.not.exist(err);
+          should.exist(hockClient);
+
+          authServer = hockClient;
+          next();
+        });
+      },
+      function(next) {
+        hock.createHock(12345, function (err, hockClient) {
+          should.not.exist(err);
+          should.exist(hockClient);
+
+          server = hockClient;
+          next();
+        });
+      }
+    ], done)
+
   });
 
   describe('The pkgcloud Rackspace Database client', function() {
@@ -26,11 +53,11 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
     it('the getVersion() method should return the proper version', function(done) {
       if (mock) {
-        n = nock('https://' + client.serversUrl)
+        server
           .get('/')
           .reply(203, {versions: [
-            {id: 'v1.0', status: 'BETA' }
-          ]}, {});
+            { id: 'v1.0', status: 'BETA' }
+          ]});
       }
 
       client.getVersion(function (err, versions) {
@@ -38,7 +65,8 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         should.exist(versions);
         versions.should.be.instanceOf(Array);
         versions.should.have.length(1);
-        n.done();
+
+        server && server.done();
         done();
       });
     });
@@ -56,15 +84,15 @@ describe('pkgcloud/rackspace/database/authentication', function() {
             key: client.config.apiKey
           };
 
-          nock('https://' + client.authUrl)
+          authServer
             .post('/v1.1/auth', { credentials: credentials })
-            .reply(200, helpers.loadFixture('rackspace/token.json'));
+            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/token.json');
         }
 
         client.auth(function (e, r) {
           err = e;
           res = r;
-          n.done();
+          authServer && authServer.done();
           done();
         });
 
@@ -98,7 +126,9 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
       var badClient = helpers.createClient('rackspace', 'database', {
         username: 'fake',
-        apiKey: 'data'
+        apiKey: 'data',
+        protocol: 'http://',
+        authUrl: 'localhost:12346'
       });
 
       var err, res;
@@ -106,7 +136,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       beforeEach(function (done) {
 
         if (mock) {
-          n = nock('https://' + client.authUrl)
+          authServer
             .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
             .reply(401, {
               unauthorized: {
@@ -115,11 +145,10 @@ describe('pkgcloud/rackspace/database/authentication', function() {
             });
         }
 
-
         badClient.auth(function (e, r) {
           err = e;
           res = r;
-          n.done();
+          authServer && authServer.done();
           done();
         });
       });
@@ -131,5 +160,20 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         err.unauthorized.code.should.equal(401);
       });
     });
+  });
+
+  after(function (done) {
+    if (!mock) {
+      return done();
+    }
+
+    async.parallel([
+      function (next) {
+        authServer.close(next);
+      },
+      function (next) {
+        server.close(next);
+      }
+    ], done)
   });
 });

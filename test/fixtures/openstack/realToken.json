@@ -41,7 +41,7 @@
             "adminURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
             "region": "Calxeda-AUS1",
             "internalURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
-            "publicURL": "http://compute.myownendpoint.org:8774/v2/72e90ecb69c44d0296072ea39e537041"
+            "publicURL": "http://localhost:12345/v2/72e90ecb69c44d0296072ea39e537041"
           }
         ], 
         "endpoints_links": [], 

@@ -6,41 +6,70 @@
 */
 
 var should = require('should'),
-    nock = require('nock'),
+    async = require('async'),
+    hock = require('hock'),
     macros = require('../macros'),
     helpers = require('../../helpers'),
     mock = !!process.env.NOCK;
 
 describe('pkgcloud/rackspace/compute/authentication', function () {
-  var client = helpers.createClient('rackspace', 'compute'),
-      n;
+  var client, authServer, server;
 
   describe('The pkgcloud Rackspace Compute client', function () {
+
+    before(function (done) {
+      client = helpers.createClient('rackspace', 'compute');
+
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          hock.createHock(12346, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            authServer = hockClient;
+            next();
+          });
+        },
+        function (next) {
+          hock.createHock(12345, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            server = hockClient;
+            next();
+          });
+        }
+      ], done);
+    });
+
     it('should have core methods defined', function() {
       macros.shouldHaveCreds(client);
     });
 
     it('the getVersion() method should return the proper version', function (done) {
       if (mock) {
-        n = nock('https://' + client.serversUrl)
+        server
           .get('/')
-          .reply(200, { versions: [{ id: 'v1.0', status: 'BETA' }]}, {})
+          .reply(200, { versions: [{ id: 'v1.0', status: 'BETA' }]});
       }
 
       client.getVersion(function (err, version) {
         should.not.exist(err);
         should.exist(version);
         version.should.equal('v1.0');
-        n.done();
+        server && server.done();
         done();
       });
     });
 
 
-    
+
     describe('the auth() method with a valid username and api key', function () {
-      var client = helpers.createClient('rackspace', 'compute'),
-        err, res;
+      var err, res;
 
       beforeEach(function (done) {
 
@@ -50,7 +79,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
             key: client.config.apiKey
           };
 
-          n = nock('https://' + client.authUrl)
+          authServer
             .get('/v1.0')
             .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
         }
@@ -58,7 +87,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         client.auth(function (e, r) {
           err = e;
           res = r;
-          n.done();
+          authServer && authServer.done();
           done();
         });
       });
@@ -80,7 +109,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       it('the getLimits() method should return the proper limits', function (done) {
         if (mock) {
-          n = nock('https://' + client.serversUrl)
+          server
             .get('/v1.0/537645/limits')
             .reply(200, { limits: { absolute: { maxPrivateIPs: 0 }, rate: [] } }, {});
         }
@@ -91,7 +120,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
           should.exist(limits.absolute);
           should.exist(limits.rate);
           limits.rate.should.be.instanceOf(Array);
-          n.done();
+          server && server.done();
           done();
         });
       });
@@ -101,7 +130,9 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       var badClient = helpers.createClient('rackspace', 'database', {
         username: 'fake',
-        apiKey: 'data'
+        apiKey: 'data',
+        authUrl: 'localhost:12346',
+        protocol: 'http://'
       });
 
       var err, res;
@@ -109,7 +140,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       beforeEach(function (done) {
 
         if (mock) {
-          n = nock('https://' + client.authUrl)
+          authServer
             .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
             .reply(401, {
               unauthorized: {
@@ -121,7 +152,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         badClient.auth(function (e, r) {
           err = e;
           res = r;
-          n.done();
+          authServer && authServer.done();
           done();
         });
 
@@ -133,6 +164,21 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         should.exist(err.unauthorized);
         err.unauthorized.code.should.equal(401);
       });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done)
     });
   });
 });

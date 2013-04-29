@@ -6,18 +6,46 @@
 */
 
 var should = require('should'),
-    nock = require('nock'),
+    hock = require('hock'),
+    async = require('async'),
     helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
     mock = !!process.env.NOCK;
 
 describe('pkgcloud/rackspace/databases/errors', function () {
   var testContext = {},
-      client = helpers.createClient('rackspace', 'database'), n;
+      client, authServer, server;
 
   describe('The pkgcloud Rackspace Database client', function () {
 
-    var a;
+    before(function (done) {
+      client = helpers.createClient('rackspace', 'database');
+
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          hock.createHock(12346, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            authServer = hockClient;
+            next();
+          });
+        },
+        function (next) {
+          hock.createHock(12345, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            server = hockClient;
+            next();
+          });
+        }
+      ], done);
+    });
 
     function getFlavors(auth, callback) {
       if (mock) {
@@ -27,12 +55,12 @@ describe('pkgcloud/rackspace/databases/errors', function () {
         };
 
         if (auth) {
-          a = nock('https://' + client.authUrl)
+          authServer
             .post('/v1.1/auth', { credentials: credentials })
             .reply(200, helpers.loadFixture('rackspace/token.json'));
         }
 
-        n = nock('https://ord.databases.api.rackspacecloud.com')
+        server
           .get('/v1.0/537645/flavors')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'))
       }
@@ -49,8 +77,8 @@ describe('pkgcloud/rackspace/databases/errors', function () {
           flavor.should.be.instanceOf(Flavor);
         });
 
-        a.done();
-        n.done();
+        server && server.done();
+        authServer && authServer.done();
         testContext.flavors = flavors;
         done();
       });
@@ -65,14 +93,14 @@ describe('pkgcloud/rackspace/databases/errors', function () {
           flavor.ram.should.be.a('number');
           flavor.href.should.be.a('string');
         });
-        n.done();
+        server && server.done();
         done();
       });
     });
 
     it('the getFlavor() method should return a valid flavor', function(done) {
       if (mock) {
-        n = nock('https://ord.databases.api.rackspacecloud.com')
+        server
           .get('/v1.0/537645/flavors/3')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
       }
@@ -82,9 +110,24 @@ describe('pkgcloud/rackspace/databases/errors', function () {
         should.exist(flavor);
         flavor.should.be.instanceOf(Flavor);
         flavor.id.should.equal(testContext.flavors[2].id);
-        n.done();
+        server && server.done();
         done();
       });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done)
     });
   });
 });
