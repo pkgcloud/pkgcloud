@@ -1,4 +1,4 @@
-MOCHA_OPTS=test/*/*/*-test.js test/*/*/*/*-test.js
+MOCHA_OPTS=-t 4000 test/*/*/*-test.js test/*/*/*/*-test.js
 REPORTER = spec
 
 check: test

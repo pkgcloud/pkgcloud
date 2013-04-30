@@ -125,16 +125,3 @@ describe('pkgcloud openstack identity Service Class', function() {
     });
   });
 });
-
-
-//  'with null service validateRegionForService': {
-//    topic: function () {
-//      identity.service.validateRegionForService(null, '', this.callback);
-//    },
-//    'should return an error': function (err, _) {
-//      assert.isUndefined(_);
-//      assert.instanceOf(err, Error);
-//      assert.equal(err.message, 'service is a required argument');
-//    }
-//  }
-//}).export(module);
