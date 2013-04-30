@@ -1,7 +1,7 @@
 var helpers = require('../../../helpers'),
-  should = require('should'),
-  hock = require('hock'),
-  mock = !!process.env.NOCK;
+    should = require('should'),
+    hock = require('hock'),
+    mock = !!process.env.NOCK;
 
 describe('pkgcloud/amazon/keys', function () {
 
@@ -106,35 +106,3 @@ describe('pkgcloud/amazon/keys', function () {
     server.close(done);
   });
 });
-
-
-//  'list KeyPairs': {
-//    topic: function () {
-//      client.listKeys(this.callback);
-//    },
-//    'should succeed': function (err, data) {
-//      assert.isNull(err);
-//      assert.isArray(data);
-//    }
-//  },
-//  'get KeyPair': {
-//    topic: function () {
-//      client.getKey('unittest', this.callback);
-//    },
-//    'should succeed': function (err, data) {
-//      assert.isNull(err);
-//      // TODO
-//    }
-//  }
-//});
-//
-//
-
-//  .post('/?Action=DescribeKeyPairs', {})
-//  .reply(200, helpers.loadFixture('amazon/list-keys.xml'), {})
-//  .post('/?Action=DescribeKeyPairs', {
-//    'KeyName.1': 'unittest'
-//  })
-//  .reply(200, helpers.loadFixture('amazon/list-keys.xml'), {})
-//
-//suite.export(module);
