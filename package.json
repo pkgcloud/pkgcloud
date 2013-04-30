@@ -40,8 +40,6 @@
     "utile":         "0.x.x"
   },
   "devDependencies": {
-    "vows": "0.7.x",
-    "nock": "0.17.x",
     "mocha": "1.9.x",
     "should": "1.2.x",
     "hock" : "0.0.x"
