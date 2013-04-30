@@ -41,7 +41,10 @@ providers.forEach(function (provider) {
 
       async.parallel([
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
+          hock.createHock({
+            port: 12345,
+            throwOnUnmatched: false
+          }, function (err, hockClient) {
             server = hockClient;
             next();
           });
