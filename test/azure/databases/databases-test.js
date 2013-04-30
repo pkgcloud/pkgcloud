@@ -29,7 +29,8 @@ describe('pkgcloud/azure/databases', function () {
         (typeof options === 'string'
           ? options
           : options.path));
-    }
+    };
+
     hock.createHock(12345, function (err, hockClient) {
       should.not.exist(err);
       should.exist(hockClient);

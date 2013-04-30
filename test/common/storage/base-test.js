@@ -1,20 +1,144 @@
-///*
-// * base-test.js: Test that should be common to all providers.
-// *
-// * (C) 2012 Nodejitsu Inc.
-// *
-// */
+/*
+* base-test.js: Test that should be common to all providers.
+*
+* (C) 2012 Nodejitsu Inc.
+*
+*/
+
+var fs = require('fs'),
+    path = require('path'),
+    Buffer = require('buffer').Buffer,
+    assert = require('../../helpers/assert'),
+    helpers = require('../../helpers'),
+    should = require('should'),
+    utile = require('utile'),
+    async = require('async'),
+    hock = require('hock'),
+    urlJoin = require('url-join'),
+    _ = require('underscore'),
+    providers = require('../../configs/providers.json'),
+    versions = require('../../fixtures/versions.json'),
+    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
+    Image = require('../../../lib/pkgcloud/core/compute/image').Image,
+    Container = require('../../../lib/pkgcloud/core/storage/container').Container,
+    mock = !!process.env.NOCK;
+
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].storage;
+}).forEach(function (provider) {
+  describe('pkgcloud/common/storage/base [' + provider + ']', function () {
+
+    var client = helpers.createClient(provider, 'storage'),
+        context = {},
+        authServer, server;
+
+    before(function (done) {
+
+      if (!mock) {
+        return done();
+      }
+
+
+      async.parallel([
+        function (next) {
+          hock.createHock(12345, function (err, hockClient) {
+            server = hockClient;
+            next();
+          });
+        },
+        function (next) {
+          hock.createHock(12346, function (err, hockClient) {
+            authServer = hockClient;
+            next();
+          });
+        }
+      ], done)
+    });
+
+    it('the createContainer() method should return newly created container', function(done) {
+
+      if (mock) {
+        if (provider === 'joyent') {
+          // TODO figure out why joyent was disabled in vows based tests
+          return done();
+        }
+        else if (provider === 'rackspace') {
+          authServer
+            .get('/v1.0')
+            .reply(204, '',
+              helpers.loadFixture('rackspace/auth.json', 'json'));
+
+          server
+            .defaultReplyHeaders(helpers.rackspaceResponseHeaders())
+            .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
+            .reply(201);
+        }
+        else if (provider === 'amazon') {
+
+          // Override the clients getUrl method as it tries to prefix the container name onto the request
+          client.getUrl = function(options) {
+            options = options || {};
+
+            if (typeof options === 'string') {
+              return urlJoin(this.protocol + this.serversUrl, options);
+            }
+
+            return urlJoin(this.protocol + this.serversUrl, options.path);
+          };
+
+          server
+            .put('/')
+            .reply(200);
+        }
+        else if (provider === 'azure') {
+
+          // Override the clients getUrl method as it tries to prefix the container name onto the request
+          client.getUrl = function (options) {
+            options = options || {};
+
+            return urlJoin('http://localhost:12345/',
+              (typeof options === 'string'
+                ? options
+                : options.path));
+          };
+
+          server
+            .put('/pkgcloud-test-container?restype=container')
+            .reply(201, '', helpers.azureResponseHeaders());
+        }
+      }
+
+      client.createContainer('pkgcloud-test-container', function(err, container) {
+        should.not.exist(err);
+        should.exist(container);
+        container.should.be.instanceOf(Container);
+
+        context.container = container;
+
+        authServer && authServer.done();
+        server && server.done();
+        done();
+
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done)
+    });
+  });
+});
 //
-//var fs = require('fs'),
-//    path = require('path'),
-//    vows = require('vows'),
-//    Buffer = require('buffer').Buffer,
-//    assert = require('../../helpers/assert'),
-//    helpers = require('../../helpers');
-//
-//var clients     = {},
-//    testContext = {},
-//    versions    = JSON.parse(helpers.loadFixture('versions.json'));
 //
 //function batchOne(providerClient, providerName, nock) {
 //  var test   = {};

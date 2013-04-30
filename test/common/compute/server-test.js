@@ -6,21 +6,21 @@
 */
 
 var fs = require('fs'),
-  path = require('path'),
-  should = require('should'),
-  utile = require('utile'),
-  async = require('async'),
-  helpers = require('../../helpers'),
-  hock = require('hock'),
-  async = require('async'),
-  _ = require('underscore'),
-  providers = require('../../configs/providers.json'),
-  versions = require('../../fixtures/versions.json'),
-  Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-  Image = require('../../../lib/pkgcloud/core/compute/image').Image,
-  Server = require('../../../lib/pkgcloud/core/compute/server').Server,
-  azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
-  mock = !!process.env.NOCK;
+    path = require('path'),
+    should = require('should'),
+    utile = require('utile'),
+    async = require('async'),
+    helpers = require('../../helpers'),
+    hock = require('hock'),
+    async = require('async'),
+    _ = require('underscore'),
+    providers = require('../../configs/providers.json'),
+    versions = require('../../fixtures/versions.json'),
+    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
+    Image = require('../../../lib/pkgcloud/core/compute/image').Image,
+    Server = require('../../../lib/pkgcloud/core/compute/server').Server,
+    azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
+    mock = !!process.env.NOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
