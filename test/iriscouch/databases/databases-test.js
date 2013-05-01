@@ -34,13 +34,20 @@ describe('pkgcloud/iriscouch/databases', function () {
     var subdomain = (mock ? 'nodejitsudb908' : 'nodejitsudb' + Math.floor(Math.random() * 100000));
 
     if (mock) {
+
+      client._getCouchPollingUrl = function() {
+        return 'http://localhost:12345';
+      };
+
       server
         .post('/hosting_public', helpers.loadFixture('iriscouch/database.json'))
         .reply(201, {
           ok: true,
           id: 'Server/nodejitsudb908',
           rev: '1-dc91e4ee524420e6f32607b0c24151de'
-        });
+        })
+        .get('/')
+        .reply(200);
     }
 
     client.create({
