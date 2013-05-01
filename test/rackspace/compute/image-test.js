@@ -12,7 +12,7 @@ var fs = require('fs'),
     async = require('async'),
     hock = require('hock'),
     helpers = require('../../helpers'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/compute/images', function () {
   var client,

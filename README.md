@@ -287,36 +287,36 @@ Windows - Vows installed locally:
 ```
 
 ### Other ways to run the tests
-Also you can run the tests directly using `vows` with `nock` enabled:
+Also you can run the tests directly using `mocha` with `hock` enabled:
 
 ``` bash
-Linux/Mac - Vows installed globally:
- $ NOCK=on vows --spec --isolate test/*/*/*-test.js	
+Linux/Mac - Mocha installed globally:
+ $ MOCK=on mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
  
-Linux/Mac - Vows installed locally:
- $ NOCK=on ./node_modules/.bin/vows.cmd --spec --isolate test/*/*/*-test.js		
+Linux/Mac - Mocha installed locally:
+ $ MOCK=on node_modules/.bin/mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
-Windows - Vows installed globally:
- $ set NOCK=on&vows --spec --isolate test/*/*/*-test.js	
+Windows - Mocha installed globally:
+ $ set MOCK=on&mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
  
-Windows - Vows installed locally:
- $ set NOCK=on&node_modules\.bin\vows.cmd --spec --isolate test/*/*/*-test.js	
+Windows - Mocha installed locally:
+ $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 ```
 
 Even better, you can run the tests for some specific provider:
 
 ``` bash
-Linux/Mac - Vows installed globally:
- $ NOCK=on vows --spec --isolate test/iriscouch/*/*-test.js
+Linux/Mac - Mocha installed globally:
+ $ MOCK=on mocha -R spec test/iriscouch/*/*-test.js
 
-Linux/Mac - Vows installed locally:
- $ NOCK=on ./node_modules/.bin/vows --spec --isolate test/iriscouch/*/*-test.js
+Linux/Mac - Mocha installed locally:
+ $ MOCK=on ./node_modules/.bin/mocha -R spec test/iriscouch/*/*-test.js
 
-Windows - Vows installed globally:
- $ set NOCK=on&vows --spec --isolate test/iriscouch/*/*-test.js
+Windows - Mocha installed globally:
+ $ set MOCK=on&mocha -R spec test/iriscouch/*/*-test.js
  
-Windows - Vows installed locally:
- $ set NOCK=on&node_modules\.bin\vows.cmd --spec --isolate test/iriscouch/*/*-test.js
+Windows - Mocha installed locally:
+ $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/iriscouch/*/*-test.js
 
 ```
 

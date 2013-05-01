@@ -94,7 +94,7 @@ var client = helpers.createClient('azure', 'compute');
 
 var testContext = {};
 
-if (process.env.NOCK) {
+if (process.env.MOCK) {
   azureNock.serverTest(nock, helpers);
 }
 

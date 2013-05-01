@@ -11,7 +11,7 @@ var should = require('should'),
     async = require('async'),
     hock = require('hock'),
     helpers = require('../../helpers'),
-    mock = process.env.NOCK;
+    mock = process.env.MOCK;
 
 describe('pkgcloud/rackspace/database/authentication', function() {
   var client, testContext = {}, authServer, server;

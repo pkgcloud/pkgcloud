@@ -19,7 +19,7 @@ var fs = require('fs'),
     Image = require('../../../lib/pkgcloud/core/compute/image').Image,
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
@@ -528,7 +528,7 @@ function setupGetServerMock(client, provider, servers) {
 //function batchReboot(providerClient, providerName, nock) {
 //  var name    = providerName   || 'rackspace',
 //      client  = providerClient || clients['rackspace'],
-//      timeout = process.env.NOCK ? 1 : 10000,
+//      timeout = process.env.MOCK ? 1 : 10000,
 //      test    = {};
 //
 //  test["The pkgcloud " + name + " compute client"] = {
@@ -619,7 +619,7 @@ function setupGetServerMock(client, provider, servers) {
 //    testData    = {};
 //    testContext = {};
 //
-//    if (process.env.NOCK) {
+//    if (process.env.MOCK) {
 //      if (provider === 'joyent') {
 //        nock('https://' + client.serversUrl)
 //          .get('/' + client.account + '/machines')

@@ -9,7 +9,7 @@
 var should  = require('should'),
     helpers = require('../../helpers'),
     hock    = require('hock'),
-    mock    = !!process.env.NOCK;
+    mock    = !!process.env.MOCK;
 
 describe('pkgcloud/redistogo/databases', function () {
   var testContext = {},

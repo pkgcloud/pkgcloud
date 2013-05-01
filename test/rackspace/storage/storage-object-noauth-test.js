@@ -16,7 +16,7 @@
 //    pkgcloud = require('../../../lib/pkgcloud'),
 //    helpers = require('../../helpers');
 //
-//if (process.env.NOCK) {
+//if (process.env.MOCK) {
 //  return;
 //}
 //

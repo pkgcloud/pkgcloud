@@ -12,7 +12,7 @@ var should = require('should'),
     helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
     Instance = require('../../../lib/pkgcloud/rackspace/database/instance').Instance,
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/instances', function () {
   var testContext = {},

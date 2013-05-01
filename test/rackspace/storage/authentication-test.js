@@ -10,7 +10,7 @@ var should = require('should'),
     helpers = require('../../helpers'),
     async = require('async'),
     hock = require('hock'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/storage/authentication', function () {
   describe('The pkgcloud Rackspace Storage client', function () {

@@ -10,7 +10,7 @@ var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/errors', function () {
   var testContext = {},

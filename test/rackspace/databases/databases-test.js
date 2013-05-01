@@ -10,7 +10,7 @@ var should = require('should'),
     hock = require('hock'),
     async = require('async'),
     helpers = require('../../helpers'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/databases', function() {
 

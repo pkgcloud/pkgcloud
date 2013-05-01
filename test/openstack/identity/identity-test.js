@@ -1,7 +1,7 @@
 var identity = require('../../../lib/pkgcloud/openstack/identity'),
     should = require('should'),
     hock = require('hock'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/openstack/identity', function () {
   var server;

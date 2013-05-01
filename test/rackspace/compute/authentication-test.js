@@ -10,7 +10,7 @@ var should = require('should'),
     hock = require('hock'),
     macros = require('../macros'),
     helpers = require('../../helpers'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/compute/authentication', function () {
   var client, authServer, server;

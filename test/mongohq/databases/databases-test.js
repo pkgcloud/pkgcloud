@@ -9,7 +9,7 @@
 var helpers = require('../../helpers'),
   should = require('should'),
   hock = require('hock'),
-  mock = !!process.env.NOCK;
+  mock = !!process.env.MOCK;
 
 describe('pkgcloud/mongohq/databases', function () {
   var context = {}, client, server;

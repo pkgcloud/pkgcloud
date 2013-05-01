@@ -16,7 +16,7 @@
 //    macros = require('../macros'),
 //    helpers = require('../../helpers'),
 //    nock = require('nock'),
-//    mock = !!process.env.NOCK;
+//    mock = !!process.env.MOCK;
 //
 //if (mock) {
 //  return;

@@ -20,7 +20,7 @@ var fs = require('fs'),
   Image = require('../../../lib/pkgcloud/core/compute/image').Image,
   Server = require('../../../lib/pkgcloud/core/compute/server').Server,
   azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
-  mock = !!process.env.NOCK;
+  mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 

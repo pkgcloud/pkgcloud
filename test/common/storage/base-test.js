@@ -20,7 +20,7 @@ var fs = require('fs'),
     versions = require('../../fixtures/versions.json'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
     File = require('../../../lib/pkgcloud/core/storage/file').File,
-    mock = !!process.env.NOCK,
+    mock = !!process.env.MOCK,
     fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
 
 providers.filter(function (provider) {

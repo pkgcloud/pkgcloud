@@ -9,7 +9,7 @@ var helpers = require('../../helpers'),
     should = require('should'),
     urlJoin = require('url-join'),
     hock = require('hock'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/azure/databases', function () {
 

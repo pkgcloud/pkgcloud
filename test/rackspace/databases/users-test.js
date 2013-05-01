@@ -11,7 +11,7 @@ var should = require('should'),
   hock = require('hock'),
   helpers = require('../../helpers'),
   User = require('../../../lib/pkgcloud/rackspace/database/user').User,
-  mock = !!process.env.NOCK;
+  mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/users', function () {
   var testContext = {},

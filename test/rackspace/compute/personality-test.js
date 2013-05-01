@@ -13,7 +13,7 @@ var fs = require('fs'),
     should = require('should'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers'),
-    mock = !!process.env.NOCK;
+    mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/compute/personality', function () {
   var keyBuffer = fs.readFileSync(__dirname + '/../../fixtures/testkey.pub'),
