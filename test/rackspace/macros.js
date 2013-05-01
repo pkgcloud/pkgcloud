@@ -9,7 +9,6 @@ var fs = require('fs'),
     filed = require('filed'),
     assert = require('../helpers/assert'),
     should = require('should'),
-    nock = require('nock'),
     helpers = require('../helpers'),
     mock = !!process.env.NOCK;
 

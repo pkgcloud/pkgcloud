@@ -11,7 +11,6 @@ var fs = require('fs'),
     path = require('path'),
     spawn = require('child_process').spawn,
     should = require('should'),
-    nock = require('nock'),
     pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers'),
     mock = !!process.env.NOCK;

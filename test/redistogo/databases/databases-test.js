@@ -8,7 +8,6 @@
 
 var should  = require('should'),
     helpers = require('../../helpers'),
-    nock    = require('nock'),
     hock    = require('hock'),
     mock    = !!process.env.NOCK;
 
