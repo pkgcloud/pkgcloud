@@ -156,7 +156,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken.json');
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken-multiRegionVolume.json');
       }
 
       identity.createIdentity({
