@@ -6,327 +6,452 @@
 *
 */
 
-var vows    = require('vows'),
-    helpers = require('../../helpers'),
-    assert  = require('../../helpers/assert'),
-    nock    = require('nock');
+var helpers = require('../../helpers'),
+    should = require('should'),
+    hock = require('hock'),
+    mock = !!process.env.MOCK;
 
-var client = helpers.createClient('mongolab', 'database'),
-    testContext = {};
+describe('pkgcloud/mongolab/databases', function () {
+  var context = {}, client, server;
 
-if (process.env.NOCK) {
-  nock('https://api.mongolab.com')
-    .post('/api/1/partners/nodejitsu/accounts', "{\"name\":\"nodejitsu_daniel\",\"adminUser\":{\"email\":\"daniel@nodejitsu.com\"}}")
-      .reply(200, helpers.loadFixture('mongolab/user.json'))
+  before(function (done) {
+    client = helpers.createClient('mongolab', 'database');
 
-    .post('/api/1/partners/nodejitsu/accounts', "{\"name\":\"nodejitsu_custompassword\",\"adminUser\":{\"email\":\"custom@password.com\",\"password\":\"my1custom2password\"}}")
-      .reply(200, helpers.loadFixture('mongolab/customUser.json'))
+    if (!mock) {
+      return done();
+    }
 
-    .get('/api/1/partners/nodejitsu/accounts')
-      .reply(200, helpers.loadFixture('mongolab/userList.json'))
+    hock.createHock(12345, function (err, hockClient) {
+      should.not.exist(err);
+      should.exist(hockClient);
 
-    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
-      .reply(200, " {\"name\": \"nodejitsu_daniel\", \"adminUser\": { \"username\": \"nodejitsu_daniel\", \"email\": \"daniel@nodejitsu.com\"}}")
+      server = hockClient;
+      done();
+    });
+  });
 
-    .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', helpers.loadFixture('mongolab/reqDatabase.json'))
-      .reply(200, helpers.loadFixture('mongolab/database.json'))
+  it('the createAccount() method with correct options should respond correctly', function (done) {
 
-    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
-      .reply(200, "[ { \"name\" : \"nodejitsu_daniel_testDatabase\"} ]")
-
-    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
-      .reply(200, "{ \"name\" : \"nodejitsu_daniel_testDatabase\"}")
-
-    .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
-      .reply(200, " null ")
-
-    .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
-      .reply(200, "[  ]")
-
-    .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
-      .reply(200, " null ")
-
-    .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_custompassword')
-      .reply(200, " null ");
-}
-
-vows.describe('pkgcloud/mongolab/databases').addBatch({
-  "The pkgcloud MongoLab client": {
-    "the createAccount() method": {
-      "with correct options": {
-        topic: function () {
-          client.createAccount({
-            name: 'daniel',
+    if (mock) {
+      server
+        .post('/api/1/partners/nodejitsu/accounts', {
+          name: 'nodejitsu_daniel',
+          adminUser: {
             email: 'daniel@nodejitsu.com'
-          }, this.callback);
-        },
-        "should respond correctly": function (err, response) {
-          assert.isNull(err);
-          assert.ok(response.account);
-          assert.ok(response.account.username);
-          assert.ok(response.account.email);
-          assert.ok(response.account.password);
-          assert.equal(response.account.email, 'daniel@nodejitsu.com');
-          testContext.account = response.account;
-        }
-      },
-      "with invalid options like": {
-        "no options": {
-          topic: function () {
-            client.createAccount(this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "invalid options": {
-          topic: function () {
-            client.createAccount({ invalid:'keys' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no email": {
-          topic: function () {
-            client.createAccount({ name: 'testDatabase' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
-      },
-      "with a custom password": {
-        "without number character": {
-          topic: function () {
-            client.createAccount({
-              name: 'custompassword',
-              email: 'custom@password.com',
-              password: 'mycustompassword'
-            }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "with number character": {
-          topic: function () {
-            client.createAccount({
-              name: 'custompassword',
+          }
+        })
+        .reply(200, helpers.loadFixture('mongolab/user.json'))
+    }
+
+    client.createAccount({
+      name: 'daniel',
+      email: 'daniel@nodejitsu.com'
+    }, function (err, response) {
+      should.not.exist(err);
+      should.exist(response);
+      should.exist(response.account);
+      should.exist(response.account.username);
+      should.exist(response.account.email);
+      should.exist(response.account.password);
+      context.account = response.account;
+
+      server && server.done();
+      done();
+    });
+  });
+
+//  it('the remove() method with correct options should respond correctly', function (done) {
+//
+//    if (mock) {
+//      server
+//        .delete('/provider/resources/63562')
+//        .reply(200, "OK");
+//    }
+//
+//    client.remove(context.databaseId, function (err, confirm) {
+//      should.not.exist(err);
+//      should.exist(confirm);
+//      confirm.should.equal('deleted');
+//      ;
+//
+//      server && server.done();
+//      done();
+//    });
+//  });
+
+  describe('the createAccount() method with invalid options like', function () {
+    it('no options should respond with errors', function (done) {
+      client.createAccount(function (err, database) {
+        should.exist(err);
+        should.not.exist(database);
+        done();
+      });
+    });
+
+    it('no invalid options should respond with errors', function (done) {
+      client.createAccount({ invalid: 'keys' }, function (err, database) {
+        should.exist(err);
+        should.not.exist(database);
+        done();
+      });
+    });
+
+    it('no email should respond with errors', function (done) {
+      client.createAccount({ name: 'testDatabase' }, function (err, database) {
+        should.exist(err);
+        should.not.exist(database);
+        done();
+      });
+    });
+  });
+
+  describe('the createAccount() method with custom passwords with', function () {
+    it('no numbers should respond with errors', function(done) {
+      client.createAccount({
+        name: 'custompassword',
+        email: 'custom@password.com',
+        password: 'mycustompassword'
+      }, function(err, response) {
+        should.exist(err);
+        should.not.exist(response);
+
+        done();
+      });
+    });
+
+    it('with numbers should respond with success', function(done) {
+      
+      if (mock) {
+        server
+          .post('/api/1/partners/nodejitsu/accounts', {
+            name: 'nodejitsu_custompassword',
+            adminUser: {
               email: 'custom@password.com',
               password: 'my1custom2password'
-            }, this.callback);
-          },
-          "should respond with the defined password": function (err, response) {
-            assert.isNull(err);
-            assert.ok(response.account);
-            assert.ok(response.account.username);
-            assert.ok(response.account.email);
-            assert.isUndefined(response.account.password);
-            assert.equal(response.account.email, 'custom@password.com');
-            testContext.custompw = response.account.username;
-          }
-        }
+            }
+          })
+          .reply(200, helpers.loadFixture('mongolab/customUser.json'));
       }
+      
+      client.createAccount({
+        name: 'custompassword',
+        email: 'custom@password.com',
+        password: 'my1custom2password'
+      }, function(err, response) {
+        should.not.exist(err);
+        should.exist(response);
+        should.exist(response.account);
+        should.exist(response.account.username);
+        should.exist(response.account.email);
+        context.custompw = response.account;
+
+        server && server.done();
+        done();
+      });
+    });
+  });
+
+  it('the getAccounts() method should respond with all accounts', function(done) {
+    
+    if (mock) {
+      server
+        .get('/api/1/partners/nodejitsu/accounts')
+        .reply(200, helpers.loadFixture('mongolab/userList.json'))
     }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the getAccounts() method": {
-      topic: function () {
-        client.getAccounts(this.callback);
-      },
-      "should respond with all created accounts": function (err, accounts) {
-        assert.isNull(err);
-        assert.isArray(accounts);
-        assert.lengthOf(accounts, 2);
-        accounts.forEach(function (account) {
-          assert.ok(account.username);
-          assert.ok(account.email);
+
+    client.getAccounts(function(err, accounts) {
+      should.not.exist(err);
+      should.exist(accounts);
+      accounts.should.be.instanceOf(Array);
+      accounts.should.have.length(2);
+      accounts.forEach(function(account) {
+        should.exist(account.username);
+        should.exist(account.email);
+      });
+
+      server && server.done();
+      done();
+    });
+  });
+  
+  it('the getAccount() method should return the matching account', function(done) {
+
+    if (mock) {
+      server
+        .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
+        .reply(200, {
+          name: 'nodejitsu_daniel',
+          adminUser: {
+            username: 'nodejitsu_daniel',
+            email: 'daniel@nodejitsu.com'
+          }
         });
-      }
     }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the getAccount() method": {
-      topic: function () {
-        client.getAccount(testContext.account.username, this.callback);
-      },
-      "should respond with the account": function (err, account) {
-        assert.isNull(err);
-        assert.equal(account.username, testContext.account.username);
-        assert.equal(account.email, testContext.account.email);
-      }
+
+    client.getAccount(context.account.username, function (err, account) {
+      should.not.exist(err);
+      should.exist(account);
+      account.username.should.equal(context.account.username);
+      account.email.should.equal(context.account.email);
+
+      server && server.done();
+      done();
+    });
+    
+  });
+
+  it('the create() method with correct options should respond correctly', function (done) {
+
+    if (mock) {
+      server
+        .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', helpers.loadFixture('mongolab/reqDatabase.json'))
+        .reply(200, helpers.loadFixture('mongolab/database.json'));
     }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the create() method": {
-      "with correct options": {
-        topic: function () {
-          client.create({
-            plan:'free',
-            name:'testDatabase',
-            owner: testContext.account.username
-          }, this.callback)
-        },
-        "should respond correctly": function (err, database) {
-          assert.isNull(err);
-          assert.ok(database.id);
-          assert.ok(database.uri);
-          assert.ok(database.username);
-          assert.ok(database.password);
-          testContext.databaseId = database.id;
-        }
-      },
-      "with invalid options like": {
-        "no options": {
-          topic: function () {
-            client.create(this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "invalid options": {
-          topic: function () {
-            client.create({ invalid:'keys' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no plan": {
-          topic: function () {
-            client.create({ name:'testDatabase' }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
+
+    client.create({
+      plan:'free',
+      name:'testDatabase',
+      owner: context.account.username
+    }, function (err, database) {
+      should.not.exist(err);
+      should.exist(database);
+      should.exist(database.id);
+      should.exist(database.uri);
+      should.exist(database.username);
+      should.exist(database.password);
+      context.databaseId = database.id;
+
+      server && server.done();
+      done();
+    });
+  });
+
+  describe('the create() method with invalid options like', function () {
+    it('no options should respond with errors', function (done) {
+      client.create(function (err, database) {
+        should.exist(err);
+        should.not.exist(database);
+        done();
+      });
+    });
+
+    it('no invalid options should respond with errors', function (done) {
+      client.create({ invalid: 'keys' }, function (err, database) {
+        should.exist(err);
+        should.not.exist(database);
+        done();
+      });
+    });
+
+    it('no plan should respond with errors', function (done) {
+      client.create({ name: 'testDatabase' }, function (err, database) {
+        should.exist(err);
+        should.not.exist(database);
+        done();
+      });
+    });
+  });
+
+  describe('the getDatabases() method', function() {
+    it('with valid options should respond correctly', function (done) {
+
+      if (mock) {
+        server
+          .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
+          .reply(200, [ { name : 'nodejitsu_daniel_testDatabase' } ]);
       }
-    }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the getDatabases() method": {
-      "with correct options": {
-        topic: function () {
-          client.getDatabases(testContext.account.username, this.callback);
-        },
-        "should respond correctly": function (err, databases) {
-          assert.isNull(err);
-          assert.isArray(databases);
-          assert.isObject(databases[0]);
-          assert.equal(databases[0].name, testContext.account.username + '_testDatabase');
-          testContext.databaseName = databases[0].name;
-        }
-      },
-      "with invalid options like no name": {
-        topic: function () {
-          client.getDatabases(this.callback);
-        },
-        "should respond with errors": assert.assertError
+
+      client.getDatabases(context.account.username, function (err, databases) {
+        should.not.exist(err);
+        should.exist(databases);
+        databases.should.be.instanceOf(Array);
+        databases.should.have.length(1);
+        databases[0].should.be.a('object');
+        databases[0].name.should.equal(context.account.username + '_testDatabase');
+        context.databaseName = databases[0].name;
+        
+        server && server.done();
+        done();
+      });
+    });
+
+    it('with invalid options should respond with errors', function(done) {
+      client.getDatabases(function(err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+  });
+
+  describe('the getDatabase() method', function () {
+    it('with valid options should respond correctly', function (done) {
+
+      if (mock) {
+        server
+          .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
+          .reply(200, { name : 'nodejitsu_daniel_testDatabase' });
       }
-    }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the getDatabase() method": {
-      "with correct options":{
-        topic: function () {
-          client.getDatabase({
-            name: testContext.databaseName,
-            owner: testContext.account.username
-          }, this.callback);
-        },
-        "should respond correctly": function (err, database) {
-          // @todo Check for details like hostname, port, username, or password
-          assert.isNull(err);
-          assert.ok(database);
-        }
-      },
-      "with invalid options like":{
-        "no owner": {
-          topic: function () {
-            client.getDatabase({ name: testContext.databaseName }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no name": {
-          topic: function () {
-            client.getDatabase({ owner: testContext.account.username }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no options": {
-          topic: function () {
-            client.getDatabase(this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
+
+      client.getDatabase({
+        owner: context.account.username,
+        name: context.databaseName },
+        function (err, database) {
+          should.not.exist(err);
+          should.exist(database);
+          database.should.be.a('object');
+          database.name.should.equal(context.account.username + '_testDatabase');
+
+          server && server.done();
+          done();
+        });
+    });
+
+    it('with invalid options should respond with errors', function (done) {
+      client.getDatabase(function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+
+    it('with no owner should respond with errors', function (done) {
+      client.getDatabase({ name: 'no-owner' }, function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+
+    it('with no name should respond with errors', function (done) {
+      client.getDatabase({ owner: 'no-name' }, function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+  });
+
+  describe('the remove() method', function () {
+    it('with valid options should respond correctly', function (done) {
+
+      if (mock) {
+        server
+          .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
+          .reply(200, " null ")
       }
-    }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the remove() method": {
-      "with correct options": {
-        topic: function () {
-          client.remove({
-            name: testContext.databaseName,
-            owner: testContext.account.username
-          }, this.callback);
-        },
-        "should respond correctly": function (err) {
-          assert.isUndefined(err);
-        },
-        "should have no databases": {
-          topic: function () {
-            client.getDatabases(testContext.account.username, this.callback);
-          },
-          "empty response": function (err, databases) {
-            assert.isNull(err);
-            assert.isEmpty(databases);
-          }
-        }
-      },
-      "with invalid options like": {
-        "no owner": {
-          topic: function () {
-            client.remove({ name: testContext.databaseName }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no name": {
-          topic: function () {
-            client.remove({ owner: testContext.account.username }, this.callback);
-          },
-          "should respond with errors": assert.assertError
-        },
-        "no options": {
-          topic: function () {
-            client.remove(this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
+
+      client.remove({
+          owner: context.account.username,
+          name: context.databaseName },
+        function (err) {
+          should.not.exist(err);
+
+          server && server.done();
+          done();
+        });
+    });
+
+    it('and have no databases left after getDatabases()', function (done) {
+
+      if (mock) {
+        server
+          .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
+          .reply(200, []);
       }
-    }
-  }
-}).addBatch({
-  "The pkgcloud MongoLab client": {
-    "the deleteAccount() method": {
-      "with correct options": {
-        topic: function () {
-          client.deleteAccount(testContext.account.username, this.callback);
-        },
-        "should respond correctly": function (err) {
-          assert.isUndefined(err);
-        }
-      },
-      "with invalid options like": {
-        "no name": {
-          topic: function () {
-            client.deleteAccount(this.callback);
-          },
-          "should respond with errors": assert.assertError
-        }
-      },
-      "other account with correct options": {
-        topic: function () {
-          client.deleteAccount(testContext.custompw, this.callback);
-        },
-        "should respond correctly": function (err) {
-          assert.isUndefined(err);
-        }
+
+      client.getDatabases(context.account.username, function (err, databases) {
+        should.not.exist(err);
+        should.exist(databases);
+        databases.should.be.instanceOf(Array);
+        databases.should.have.length(0);
+
+        server && server.done();
+        done();
+      });
+    });
+
+    it('with invalid options should respond with errors', function (done) {
+      client.remove(function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+
+    it('with no owner should respond with errors', function (done) {
+      client.remove({ name: 'no-owner' }, function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+
+    it('with no name should respond with errors', function (done) {
+      client.remove({ owner: 'no-name' }, function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+  });
+
+  describe('the deleteAccount() method', function () {
+    it('with valid options should respond correctly', function (done) {
+
+      if (mock) {
+        server
+          .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
+          .reply(200, " null ")
       }
+
+      client.deleteAccount(context.account.username,
+        function (err) {
+          should.not.exist(err);
+
+          server && server.done();
+          done();
+        });
+    });
+
+    it('and delete the other account', function (done) {
+
+      if (mock) {
+        server
+          .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_custompassword')
+          .reply(200, " null ");
+      }
+
+      client.deleteAccount(context.custompw.username, function (err, databases) {
+        should.not.exist(err);
+
+        server && server.done();
+        done();
+      });
+    });
+
+    it('with invalid options should respond with errors', function (done) {
+      client.deleteAccount(function (err, databases) {
+        should.exist(err);
+        should.not.exist(databases);
+
+        done();
+      });
+    });
+  });
+
+  after(function (done) {
+    if (!mock) {
+      return done();
     }
-  }
-}).export(module);
+
+    server.close(done);
+  });
+});

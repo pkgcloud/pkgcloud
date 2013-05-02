@@ -1,76 +1,83 @@
-// if one of the befores blows up should return in err back
-// if one of the befores blows up no callback returns in stream
-// should be able to sign appropriately
 /*
- * client.js: Tests for pkgcloud Joyent compute image requests
- *
- * (C) 2012 Nodejitsu Inc.
- *
- */
+* client-test.js: Tests for pkgcloud base client
+*
+* (C) 2012 Nodejitsu Inc.
+*
+*/
 
-var vows   = require('vows'),
-    assert = require('../../helpers/assert'),
+var should = require('should'),
     Client = new require('../../../lib/pkgcloud/core/base/client').Client;
 
-vows.describe('pkgcloud/core/base/client').addBatch({
-  "The pkgcloud base client": {
-    "the request() method": {
-      "with a wrong request with a cb": {
-        topic: function () {
-          var cli = new Client();
-          cli.getUrl = function () { return "badurl"; };
-          cli.failCodes = {};
-          cli.request({ path: '/' }, this.callback);
-        },
-        "should return the error on the cb": function (err, response) {
-          assert.assertError(err);
-        }
-      },
-      "with a wrong request without a cb": {
-        topic: function () {
-          var self = this,
-              cli = new Client();
+describe('pkgcloud/core/base/client', function () {
+  describe('The pkgcloud base client request method', function() {
+    it('with a wrong request with a cb', function(done) {
+      var cli = new Client();
+      cli.getUrl = function () {
+        return "badurl";
+      };
+      cli.failCodes = {};
+      cli.request({ path: '/' }, function(err) {
+        should.exist(err);
+        done();
+      });
+    });
 
-          cli.getUrl = function () { return "badurl"; };
-          cli.failCodes = {};
-          var stream = cli.request({ path: '/' });
-          stream.on('error', function () { return self.callback(null, true); });
-          stream.on('end', function () { return self.callback(null, false); });
-        },
-        "should return the error on the EE": function (_, ok) {
-          assert.ok(ok);
-        }
-      }
-    },
-    "the before filters": {
-      "throwing an error with a cb": {
-        topic: function () {
-          var cli = new Client();
-          cli.getUrl = function () { return "badurl"; };
-          cli.failCodes = {};
-          cli.before = [function () { throw new Error('Foo!'); }];
-          cli.request('/', this.callback, this.callback);
-        },
-        "should return the error on the cb": function (err, response) {
-          assert.ok(err.message);
-          assert.equal(err.message, "Foo!");
-        }
-      },
-      "throwing an error without a cb": {
-        topic: function () {
-          var self = this,
-              cli = new Client();
+    it('with a wrong request without a cb', function (done) {
+      var cli = new Client();
 
-          cli.getUrl = function () { return "badurl"; };
-          cli.failCodes = {};
-          var stream = cli.request({ path: '/' });
-          stream.on('error', function () { return self.callback(null, true); });
-          stream.on('end', function () { return self.callback(null, false); });
-        },
-        "should return the error on the EE": function (_, ok) {
-          assert.ok(ok);
-        }
+      cli.getUrl = function () {
+        return "badurl";
+      };
+      cli.failCodes = {};
+      var stream = cli.request({ path: '/' });
+      stream.on('error', function () {
+        return handleResponse(true);
+      });
+      stream.on('end', function () {
+        return handleResponse(false);
+      });
+
+      function handleResponse(err) {
+        should.exist(err);
+        done();
       }
-    }
-  }
-})["export"](module);
+
+    });
+
+    it('the before filters throwing an error with a callback should return the error on the cb', function(done) {
+      var cli = new Client();
+      cli.getUrl = function () {
+        return "badurl";
+      };
+      cli.failCodes = {};
+      cli.before = [function () {
+        throw new Error('Foo!');
+      }];
+      cli.request({ path: '/' }, function(err) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('the before filters throwing an error without a callback should return the error on the EE', function(done) {
+      var cli = new Client();
+
+      cli.getUrl = function () {
+        return "badurl";
+      };
+      cli.failCodes = {};
+      var stream = cli.request({ path: '/' });
+      stream.on('error', function () {
+        handleResponse(true);
+      });
+      stream.on('end', function () {
+        handleResponse(false);
+      });
+
+      function handleResponse(err) {
+        should.exist(err);
+        done();
+      }
+    });
+  });
+});

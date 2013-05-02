@@ -47,7 +47,7 @@ helpers.loadConfig = function loadConfig(provider) {
   var basefile = path.join(__dirname, '..', 'configs'),
       content;
 
-  if (process.env.NOCK === 'on') {
+  if (process.env.MOCK === 'on') {
     basefile = path.join(basefile, 'mock', provider + '.json');
   }
   else {
