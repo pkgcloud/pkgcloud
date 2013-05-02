@@ -1,7 +1,7 @@
 {
   "name":        "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version":     "0.6.15",
+  "version":     "0.7.0",
   "author":      "Nodejitsu Inc <info@nodejitsu.com>",
   "contributors": [
     { "name": "Charlie Robbins",    "email": "charlie@nodejitsu.com" },
@@ -45,6 +45,6 @@
     "hock" : "0.1.x"
   },
   "main":    "./lib/pkgcloud",
-  "scripts": { "test": "make test"},
+  "scripts": { "test": "make test" },
   "engines": { "node": "0.8.x" }
 }
