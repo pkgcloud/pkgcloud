@@ -1,5 +1,7 @@
 {
   "username": "nodejitsu",
   "password": "MOCK-PASSWORD",
-  "cloud": "JYC_us-sw-1"
+  "cloud": "JYC_us-sw-1",
+  "protocol": "http://",
+  "databaseUrl": "localhost:12345"
 }

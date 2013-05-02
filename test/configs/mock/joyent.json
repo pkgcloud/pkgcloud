@@ -1,5 +1,6 @@
 {
   "account"    : "MOCK-ACCOUNT",
-  "serversUrl" : "us-sw-1.api.joyentcloud.com",
+  "serversUrl" : "localhost:12345",
+  "protocol"   : "http://",
   "identity" : "./test/fixtures/testkey"
 }

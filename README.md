@@ -257,66 +257,66 @@ All of the individual methods are documented for each DBaaS provider listed abov
 
 <a name="tests"></a>
 ## Tests
-For run the tests you will need `vows@0.7.0` or higher, please install it and then run:
+For run the tests you will need `mocha@1.9.x` or higher, please install it and then run:
 
 ``` bash
  $ npm test
 ```
 
-The tests use the [`nock`](https://github.com/flatiron/nock) library for mock up the response of providers, so the tests run without do any connection to the providers, there is a notorius advantage of speed on that, also you can run the tests without Internet connection and also can highlight a change of API just disabling `nock`.
+The tests use the [`hock`](https://github.com/mmalecki/hock) library for mock up the response of providers, so the tests run without do any connection to the providers, there is a notorius advantage of speed on that, also you can run the tests without Internet connection and also can highlight a change of API just disabling `hock`.
 
 
 ### Running tests without mocks
-By default the `npm test` command run the tests enabling `nock`. And sometimes you will want to test against the live provider, so you need to do this steps, in order to test without mocks.
+By default the `npm test` command run the tests enabling `hock`. And sometimes you will want to test against the live provider, so you need to do this steps, in order to test without mocks.
 
 1. Copy a provider config file from `test/configs/mock` to `test/configs`
 2. Fill in with your own credentials for the provider.
 3. (Optional) The compute test suite run the common tests for all providers listed on `test/configs/providers.json`, there you can enable or disable providers.
-4. Run the tests using vows.
+4. Run the tests using mocha.
 
 ``` bash
-Vows installed globally
- $ vows --spec --isolate test/*/*/*-test.js
+Mocha installed globally
+ $ mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
-Linux/Mac - Vows installed locally
- $ ./node_modules/.bin/vows --spec --isolate test/*/*/*-test.js		
+Linux/Mac - Mocha installed locally
+ $ ./node_modules/.bin/mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
-Windows - Vows installed locally:
- $ node_modules\.bin\vows.cmd --spec --isolate test/*/*/*-test.js	
+Windows - Mocha installed locally:
+ $ node_modules\.bin\mocha.cmd -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
 ```
 
 ### Other ways to run the tests
-Also you can run the tests directly using `vows` with `nock` enabled:
+Also you can run the tests directly using `mocha` with `hock` enabled:
 
 ``` bash
-Linux/Mac - Vows installed globally:
- $ NOCK=on vows --spec --isolate test/*/*/*-test.js	
+Linux/Mac - Mocha installed globally:
+ $ MOCK=on mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
  
-Linux/Mac - Vows installed locally:
- $ NOCK=on ./node_modules/.bin/vows.cmd --spec --isolate test/*/*/*-test.js		
+Linux/Mac - Mocha installed locally:
+ $ MOCK=on node_modules/.bin/mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
-Windows - Vows installed globally:
- $ set NOCK=on&vows --spec --isolate test/*/*/*-test.js	
+Windows - Mocha installed globally:
+ $ set MOCK=on&mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
  
-Windows - Vows installed locally:
- $ set NOCK=on&node_modules\.bin\vows.cmd --spec --isolate test/*/*/*-test.js	
+Windows - Mocha installed locally:
+ $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 ```
 
 Even better, you can run the tests for some specific provider:
 
 ``` bash
-Linux/Mac - Vows installed globally:
- $ NOCK=on vows --spec --isolate test/iriscouch/*/*-test.js
+Linux/Mac - Mocha installed globally:
+ $ MOCK=on mocha -R spec test/iriscouch/*/*-test.js
 
-Linux/Mac - Vows installed locally:
- $ NOCK=on ./node_modules/.bin/vows --spec --isolate test/iriscouch/*/*-test.js
+Linux/Mac - Mocha installed locally:
+ $ MOCK=on ./node_modules/.bin/mocha -R spec test/iriscouch/*/*-test.js
 
-Windows - Vows installed globally:
- $ set NOCK=on&vows --spec --isolate test/iriscouch/*/*-test.js
+Windows - Mocha installed globally:
+ $ set MOCK=on&mocha -R spec test/iriscouch/*/*-test.js
  
-Windows - Vows installed locally:
- $ set NOCK=on&node_modules\.bin\vows.cmd --spec --isolate test/iriscouch/*/*-test.js
+Windows - Mocha installed locally:
+ $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/iriscouch/*/*-test.js
 
 ```
 

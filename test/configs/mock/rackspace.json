@@ -1,4 +1,8 @@
 {
   "username": "MOCK-USERNAME",
-  "apiKey": "MOCK-API-KEY"
+  "apiKey": "MOCK-API-KEY",
+  "serversUrl": "localhost:12345",
+  "authUrl": "localhost:12346",
+  "databaseUrl": "localhost:12345",
+  "protocol": "http://"
 }

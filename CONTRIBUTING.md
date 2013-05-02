@@ -46,30 +46,30 @@ The only issues we accept are bug reports or feature requests. Bugs must be isol
 
 ## Adding tests to my pull requests
 
-The tests are written using [vows](http://vowsjs.org/) and given the nature of `pkgcloud` test against third-party APIs are very slow specially in case of IaaS providers, so, we encourage the use of [`nock`](https://github.com/flatiron/nock) for mocking the responses.
+The tests are written using [mocha](http://visionmedia.github.io/mocha/) and given the nature of `pkgcloud` test against third-party APIs are very slow specially in case of IaaS providers, so, we encourage the use of [`hock`](https://github.com/mmalecki) for mocking the responses.
 
 Be familiar with the whole test suite and its helpers and other utilities on `test/` directory, read it to see examples of tests.
 
-Add mocking to your pull request should be really easy, first write the test using vows, require the `nock` library:
+Add mocking to your pull request should be really easy, first write the test using mocha, require the `hock` library:
 
 ``` js
-var vows = require('vows');
-// ...
-var nock = require('nock');
+var hock = require('hock');
 // ...
 ```
 
-The easy way is using the `recorder.rec()` method offer by `nock` just add this before the test declaration:
+As `hock` has a similar API to [nock](https://github.com/flatiron/nock), you can easily record the API calls using `nock`. do this using the `recorder.rec()` method offer by `nock` just add this before the test declaration:
 
 ``` js
 nock.recorder.rec();
 ```
 
-This will show you all the requests made by the test in the *nock definition*, go replace the `host` and other information using variables, also you can use the `loadFixture()` helper in case your reponse is too big. As final point add the conditional for run `nock` just when is enable, please put definitions inside this conditional:
+This will show you all the requests made by the test in the *nock definition*, go replace the `host` and other information using variables, also you can use the `loadFixture()` helper in case your reponse is too big. All of the tests are setup to check for an environment variable, and when present, will run against the mocking server.
 
 ``` js
-if (process.env.NOCK) {
-  // Put here all the nock definitions needed
+var mock = !!process.env.MOCK;
+
+if (mock) {
+  // Do all of your mocking preparation/cleanup in these blocks
 }
 ```
 

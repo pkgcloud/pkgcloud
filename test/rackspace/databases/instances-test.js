@@ -1,419 +1,535 @@
 /*
- * instances-test.js: Tests for Rackspace Cloud Database instances
- *
- * (C) 2010 Nodejitsu Inc.
- * MIT LICENSE
- *
- */
+* instances-test.js: Tests for Rackspace Cloud Database instances
+*
+* (C) 2010 Nodejitsu Inc.
+* MIT LICENSE
+*
+*/
 
-var vows = require('vows'),
-    assert = require('../../helpers/assert'),
-    nock = require('nock'),
-    helpers = require('../../helpers');
+var should = require('should'),
+    hock = require('hock'),
+    async = require('async'),
+    helpers = require('../../helpers'),
+    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
+    Instance = require('../../../lib/pkgcloud/rackspace/database/instance').Instance,
+    mock = !!process.env.MOCK;
 
-var client = helpers.createClient('rackspace', 'database');
+describe('pkgcloud/rackspace/databases/instances', function () {
+  var testContext = {},
+      client, authServer, server;
 
-var testContext = {};
+  describe('The pkgcloud Rackspace Database client', function () {
 
-if (process.env.NOCK) {
+    before(function (done) {
+      client = helpers.createClient('rackspace', 'database');
 
-  var credentials = {
-     username: client.config.username,
-     key: client.config.apiKey
-  };
+      if (!mock) {
+        return done();
+      }
 
-  nock('https://' + client.authUrl)
-    .post('/v1.1/auth', { "credentials": credentials })
-      .reply(200, helpers.loadFixture('rackspace/token.json'));
+      async.parallel([
+        function (next) {
+          hock.createHock(12346, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
 
-  nock('https://ord.databases.api.rackspacecloud.com')
-    .get('/v1.0/537645/flavors/1')
-      .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
-
-    .post('/v1.0/537645/instances',
-      "{\"instance\":{\"name\":\"test-instance\",\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1\",\"databases\":[],\"volume\":{\"size\":1}}}")
-      .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'))
-
-    .post('/v1.0/537645/instances',
-      "{\"instance\":{\"name\":\"test-instance\",\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1\",\"databases\":[],\"volume\":{\"size\":1}}}")
-      .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'))
-
-    .get('/v1.0/537645/instances?limit=2')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-      .reply(202)
-
-    .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstanceShutdown.json'))
-
-    .get('/v1.0/537645/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstanceOffset.json'))
-
-    .get('/v1.0/537645/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstanceLimitOffset.json'))
-
-    .get('/v1.0/537645/flavors/1')
-      .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', "{\"restart\":{}}")
-      .reply(202)
-
-    .get('/v1.0/537645/flavors/2')
-      .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .get('/v1.0/537645/flavors/2')
-      .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
-
-    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action',
-      "{\"resize\":{\"flavorRef\":\"https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2\"}}")
-      .reply(202)
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .get('/v1.0/537645/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-
-    .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action',
-      "{\"resize\":{\"volume\":{\"size\":2}}}")
-      .reply(202);
-}
-
-function assertLinks(links) {
-  assert.isArray(links);
-  links.forEach(function (link) {
-    assert.ok(link.href);
-    assert.ok(link.rel);
-  });
-}
-
-vows.describe('pkgcloud/rackspace/databases/instances').addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the create() method": {
-     topic: function () {
-      var self = this;
-       client.getFlavor(1, function (err, flavor) {
-        client.createInstance({
-          name: 'test-instance',
-          flavor: flavor
-        }, self.callback);
-       });
-     },
-     "should return a valid instance": function (err, instance) {
-      assert.isNull(err);
-      assert.assertInstance(instance);
-     },
-     "should return the same name and flavor used": function (err, instance) {
-      assert.isNull(err);
-      assert.assertInstance(instance);
-      assert.equal(instance.name, 'test-instance');
-      assert.equal(instance.flavor.id, 1);
-     }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the getInstances() method": {
-      "without options": {
-        topic: function () {
-          client.getInstances(this.callback);
+            authServer = hockClient;
+            next();
+          });
         },
-        "should return the list of instances": function (err, instances) {
-          assert.isNull(err);
-          assert.isArray(instances);
-          assert.ok(instances.length > 0);
+        function (next) {
+          hock.createHock(12345, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            server = hockClient;
+            next();
+          });
+        }
+      ], done);
+    });
+
+    describe('the create() method', function() {
+
+      var err, instance;
+
+      before(function(done) {
+        
+        if (mock) {
+          var credentials = {
+            username: client.config.username,
+            key: client.config.apiKey
+          };
+
+          authServer
+            .post('/v1.1/auth', { credentials: credentials })
+            .reply(200, helpers.loadFixture('rackspace/token.json'));
+
+          server
+            .get('/v1.0/537645/flavors/1')
+            .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
+
+            .post('/v1.0/537645/instances', {
+              instance: {
+                name: 'test-instance',
+                flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1',
+                databases: [],
+                volume: {
+                  size:1
+                }
+              }
+            })
+            .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
+          
+        }
+        client.getFlavor(1, function (err, flavor) {
+          should.not.exist(err);
+          should.exist(flavor);
+          flavor.should.be.instanceOf(Flavor);
+
+          client.createInstance({
+            name: 'test-instance',
+            flavor: flavor
+          }, function(e, i) {
+            err = e;
+            instance = i;
+            authServer && authServer.done();
+            server && server.done();
+            done();
+          });
+        });
+      });
+
+      it('should return a valid instance', function() {
+        should.not.exist(err);
+        should.exist(instance);
+        instance.should.be.instanceOf(Instance);
+      });
+
+      it('should return the same name and flavor used', function() {
+        should.not.exist(err);
+        should.exist(instance);
+        instance.name.should.equal('test-instance');
+        should.equal(1, instance.flavor.id);
+      });
+    });
+
+    describe('the getInstances() method', function() {
+      describe('without options', function() {
+
+        var err, instances, offset
+
+        before(function(done) {
+
+          if (mock) {
+            server
+              .get('/v1.0/537645/instances')
+              .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+          }
+
+          client.getInstances(function(e, i, o) {
+            err = e;
+            instances = i;
+            offset = o;
+            server && server.done();
+            done();
+          });
+        });
+
+        it('should return the list of instances', function () {
+          should.not.exist(err);
+          should.exist(instances);
+          instances.should.be.instanceOf(Array);
+          instances.length.should.be.above(0);
+
           testContext.instancesQuantity = instances.length;
-        },
-        "should valid instance each item in the list": function (err, instances) {
-          assert.isNull(err);
+        });
+
+        it('should valid instance each item in the list', function () {
           instances.forEach(function (instance) {
-            assert.assertInstance(instance);
+            instance.should.be.instanceOf(Instance);
           });
-        },
-        "should response with extra info": function (err, instances) {
-          assert.isNull(err);
+        });
+
+        it('should response with extra info', function () {
+
           instances.forEach(function (instance) {
-            assert.ok(instance.id);
-            assert.isArray(instance.links);
-            assert.isObject(instance.flavor);
-            assert.isObject(instance.volume);
-            assert.isNumber(instance.volume.size);
+            should.exist(instance.id);
+            instance.links.should.be.instanceOf(Array);
+            instance.flavor.should.be.a('object');
+            instance.volume.should.be.a('object');
+            instance.volume.size.should.be.a('number');
           });
-        },
-        "should have correct flavor": function (err, instances) {
-          assert.isNull(err);
+        });
+
+        it('should have correct flavor', function () {
           instances.forEach(function (instance) {
-            assert.ok(instance.flavor.id);
+            should.exist(instance.flavor.id);
             assertLinks(instance.flavor.links);
           });
-        },
-        "should have correct links": function (err, instances) {
+        });
+
+        it('should have correct links', function () {
           instances.forEach(function (instance) {
             assertLinks(instance.links);
           });
-        },
-        "should have a null offset": function (err, instances, offset) {
-          assert.isNull(err);
-          assert.ok(instances);
-          assert.isNull(offset);
-        }
-      },
-      "with limit": {
-        topic: function () {
-          client.getInstances({ limit: 2 }, this.callback);
-        },
-        "should respond at least 2 elements": function (err, instances) {
-          assert.isNull(err);
-          assert.isArray(instances);
-          assert.equal(instances.length, 2);
-        },
-        "should pass as third argument the offset mark": function (err, instances, offset) {
-          assert.isNull(err);
-          assert.isNotNull(offset);
-          assert.ok(offset);
+        });
+
+        it('should have a null offset', function () {
+          should.not.exist(offset);
+        });
+      });
+
+      describe('with limit', function () {
+        var err, instances, offset
+
+        before(function (done) {
+
+          if (mock) {
+            server
+              .get('/v1.0/537645/instances?limit=2')
+              .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
+          }
+
+          client.getInstances({ limit: 2 }, function (e, i, o) {
+            err = e;
+            instances = i;
+            offset = o;
+            server && server.done();
+            done();
+          });
+        });
+
+        it('should respond at least 2 elements', function() {
+          should.not.exist(err);
+          should.exist(instances);
+          instances.should.be.instanceOf(Array);
+          instances.should.have.length(2);
+        });
+
+        it('should pass as third argument the offset mark', function() {
+          should.exist(offset);
           testContext.marker = offset;
+        });
+      });
+    });
+
+    describe('the destroyInstance() method', function() {
+      it('should respond correctly', function(done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+            .reply(202)
         }
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the destroyInstance() method": {
-      topic: function () {
-        var self = this;
+
         helpers.selectInstance(client, function (instance) {
           testContext.Instance = instance;
-          client.destroyInstance(testContext.Instance, self.callback);
+          client.destroyInstance(testContext.Instance, function(err, result) {
+            should.not.exist(err);
+            should.exist(result);
+            result.statusCode.should.equal(202);
+            server && server.done();
+            done();
+          });
         });
-      },
-      "should respond correctly": function (err, res) {
-        assert.isNull(err);
-        assert.equal(res.statusCode, 202);
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the getInstance() method": {
-      topic: function () {
-        client.getInstance(testContext.Instance.id, this.callback);
-      },
-      "should response with details": function (err, instance) {
-        assert.isNull(err);
-        assert.ok(instance);
-        assert.assertInstance(instance);
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the getInstances() method with offset": {
-      topic: function () {
-        client.getInstances({ offset: testContext.marker }, this.callback);
-      },
-      "should respond less quantity": function (err, instances, offset) {
-        assert.isNull(err);
-        assert.isArray(instances);
-        assert.ok(instances.length >= 2
+      });
+    });
+
+    describe('the getInstance() method', function () {
+      it('should response with details', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstance.json'))
+        }
+
+        client.getInstance(testContext.Instance.id, function (err, instance) {
+          should.not.exist(err);
+          should.exist(instance);
+          instance.should.be.instanceOf(Instance);
+          instance.id.should.equal(testContext.Instance.id);
+          server && server.done();
+          done();
+        });
+      });
+    });
+
+    describe('the getInstances() method', function () {
+      it('with offset should respond less quantity', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstanceOffset.json'))
+        }
+
+        client.getInstances({ offset: testContext.marker }, function (err, instances, offset) {
+          should.not.exist(err);
+          should.exist(instances);
+          instances.should.be.instanceOf(Array);
+          should.ok(instances.length >= 2
             && instances.length < testContext.instancesQuantity);
-      }
-    },
-    "the getInstances() method with limit and offset": {
-      topic: function () {
-        client.getInstances({limit:1, offset: testContext.marker }, this.callback);
-      },
-      "should respond just one result with more next points": function (err, instances, offset) {
-        assert.isNull(err);
-        assert.isArray(instances);
-        assert.equal(instances.length, 1);
-        assert.ok(offset);
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the create() method with erros": {
-      topic: function () {
-        client.createInstance(this.callback);
-      },
-      "should respond with errors": assert.assertError
-    },
-    "the create() method without flavor": {
-      topic: function () {
-        client.createInstance({ name: 'test-without-flavor' }, this.callback);
-      },
-      "should respond with errors": assert.assertError
-    },
-    "the create() method with a incorrect size": {
-      topic: function () {
-        var self = this;
+          server && server.done();
+          done();
+        });
+
+      });
+
+      it('with limit and offset should respond just one result with more next points', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstanceLimitOffset.json'))
+        }
+
+        client.getInstances({limit: 1, offset: testContext.marker }, function (err, instances, offset) {
+          should.not.exist(err);
+          should.exist(instances);
+          instances.should.be.instanceOf(Array);
+          should.exist(offset);
+          instances.should.have.length(1);
+          server && server.done();
+          done();
+        });
+      });
+    });
+
+    describe('the setFlavor() method', function () {
+      it('without instance and flavor parameters should get errors', function (done) {
+        client.setFlavor(function (err) {
+          should.exist(err);
+          done();
+        });
+      });
+
+      it('without flavor parameter should get errors', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          client.setFlavor(instance, function (err) {
+            should.exist(err);
+            server && server.done();
+            done();
+          });
+        });
+      });
+
+      it('without instance parameter should get errors', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/flavors/2')
+            .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
+        }
+
+        client.getFlavor(2, function (err, flavor) {
+          should.not.exist(err);
+          should.exist(flavor);
+
+          client.setFlavor(flavor, function(err) {
+            should.exist(err);
+            server && server.done();
+            done();
+          });
+        });
+      });
+
+      it('with correct inputs should respond correctly', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .get('/v1.0/537645/flavors/2')
+            .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
+            .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+              resize: {
+                flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2'
+              }
+            })
+            .reply(202)
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          var newFlavor = (Number(instance.flavor.id) === 4) ? 1 : Number(instance.flavor.id) + 1;
+          client.getFlavor(newFlavor, function (err, flavor) {
+            should.not.exist(err);
+            should.exist(flavor);
+            client.setFlavor(instance, flavor, function (err) {
+              should.not.exist(err);
+              server && server.done();
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    describe('the setVolumeSize() method', function() {
+      it('without instance and size parameters should get errors', function(done) {
+        client.setVolumeSize(function(err) {
+          should.exist(err);
+          done();
+        });
+      });
+
+      it('without size parameter should get errors', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          client.setVolumeSize(instance, function (err) {
+            should.exist(err);
+            server && server.done();
+            done();
+          });
+        });
+      });
+
+      it('without invalid size parameter should get errors', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          client.setVolumeSize(instance, 12, function (err) {
+            should.exist(err);
+            server && server.done();
+            done();
+          });
+        });
+      });
+
+      it('with correct inputs should respond correctly', function (done) {
+
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+              resize: {
+                volume :{
+                  size :2
+                }
+              }
+            })
+            .reply(202)
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          var newSize = (Number(instance.volume.size) === 8) ? 1 : Number(instance.volume.size) + 1;
+
+          client.setVolumeSize(instance, newSize, function (err) {
+            should.not.exist(err);
+            server && server.done();
+            done();
+          });
+        });
+      });
+    });
+
+    describe('the create() method with errors', function () {
+      it('should respond with errors', function (done) {
+        client.createInstance(function(err) {
+          should.exist(err);
+          done();
+        })
+      });
+
+      it('without flavor should respond with errors', function (done) {
+        client.createInstance({ name: 'test-without-flavor' }, function (err) {
+          should.exist(err);
+          done();
+        })
+      });
+
+      it('with invalid size should respond with errors', function (done) {
+        if (mock) {
+          server
+            .get('/v1.0/537645/flavors/1')
+            .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
+        }
+
         client.getFlavor(1, function (err, flavor) {
           client.createInstance({
             name: 'test-instance',
             flavor: flavor,
             size: '1'
-          }, self.callback);
+          }, function(err) {
+            should.exist(err);
+            server && server.done();
+            done();
+          });
         });
-      },
-      "should respond with errors": assert.assertError
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the restartInstance() method": {
-      "with valid instance": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            client.restartInstance(instance, self.callback);
-          });
-        },
-        "should respond correctly": function (err) {
-          assert.isUndefined(err);
-        }
-      },
-      "with no instance": {
-        topic: function () {
-          client.restartInstance(this.callback);
-        },
-        "should get errors": assert.assertError
-      },
-      "with no parameters": {
-        topic: client.restartInstance,
-        "should get errros": assert.assertError
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the setFlavor() method": {
-      "without instance and flavor parameters": {
-        topic: function () {
-          client.setFlavor(this.callback);
-        },
-        "should get errors": assert.assertError
-      },
-      "whitout flavor parameter": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            client.setFlavor(instance, self.callback);
-          });
-        },
-        "should get errors": assert.assertError
-      },
-      "whitout instance parameter": {
-        topic: function () {
-          var self = this;
-          client.getFlavor(2, function (err, flavor) {
-            if (!err && flavor) {
-              client.setFlavor(flavor, self.callback);
-            }
-          })
-        },
-        "should get errors": assert.assertError
-      },
-      "with correct parameters": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            var newFlavor = (Number(instance.flavor.id) === 4) ? 1 : Number(instance.flavor.id) + 1;
-            client.getFlavor(newFlavor, function (err, flavor) {
-              if (!err && flavor) {
-                client.setFlavor(instance, flavor, self.callback);
-              }
-            });
-          });
-        },
-        "should respond correctly": function (err) {
-          assert.isUndefined(err);
-        }
-      }
-    }
-  }
-}).addBatch({
-  "The pkgcloud Rackspace database client": {
-    "the setVolumeSize() method": {
-      "without instance and size parameters": {
-        topic: function () {
-          client.setVolumeSize(this.callback);
-        },
-        "should get errors": assert.assertError
-      },
-      "without size parameter": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            client.setVolumeSize(instance, self.callback);
-          });
-        },
-        "should get errors": assert.assertError
-      },
-      "with invalid size parameter": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            client.setVolumeSize(instance, 12, self.callback);
-          });
-        },
-        "should get errors": assert.assertError
-      },
-      "with correct parameters": {
-        topic: function () {
-          var self = this;
-          helpers.selectInstance(client, function (instance) {
-            var newSize = (Number(instance.volume.size) === 8) ? 1 : Number(instance.volume.size) + 1;
-            client.setVolumeSize(instance, newSize, self.callback);
-          });
-        },
-        "should respond correctly": function (err) {
-          assert.isUndefined(err);
-        }
-      }
-    }
-  }
-})
-//
-// Its better run the tests again for have instances already running.
-// for the moment I will not clean up the instances at the end.
-//
-/**
-.addBatch({
-  "The pkgcloud Rackspace database client": {
-    "destroying test instances": {
-      topic: function () {
-        var self  = this,
-            async = require('async');
-        client.getInstances(function (err, instances) {
-          if (err) throw new Error(err);
-          async.forEach(instances, function () {
-            // I dont know why I have to do this for not lost the context of client.
-            client.destroyInstance(arguments[0], arguments[1]);
-          } , self.callback);
+      });
+    });
+
+    describe('the restartInstance() method', function () {
+      it('with no instance should return error', function (done) {
+        client.restartInstance(function (err) {
+          should.exist(err);
+          done();
         })
-      },
-      "should complete without erros": function (err) {
-        assert.isUndefined(err);
+      });
+
+      it('with valid instance should restart', function (done) {
+        if (mock) {
+          server
+            .get('/v1.0/537645/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
+            .reply(202)
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          client.restartInstance(instance, function (err) {
+            should.not.exist(err);
+            server && server.done();
+            done();
+          });
+        });
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
       }
-    }
-  }
-})**/.export(module);
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done)
+    });
+  });
+});
+
+function assertLinks(links) {
+  links.should.be.instanceOf(Array);
+  links.forEach(function (link) {
+    should.exist(link.href);
+    should.exist(link.rel);
+  });
+}
+
