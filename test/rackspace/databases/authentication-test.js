@@ -53,11 +53,34 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
     it('the getVersion() method should return the proper version', function(done) {
       if (mock) {
+        authServer
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+
         server
           .get('/')
-          .reply(203, {versions: [
-            { id: 'v1.0', status: 'BETA' }
-          ]});
+          .reply(200, {
+            versions: [
+              {
+                "status": "CURRENT",
+                "updated": "2012-08-01T00:00:00Z",
+                "id": "v1.0",
+                "links": [
+                  {
+                    "href": "http://dfw.databases.api.rackspacecloud.com/v1.0/",
+                    "rel": "self"
+                  }
+                ]
+              }
+            ]
+          });
       }
 
       client.getVersion(function (err, versions) {
@@ -67,6 +90,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         versions.should.have.length(1);
 
         server && server.done();
+        authServer && authServer.done();
         done();
       });
     });
@@ -79,19 +103,20 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       beforeEach(function(done) {
 
         if (mock) {
-          var credentials = {
-            username: client.config.username,
-            key: client.config.apiKey
-          };
-
           authServer
-            .post('/v1.1/auth', { credentials: credentials })
-            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/token.json');
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'MOCK-USERNAME',
+                  apiKey: 'MOCK-API-KEY'
+                }
+              }
+            })
+            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
         }
 
-        client.auth(function (e, r) {
+        client.auth(function (e) {
           err = e;
-          res = r;
           authServer && authServer.done();
           done();
         });
@@ -100,25 +125,14 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
       it('should respond with 200 and appropriate info', function() {
         should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(200);
-        res.headers.should.be.a('object');
-        res.body.should.be.a('object');
       });
 
       it('should respond with a token', function () {
-        res.body.auth.should.be.a('object');
-        res.body.auth.token.should.be.a('object');
-        res.body.auth.token.id.should.be.a('string');
+        should.exist(client.identity.token);
       });
 
       it('should update the config with appropriate urls', function () {
-        var config = client.config;
-        config.serverUrl.should.equal(res.headers['x-server-management-url']);
-        config.storageUrl.should.equal(res.headers['x-storage-url']);
-        config.cdnUrl.should.equal(res.headers['x-cdn-management-url']);
-        config.authToken.should.equal(res.headers['x-auth-token']);
-        config.accountNumber.should.be.a('string');
+        should.exist(client.identity);
       });
     });
 
@@ -137,7 +151,14 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
         if (mock) {
           authServer
-            .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'fake',
+                  apiKey: 'data'
+                }
+              }
+            })
             .reply(401, {
               unauthorized: {
                 message: 'Username or api key is invalid', code: 401
@@ -145,9 +166,8 @@ describe('pkgcloud/rackspace/database/authentication', function() {
             });
         }
 
-        badClient.auth(function (e, r) {
+        badClient.auth(function (e) {
           err = e;
-          res = r;
           authServer && authServer.done();
           done();
         });
@@ -155,9 +175,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
       it('should respond with Error code 401', function () {
         should.exist(err);
-        should.not.exist(res);
-        should.exist(err.unauthorized);
-        err.unauthorized.code.should.equal(401);
+        // TODO resolve identity responses
       });
     });
   });

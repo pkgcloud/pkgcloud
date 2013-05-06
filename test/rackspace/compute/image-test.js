@@ -51,11 +51,18 @@ describe('pkgcloud/rackspace/compute/images', function () {
     before(function(done) {
       if (mock) {
         authServer
-          .get('/v1.0')
-          .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
 
         server
-          .get('/v1.0/537645/servers/detail.json')
+          .get('/v2/123456/servers/detail')
           .reply(200, helpers.loadFixture('rackspace/servers.json'));
       }
 
@@ -73,8 +80,15 @@ describe('pkgcloud/rackspace/compute/images', function () {
     it('the createImage() method with a serverId should create a new image', function(done) {
       if (mock) {
         server
-          .post('/v1.0/537645/images', { image: { name: 'test-img-id', serverId: 20578901 } })
-          .reply(202, helpers.loadFixture('rackspace/queued_image.json'), {});
+          .post('/v2/123456/servers/a0a5f183-b94e-4a41-a854-00aa00aa00aa/action', {
+            createImage: { name: 'test-img-id' }
+          })
+          .reply(202, helpers.loadFixture('rackspace/queued_image.json'), {
+            location: 'http://localhost:12345/v2/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322'
+          })
+          .get('/v2/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322')
+          .reply(200, helpers.loadFixture('rackspace/image.json'));
+
       }
 
       client.createImage({ name: 'test-img-id',
@@ -92,7 +106,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
 
       if (mock) {
         server
-          .delete('/v1.0/537645/images/18753753')
+          .delete('/v2/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322')
           .reply(204, '', {});
       }
 

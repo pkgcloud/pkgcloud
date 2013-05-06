@@ -52,16 +52,28 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
     it('the getVersion() method should return the proper version', function (done) {
       if (mock) {
+        authServer
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+
         server
-          .get('/')
-          .reply(200, { versions: [{ id: 'v1.0', status: 'BETA' }]});
+          .get('/v2/')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
       }
 
       client.getVersion(function (err, version) {
         should.not.exist(err);
         should.exist(version);
-        version.should.equal('v1.0');
+        version.should.equal('v2');
         server && server.done();
+        authServer && authServer.done();
         done();
       });
     });
@@ -73,44 +85,36 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       beforeEach(function (done) {
 
-        if (mock) {
-          var credentials = {
-            username: client.config.username,
-            key: client.config.apiKey
-          };
+        client = helpers.createClient('rackspace', 'compute');
 
+        if (mock) {
           authServer
-            .get('/v1.0')
-            .reply(204, '', JSON.parse(helpers.loadFixture('rackspace/auth.json')));
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'MOCK-USERNAME',
+                  apiKey: 'MOCK-API-KEY'
+                }
+              }
+            })
+            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
         }
 
-        client.auth(function (e, r) {
-          err = e;
-          res = r;
+        client.auth(function (e) {
+          should.not.exist(e);
           authServer && authServer.done();
           done();
         });
       });
 
-      it('should respond with 200 and appropriate info', function () {
-        should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(204);
-        res.headers.should.be.a('object');
-      });
-
       it('should update the config with appropriate urls', function () {
-        var config = client.config;
-        config.serverUrl.should.equal(res.headers['x-server-management-url']);
-        config.storageUrl.should.equal(res.headers['x-storage-url']);
-        config.cdnUrl.should.equal(res.headers['x-cdn-management-url']);
-        config.authToken.should.equal(res.headers['x-auth-token']);
+        client.identity.should.be.a('object');
       });
 
       it('the getLimits() method should return the proper limits', function (done) {
         if (mock) {
           server
-            .get('/v1.0/537645/limits')
+            .get('/v2/123456/limits')
             .reply(200, { limits: { absolute: { maxPrivateIPs: 0 }, rate: [] } }, {});
         }
 
@@ -128,7 +132,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
     describe('the auth() method with an invalid username and api key', function () {
 
-      var badClient = helpers.createClient('rackspace', 'database', {
+      var badClient = helpers.createClient('rackspace', 'compute', {
         username: 'fake',
         apiKey: 'data',
         authUrl: 'localhost:12346',
@@ -141,7 +145,14 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
         if (mock) {
           authServer
-            .post('/v1.1/auth', { credentials: { username: 'fake', key: 'data' }})
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'fake',
+                  apiKey: 'data'
+                }
+              }
+            })
             .reply(401, {
               unauthorized: {
                 message: 'Username or api key is invalid', code: 401
@@ -149,9 +160,8 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
             });
         }
 
-        badClient.auth(function (e, r) {
+        badClient.auth(function (e) {
           err = e;
-          res = r;
           authServer && authServer.done();
           done();
         });
@@ -160,9 +170,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       it('should respond with Error code 401', function () {
         should.exist(err);
-        should.not.exist(res);
-        should.exist(err.unauthorized);
-        err.unauthorized.code.should.equal(401);
+        // TODO resolve identity responses
       });
     });
 

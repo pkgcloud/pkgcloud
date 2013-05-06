@@ -56,23 +56,25 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       before(function(done) {
         
         if (mock) {
-          var credentials = {
-            username: client.config.username,
-            key: client.config.apiKey
-          };
-
           authServer
-            .post('/v1.1/auth', { credentials: credentials })
-            .reply(200, helpers.loadFixture('rackspace/token.json'));
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'MOCK-USERNAME',
+                  apiKey: 'MOCK-API-KEY'
+                }
+              }
+            })
+            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
 
           server
-            .get('/v1.0/537645/flavors/1')
+            .get('/v1.0/123456/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
 
-            .post('/v1.0/537645/instances', {
+            .post('/v1.0/123456/instances', {
               instance: {
                 name: 'test-instance',
-                flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1',
+                flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
                 databases: [],
                 volume: {
                   size:1
@@ -123,7 +125,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           if (mock) {
             server
-              .get('/v1.0/537645/instances')
+              .get('/v1.0/123456/instances')
               .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           }
 
@@ -187,7 +189,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           if (mock) {
             server
-              .get('/v1.0/537645/instances?limit=2')
+              .get('/v1.0/123456/instances?limit=2')
               .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
           }
 
@@ -219,9 +221,9 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+            .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
             .reply(202)
         }
 
@@ -243,7 +245,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
             .reply(200, helpers.loadFixture('rackspace/databaseInstance.json'))
         }
 
@@ -263,7 +265,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
+            .get('/v1.0/123456/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
             .reply(200, helpers.loadFixture('rackspace/databaseInstanceOffset.json'))
         }
 
@@ -283,7 +285,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
+            .get('/v1.0/123456/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
             .reply(200, helpers.loadFixture('rackspace/databaseInstanceLimitOffset.json'))
         }
 
@@ -311,7 +313,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
 
@@ -328,7 +330,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/flavors/2')
+            .get('/v1.0/123456/flavors/2')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
         }
 
@@ -348,13 +350,13 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/537645/flavors/2')
+            .get('/v1.0/123456/flavors/2')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
-            .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+            .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
               resize: {
-                flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2'
+                flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
               }
             })
             .reply(202)
@@ -387,7 +389,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
 
@@ -404,7 +406,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
 
@@ -421,9 +423,9 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+            .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
               resize: {
                 volume :{
                   size :2
@@ -463,7 +465,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with invalid size should respond with errors', function (done) {
         if (mock) {
           server
-            .get('/v1.0/537645/flavors/1')
+            .get('/v1.0/123456/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
         }
 
@@ -492,9 +494,9 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with valid instance should restart', function (done) {
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
+            .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
             .reply(202)
         }
 

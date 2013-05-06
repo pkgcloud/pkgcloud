@@ -49,20 +49,21 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
     it('the createDatabases() method should respond correctly', function(done) {
       if (mock) {
-
-        var credentials = {
-          username: client.config.username,
-          key: client.config.apiKey
-        };
-
         authServer
-          .post('/v1.1/auth', { "credentials": credentials })
-          .reply(200, helpers.loadFixture('rackspace/token.json'))
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
 
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
           {
             databases: [
               { name: 'TestDatabase' }
@@ -87,9 +88,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
           {
             databases: [
               { name: 'TestDatabaseTwo' }
@@ -113,9 +114,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
           {
             databases: [
               { name: 'TestDatabaseThree' }
@@ -157,9 +158,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
           .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
       }
 
@@ -179,9 +180,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
           .reply(200, {databases: [
             {name: 'TestDatabase'},
             {name: 'TestDatabaseTwo'}
@@ -205,9 +206,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
           .reply(200, {databases: [
             {name: 'TestDatabase'}
           ]});
@@ -229,9 +230,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
           .reply(200, helpers.loadFixture('rackspace/databasesLimit.json'));
       }
 
@@ -252,9 +253,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?marker=TestDatabase')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?marker=TestDatabase')
           .reply(200, { databases: [{ name: 'TestDatabaseTwo '}] });
       }
 
@@ -276,9 +277,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1&marker=TestDatabase')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1&marker=TestDatabase')
           .reply(200, { databases: [{ name: 'TestDatabaseTwo' }] });
       }
 
@@ -300,9 +301,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
+          .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
           .reply(202);
       }
 
@@ -321,9 +322,9 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
+          .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
           .reply(202);
       }
 

@@ -38,17 +38,21 @@ describe('pkgcloud/rackspace/storage/authentication', function () {
 
           if (mock) {
             authServer
-              .get('/v1.0')
-              .reply(204, '', helpers.loadFixture('rackspace/auth.json', 'json'));
+              .post('/v2.0/tokens', {
+                auth: {
+                  'RAX-KSKEY:apiKeyCredentials': {
+                    username: 'MOCK-USERNAME',
+                    apiKey: 'MOCK-API-KEY'
+                  }
+                }
+              })
+              .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
           }
 
           var client = helpers.createClient('rackspace', 'storage');
 
-          client.auth(function (err, res) {
+          client.auth(function (err) {
             should.not.exist(err);
-            should.exist(res);
-            res.statusCode.should.equal(204);
-            res.headers.should.be.a('object');
             authServer && authServer.done();
             done();
           });
@@ -57,19 +61,21 @@ describe('pkgcloud/rackspace/storage/authentication', function () {
         it('should update the config with appropriate urls', function (done) {
           if (mock) {
             authServer
-              .get('/v1.0')
-              .reply(204, '', helpers.loadFixture('rackspace/auth.json', 'json'));
+              .post('/v2.0/tokens', {
+                auth: {
+                  'RAX-KSKEY:apiKeyCredentials': {
+                    username: 'MOCK-USERNAME',
+                    apiKey: 'MOCK-API-KEY'
+                  }
+                }
+              })
+              .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
           }
 
           var client = helpers.createClient('rackspace', 'storage');
 
-          client.auth(function (err, res) {
+          client.auth(function (err) {
             should.not.exist(err);
-            should.exist(res);
-            client.config.serverUrl.should.equal(res.headers['x-server-management-url']);
-            client.config.storageUrl.should.equal(res.headers['x-storage-url']);
-            client.config.cdnUrl.should.equal(res.headers['x-cdn-management-url']);
-            client.config.authToken.should.equal(res.headers['x-auth-token']);
             authServer && authServer.done();
             done();
           });
@@ -105,16 +111,30 @@ describe('pkgcloud/rackspace/storage/authentication', function () {
 
           if (mock) {
             authServer
-              .get('/v1.0')
-              .reply(401);
+              .post('/v2.0/tokens', {
+                auth: {
+                  'RAX-KSKEY:apiKeyCredentials': {
+                    username: 'fake',
+                    apiKey: 'data'
+                  }
+                }
+              })
+              .reply(401, {
+                unauthorized: {
+                  message: 'Username or api key is invalid', code: 401
+                }
+              });
           }
 
-          var client = helpers.createClient('rackspace', 'storage');
+          var badClient = helpers.createClient('rackspace', 'compute', {
+            username: 'fake',
+            apiKey: 'data',
+            authUrl: 'localhost:12346',
+            protocol: 'http://'
+          });
 
-          client.auth(function (err, res) {
+          badClient.auth(function (err, res) {
             should.exist(err);
-            should.not.exist(res);
-            err.failCode.should.equal('Unauthorized');
             authServer && authServer.done();
             done();
           });

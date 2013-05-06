@@ -1,64 +1,137 @@
 {
   "flavors": [
     {
+      "name": "512MB Standard Instance",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/2",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/2",
+          "rel": "bookmark"
+        }
+      ],
       "ram": 512,
-      "id": 1,
-      "links": [
-        {
-          "href": 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1',
-          "rel": 'self'
-        },
-        {
-          "href": 'https://ord.databases.api.rackspacecloud.com/flavors/1',
-          "rel": 'bookmark'
-        }
-      ],
-      "name": 'm1.tiny'
+      "vcpus": 1,
+      "swap": 512,
+      "rxtx_factor": 2,
+      "disk": 20,
+      "id": "2"
     },
     {
+      "name": "1GB Standard Instance",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/3",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/3",
+          "rel": "bookmark"
+        }
+      ],
       "ram": 1024,
-      "id": 2,
-      "links":[
-        {
-          "href": 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2',
-          "rel": 'self'
-        },
-        {
-          "href": 'https://ord.databases.api.rackspacecloud.com/flavors/2',
-          "rel": 'bookmark'
-        }
-      ],
-      "name": 'm1.small'
+      "vcpus": 1,
+      "swap": 1024,
+      "rxtx_factor": 3,
+      "disk": 40,
+      "id": "3"
     },
     {
+      "name": "2GB Standard Instance",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/4",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/4",
+          "rel": "bookmark"
+        }
+      ],
       "ram": 2048,
-      "id": 3,
-      "links": [
-        {
-          "href": 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/3',
-          "rel": 'self'
-        },
-        {
-          "href": 'https://ord.databases.api.rackspacecloud.com/flavors/3',
-          "rel": 'bookmark'
-        }
-      ],
-      "name": 'm1.medium'
+      "vcpus": 2,
+      "swap": 2048,
+      "rxtx_factor": 6,
+      "disk": 80,
+      "id": "4"
     },
     {
-      "ram": 4096,
-      "id": 4,
+      "name": "4GB Standard Instance",
       "links": [
         {
-          "href": 'https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/4',
-          "rel": 'self'
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/5",
+          "rel": "self"
         },
         {
-          "href": 'https://ord.databases.api.rackspacecloud.com/flavors/4',
-          "rel": 'bookmark'
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/5",
+          "rel": "bookmark"
         }
       ],
-      "name": 'm1.large'
+      "ram": 4096,
+      "vcpus": 2,
+      "swap": 2048,
+      "rxtx_factor": 10,
+      "disk": 160,
+      "id": "5"
+    },
+    {
+      "name": "8GB Standard Instance",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/6",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/6",
+          "rel": "bookmark"
+        }
+      ],
+      "ram": 8192,
+      "vcpus": 4,
+      "swap": 2048,
+      "rxtx_factor": 15,
+      "disk": 320,
+      "id": "6"
+    },
+    {
+      "name": "15GB Standard Instance",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/7",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/7",
+          "rel": "bookmark"
+        }
+      ],
+      "ram": 15360,
+      "vcpus": 6,
+      "swap": 2048,
+      "rxtx_factor": 20,
+      "disk": 620,
+      "id": "7"
+    },
+    {
+      "name": "30GB Standard Instance",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/8",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/8",
+          "rel": "bookmark"
+        }
+      ],
+      "ram": 30720,
+      "vcpus": 8,
+      "swap": 2048,
+      "rxtx_factor": 30,
+      "disk": 1200,
+      "id": "8"
     }
   ]
 }

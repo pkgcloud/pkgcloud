@@ -254,11 +254,18 @@ providers.forEach(function (provider) {
 function setupImagesMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.authServer
-      .get('/v1.0')
-      .reply(204, '', require(__dirname + '/../../fixtures/rackspace/auth.json'));
+      .post('/v2.0/tokens', {
+        auth: {
+          'RAX-KSKEY:apiKeyCredentials': {
+            username: 'MOCK-USERNAME',
+            apiKey: 'MOCK-API-KEY'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
 
     servers.server
-      .get('/v1.0/537645/images/detail.json')
+      .get('/v2/123456/images/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/images.json');
   }
   else if (provider === 'openstack') {
@@ -310,8 +317,8 @@ function setupImagesMock(client, provider, servers) {
 function setupFlavorMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1.0/537645/flavors/detail.json')
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/serverFlavors.json');
+      .get('/v2/123456/flavors/detail')
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/flavors.json');
   }
   else if (provider === 'openstack') {
     servers.server
@@ -328,11 +335,18 @@ function setupFlavorMock(client, provider, servers) {
 function setupServerMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .post('/v1.0/537645/servers',
-        require(__dirname + '/../../fixtures/rackspace/createServer.json'))
+      .post('/v2/123456/servers', {
+        server: {
+          name: 'create-test-ids2',
+          flavorRef: 2,
+          imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346',
+          personality: [],
+          key_name: null
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/rackspace/createdServer.json')
-      .get('/v1.0/537645/servers/20592449')
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/20592449.json')
+      .get('/v2/123456/servers/a0a5f183-b94e-4a41-a854-00aa00aa00aa')
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/a0a5f183-b94e-4a41-a854-00aa00aa00aa.json');
   }
   else if (provider === 'openstack') {
     servers.server
@@ -415,7 +429,7 @@ function setupServerMock(client, provider, servers) {
 function setupGetServersMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1.0/537645/servers/detail.json')
+      .get('/v2/123456/servers/detail')
       .replyWithFile(202, __dirname + '/../../fixtures/rackspace/servers.json');
   }
   else if (provider === 'openstack') {

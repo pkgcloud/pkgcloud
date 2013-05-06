@@ -206,12 +206,20 @@ providers.forEach(function(provider) {
 
 function setupVersionMock(client, provider, servers) {
   if (provider === 'rackspace') {
+    servers.authServer
+      .post('/v2.0/tokens', {
+        auth: {
+          'RAX-KSKEY:apiKeyCredentials': {
+            username: 'MOCK-USERNAME',
+            apiKey: 'MOCK-API-KEY'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+
     servers.server
-      .get('/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .reply(200,
-      { versions: [
-        { id: 'v1.0', status: 'BETA'}
-      ]});
+      .get('/v2/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
   }
   else if (provider === 'openstack') {
     servers.authServer
@@ -239,7 +247,7 @@ function setupVersionMock(client, provider, servers) {
 
     servers.server
       .get('/v2/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/versions.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
   }
   else if (provider === 'joyent') {
     servers.server
@@ -251,14 +259,9 @@ function setupVersionMock(client, provider, servers) {
 
 function setupFlavorMock(client, provider, servers) {
   if (provider === 'rackspace') {
-    servers.authServer
-      .get('/v1.0', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .reply(204, '', require(__dirname + '/../../fixtures/rackspace/auth.json'));
-
     servers.server
-      .get('/v1.0/537645/flavors/detail.json',
-        {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/serverFlavors.json');
+      .get('/v2/123456/flavors/detail, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/flavors.json');
   }
   else if (provider === 'openstack') {
     servers.server
@@ -277,7 +280,7 @@ function setupFlavorMock(client, provider, servers) {
 function setupImagesMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1.0/537645/images/detail.json',
+      .get('/v2/123456/images/detail',
         {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/images.json');
   }
@@ -311,13 +314,20 @@ function setupImagesMock(client, provider, servers) {
 function setupServerMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .post('/v1.0/537645/servers',
-        helpers.loadFixture('rackspace/setWait.json'),
+      .post('/v2/123456/servers', {
+        server: {
+          name: 'create-test-setWait',
+          flavorRef: 2,
+          imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346',
+          personality: [],
+          key_name: null
+        }
+      },
+      {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(202, __dirname + '/../../fixtures/rackspace/setWaitResp1.json')
+      .get('/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf',
         {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(202, __dirname + '/../../fixtures/rackspace/setWaitResp2.json')
-      .get('/v1.0/537645/servers/20602046',
-        {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/20602046.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/a0a5f183-b94e-4a41-a854-64cff53375bf.json');
   }
   else if (provider === 'openstack') {
     servers.server
@@ -435,7 +445,8 @@ function setupServerMock(client, provider, servers) {
 function setupDestroyMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .delete('/v1.0/537645/servers/20602046', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .delete('/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf',
+        {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(204);
   }
   else if (provider === 'openstack') {

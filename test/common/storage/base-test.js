@@ -435,13 +435,19 @@ providers.filter(function (provider) {
 function setupCreateContainerMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
-      .get('/v1.0')
-      .reply(204, '',
-        helpers.loadFixture('rackspace/auth.json', 'json'));
+      .post('/v2.0/tokens', {
+        auth: {
+          'RAX-KSKEY:apiKeyCredentials': {
+            username: 'MOCK-USERNAME',
+            apiKey: 'MOCK-API-KEY'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
 
     servers.server
       .defaultReplyHeaders(helpers.rackspaceResponseHeaders())
-      .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
+      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(201);
   }
   else if (provider === 'amazon') {
@@ -482,7 +488,7 @@ function setupCreateContainerMock(provider, client, servers) {
 function setupGetContainersMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41?format=json')
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('rackspace/postContainers.json'));
   }
   else if (provider === 'amazon') {
@@ -500,7 +506,7 @@ function setupGetContainersMock(provider, client, servers) {
 function setupUploadStreamMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .put('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt', fillerama)
+      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
   }
   else if (provider === 'amazon') {
@@ -520,7 +526,7 @@ function setupUploadStreamMock(provider, client, servers) {
 function setupDownloadStreamMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, { 'content-length': fillerama.length + 2})
   }
   else if (provider === 'amazon') {
@@ -538,7 +544,7 @@ function setupDownloadStreamMock(provider, client, servers) {
 function setupGetFileMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .head('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt?format=json')
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 })
   }
   else if (provider === 'amazon') {
@@ -556,7 +562,7 @@ function setupGetFileMock(provider, client, servers) {
 function setupGetFilesMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container?format=json')
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
       .reply(200, [{
         bytes: fillerama.length,
         name: 'test-file.txt',
@@ -578,7 +584,7 @@ function setupGetFilesMock(provider, client, servers) {
 function setupRemoveFileMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '');
   }
   else if (provider === 'amazon') {
@@ -596,7 +602,7 @@ function setupRemoveFileMock(provider, client, servers) {
 function setupDestroyContainerMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container?format=json')
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
       .reply(200, [
         {
           bytes: fillerama.length,
@@ -604,9 +610,9 @@ function setupDestroyContainerMock(provider, client, servers) {
           content_type: 'text/plain'
         }
       ])
-      .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container/test-file.txt')
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '')
-      .delete('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41/pkgcloud-test-container')
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(204);
   }
   else if (provider === 'amazon') {
@@ -628,7 +634,7 @@ function setupDestroyContainerMock(provider, client, servers) {
 function setupGetContainers2Mock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1/MossoCloudFS_9198ca47-40e2-43e4-838b-8abea03a9b41?format=json')
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('rackspace/preContainers.json'));
   }
   else if (provider === 'amazon') {

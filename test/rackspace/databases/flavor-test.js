@@ -49,19 +49,21 @@ describe('pkgcloud/rackspace/databases/errors', function () {
 
     function getFlavors(auth, callback) {
       if (mock) {
-        var credentials = {
-          username: client.config.username,
-          key: client.config.apiKey
-        };
-
         if (auth) {
           authServer
-            .post('/v1.1/auth', { credentials: credentials })
-            .reply(200, helpers.loadFixture('rackspace/token.json'));
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'MOCK-USERNAME',
+                  apiKey: 'MOCK-API-KEY'
+                }
+              }
+            })
+            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
         }
 
         server
-          .get('/v1.0/537645/flavors')
+          .get('/v1.0/123456/flavors')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'))
       }
 
@@ -101,7 +103,7 @@ describe('pkgcloud/rackspace/databases/errors', function () {
     it('the getFlavor() method should return a valid flavor', function(done) {
       if (mock) {
         server
-          .get('/v1.0/537645/flavors/3')
+          .get('/v1.0/123456/flavors/3')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
       }
 

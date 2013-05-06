@@ -49,23 +49,22 @@ describe('pkgcloud/rackspace/databases/users', function () {
     });
     
     it('the createUser() method should respond correctly', function (done) {
-
-      var a, b;
-
       if (mock) {
-        var credentials = {
-          username: client.config.username,
-          key: client.config.apiKey
-        };
-
         authServer
-          .post('/v1.1/auth', { credentials: credentials })
-          .reply(200, helpers.loadFixture('rackspace/token.json'));
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
 
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
             users: [
               {
                 name: 'joeTest',
@@ -99,9 +98,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
             users: [
               {
                 name: 'joeTestTwo',
@@ -111,7 +110,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             ]
           })
           .reply(202)
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
             users: [
               {
                 name: 'joeTestThree',
@@ -150,9 +149,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
             users: [
               {
                 name: 'joeTestFour',
@@ -197,7 +196,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
       }
 
@@ -220,9 +219,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
           .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'));
       }
 
@@ -248,9 +247,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
+            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
             .reply(200, helpers.loadFixture('rackspace/databaseUsersLimit.json'));
         }
 
@@ -280,9 +279,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest')
+            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest')
             .reply(200, {
               users: [
                 { name: 'joeTestTwo', databases: []},
@@ -308,9 +307,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1&marker=joeTest')
+            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1&marker=joeTest')
             .reply(200, helpers.loadFixture('rackspace/databaseUsersLimitOffset.json'));
         }
 
@@ -336,9 +335,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
+            .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
             .reply(202);
         }
 
@@ -357,9 +356,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
         if (mock) {
           server
-            .get('/v1.0/537645/instances')
+            .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
+            .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
             .reply(202);
         }
 
@@ -379,9 +378,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
           .reply(200, {
             user: {
               password: 'dbba235b-d078-42ec-b992-dec1464c49cc',
@@ -410,9 +409,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       if (mock) {
         server
-          .get('/v1.0/537645/instances')
+          .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
           .reply(200, { rootEnabled: true });
       }
 
