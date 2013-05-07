@@ -34,7 +34,7 @@
     "mime":          "1.2.x",
     "pause-stream":  ">=0.0.10",
     "pkginfo":       "0.2.x",
-    "request":       "2.20.x",
+    "request":       "2.21.x",
     "underscore":    "1.4.x",
     "url-join":      "0.0.x",
     "utile":         "0.x.x"
