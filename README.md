@@ -337,5 +337,5 @@ We are pretty flexible about these guidelines, but the closer you follow them th
 4. Support additional service providers.
 
 #### Author: [Nodejitsu Inc.](http://nodejitsu.com)
-#### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), [Daniel Aristizabal](https://github.com/cronopio), [Marak Squires](https://github.com/marak), [Dale Stammen](https://github.com/stammen)
+#### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), [Daniel Aristizabal](https://github.com/cronopio), [Marak Squires](https://github.com/marak), [Dale Stammen](https://github.com/stammen), [Ken Perkins](https://github.com/kenperkins)
 #### License: MIT

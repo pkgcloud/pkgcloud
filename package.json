@@ -6,7 +6,8 @@
   "contributors": [
     { "name": "Charlie Robbins",    "email": "charlie@nodejitsu.com" },
     { "name": "Nuno Job",           "email": "nuno@nodejitsu.com" },
-    { "name": "Daniel Aristizabal", "email": "daniel@nodejitsu.com" }
+    { "name": "Daniel Aristizabal", "email": "daniel@nodejitsu.com" },
+    { "name": "Ken Perkins",        "email": "ken.perkins@rackspace.com" }
   ],
   "repository": {
     "type": "git",
