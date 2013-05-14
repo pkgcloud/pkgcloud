@@ -260,7 +260,7 @@ function setupVersionMock(client, provider, servers) {
 function setupFlavorMock(client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v2/123456/flavors/detail, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2/123456/flavors/detail', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/flavors.json');
   }
   else if (provider === 'openstack') {
