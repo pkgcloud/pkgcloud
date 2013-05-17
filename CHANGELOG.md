@@ -1,3 +1,8 @@
+## v0.8.0
+* Rewrote Rackspace Client to derive from Openstack Client
+* Updated Rackspace & Openstack createClient calls to take a proper URI for authUrl
+* Added support to specify region in Rackspace & Openstack createClient options
+
 ## v0.7.3
 * Fixed inline authentication for streaming to rackspace/openstack storage #109
 * Fixed S3 multi-part upload signing #137
