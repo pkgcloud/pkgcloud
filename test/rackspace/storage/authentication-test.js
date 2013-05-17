@@ -112,9 +112,9 @@ describe('pkgcloud/rackspace/storage/authentication', function () {
           var client = helpers.createClient('rackspace', 'storage');
 
           client.auth(function (err, res) {
-            should.not.exist(err);
-            should.exist(res);
-            res.statusCode.should.equal(401);
+            should.exist(err);
+            should.not.exist(res);
+            err.failCode.should.equal('Unauthorized');
             authServer && authServer.done();
             done();
           });
