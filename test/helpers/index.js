@@ -171,5 +171,24 @@ helpers.rackspaceResponseHeaders = function rackspaceHeaders(headers) {
   return headers;
 };
 
+helpers.getRackspaceAuthResponse = function(time) {
+  return helpers._getOpenstackStandardResponse('../fixtures/rackspace/auth.json', time);
+};
+
+helpers.getOpenstackAuthResponse = function (time) {
+  return helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken.json', time);
+};
+
+helpers._getOpenstackStandardResponse = function(file, time) {
+  if (!time) {
+    time = new Date(new Date().getTime() + (1000 * 60 * 60 * 24));
+  }
+
+  var response = require(file);
+
+  response.access.token.expires = time.toString();
+
+  return response;
+}
 
 helpers.pkgcloud = pkgcloud;

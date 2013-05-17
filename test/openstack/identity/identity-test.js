@@ -1,6 +1,7 @@
 var identity = require('../../../lib/pkgcloud/openstack/identity'),
     should = require('should'),
     async = require('async'),
+    helpers = require('../../helpers'),
     hock = require('hock'),
     mock = !!process.env.MOCK;
 
@@ -127,7 +128,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken.json');
+          .reply(200, helpers.getOpenstackAuthResponse());
       }
 
       identity.createIdentity({
@@ -169,7 +170,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken-multiRegionVolume.json');
+          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-multiRegionVolume.json'));
       }
 
       identity.createIdentity({
@@ -211,7 +212,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken-noRegion.json');
+          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-noRegion.json'));
       }
 
       identity.createIdentity({
@@ -282,7 +283,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken.json')
+          .reply(200, helpers.getOpenstackAuthResponse())
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -303,7 +304,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537123'
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken-admin.json');
+          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'));
 
         adminServer
           .get('/v2.0/tokens/4bc7c5dabf3e4a49918683437d386b8a?belongsTo=72e90ecb69c44d0296072ea39e537041')

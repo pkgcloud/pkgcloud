@@ -262,7 +262,7 @@ function setupImagesMock(client, provider, servers) {
           }
         }
       })
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+      .reply(200, helpers.getRackspaceAuthResponse());
 
     servers.server
       .get('/v2/123456/images/detail')
@@ -290,7 +290,7 @@ function setupImagesMock(client, provider, servers) {
           tenantId: '72e90ecb69c44d0296072ea39e537041'
         }
       })
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken.json');
+      .reply(200, helpers.getOpenstackAuthResponse());
 
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')

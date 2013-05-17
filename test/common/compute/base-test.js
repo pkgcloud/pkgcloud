@@ -215,7 +215,7 @@ function setupVersionMock(client, provider, servers) {
           }
         }
       })
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+      .reply(200, helpers.getRackspaceAuthResponse());
 
     servers.server
       .get('/v2/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
@@ -231,7 +231,7 @@ function setupVersionMock(client, provider, servers) {
           }
         }
       }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken.json')
+      .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/initialToken.json'))
       .get('/v2.0/tenants', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
       .post('/v2.0/tokens', {
@@ -243,7 +243,7 @@ function setupVersionMock(client, provider, servers) {
           tenantId: '72e90ecb69c44d0296072ea39e537041'
         }
       }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/realToken.json');
+      .reply(200, helpers.getOpenstackAuthResponse());
 
     servers.server
       .get('/v2/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})

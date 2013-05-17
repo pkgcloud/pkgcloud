@@ -58,7 +58,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
               }
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+          .reply(200, helpers.getRackspaceAuthResponse());
 
         server
           .get('/v1.0/123456/instances')

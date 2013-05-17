@@ -62,7 +62,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
               }
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+          .reply(200, helpers.getRackspaceAuthResponse());
 
         server
           .get('/')
@@ -112,7 +112,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
                 }
               }
             })
-            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+            .reply(200, helpers.getRackspaceAuthResponse());
         }
 
         client.auth(function (e) {

@@ -61,7 +61,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
               }
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+          .reply(200, helpers.getRackspaceAuthResponse());
 
         server
           .get('/v2/')
@@ -97,7 +97,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
                 }
               }
             })
-            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+            .reply(200, helpers.getRackspaceAuthResponse());
         }
 
         client.auth(function (e) {
@@ -171,6 +171,90 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       it('should respond with Error code 401', function () {
         should.exist(err);
         // TODO resolve identity responses
+      });
+    });
+
+    describe('auth tokens should expire', function () {
+      var tokenExpiry;
+
+      beforeEach(function (done) {
+
+        client = helpers.createClient('rackspace', 'compute');
+
+        client.on('log::*', function(message, obj) {
+          if (this.event !== 'log::debug') {
+            console.log(message);
+            console.dir(obj);
+          }
+        });
+
+        if (mock) {
+
+          var response = helpers.getRackspaceAuthResponse(new Date(new Date().getTime() + 1));
+
+          tokenExpiry = response.access.token.expires;
+
+          authServer
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'MOCK-USERNAME',
+                  apiKey: 'MOCK-API-KEY'
+                }
+              }
+            })
+            .reply(200, response);
+        }
+
+        client.auth(function (e) {
+          should.not.exist(e);
+          authServer && authServer.done();
+          done();
+        });
+      });
+
+      it('should update the config with appropriate urls', function () {
+        client.identity.should.be.a('object');
+        client.identity.token.expires.toString().should.equal(tokenExpiry);
+      });
+
+      it('should expire the token and set authorized to false', function(done) {
+        setTimeout(function() {
+          client.isAuthorized().should.equal(false);
+          done();
+        }, 5);
+      });
+
+      it('should expire the token and reauth on next call', function (done) {
+
+        if (mock) {
+          authServer
+            .post('/v2.0/tokens', {
+              auth: {
+                'RAX-KSKEY:apiKeyCredentials': {
+                  username: 'MOCK-USERNAME',
+                  apiKey: 'MOCK-API-KEY'
+                }
+              }
+            })
+            .reply(200, helpers.getRackspaceAuthResponse());
+
+          server
+            .get('/v2/123456/images/detail')
+            .replyWithFile(200, __dirname + '/../../fixtures/rackspace/images.json');
+        }
+
+        setTimeout(function () {
+          client.isAuthorized().should.equal(false);
+          client.getImages(function(err, images) {
+            client.isAuthorized().should.equal(true);
+            should.not.exist(err);
+            should.exist(images);
+            server && server.done();
+            authServer && authServer.done();
+            done();
+          });
+        }, 5);
       });
     });
 

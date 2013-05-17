@@ -443,7 +443,7 @@ function setupCreateContainerMock(provider, client, servers) {
           }
         }
       })
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+      .reply(200, helpers.getRackspaceAuthResponse());
 
     servers.server
       .defaultReplyHeaders(helpers.rackspaceResponseHeaders())

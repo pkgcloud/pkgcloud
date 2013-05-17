@@ -59,7 +59,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
               }
             }
           })
-          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/auth.json');
+          .reply(200, helpers.getRackspaceAuthResponse());
 
         server
           .get('/v2/123456/servers/detail')
