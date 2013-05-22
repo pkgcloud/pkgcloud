@@ -8,7 +8,7 @@ The Rackspace provider in pkgcloud supports the following services:
 
 ### Getting Started with Compute
 
-We've provided a [simple compute example](getting-started.md) where it creates a couple of compute instances.
+We've provided a [simple compute example](getting-started-compute.md) where it creates a couple of compute instances.
 
 ### Authentication
 
