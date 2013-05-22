@@ -10,7 +10,7 @@ Due to the differences between the vocabulary for each service provider, **[pkgc
 
 Supporting every API for every cloud service provider in Node.js is a huge undertaking, but _that is the long-term goal of `pkgcloud`_. **Special attention has been made to ensure that each service type has enough providers for a critical mass of portability between providers** (i.e. Each service implemented has multiple providers).
 
-* **[Compute](#compute)**
+* **[Compute](#compute)** [*Compute Client Commonality*](compute-commonality.md)
   * [Joyent](providers/joyent.md#using-compute)
   * [Azure](providers/azure.md#using-compute)
   * [Rackspace](providers/rackspace/compute.md)
