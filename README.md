@@ -76,16 +76,16 @@ Supporting every API for every cloud service provider in Node.js is a huge under
 * **[Compute](#compute)**
   * [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#using-compute)
   * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-compute)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-compute)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace/compute.md)
   * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-compute)
 * **[Storage](#storage)**
   * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-storage)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-storage)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace/storage.md)
   * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-storage)
 * **[Database](#database)**
   * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md)
   * [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace/database.md)
   * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
   * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
   
@@ -111,7 +111,7 @@ Each compute provider takes different credentials to authenticate; these details
 
 * [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#using-compute)
 * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-compute)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-compute)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace)
 * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-compute)
 
 Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
@@ -159,7 +159,7 @@ To get started with a `pkgcloud.storage` client just create one:
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
 * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-storage)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-storage)
+* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace)
 * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-storage)
 
 Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
@@ -238,7 +238,7 @@ Each database provider takes different credentials to authenticate; these detail
   * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md#redis)
   * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
 * **MySQL**
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace)
 * **Azure Tables**
   * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#database)
 
