@@ -111,7 +111,7 @@ Each compute provider takes different credentials to authenticate; these details
 
 * [Joyent](docs/providers/joyent.md#using-compute)
 * [Azure](docs/providers/azure.md#using-compute)
-* [Rackspace](docs/providers/rackspace/README.md)
+* [Rackspace](docs/providers/rackspace/compute.md)
 * [Amazon](docs/providers/amazon.md#using-compute)
 
 Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
@@ -159,7 +159,7 @@ To get started with a `pkgcloud.storage` client just create one:
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
 * [Azure](docs/providers/azure.md#using-storage)
-* [Rackspace](docs/providers/rackspace/README.md)
+* [Rackspace](docs/providers/rackspace/storage.md)
 * [Amazon](docs/providers/amazon.md#using-storage)
 
 Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
@@ -238,7 +238,7 @@ Each database provider takes different credentials to authenticate; these detail
   * [IrisCouch](docs/providers/iriscouch.md#redis)
   * [RedisToGo](docs/providers/redistogo.md)
 * **MySQL**
-  * [Rackspace](docs/providers/rackspace/README.md)
+  * [Rackspace](docs/providers/rackspace/databases.md)
 * **Azure Tables**
   * [Azure](docs/providers/azure.md#database)
 
