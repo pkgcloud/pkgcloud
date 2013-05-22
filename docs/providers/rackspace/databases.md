@@ -1,4 +1,6 @@
-#Using the Rackspace Database provider
+##Using the Rackspace Database provider
+
+Creating a client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.database.createClient({
@@ -7,6 +9,8 @@
     apiKey: 'your-api-key'
   });
 ```
+
+[More options for creating clients](README.md)
 
 ### Creating a MySQL Database
 

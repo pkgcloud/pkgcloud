@@ -1,4 +1,6 @@
-#Using the Rackspace Storage provider
+## Using the Rackspace Storage provider
+
+Creating a client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.storage.createClient({
@@ -8,101 +10,103 @@
   });
 ```
 
+[More options for creating clients](README.md)
+
+### Models
+
+#### Container
+
+Containers for Rackspace have the following properties
+
+* name
+* count
+* bytes
+* ttl
+* logRetention
+* cdnEnabled (bool)
+* cdnUri
+* cdnSslUri
+
+#### File
+
+Files for Rackspace have the following properties
+
+* name
+* container
+* size
+* contentType
+* etag
+* lastModified
+
 ### API Methods
 
-**Servers**
+#### Container APIs
 
-#### client.getServers(callback)
-Lists all servers that are available to use on your Rackspace account
+* [`client.getContainers(function(err, containers) { })`](#clientgetcontainersfunctionerr-containers--)
+* [`client.getContainer(container, function(err, container) { })`](#clientgetcontainercontainer-functionerr-container--)
+* [`client.createContainer(container, function(err, container) { })`](#clientcreatecontainercontainer-functionerr-container--)
+* [`client.destroyContainer(container, function(err, true) { })`](#clientdestroycontainercontainer-functionerr-true--)
 
-Callback returns `f(err, servers)` where `servers` is an `Array`
+#### File APIs
 
-#### client.createServer(options, callback)
-Creates a server with the options specified
+* [`client.upload(options, function(err, true) { })`](#clientuploadoptions-functionerr-true--)
+* [`client.download(options, function(err, file) { })`](#clientdownloadoptions-functionerr-true--)
+* `client.getFile(container, file, callback)`
+* `client.getFiles(container, download, callback)`
+* `client.removeFile(container, file, callback)`
 
-Options are as follows:
+### Container API Details
 
-```js
-{
-  name: 'serverName', // required
-  flavor: 'flavor1',  // required
-  image: 'image1',    // required
-  personality: []     // optional
-}
-```
-Returns the server in the callback `f(err, server)`
+For all of the container methods, you can pass either an instance of [`container`](#container) or the container name as `container`. For example:
 
-#### client.destroyServer(server, callback)
-Destroys the specified server
-
-Takes server or serverId as an argument  and returns the id of the destroyed server in the callback `f(err, serverId)`
-
-#### client.getServer(server, callback)
-Gets specified server
-
-Takes server or serverId as an argument and returns the server in the callback
-`f(err, server)`
-
-#### client.rebootServer(server, options, callback)
-Reboots the specifed server with options
-
-Options include:
-
-```js
-{
-  type: 'HARD' // optional (defaults to 'SOFT')
-}
-```
-Returns callback with a confirmation
-
-#### client.getVersion(callback)
-
-Get the current version of the api returned in a callback `f(err, version)`
-
-#### client.getLimits(callback)
-
-Get the current API limits returned in a callback `f(err, limits)`
-
-**flavors**
-
-#### client.getFlavors(callback)
-
-Returns a list of all possible server flavors available in the callback `f(err,
-flavors)`
-
-#### client.getFlavor(flavor, callback)
-Returns the specified rackspace flavor of Rackspace Images by ID or flavor
-object in the callback `f(err, flavor)`
-
-**images**
-
-#### client.getImages(callback)
-Returns a list of the images available for your account
-
-`f(err, images)`
-
-#### client.getImage(image, callback)
-Returns the image specified
-
-`f(err, image)`
-
-#### client.createImage(options, callback)
-Creates an Image based on a server
-
-Options include:
-
-```js
-{
-  name: 'imageName',  // required
-  server: 'serverId'  // required
-}
+```Javascript
+client.getContainer('my-container', function(err, container) { ... });
 ```
 
-Returns the newly created image
+This call is functionally equivalent to:
 
-`f(err, image)`
+```Javascript
+var myContainer = new Container({ name: 'my-container' });
 
-#### client.destroyImage(image, callback)
-Destroys the specified image and returns a confirmation
+client.getContainer(myContainer, function(err, container) { ... });
+```
 
-`f(err, {ok: imageId})`
+#### client.getContainers(function(err, containers) { })
+
+Retreives the containers for the current client instance as an array of [`container`](#container)
+
+#### client.getContainer(container, function(err, container) { })
+
+Retrieves the specified [`container`](#container) from the current client instance.
+
+#### client.createContainer(container, function(err, container) { })
+
+Creates a new [`container`](#container) with the name from argument `container`.
+
+#### client.destroyContainer(container, function(err, true) { })
+
+Removes the [`container`](#container) from the storage account. If there are any files within the `container`, they will be deleted before removing the `container` on the client.
+
+### File API Details
+
+For all of the file methods, you can pass either an instance of [`container`](#container) or the container name as `container`. For example:
+
+```Javascript
+client.getFile('my-container', 'my-file', function(err, file) { ... });
+```
+
+This call is functionally equivalent to:
+
+```Javascript
+var myContainer = new Container({ name: 'my-container' });
+
+client.getFile(myContainer, 'my-file', function(err, file) { ... });
+```
+
+#### client.upload(options, function(err, true) { })
+
+Upload a new file to a [`container`](#container). To upload a file, you need to provide an `options` argument:
+
+* container
+* remote *name of the new file*
+* \[stream|local\] *optional*

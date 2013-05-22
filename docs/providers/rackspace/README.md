@@ -1,4 +1,4 @@
-# Using the Rackspace provider in pkgcloud
+## Using the Rackspace provider in pkgcloud
 
 The Rackspace provider in pkgcloud supports the following services:
 
@@ -12,7 +12,7 @@ For all of the Rackspace services, you create a client with the same options:
 var client = require('pkgcloud').compute.createClient({
     provider: 'rackspace',
     username: 'your-user-name',
-    apiKey: 'your-api-key
+    apiKey: 'your-api-key'
 });
 ```
 
