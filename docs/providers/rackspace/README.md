@@ -6,6 +6,12 @@ The Rackspace provider in pkgcloud supports the following services:
 * [**Storage**](storage.md) (Cloud Files)
 * [**Databases**](databases.md) (Cloud Databases)
 
+### Getting Started with Compute
+
+We've provided a [simple compute example](getting-started.md) where it creates a couple of compute instances.
+
+### Authentication
+
 For all of the Rackspace services, you create a client with the same options:
 
 ```Javascript
@@ -13,7 +19,7 @@ var client = require('pkgcloud').compute.createClient({
     provider: 'rackspace',
     username: 'your-user-name',
     apiKey: 'your-api-key'
-});
+});s
 ```
 
 In addition to your `apiKey`, you could alternately provide your `password` as an option to `createClient`.
