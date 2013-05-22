@@ -1,0 +1,40 @@
+{
+  "version": {
+    "id": "v2",
+    "media-types": [
+      {
+        "base": "application/xml",
+        "type": "application/xml;version=2"
+      },
+      {
+        "base": "application/json",
+        "type": "application/json;version=2"
+      },
+      {
+        "base": "application/xml",
+        "type": "application/v2+xml"
+      },
+      {
+        "base": "application/json",
+        "type": "application/v2+json"
+      },
+      {
+        "base": "application/xml",
+        "type": "application/vnd.rackspace; x=v2; y=xml"
+      },
+      {
+        "base": "application/json",
+        "type": "application/vnd.rackspace; x=v2; y=json"
+      },
+      {
+        "base": "application/xml",
+        "type": "application/vnd.rackspace; rnd=1; x=v2; rnd2=2; y=xml"
+      },
+      {
+        "base": "application/json",
+        "type": "application/vnd.rackspace; rnd=1; x=v2; rnd2=2; y=json"
+      }
+    ],
+    "status": "CURRENT"
+  }
+}

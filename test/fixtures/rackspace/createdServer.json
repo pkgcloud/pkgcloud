@@ -1,21 +1,17 @@
 {
-    "server": {
-        "progress": 0,
-        "id": 20592449,
-        "imageId": 112,
-        "flavorId": 1,
-        "status": "BUILD",
-        "adminPass": "create-test-ids22Wh6n7OcB",
-        "name": "create-test-ids2",
-        "hostId": "26efab19ebea6255be6a76c33563039d",
-        "addresses": {
-            "public": [
-                "50.57.49.25"
-            ],
-            "private": [
-                "10.183.44.172"
-            ]
-        },
-        "metadata": {}
-    }
+  "server": {
+    "OS-DCF:diskConfig": "AUTO",
+    "id": "a0a5f183-b94e-4a41-a854-00aa00aa00aa",
+    "links": [
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/servers/a0a5f183-b94e-4a41-a854-00aa00aa00aa",
+        "rel": "self"
+      },
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/123456/servers/a0a5f183-b94e-4a41-a854-00aa00aa00aa",
+        "rel": "bookmark"
+      }
+    ],
+    "adminPass": "728bgxNeHDQy"
+  }
 }

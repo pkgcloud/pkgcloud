@@ -63,7 +63,7 @@ All API clients exposed by `pkgcloud` can be instantiated through `pkgcloud[serv
 <a name="unified-vocabulary"></a>
 ### Unified Vocabulary
 
-Due to the differences between the vocabulary for each service provider, **[pkgcloud uses its own unified vocabulary](https://github.com/nodejitsu/pkgcloud/blob/master/docs/vocabulary.md).** 
+Due to the differences between the vocabulary for each service provider, **[pkgcloud uses its own unified vocabulary](docs/vocabulary.md).**
 
 * **Compute:** [Server](#server), [Image](#image), [Flavor](#flavor)
 * **Storage:** [Container](#container), [File](#file)
@@ -74,20 +74,20 @@ Due to the differences between the vocabulary for each service provider, **[pkgc
 Supporting every API for every cloud service provider in Node.js is a huge undertaking, but _that is the long-term goal of `pkgcloud`_. **Special attention has been made to ensure that each service type has enough providers for a critical mass of portability between providers** (i.e. Each service implemented has multiple providers).
 
 * **[Compute](#compute)**
-  * [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#using-compute)
-  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-compute)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-compute)
-  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-compute)
+  * [Joyent](docs/providers/joyent.md#using-compute)
+  * [Azure](docs/providers/azure.md#using-compute)
+  * [Rackspace](docs/providers/rackspace/compute.md)
+  * [Amazon](docs/providers/amazon.md#using-compute)
 * **[Storage](#storage)**
-  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-storage)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-storage)
-  * [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-storage)
+  * [Azure](docs/providers/azure.md#using-storage)
+  * [Rackspace](docs/providers/rackspace/storage.md)
+  * [Amazon](docs/providers/amazon.md#using-storage)
 * **[Database](#database)**
-  * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md)
-  * [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
-  * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
-  * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
+  * [IrisCouch](docs/providers/iriscouch.md)
+  * [MongoLab](docs/providers/mongolab.md)
+  * [Rackspace](docs/providers/rackspace/database.md)
+  * [MongoHQ](docs/providers/mongohq.md)
+  * [RedisToGo](docs/providers/redistogo.md)
   
 <a name="compute"></a>
 ## Compute
@@ -109,10 +109,10 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
 
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Joyent](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/joyent.md#using-compute)
-* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-compute)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-compute)
-* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-compute)
+* [Joyent](docs/providers/joyent.md#using-compute)
+* [Azure](docs/providers/azure.md#using-compute)
+* [Rackspace](docs/providers/rackspace/compute.md)
+* [Amazon](docs/providers/amazon.md#using-compute)
 
 Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
 
@@ -158,9 +158,9 @@ To get started with a `pkgcloud.storage` client just create one:
 
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#using-storage)
-* [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#using-storage)
-* [Amazon](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/amazon.md#using-storage)
+* [Azure](docs/providers/azure.md#using-storage)
+* [Rackspace](docs/providers/rackspace/storage.md)
+* [Amazon](docs/providers/amazon.md#using-storage)
 
 Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
 
@@ -230,17 +230,17 @@ To get started with a `pkgcloud.storage` client just create one:
 Each database provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
 * **CouchDB**
-  * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md#couchdb)
+  * [IrisCouch](docs/providers/iriscouch.md#couchdb)
 * **MongoDB**
-  * [MongoLab](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongolab.md)
-  * [MongoHQ](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/mongohq.md)
+  * [MongoLab](docs/providers/mongolab.md)
+  * [MongoHQ](docs/providers/mongohq.md)
 * **Redis**
-  * [IrisCouch](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/iriscouch.md#redis)
-  * [RedisToGo](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/redistogo.md)
+  * [IrisCouch](docs/providers/iriscouch.md#redis)
+  * [RedisToGo](docs/providers/redistogo.md)
 * **MySQL**
-  * [Rackspace](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/rackspace.md#database)
+  * [Rackspace](docs/providers/rackspace/databases.md)
 * **Azure Tables**
-  * [Azure](https://github.com/nodejitsu/pkgcloud/blob/master/docs/providers/azure.md#database)
+  * [Azure](docs/providers/azure.md#database)
 
 Due to the various differences in how these DBaaS providers provision databases only a small surface area of the API for instances of `pkgcloud.database.Client` returned from `pkgcloud.database.createClient` is consistent across all providers:
 
@@ -324,7 +324,7 @@ Windows - Mocha installed locally:
 
 <a name="contributing"></a>
 ## Contribute!
-We welcome contribution to `pkgcloud` by any and all individuals or organizations. Before contributing please take a look at the [Contribution Guidelines in CONTRIBUTING.md](https://github.com/nodejitsu/pkgcloud/blob/master/CONTRIBUTING.md).
+We welcome contribution to `pkgcloud` by any and all individuals or organizations. Before contributing please take a look at the [Contribution Guidelines in CONTRIBUTING.md](CONTRIBUTING.md).
 
 We are pretty flexible about these guidelines, but the closer you follow them the more likely we are to merge your pull-request.
 
