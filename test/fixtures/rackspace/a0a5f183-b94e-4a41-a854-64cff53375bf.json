@@ -1,0 +1,66 @@
+{
+  "server": {
+    "status": "ACTIVE",
+    "updated": "2013-05-06T16:22:48Z",
+    "hostId": "28b4c123c414740339c244e1d9be7d7aacec44034b3cc40afa520db9",
+    "addresses": {
+      "public": [
+        {
+          "version": 6,
+          "addr": "2001:4800:7810:0512:7116:3555:ff05:05fd"
+        },
+        {
+          "version": 4,
+          "addr": "166.78.13.86"
+        }
+      ],
+      "private": [
+        {
+          "version": 4,
+          "addr": "10.181.16.172"
+        }
+      ]
+    },
+    "links": [
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf",
+        "rel": "self"
+      },
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf",
+        "rel": "bookmark"
+      }
+    ],
+    "image": {
+      "id": "9922a7c7-5a42-4a56-bc6a-93f857ae2346",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/images/9922a7c7-5a42-4a56-bc6a-93f857ae2346",
+          "rel": "bookmark"
+        }
+      ]
+    },
+    "OS-EXT-STS:task_state": null,
+    "OS-EXT-STS:vm_state": "active",
+    "flavor": {
+      "id": "2",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/2",
+          "rel": "bookmark"
+        }
+      ]
+    },
+    "id": "a0a5f183-b94e-4a41-a854-64cff53375bf",
+    "user_id": "333789",
+    "name": "create-test-setWait",
+    "created": "2013-05-06T16:17:20Z",
+    "tenant_id": "123456",
+    "OS-DCF:diskConfig": "AUTO",
+    "accessIPv4": "166.78.13.86",
+    "accessIPv6": "2001:4800:7810:512:7116:3555:ff05:5fd",
+    "progress": 100,
+    "OS-EXT-STS:power_state": 1,
+    "metadata": {}
+  }
+}

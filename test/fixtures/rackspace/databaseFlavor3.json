@@ -5,7 +5,7 @@
     "id": 3,
     "links": [
       {
-        "href": "http://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/3",
+        "href": "http://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/3",
         "rel": "self"
       },
       {

@@ -1,8 +1,21 @@
 {
   "flavor": {
-    "id": 1,
-    "ram": 256,
-    "disk": 10,
-    "name": "256 server"
+    "name": "512MB Standard Instance",
+    "links": [
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/flavors/2",
+        "rel": "self"
+      },
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/123456/flavors/2",
+        "rel": "bookmark"
+      }
+    ],
+    "ram": 512,
+    "vcpus": 1,
+    "swap": 512,
+    "rxtx_factor": 2,
+    "disk": 20,
+    "id": "2"
   }
 }

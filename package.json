@@ -42,9 +42,9 @@
     "utile":         "0.x.x"
   },
   "devDependencies": {
+    "hock" : "0.1.x",
     "mocha": "1.9.x",
-    "should": "1.2.x",
-    "hock" : "0.1.x"
+    "should": "1.2.x"
   },
   "main":    "./lib/pkgcloud",
   "scripts": { "test": "make test" },

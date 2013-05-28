@@ -1,9 +1,76 @@
 {
   "image": {
-    "id": 112,
     "status": "ACTIVE",
-    "created": "2011-04-21T10:24:01-05:00",
-    "updated": "2011-04-21T10:24:01-05:00",
-    "name": "Ubuntu 10.04 LTS"
+    "updated": "2013-05-06T19:43:14Z",
+    "links": [
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322",
+        "rel": "self"
+      },
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322",
+        "rel": "bookmark"
+      },
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322",
+        "type": "application/vnd.openstack.image",
+        "rel": "alternate"
+      }
+    ],
+    "OS-DCF:diskConfig": "AUTO",
+    "id": "a52cce1f-73fa-49ed-8382-0ab1c9caa322",
+    "OS-EXT-IMG-SIZE:size": 242841600,
+    "name": "test-image",
+    "created": "2013-05-06T19:41:05Z",
+    "minDisk": 20,
+    "server": {
+      "id": "a0a5f183-b94e-4a41-a854-64cff53375bf",
+      "links": [
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf",
+          "rel": "self"
+        },
+        {
+          "href": "https://dfw.servers.api.rackspacecloud.com/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf",
+          "rel": "bookmark"
+        }
+      ]
+    },
+    "progress": 100,
+    "minRam": 512,
+    "metadata": {
+      "com.rackspace__1__options": "0",
+      "instance_type_name": "512MB Standard Instance",
+      "com.rackspace__1__release_version": "2",
+      "instance_type_vcpus": "1",
+      "com.rackspace__1__release_id": "1005",
+      "com.rackspace__1__build_core": "1",
+      "base_image_ref": "9922a7c7-5a42-4a56-bc6a-93f857ae2346",
+      "os_distro": "ubuntu",
+      "org.openstack__1__os_distro": "com.ubuntu",
+      "image_type": "snapshot",
+      "org.openstack__1__os_version": "13.04",
+      "instance_type_ephemeral_gb": "0",
+      "com.rackspace__1__release_state": "kickstart_qc_pass",
+      "com.rackspace__1__build_managed": "1",
+      "org.openstack__1__architecture": "x64",
+      "com.rackspace__1__visible_core": "1",
+      "instance_type_vcpu_weight": "10",
+      "instance_type_root_gb": "20",
+      "instance_type_id": "2",
+      "com.rackspace__1__release_build_date": "2013-04-25_17-03-56",
+      "instance_type_rxtx_factor": "2",
+      "com.rackspace__1__visible_rackconnect": "1",
+      "user_id": "100000",
+      "com.rackspace__1__visible_managed": "1",
+      "instance_uuid": "a0a5f183-b94e-4a41-a854-64cff53375bf",
+      "instance_type_memory_mb": "512",
+      "instance_type_swap": "512",
+      "com.rackspace__1__build_rackconnect": "1",
+      "instance_type_flavorid": "2",
+      "auto_disk_config": "True",
+      "os_type": "linux",
+      "com.rackspace__1__source": "kickstart"
+    }
   }
 }

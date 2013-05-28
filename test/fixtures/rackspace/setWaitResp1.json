@@ -1,1 +1,17 @@
-{"server":{"progress":0,"id":20602046,"imageId":112,"flavorId":1,"status":"BUILD","adminPass":"create-test-setWait5Aih3LhP3","name":"create-test-setWait","hostId":"27d6872eb840a1ea90853bdad489a0a3","addresses":{"public":["108.166.124.26"],"private":["10.182.100.213"]},"metadata":{}}}
+{
+  "server": {
+    "OS-DCF:diskConfig": "AUTO",
+    "id": "a0a5f183-b94e-4a41-a854-64cff53375bf",
+    "links": [
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf",
+        "rel": "self"
+      },
+      {
+        "href": "https://dfw.servers.api.rackspacecloud.com/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf",
+        "rel": "bookmark"
+      }
+    ],
+    "adminPass": "728bgxNeHDQy"
+  }
+}
