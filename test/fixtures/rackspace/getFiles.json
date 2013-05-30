@@ -1,0 +1,37 @@
+[
+  {
+    "hash": "cb5c530452af82fb875dc0fb1a00a2c4",
+    "last_modified": "2013-05-20T22:48:08.059180",
+    "bytes": 2027,
+    "name": "CHANGELOG",
+    "content_type": "application/octet-stream"
+  },
+  {
+    "hash": "db8c683d2e6af401293ba366ab341831",
+    "last_modified": "2013-05-20T22:48:07.889070",
+    "bytes": 6963,
+    "name": "manifest.json",
+    "content_type": "application/json"
+  },
+  {
+    "hash": "46f106a647d3caa3330519ae63c36a4f",
+    "last_modified": "2013-05-20T22:48:08.254210",
+    "bytes": 3033047,
+    "name": "symbol-0F70C41033882AE4BF41B03C2750CDFC0",
+    "content_type": "application/octet-stream"
+  },
+  {
+    "hash": "0415cf1e11b785ad1da3aff1960a4171",
+    "last_modified": "2013-05-20T22:48:08.171690",
+    "bytes": 176,
+    "name": "ubuntu-10.04-x86_64/conf/distributions",
+    "content_type": "application/octet-stream"
+  },
+  {
+    "hash": "aca918ab5de871662c7feb0869bcef0e",
+    "last_modified": "2013-05-20T22:48:08.887310",
+    "bytes": 16384,
+    "name": "ubuntu-10.04-x86_64/db/contents.cache.db",
+    "content_type": "application/octet-stream"
+  }
+]

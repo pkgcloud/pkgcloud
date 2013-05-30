@@ -10,11 +10,9 @@ var path = require('path'),
     fs = require('fs'),
     should = require('should'),
     pkgcloud = require('../../../lib/pkgcloud'),
-    macros = require('../macros'),
     helpers = require('../../helpers'),
     async = require('async'),
     hock = require('hock'),
-    should = require('should'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
     mock = !!process.env.MOCK;
 
@@ -23,7 +21,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
 
     var client, server, authServer;
 
-    before(function(done) {
+    before(function (done) {
       client = helpers.createClient('rackspace', 'storage');
 
       if (!mock) {
@@ -124,7 +122,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
       });
     });
 
-    it('getContainers with marker should start offset appropriatley', function (done) {
+    it('getContainers with marker should start offset appropriately', function (done) {
 
       if (mock) {
         server
