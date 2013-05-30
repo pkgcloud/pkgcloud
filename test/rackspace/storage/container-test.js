@@ -6,197 +6,178 @@
 *
 */
 
-// TODO Enable all rackspace storage client tests with mocks
-//
-//
-//var path = require('path'),
-//    fs = require('fs'),
-//    should = require('should'),
-//    pkgcloud = require('../../../lib/pkgcloud'),
-//    macros = require('../macros'),
-//    helpers = require('../../helpers'),
-//    nock = require('nock'),
-//    mock = !!process.env.MOCK;
-//
-//if (mock) {
-//  return;
-//}
-//
-//var testData = {},
-//    client = helpers.createClient('rackspace', 'storage'),
-//    fixturesDir = path.join(__dirname, '..', '..', 'fixtures'),
-//    sampleData = fs.readFileSync(path.join(fixturesDir, 'fillerama.txt'), 'utf8');
-//
-//vows.describe('pkgcloud/rackspace/storage/containers').addBatch(
-//  macros.shouldCreateContainer(
-//    client,
-//    'test_container'
-//  )
-//).addBatch(
-//  macros.shouldCreateContainer(
-//    client,
-//    'test_container',
-//    'when creating a container that already exists'
-//  )
-//).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "the getContainers() method": {
-//      topic: function () {
-//        client.getContainers(this.callback);
-//      },
-//      "should return a list of containers": function (err, containers) {
-//        assert.isArray(containers);
-//        assert.equal(containers.filter(function (container) {
-//          return /test_container/.test(container.name);
-//        }).length, 1);
-//
-//        containers.forEach(function (container) {
-//          assert.assertContainer(container);
-//        });
-//      }
-//    },
-//    "the getContainer() method": {
-//      topic: function () {
-//        client.getContainer('test_container', this.callback);
-//      },
-//      "should return a valid container": function (err, container) {
-//        assert.assertContainer(container);
-//        testData.container = container;
-//      }
-//    }
-//  }
-//})/*.addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the addFile() method": {
-//        topic: function () {
-//          var ustream = client.addFile('test_container', {
-//            remote: 'file1.txt',
-//            local: path.join(__dirname, '..', 'test', 'fixtures', 'fillerama.txt')
-//          }, function () { });
-//
-//          ustream.on('end', this.callback)
-//        },
-//        "should raise the `end` event": function () {
-//          assert.isTrue(true);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the getFiles() method": {
-//        topic: function () {
-//          testData.container.getFiles(this.callback);
-//        },
-//        "should response with a list of files": function (err, files) {
-//          assert.isArray(files);
-//          assert.lengthOf(files, 1);
-//          assert.isArray(testData.container.files);
-//          assert.lengthOf(testData.container.files, 1);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the getFiles(true) method": {
-//        topic: function () {
-//          testData.container.getFiles(true, this.callback);
-//        },
-//        "should response with a list of files with content": function (err, files) {
-//          assert.isArray(files);
-//          assert.lengthOf(files, 1);
-//          assert.isArray(testData.container.files);
-//          assert.lengthOf(testData.container.files, 1);
-//          assert.isNotNull(files[0].local);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the getFiles(new RegExp(...)) method": {
-//        topic: function () {
-//          testData.container.getFiles(/^file/, this.callback);
-//        },
-//        "should response with a list of files with content": function (err, files) {
-//          assert.isArray(files);
-//          assert.lengthOf(files, 1);
-//          assert.isArray(testData.container.files);
-//          assert.lengthOf(testData.container.files, 1);
-//          assert.isTrue(/^file/.test(files[0].name));
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the getFiles(new RegExp(...) with no matches) method": {
-//        topic: function () {
-//          testData.container.getFiles(/^no_matches/, this.callback);
-//        },
-//        "should response with a empty list": function (err, files) {
-//          assert.isArray(files);
-//          assert.lengthOf(files, 0);
-//          assert.isArray(testData.container.files);
-//          assert.lengthOf(testData.container.files, 0);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the getFiles([filenames]) method": {
-//        topic: function () {
-//          testData.container.getFiles(['file1.txt'], this.callback);
-//        },
-//        "should response with a list of files with content": function (err, files) {
-//          assert.isArray(files);
-//          assert.lengthOf(files, 1);
-//          assert.isArray(testData.container.files);
-//          assert.lengthOf(testData.container.files, 1);
-//          assert.equal(files[0].name, 'file1.txt');
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the getFiles([not-existing-filenames]) method": {
-//        topic: function () {
-//          testData.container.getFiles(['not-exists.txt'], this.callback);
-//        },
-//        "should response with a error": function (err, files) {
-//          assert.isArray(err);
-//          assert.lengthOf(err, 1);
-//          assert.instanceOf(err[0], Error);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "The pkgcloud Rackspace storage client": {
-//    "an instance of a Container object": {
-//      "the removeFile() method": {
-//        topic: function () {
-//          testData.container.removeFile('file1.txt', this.callback);
-//        },
-//        "should response with true": function (err, removed) {
-//          assert.isTrue(removed);
-//        }
-//      }
-//    }
-//  }
-//})*/.addBatch(
-//  macros.shouldDestroyContainer(
-//    client,
-//    'test_container'
-//  )
-//).export(module);
+var path = require('path'),
+    fs = require('fs'),
+    should = require('should'),
+    pkgcloud = require('../../../lib/pkgcloud'),
+    macros = require('../macros'),
+    helpers = require('../../helpers'),
+    async = require('async'),
+    hock = require('hock'),
+    should = require('should'),
+    Container = require('../../../lib/pkgcloud/core/storage/container').Container,
+    mock = !!process.env.MOCK;
+
+describe('pkgcloud/rackspace/storage/containers', function () {
+  describe('The pkgcloud Rackspace Storage client', function () {
+
+    var client, server, authServer;
+
+    before(function(done) {
+      client = helpers.createClient('rackspace', 'storage');
+
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          hock.createHock(12346, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            authServer = hockClient;
+            next();
+          });
+        },
+        function (next) {
+          hock.createHock(12345, function (err, hockClient) {
+            should.not.exist(err);
+            should.exist(hockClient);
+
+            server = hockClient;
+            next();
+          });
+        }
+      ], done);
+    });
+
+    it('getContainers should return a list of containers', function (done) {
+
+      if (mock) {
+        authServer
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .reply(200, helpers.getRackspaceAuthResponse());
+
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainers.json');
+      }
+
+      client.getContainers(function(err, containers) {
+        should.not.exist(err);
+        should.exist(containers);
+        containers.should.have.length(5);
+        containers.forEach(function(c) {
+          c.should.be.instanceof(Container);
+        });
+        authServer && authServer.done();
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getContainers with limit should return reduced set', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json&limit=3')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainersLimit.json');
+      }
+
+      client.getContainers({ limit: 3 }, function (err, containers) {
+        should.not.exist(err);
+        should.exist(containers);
+        containers.should.have.length(3);
+        containers.forEach(function (c) {
+          c.should.be.instanceof(Container);
+        });
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getContainers with limit should return reduced set', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json&limit=3')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainersLimit.json');
+      }
+
+      client.getContainers({ limit: 3 }, function (err, containers) {
+        should.not.exist(err);
+        should.exist(containers);
+        containers.should.have.length(3);
+        containers.forEach(function (c) {
+          c.should.be.instanceof(Container);
+        });
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getContainers with marker should start offset appropriatley', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json&marker=0.1.3-90')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainersMarker.json');
+      }
+
+      client.getContainers({ marker: '0.1.3-90' }, function (err, containers) {
+        should.not.exist(err);
+        should.exist(containers);
+        containers.should.have.length(1);
+        containers.forEach(function (c) {
+          c.should.be.instanceof(Container);
+        });
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getContainers with marker and limit should start offset appropriatley', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json&limit=4&marker=0.1.3-85')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainersLimitMarker.json');
+      }
+
+      client.getContainers({ limit: 4, marker: '0.1.3-85' }, function (err, containers) {
+        should.not.exist(err);
+        should.exist(containers);
+        containers.should.have.length(4);
+        containers.forEach(function (c) {
+          c.should.be.instanceof(Container);
+        });
+        server && server.done();
+        done();
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done)
+    });
+  });
+});
+
