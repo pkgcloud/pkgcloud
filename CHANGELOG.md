@@ -1,3 +1,9 @@
+## v0.8.1
+* Added support for limit/marker options for Rackspace getContainers, getFiles
+* removed unused Rackspace.File.rm/ls/cp methods
+* Fixed a bug in File.fullPath
+* Fixed a bug in Azure header signing
+
 ## v0.8.0
 * Rewrote Rackspace Client to derive from Openstack Client
 * Updated Rackspace & Openstack createClient calls to take a proper URI for authUrl
