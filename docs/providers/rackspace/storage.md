@@ -28,6 +28,9 @@ A Container for Rackspace has following properties:
   name: 'my-container',
   count: 1, // number of files in your container
   bytes: 12345, // size of the container in bytes
+  metadata: { // key value pairs for the container
+    // ...
+  }
 }
 ```
 
@@ -53,6 +56,8 @@ A File for Rackspace has the following properties:
 * [`client.getContainer(container, function(err, container) { })`](#clientgetcontainercontainer-functionerr-container--)
 * [`client.createContainer(container, function(err, container) { })`](#clientcreatecontainercontainer-functionerr-container--)
 * [`client.destroyContainer(container, function(err, result) { })`](#clientdestroycontainercontainer-functionerr-result--)
+* [`client.updateContainerMetadata(container, function(err, container) { })`](#clientupdatecontainermetadatacontainer-functionerr-container--)
+* [`client.removeContainerMetadata(container, metadataToRemove, function(err, container) { })`](#clientremovecontainermetadatacontainer-metadatatoremove-functionerr-container--)
 
 ### Container API Details
 
@@ -80,11 +85,44 @@ Retrieves the specified [`container`](#container-model) from the current client 
 
 #### client.createContainer(container, function(err, container) { })
 
-Creates a new [`container`](#container-model) with the name from argument `container`.
+Creates a new [`container`](#container-model) with the name from argument `container`. You can optionally provide `metadata` on the request:
+
+```javascript
+client.createContainer({
+ name: 'my-container',
+ metadata: {
+  brand: 'bmw',
+  model: '335i'
+  year: 2009
+ }}, function(err, container) {
+  // ...
+ })
+```
 
 #### client.destroyContainer(container, function(err, result) { })
 
 Removes the [`container`](#container-model) from the storage account. If there are any files within the `container`, they will be deleted before removing the `container` on the client. `result` will be `true` on success.
+
+#### client.updateContainerMetadata(container, function(err, container) { })
+
+Updates the metadata on the provided [`container`](#container-model) . Currently, the `updateContainer` method only adds new metadata fields. If you need to remove specific metadata properties, you should call `client.removeContainerMetadata(...)`.
+
+```javascript
+container.metadata.color = 'red';
+client.updateContainerMetadata(container, function(err, container) {
+  // ...
+})
+```
+
+#### client.removeContainerMetadata(container, metadataToRemove, function(err, container) { })
+
+Removes the keys in the `metadataToRemove` object from the stored [`container`](#container-model) metadata.
+
+```Javascript
+client.removeContainerMetadata(container, { year: false }, function(err, c) {
+  // ...
+});
+```
 
 ### File APIs
 
@@ -93,6 +131,7 @@ Removes the [`container`](#container-model) from the storage account. If there a
 * [`client.getFile(container, file, function(err, file) { })`](#clientgetfilecontainer-file-functionerr-file--)
 * [`client.getFiles(container, function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
 * [`client.removeFile(container, file, function(err, result) { })`](#clientremovefilecontainer-file-functionerr-result--)
+* [`client.updateFileMetadata(container, file, function(err, file) { })`](#clientupdatefilemetadatacontainer-file-functionerr-file--)
 
 ### File API Details
 
@@ -125,6 +164,14 @@ var options = {
     // optional, either stream or local
     stream: myStream, // any instance of a readable stream
     local: '/path/to/local/file' // a path to any local file
+    
+    // Other optional values
+    metadata: { // provide any number of property/values for metadata
+      campaign: '2012 magazine'
+    },
+    headers: { // optionally provide raw headers to send to cloud files
+      'content-type': 'application/json'
+    }
 };
 ```
 
@@ -229,3 +276,19 @@ Retreives an array of [`file`](#file-model) for the provided [`container`](#cont
 #### client.removeFile(container, file, function(err, result) { })
 
 Removes the provided [`file`](#file-model) from the provided [`container`](#container-model).
+
+#### client.updateFileMetadata(container, file, function(err, file) { })
+
+Updates the [`file`](#file-model) metadata in the the provided [`container`](#container-model).
+
+File metadata is completely replaced with each callt o updateFileMetadata. This is different than container metadata. To delete a property, just remove it from the metadata attribute on the `File` and call `updateFileMetadata`.
+```javascript
+file.metadata = {
+ campaign = '2011 website'
+};
+
+client.updateFileMetadata(file.container, file, function(err, file) {
+  // ...
+});
+```
+

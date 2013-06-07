@@ -16,6 +16,10 @@ var path = require('path'),
   File = require('../../../lib/pkgcloud/core/storage/file').File,
   mock = !!process.env.MOCK;
 
+if (!mock) {
+  return; // these tests are disabled when running for real
+}
+
 describe('pkgcloud/rackspace/storage/stroage-object', function () {
   describe('The pkgcloud Rackspace Storage client', function () {
 
