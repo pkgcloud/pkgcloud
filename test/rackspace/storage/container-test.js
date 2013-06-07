@@ -16,6 +16,10 @@ var path = require('path'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
     mock = !!process.env.MOCK;
 
+if (!mock) {
+  return; // these tests are disabled when running for real
+}
+
 describe('pkgcloud/rackspace/storage/containers', function () {
   describe('The pkgcloud Rackspace Storage client', function () {
 
@@ -160,6 +164,12 @@ describe('pkgcloud/rackspace/storage/containers', function () {
         server && server.done();
         done();
       });
+    });
+
+    it('updateContainerMetadata should throw if passed non container', function() {
+      (function() {
+        client.updateContainerMetadata({ name: 'foo' })
+      }).should.throw();
     });
 
     after(function (done) {
