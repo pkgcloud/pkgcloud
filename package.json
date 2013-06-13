@@ -42,7 +42,7 @@
     "utile":         "0.x.x"
   },
   "devDependencies": {
-    "hock" : "0.1.x",
+    "hock" : "0.2.x",
     "mocha": "1.9.x",
     "should": "1.2.x"
   },
