@@ -119,7 +119,7 @@ providers.forEach(function (provider) {
         should.not.exist(err);
         should.exist(srv1);
 
-        srv1.setWait({ status: 'RUNNING' }, 100 * m, function (err, srv2) {
+        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, function (err, srv2) {
           should.not.exist(err);
           should.exist(srv2);
           srv2.should.be.instanceOf(Server);

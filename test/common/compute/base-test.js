@@ -146,12 +146,12 @@ providers.forEach(function(provider) {
         should.not.exist(err);
         should.exist(srv1);
 
-        srv1.setWait({ status: 'RUNNING' }, 100 * m, function (err, srv2) {
+        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, function (err, srv2) {
           should.not.exist(err);
           should.exist(srv2);
           srv2.should.be.instanceOf(Server);
           srv2.name.should.equal('create-test-setWait');
-          srv2.status.should.equal('RUNNING');
+          srv2.status.should.equal(srv2.STATUS.running);
           context.server = srv2;
 
           authServer && authServer.done();
