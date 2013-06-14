@@ -49,7 +49,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
 
       var data;
 
-      testServer.setWait({ status: 'RUNNING' }, 5000, function () {
+      testServer.setWait({ status: testServer.STATUS.running }, 5000, function () {
         var ssh = spawn('ssh', [
           '-i',
           __dirname + '/../../fixtures/testkey',

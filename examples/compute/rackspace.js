@@ -55,7 +55,7 @@ function handleServerResponse(err, server) {
   console.log('SERVER CREATED: ' + server.name + ', waiting for active status');
 
   // Wait for status: ACTIVE on our server, and then callback
-  server.setWait({ status: 'ACTIVE' }, 5000, function (err) {
+  server.setWait({ status: server.STATUS.running }, 5000, function (err) {
     if (err) {
       console.dir(err);
       return;
