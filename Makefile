@@ -11,7 +11,7 @@ test-unit:
 		$(MOCHA_OPTS)
 
 lib-cov:
-	jscoverage lib lib-cov
+	jscoverage --no-highlight --encoding=UTF-8 lib lib-cov
 
 test-cov:	lib-cov
 	mv lib lib-bak
