@@ -39,13 +39,14 @@
     "request":       "2.21.x",
     "underscore":    "1.4.x",
     "url-join":      "0.0.x",
-    "utile":         "0.x.x",
-    "mocha-lcov-reporter": "0.0.1"
+    "utile":         "0.x.x"
   },
   "devDependencies": {
     "hock" : "0.2.x",
     "mocha": "1.9.x",
-    "should": "1.2.x"
+    "should": "1.2.x",
+    "mocha-lcov-reporter": "0.0.1",
+    "coveralls": "2.x.x"
   },
   "main":    "./lib/pkgcloud",
   "scripts": {
