@@ -1,80 +1,57 @@
 {
   "name":        "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version": "0.8.1",
-  "author": "Nodejitsu Inc <info@nodejitsu.com>",
+  "version":     "0.8.1",
+  "author":      "Nodejitsu Inc <info@nodejitsu.com>",
   "contributors": [
-    {
-      "name": "Charlie Robbins",
-      "email": "charlie@nodejitsu.com"
-    },
-    {
-      "name": "Nuno Job",
-      "email": "nuno@nodejitsu.com"
-    },
-    {
-      "name": "Daniel Aristizabal",
-      "email": "daniel@nodejitsu.com"
-    },
-    {
-      "name": "Ken Perkins",
-      "email": "ken.perkins@rackspace.com"
-    }
+    { "name": "Charlie Robbins",    "email": "charlie@nodejitsu.com" },
+    { "name": "Nuno Job",           "email": "nuno@nodejitsu.com" },
+    { "name": "Daniel Aristizabal", "email": "daniel@nodejitsu.com" },
+    { "name": "Ken Perkins",        "email": "ken.perkins@rackspace.com" }
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/nodejitsu/pkgcloud.git"
+    "url" : "http://github.com/nodejitsu/pkgcloud.git"
   },
   "keywords": [
-    "cloud",
-    "cloud computing",
-    "api",
-    "rackspace",
-    "joyent",
-    "aws",
-    "amazon",
-    "azure",
-    "iaas",
-    "servers",
-    "compute",
-    "storage",
-    "databases",
-    "client",
-    "mongolab",
-    "iriscouch",
-    "mongohq",
-    "openstack",
+    "cloud", "cloud computing",
+    "api", "rackspace",
+    "joyent", "aws",
+    "amazon", "azure",
+    "iaas", "servers",
+    "compute", "storage",
+    "databases", "client",
+    "mongolab", "iriscouch",
+    "mongohq", "openstack",
     "redistogo"
   ],
   "dependencies": {
-    "async": "0.1.x",
-    "errs": "0.2.x",
+    "async":         "0.1.x",
+    "errs":          "0.2.x",
     "eventemitter2": "0.4.x",
-    "filed": "0.0.7",
-    "ip": "0.0.x",
-    "xml2js": "0.1.x",
-    "mime": "1.2.x",
-    "pause-stream": ">=0.0.10",
-    "pkginfo": "0.2.x",
-    "qs": "0.6.x",
-    "request": "2.21.x",
-    "underscore": "1.4.x",
-    "url-join": "0.0.x",
-    "utile": "0.x.x",
+    "filed":         "0.0.7",
+    "ip":            "0.0.x",
+    "xml2js":        "0.1.x",
+    "mime":          "1.2.x",
+    "pause-stream":  ">=0.0.10",
+    "pkginfo":       "0.2.x",
+    "qs":            "0.6.x",
+    "request":       "2.21.x",
+    "underscore":    "1.4.x",
+    "url-join":      "0.0.x",
+    "utile":         "0.x.x",
     "mocha-lcov-reporter": "0.0.1"
   },
   "devDependencies": {
-    "hock": "0.1.x",
+    "hock" : "0.2.x",
     "mocha": "1.9.x",
     "should": "1.2.x"
   },
-  "main": "./lib/pkgcloud",
+  "main":    "./lib/pkgcloud",
   "scripts": {
     "test": "make test",
     "test-cov": "make test-cov",
     "test-coveralls": "make test-coveralls"
   },
-  "engines": {
-    "node": "0.8.x || 0.10.x"
-  }
+  "engines": { "node": "0.8.x || 0.10.x" }
 }
