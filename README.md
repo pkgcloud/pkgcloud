@@ -14,6 +14,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
+  * [Code Coverage](#coverage)
   * [Contribute!](#contributing)
   * [Roadmap](#roadmap)
 
@@ -321,6 +322,36 @@ Windows - Mocha installed locally:
 ```
 
 
+<a name="coverage"></a>
+## Code Coverage
+You will need jscoverage installed in order to run code coverage.  There seems to be many forks of the jscoverage project, but the recommended one is [node-jscoverage](https://github.com/visionmedia/node-jscoverage), because we use [node-coveralls](https://github.com/cainus/node-coveralls) to report coverage to http://coveralls.io.  node-coveralls requires output from [mocha-lcov-reporter](https://github.com/StevenLooman/mocha-lcov-reporter), whose documentation mentions node-jscoverage.
+
+### Warning
+
+**Running coverage will mess with your lib folder.  It will make a backup lib-bak before running and restore it if the coverage task runs successfully.**
+
+In order to simplify cleanup if something goes wrong, it is recommended to have all all new files added and all changes committed before running coverage, so you'll be able to restore with these commands if something goes wrong:
+
+``` bash
+git clean -fd
+git checkout lib
+```
+
+### Coverage Pre-requisites
+
+Please make sure jscoverage has been installed following the instructions at [node-jscoverage](https://github.com/visionmedia/node-jscoverage).
+
+### Local Coverage
+
+<code>make test-cov</code>
+
+### Run Coverage locally and send to coveralls.io
+
+Travis takes care of coveralls, so this shouldn't be necessary unless you're troubleshooting a problem with Travis/Coveralls.
+You'll need to have access to the coveralls repo_token, which should only be visible to nodejitsu/pkgcloud admins.
+
+1. Create a .coveralls.yml containing the repo_token from https://coveralls.io/r/nodejitsu/pkgcloud
+2. Run <code>make test-coveralls</code>
 
 <a name="contributing"></a>
 ## Contribute!
