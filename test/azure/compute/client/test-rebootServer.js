@@ -56,16 +56,16 @@ function testSetWait(client) {
 
   test["The pkgcloud " + name + " compute client"] = {
     "the setWait() method": {
-      "with setWait({ status: 'RUNNING' },": {
+      "with setWait({ status: testContext.server.STATUS.running },": {
         topic: function () {
-          testContext.server.setWait({ status: 'RUNNING' }, 1000, this.callback);
+          testContext.server.setWait({ status: testContext.server.STATUS.running }, 1000, this.callback);
         },
         "should return a running server": function (err, server) {
           testContext.server = server;
           assert.isNull(err);
           if (err === null) {
             assert.equal(server.name, options.name);
-            assert.equal(server.status, 'RUNNING');
+            assert.equal(server.status, testContext.server.STATUS.running);
             assert.equal(server.imageId, options.image);
             assert.assertServerDetails(server);
           }

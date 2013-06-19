@@ -71,7 +71,7 @@ client.createServer(options, function (err, server) {
     // Wait for the server to reach the RUNNING state.
     // This may take several minutes.
     console.log("waiting for server RUNNING state...");
-    server.setWait({ status: 'RUNNING' }, 10000, function (err, server) {
+    server.setWait({ status: server.STATUS.running }, 10000, function (err, server) {
       if (err) {
         console.log(err);
       } else {
