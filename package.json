@@ -44,9 +44,15 @@
   "devDependencies": {
     "hock" : "0.2.x",
     "mocha": "1.9.x",
-    "should": "1.2.x"
+    "should": "1.2.x",
+    "mocha-lcov-reporter": "0.0.1",
+    "coveralls": "2.x.x"
   },
   "main":    "./lib/pkgcloud",
-  "scripts": { "test": "make test" },
+  "scripts": {
+    "test": "make test",
+    "test-cov": "make test-cov",
+    "test-coveralls": "make test-coveralls"
+  },
   "engines": { "node": "0.8.x || 0.10.x" }
 }

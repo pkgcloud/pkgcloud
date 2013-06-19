@@ -9,3 +9,6 @@ test/configs/*.json
 !test/configs/providers.json
 .idea
 azure_error
+coverage.html
+.coveralls.yml
+pkgcloud.lcov*

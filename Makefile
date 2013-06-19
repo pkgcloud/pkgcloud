@@ -10,4 +10,25 @@ test-unit:
 	    --reporter $(REPORTER) \
 		$(MOCHA_OPTS)
 
+lib-cov:
+	jscoverage --encoding=UTF-8 lib lib-cov
+
+test-cov:	lib-cov
+	mv lib lib-bak
+	mv lib-cov lib
+	$(MAKE) test REPORTER=html-cov > coverage.html
+	rm -rf lib
+	mv lib-bak lib
+
+test-coveralls:	lib-cov
+	echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
+	mv lib lib-bak
+	mv lib-cov lib
+	$(MAKE) test REPORTER=mocha-lcov-reporter > pkgcloud.lcov.raw
+	sed "s#SF:#SF:$(PWD)/lib/#g" pkgcloud.lcov.raw > pkgcloud.lcov
+	./node_modules/coveralls/bin/coveralls.js < pkgcloud.lcov
+	rm pkgcloud.lcov pkgcloud.lcov.raw
+	rm -rf lib
+	mv lib-bak lib
+
 .PHONY: test
