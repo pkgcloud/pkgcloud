@@ -7,3 +7,10 @@ notifications:
   email:
     - travis@nodejitsu.com
   irc: "irc.freenode.org#nodejitsu"
+
+before_script:
+  - git clone git://github.com/visionmedia/node-jscoverage.git
+  - pushd node-jscoverage
+  - ./configure
+  - make
+  - popd
