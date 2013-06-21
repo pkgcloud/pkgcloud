@@ -1,5 +1,6 @@
 ## v0.8.2
 * Added support for File/Container metadata for Rackspace Storage
+* Adding support for Rackspace CDN enabled Containers
 
 ## v0.8.1
 * Added support for limit/marker options for Rackspace getContainers, getFiles
