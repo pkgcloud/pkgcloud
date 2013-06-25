@@ -86,6 +86,100 @@ describe('pkgcloud/rackspace/storage/containers', function () {
       });
     });
 
+    it('getContainers with options should get CDN attributes and return a list of containers', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
+          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainers.json')
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(204, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'False',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25 GMT',
+            connection: 'keep-alive' })
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85,')
+          .reply(204, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'False',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25 GMT',
+            connection: 'keep-alive' })
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-87')
+          .reply(204, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'False',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25 GMT',
+            connection: 'keep-alive' })
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-90')
+          .reply(204, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'False',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25 GMT',
+            connection: 'keep-alive' })
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-92')
+          .reply(204, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'False',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25 GMT',
+            connection: 'keep-alive' })
+
+      }
+
+      client.getContainers({
+        loadCDNAttributes: true
+      }, function (err, containers) {
+        should.not.exist(err);
+        should.exist(containers);
+        containers.should.have.length(5);
+        containers.forEach(function (c) {
+          c.should.be.instanceof(Container);
+        });
+        authServer && authServer.done();
+        server && server.done();
+        done();
+      });
+    });
+
     it('getContainers with limit should return reduced set', function (done) {
 
       if (mock) {
@@ -163,6 +257,127 @@ describe('pkgcloud/rackspace/storage/containers', function () {
         });
         server && server.done();
         done();
+      });
+    });
+
+    it('getContainer should include cdn metadata', function (done) {
+
+      if (mock) {
+        server
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+          )
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'True',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25 GMT',
+            connection: 'keep-alive' })
+      }
+
+      client.getContainer('0.1.3-85', function (err, container) {
+        should.not.exist(err);
+        should.exist(container);
+
+        container.should.be.instanceof(Container);
+
+        container.cdnEnabled.should.equal(true);
+        container.cdnUri.should.equal('http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com');
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getContainer and enable CDN ', function (done) {
+
+      if (mock) {
+        server
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+        )
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(404)
+          .post('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85', '', {
+            'x-cdn-enabled': true
+          })
+          .reply(202)
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+        )
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-cdn-enabled': 'True',
+            'x-log-retention': 'True',
+            'x-cdn-ios-uri': 'http://1762d02cb83dd4594008-edfcb31ae70ea7c07367728d50539bc7.iosr.cf1.rackcdn.com',
+            'x-cdn-uri': 'http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25'})
+      }
+
+      client.getContainer('0.1.3-85', function (err, container) {
+        should.not.exist(err);
+        should.exist(container);
+
+        container.should.be.instanceof(Container);
+
+        container.cdnEnabled.should.equal(false);
+        should.not.exist(container.cdnUri);
+
+        container.updateCdn({ enabled: true }, function(err, container) {
+          should.not.exist(err);
+          should.exist(container);
+
+          container.should.be.instanceof(Container);
+
+          container.cdnEnabled.should.equal(true);
+          container.cdnUri.should.equal('http://cbebcab2b59eae3d0c71-edfcb31ae70ea7c07367728d50539bc7.r63.cf1.rackcdn.com');
+
+          server && server.done();
+          done();
+        });
       });
     });
 
