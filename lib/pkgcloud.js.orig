@@ -37,7 +37,11 @@ components.forEach(function (component) {
 //
 // Setup empty exports to be populated later
 //
-['storage', 'cdn', 'providers', 'database', 'dns', 'blockstorage'].forEach(function (key) {
+<<<<<<< HEAD
+['storage', 'cdn', 'providers', 'database', 'dns'].forEach(function (key) {
+=======
+['storage', 'cdn', 'blockstorage', 'providers', 'database'].forEach(function (key) {
+>>>>>>> [rackspace] adding support for cloud block storage
   pkgcloud[key] = {};
 });
 
@@ -45,7 +49,11 @@ components.forEach(function (component) {
 // Setup core `pkgcloud.*.createClient` methods for all
 // provider functionality.
 //
-['compute', 'storage', 'cdn', 'database', 'dns', 'blockstorage'].forEach(function (service) {
+<<<<<<< HEAD
+['compute', 'storage', 'cdn', 'database', 'dns'].forEach(function (service) {
+=======
+['compute', 'blockstorage', 'storage', 'cdn', 'database'].forEach(function (service) {
+>>>>>>> [rackspace] adding support for cloud block storage
   pkgcloud[service].createClient = function (options) {
     if (!options.provider) {
       throw new Error('options.provider is required to create a new pkgcloud client.');
