@@ -30,7 +30,7 @@ All of the Rackspace `createClient` calls have a few options that can be provide
 
 #### authUrl
 
-`authUrl` specifies the authentication endpoint used to create a token for your Rackspace client. By default, this is set to the US endpoint: https://identity.api.rackspacecloud.com.
+`authUrl` specifies the authentication endpoint used to create a token for your Rackspace client. By default, this is set to the Global endpoint: https://identity.api.rackspacecloud.com.
 
 ##### Authenticating against the London endpoint
 
@@ -45,7 +45,7 @@ var client = require('pkgcloud').compute.createClient({
 
 #### region
 
-`region` specifies which region of a service to use. For example, when you authenticate with the US endpoint for compute, you have the option of either `DFW` or `ORD`. The default region is `DFW`. Previous pkgcloud versions did not let you specify which region you used, so all calls were against `DFW`.
+`region` specifies which region of a service to use. For example, when you authenticate with the global endpoint for compute, you have the option of either `DFW`, `ORD`, or `SYD`. The default region is `DFW`. Previous pkgcloud versions did not let you specify which region you used, so all calls were against `DFW`.
 
 ##### Specifying a custom region
 
