@@ -1,5 +1,6 @@
 ## v0.8.3
 * Dependency bump for request (2.22.0)
+* Support internal Openstack service URLs
 
 ## v0.8.2
 * Added support for File/Container metadata for Rackspace Storage
