@@ -62,3 +62,17 @@ var client = require('pkgcloud').compute.createClient({
 
 When you make your first call to a Rackspace provider, your client is authenticated transparent to your API call. Rackspace will issue you a token, with an expiration. When that token expires, the client will automatically re-authenticate and retrieve a new token. The caller shouldn't have to worry about this happening.
 
+#### Internal URLs
+
+As part of the options, you can tell `pkgcloud` to use the Internal (Service Net) URLs for a service, if possible.
+
+ ```Javascript
+ var client = require('pkgcloud').storage.createClient({
+     provider: 'rackspace',
+     username: 'your-user-name',
+     apiKey: 'your-api-key',
+     useInternal: true
+ });
+ ```
+
+ This setting is explicit. If you set it to true, and you have no connectivity to the internal URL for a service, your connections will timeout.
