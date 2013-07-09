@@ -1,3 +1,6 @@
+## v0.8.3
+* Dependency bump for request (2.22.0)
+
 ## v0.8.2
 * Added support for File/Container metadata for Rackspace Storage
 * Adding support for Rackspace CDN enabled Containers
