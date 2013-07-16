@@ -1,3 +1,7 @@
+## v0.8.4
+* Rackspace provider can now validate token with admin account
+* Using through in lieu of pause-stream
+
 ## v0.8.3
 * Dependency bump for request (2.22.0)
 * Support internal Openstack service URLs
