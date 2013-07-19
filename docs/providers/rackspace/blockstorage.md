@@ -14,7 +14,7 @@ Creating a block-storage client is straight-forward:
 
 ### API Methods
 
-**Volumes**
+### Volumes
 
 #### client.getVolumes(detailed, callback)
 Lists all volumes that are available to use on your Rackspace account
@@ -53,46 +53,40 @@ Updates the name & description on the provided volume. Does not support resize.
 
 Returns callback with a confirmation
 
-**flavors**
+### Snapshots
 
-#### client.getFlavors(callback)
+#### client.getSnapshots(detailed, callback)
+Lists all snapshots that are available to use on your Rackspace account
 
-Returns a list of all possible server flavors available in the callback `f(err,
-flavors)`
+Callback returns `f(err, snapshots)` where `snapshots` is an `Array`. `detailed` is an optional `boolean` which will return the full snapshot details if true.
 
-#### client.getFlavor(flavor, callback)
-Returns the specified rackspace flavor of Rackspace Images by ID or flavor
-object in the callback `f(err, flavor)`
+#### client.getSnapshot(snapshot, callback)
+Gets specified snapshot.
 
-**images**
+Takes snapshot or snapshotId as an argument and returns the snapshot in the callback
+`f(err, snapshot)`
 
-#### client.getImages(callback)
-Returns a list of the images available for your account
+#### client.createSnapshot(options, callback)
+Creates a snapshot with the options specified
 
-`f(err, images)`
-
-#### client.getImage(image, callback)
-Returns the image specified
-
-`f(err, image)`
-
-#### client.createImage(options, callback)
-Creates an Image based on a server
-
-Options include:
+Options are as follows:
 
 ```js
 {
-  name: 'imageName',  // required
-  server: 'serverId'  // required
+  name: 'volumeName', // required
+  description: 'my volume',  // required
+  volumeId: 'asdf1234', // required, volume id of the new snapshot
+  force: true // optional, defaults to false. force creation of the snapshot
 }
 ```
+Returns the new snapshot in the callback `f(err, snapshot)`
 
-Returns the newly created image
+#### client.deleteSnapshot(snapshot, callback)
+Deletes the specified snapshot
 
-`f(err, image)`
+Takes snapshot or snapshotId as an argument and returns an error if unsuccessful `f(err)`
 
-#### client.destroyImage(image, callback)
-Destroys the specified image and returns a confirmation
+#### client.updateSnapshot(snapshot, callback)
+Updates the name & description on the provided snapshot.
 
-`f(err, {ok: imageId})`
+Returns callback with a confirmation
