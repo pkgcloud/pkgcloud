@@ -14,6 +14,10 @@ Creating a block-storage client is straight-forward:
 
 ### API Methods
 
+* [Volumes](#volumes)
+* [Snapshots](#snapshots)
+* [VolumeTypes](#volume-types)
+
 ### Volumes
 
 #### client.getVolumes(detailed, callback)
