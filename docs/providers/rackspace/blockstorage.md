@@ -90,3 +90,18 @@ Takes snapshot or snapshotId as an argument and returns an error if unsuccessful
 Updates the name & description on the provided snapshot.
 
 Returns callback with a confirmation
+
+### Volume Types
+
+Volume types are used to define which kind of new volume to create.
+
+#### client.getVolumeTypes(callback)
+Lists all volumeTypes that are available to use on your Rackspace account
+
+Callback returns `f(err, volumeTypes)` where `volumeTypes` is an `Array`.
+
+#### client.getVolumeType(volumeType, callback)
+Gets specified volumeType.
+
+Takes volumeType or volumeTypeId as an argument and returns the volumeType in the callback
+`f(err, volumeType)`
