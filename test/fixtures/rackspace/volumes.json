@@ -1,0 +1,19 @@
+{
+  "volumes": [
+    {
+      "status": "available",
+      "display_name": "foo3",
+      "attachments": [],
+      "availability_zone": "nova",
+      "bootable": "false",
+      "created_at": "2013-07-26T15:54:04.000000",
+      "display_description": "my volume",
+      "volume_type": "SATA",
+      "snapshot_id": null,
+      "source_volid": null,
+      "metadata": {},
+      "id": "b14658a5-62fe-44ef-bcee-ea25abd0598e",
+      "size": 100
+    }
+  ]
+}
