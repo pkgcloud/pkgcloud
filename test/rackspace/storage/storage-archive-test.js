@@ -27,6 +27,7 @@
 //     client.extract({
 //       local: tmp
 //     },function(e, ok, resp) {
+//       console.log(resp);
 //       should.not.exist(e);
 //       client.download({
 //         container: "foo",
