@@ -1,3 +1,6 @@
+## v0.8.5
+* Fixing a bug introduced by pre-release services listed in the Openstack Service Catalog
+
 ## v0.8.4
 * Rackspace provider can now validate token with admin account
 * Using through in lieu of pause-stream
