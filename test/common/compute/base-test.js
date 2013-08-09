@@ -341,7 +341,31 @@ function setupImagesMock(client, provider, servers) {
 }
 
 function setupServerMock(client, provider, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+
+    servers.server
+      .get('/droplets/new?' + qs.stringify({
+        name: 'create-test-setWait',
+        region_id: 1,
+        size_id: 66,
+        image_id: 1601,
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server.json')
+      .get('/droplets/354526?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/not-active.json')
+      .get('/droplets/354526?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
+  }
+  else if (provider === 'rackspace') {
     servers.server
       .post('/v2/123456/servers', {
         server: {
@@ -482,5 +506,15 @@ function setupDestroyMock(client, provider, servers) {
     servers.server
       .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(204);
+  }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+
+    servers.server
+      .get('/droplets/354526/destroy?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/destroy-server.json');
   }
 }
