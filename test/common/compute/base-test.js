@@ -8,6 +8,7 @@
 var fs = require('fs'),
   path = require('path'),
   should = require('should'),
+  qs = require('qs'),
   utile = require('utile'),
   async = require('async'),
   helpers = require('../../helpers'),
@@ -60,22 +61,29 @@ providers.forEach(function(provider) {
 
     it('the getVersion() method with no arguments should return the version', function (done) {
       if (mock) {
-        setupVersionMock(client, provider, {
+        var errors = setupVersionMock(client, provider, {
           authServer: authServer,
           server: server
         });
       }
+      
+      if (errors) {
+        client.getVersion(function (err) {
+          err.should.be.an.instanceof(Error);
+          done();
+        });
+      }
+      else {
+        client.getVersion(function (err, version) {
+          should.not.exist(err);
+          should.exist(version);
+          version.should.equal(versions[provider]);
 
-      client.getVersion(function (err, version) {
-        should.not.exist(err);
-        should.exist(version);
-        version.should.equal(versions[provider]);
-
-        authServer && authServer.done();
-        server && server.done();
-        done();
-      });
-
+          authServer && authServer.done();
+          server && server.done();
+          done();
+        });
+      }
     });
 
     it('the getFlavors() method should return a list of flavors', function(done) {
@@ -205,7 +213,10 @@ providers.forEach(function(provider) {
 });
 
 function setupVersionMock(client, provider, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'digitalocean') {
+    return true;
+  }
+  else if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
         auth: {
@@ -275,6 +286,15 @@ function setupFlavorMock(client, provider, servers) {
         {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
   }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+    servers.server
+      .get('/sizes?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/flavors.json');
+  }
 }
 
 function setupImagesMock(client, provider, servers) {
@@ -309,10 +329,43 @@ function setupImagesMock(client, provider, servers) {
         {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/azure/images.xml');
   }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+    servers.server
+      .get('/images?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/images.json');
+  }
 }
 
 function setupServerMock(client, provider, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+
+    servers.server
+      .get('/droplets/new?' + qs.stringify({
+        name: 'create-test-setWait',
+        region_id: 1,
+        size_id: 66,
+        image_id: 1601,
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server.json')
+      .get('/droplets/354526?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/not-active.json')
+      .get('/droplets/354526?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
+  }
+  else if (provider === 'rackspace') {
     servers.server
       .post('/v2/123456/servers', {
         server: {
@@ -453,5 +506,15 @@ function setupDestroyMock(client, provider, servers) {
     servers.server
       .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(204);
+  }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+
+    servers.server
+      .get('/droplets/354526/destroy?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/destroy-server.json');
   }
 }

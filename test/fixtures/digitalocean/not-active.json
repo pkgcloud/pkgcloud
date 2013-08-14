@@ -1,0 +1,17 @@
+{
+  "status": "OK",
+  "droplet": {
+    "id": 354526,
+    "name": "create-test-setWait",
+    "image_id": 1601,
+    "size_id": 66,
+    "region_id": 1,
+    "backups_active": false,
+    "ip_address": null,
+    "locked": true,
+    "status": "new",
+    "created_at": "2013-08-09T21:57:57Z",
+    "backups": [],
+    "snapshots": []
+  }
+}

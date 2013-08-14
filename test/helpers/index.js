@@ -113,6 +113,7 @@ helpers.selectInstance = function selectInstance(client, callback) {
     callback(filterInstances(instances));
   });
 };
+
 helpers.authFilter = function authFilter(body) {
   var data = qs.parse(body);
 

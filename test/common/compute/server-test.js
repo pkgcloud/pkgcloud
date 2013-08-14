@@ -7,6 +7,7 @@
 
 var fs = require('fs'),
     path = require('path'),
+    qs = require('qs'),
     should = require('should'),
     utile = require('utile'),
     async = require('async'),
@@ -158,32 +159,6 @@ providers.forEach(function (provider) {
       });
     });
 
-    it('the getServers() method should return a list of servers', function (done) {
-      if (mock) {
-        setupGetServersMock(client, provider, {
-          authServer: authServer,
-          server: server
-        });
-      }
-
-      client.getServers(function (err, servers) {
-        should.not.exist(err);
-        should.exist(servers);
-
-        servers.should.be.instanceOf(Array);
-        context.servers = servers;
-        servers.forEach(function (srv) {
-          srv.should.be.instanceOf(Server);
-        });
-
-
-        authServer && authServer.done();
-        server && server.done();
-        done();
-
-      });
-    });
-
     it.skip('the getServer() method should get a server instance', function (done) {
       if (mock) {
         setupGetServerMock(client, provider, {
@@ -312,6 +287,15 @@ function setupImagesMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/images')
       .replyWithFile(200, __dirname + '/../../fixtures/azure/images.xml');
   }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+    servers.server
+      .get('/images?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/images.json');
+  }
 }
 
 function setupFlavorMock(client, provider, servers) {
@@ -330,10 +314,38 @@ function setupFlavorMock(client, provider, servers) {
       .get('/' + client.account + '/packages')
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
   }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+    servers.server
+      .get('/sizes?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/flavors.json');
+  }
 }
 
 function setupServerMock(client, provider, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+
+    servers.server
+      .get('/droplets/new?' + qs.stringify({
+        name: 'create-test-ids2',
+        region_id: 1,
+        size_id: 66,
+        image_id: 1601,
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server2.json')
+      .get('/droplets/354526?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active2.json');
+  }
+  else if (provider === 'rackspace') {
     servers.server
       .post('/v2/123456/servers', {
         server: {
@@ -459,6 +471,15 @@ function setupGetServersMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
   }
+  else if (provider === 'digitalocean') {
+    var account = require(__dirname + '/../../configs/mock/digitalocean');
+    servers.server
+      .get('/droplets?' + qs.stringify({
+        client_id: account.clientId,
+        api_key: account.apiKey
+      }))
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/list-servers.json');
+  }
 }
 
 function setupGetServerMock(client, provider, servers) {
@@ -471,7 +492,7 @@ function setupGetServerMock(client, provider, servers) {
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
-}
+  }
   else if (provider === 'joyent') {
     servers.server
       .get('/' + client.account + '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
