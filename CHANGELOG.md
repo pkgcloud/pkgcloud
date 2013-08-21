@@ -1,3 +1,6 @@
+## v0.8.7
+* Adding Rackspace CloudDNS as a DNS service
+
 ## v0.8.5
 * Fixing a bug introduced by pre-release services listed in the Openstack Service Catalog
 
