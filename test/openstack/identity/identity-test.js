@@ -347,6 +347,108 @@ describe('pkgcloud/openstack/identity', function () {
       });
     });
 
+    it('get the tenant info with admin token', function(done) {
+      if (mock) {
+        server
+          .post('/v2.0/tokens', {
+            auth: {
+              passwordCredentials: {
+                username: 'MOCK-USERNAME',
+                password: 'asdf1234'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken.json')
+          .get('/v2.0/tenants', { 'X-Auth-Token': 'e93be67f91724754aeb9409c9c69d304' })
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
+          .post('/v2.0/tokens', {
+            auth: {
+              passwordCredentials: {
+                username: 'MOCK-USERNAME',
+                password: 'asdf1234'
+              },
+              tenantId: '72e90ecb69c44d0296072ea39e537041'
+            }
+          })
+          .reply(200, helpers.getOpenstackAuthResponse())
+          .post('/v2.0/tokens', {
+            auth: {
+              passwordCredentials: {
+                username: 'MOCK-ADMIN',
+                password: 'asdf1234'
+              }
+            }
+          })
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken-admin.json')
+          .get('/v2.0/tenants', { 'X-Auth-Token': 'e93be67f91724754aeb9409c9c69d305' })
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId-admin.json')
+          .post('/v2.0/tokens', {
+            auth: {
+              passwordCredentials: {
+                username: 'MOCK-ADMIN',
+                password: 'asdf1234'
+              },
+              tenantId: '72e90ecb69c44d0296072ea39e537123'
+            }
+          })
+          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'));
+
+        adminServer
+          .get('/v2.0/tenants/72e90ecb69c44d0296072ea39e537041', { 'X-Auth-Token': '4bc7c5dabf3e4a49918683437d386b8b' })
+          .reply(200)
+          .get('/v2.0/tenants/72e90ecb69c44d0296072ea39e537123', { 'X-Auth-Token': '4bc7c5dabf3e4a49918683437d386b8a' })
+          .reply(403);
+
+      }
+
+      var userId, adminId;
+
+      async.parallel([
+        function(next) {
+          identity.createIdentity({
+            url: 'http://localhost:12346',
+            username: 'MOCK-USERNAME',
+            password: 'asdf1234'
+          }, function(err, id) {
+            should.not.exist(err);
+            userId = id;
+            next();
+          });
+        },
+        function(next) {
+          identity.createIdentity({
+            url: 'http://localhost:12346',
+            username: 'MOCK-ADMIN',
+            password: 'asdf1234'
+          }, function (err, id) {
+            should.not.exist(err);
+            adminId = id;
+            next();
+          });
+        }
+      ], function(err) {
+           should.not.exist(err);
+           should.exist(adminId.token);
+           async.series([
+             function(next) {
+               adminId.getTenantInfo(userId.token.tenant.id, function(err, success) {
+                should.not.exist(err);
+                next();
+               });
+              },
+             function(next) {
+               userId.getTenantInfo(adminId.token.tenant.id, function(err, success) {
+               should.exist(err);
+               next();
+               });
+             }
+           ], function(err){
+            should.not.exist(err);
+           });
+          done();
+        });
+      });
+
     it('with no active tenants listed from /v2.0/tenants should return an error', function (done) {
 
       if (mock) {
