@@ -1,3 +1,7 @@
+## v0.8.8
+* Adding support for uploading a tar.gz to Cloud files and extract on upload
+* Minor tenant changes for openstack identity providers
+
 ## v0.8.7
 * Adding Rackspace CloudDNS as a DNS service
 
