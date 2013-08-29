@@ -10,24 +10,26 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [Storage](#storage)
   * [Uploading Files](#uploading)
   * [Downloading Files](#downloading)
-* [Database](#database)
+* [Database](#databases)
+* [DNS](#dns)
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
-  * [Code Coverage](#coverage)
+  * [Code Coverage](#code-coverage)
   * [Contribute!](#contributing)
   * [Roadmap](#roadmap)
 
 <a name="getting-started"></a>
 ## Getting Started
 
-Currently there are three service types which are handled by pkgcloud:
+Currently there are four service types which are handled by pkgcloud:
 
 * [Compute](#compute)
 * [Storage](#storage)
-* [Database](#database)
+* [Database](#databases)
+* [DNS](#dns)
 
-In our [Roadmap](#roadmap), we plan to add support for DNS and CDN services, but _these are not currently available._ 
+In our [Roadmap](#roadmap), we plan to add support for Block Storage, Load Balancers, CDN services and more, but _these are not currently available._
 
 <a name="basic-apis"></a>
 ### Basic APIs for pkgcloud
@@ -68,6 +70,7 @@ Due to the differences between the vocabulary for each service provider, **[pkgc
 
 * **Compute:** [Server](#server), [Image](#image), [Flavor](#flavor)
 * **Storage:** [Container](#container), [File](#file)
+* **DNS:** [Zone](#zone), [Record](#record)
 
 <a name="supported-apis"></a>
 ### Supported APIs
@@ -83,14 +86,15 @@ Supporting every API for every cloud service provider in Node.js is a huge under
   * [Azure](docs/providers/azure.md#using-storage)
   * [Rackspace](docs/providers/rackspace/storage.md)
   * [Amazon](docs/providers/amazon.md#using-storage)
-* **[Database](#database)**
+* **[Database](#databases)**
   * [IrisCouch](docs/providers/iriscouch.md)
   * [MongoLab](docs/providers/mongolab.md)
   * [Rackspace](docs/providers/rackspace/database.md)
   * [MongoHQ](docs/providers/mongohq.md)
   * [RedisToGo](docs/providers/redistogo.md)
+* **[DNS](#dns)**
+  * [Rackspace](docs/providers/rackspace/dns.md)
   
-<a name="compute"></a>
 ## Compute
 
 The `pkgcloud.compute` service is designed to make it easy to provision and work with VMs. To get started with a `pkgcloud.compute` client just create one:
@@ -117,7 +121,6 @@ Each compute provider takes different credentials to authenticate; these details
 
 Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
 
-<a name="server"></a>
 ### Server
 * `client.getServers(function (err, servers) { })`
 * `client.createServer(options, function (err, server) { })`
@@ -125,19 +128,16 @@ Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.creat
 * `client.getServer(serverId, function (err, server) { })`
 * `client.rebootServer(server, function (err, server) { })`
 
-<a name="image"></a>
 ### Image
 * `client.getImages(function (err, images) { })`
 * `client.getImage(imageId, function (err, image) { })`
 * `client.destroyImage(image, function (err, ok) { })`
 * `client.createImage(options, function (err, image) { })`
 
-<a name="flavor"></a>
 ### Flavor
 * `client.getFlavors(function (err, flavors) { })`
 * `client.getFlavor(flavorId, function (err, flavor) { })`
 
-<a name="storage"></a>
 ## Storage
 
 The `pkgcloud.storage` service is designed to make it easy to upload and download files to various infrastructure providers. **_Special attention has been paid so that methods are streams and pipe-capable._**
@@ -165,14 +165,12 @@ Each compute provider takes different credentials to authenticate; these details
 
 Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
 
-<a name="container"></a>
 ### Container
 * `client.getContainers(function (err, containers) { })`
 * `client.createContainer(options, function (err, container) { })`
 * `client.destroyContainer(containerName, function (err) { })`
 * `client.getContainer(containerName, function (err, container) { })`
 
-<a name="file"></a>
 ### File
 * `client.upload(options, function (err) { })`
 * `client.download(options, function (err) { })`
@@ -208,7 +206,6 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
   }).pipe(fs.createWriteStream('a-file.txt'));
 ```
 
-<a name="database"></a>
 ## Databases
 
 The `pkgcloud.database` service is designed to consistently work with a variety of Database-as-a-Service (DBaaS) providers. 
@@ -249,14 +246,51 @@ Due to the various differences in how these DBaaS providers provision databases 
 
 All of the individual methods are documented for each DBaaS provider listed above.
 
-<a name="installation"></a>
+## DNS
+
+The `pkgcloud.dns` service is designed to make it easy to manage DNS zones and records on varius infrastructure providers. **_Special attention has been paid so that methods are streams and pipe-capable._**
+
+To get started with a `pkgcloud.dns` client just create one:
+
+``` js
+  var client = require('pkgcloud').dns.createClient({
+    //
+    // The name of the provider (e.g. "rackspace")
+    //
+    provider: 'provider-name',
+  
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+Currently, the only provider for DNS is [Rackspace](docs/providers/rackspace/dns.md). For more information please read the [Rackspace DNS](docs/providers/rackspace/storage.md) documentation.
+
+* [Rackspace](docs/providers/rackspace/dns.md)
+
+Each instance of `pkgcloud.dns.Client` returned from `pkgcloud.dns.createClient` has a set of uniform APIs:
+
+### Zone
+* `client.getZones(details, function (err, zones) { })`
+* `client.getZone(zone, function (err, zone) { })`
+* `client.createZone(details, function (err, zone) { })`
+* `client.updateZone(zone, function (err) { })`
+* `client.deleteZone(zone, function (err) { })`
+
+### Record
+* `client.getRecords(zone, function (err, records) { })`
+* `client.getRecord(zone, record, function (err, record) { })`
+* `client.createRecord(zoen, record, function (err, record) { })`
+* `client.updateRecord(zone, record, function (err, record) { })`
+* `client.deleteRecord(zone, record, function (err) { })`
+
 ## Installation
 
 ``` bash
   $ npm install pkgcloud
 ```
 
-<a name="tests"></a>
 ## Tests
 For run the tests you will need `mocha@1.9.x` or higher, please install it and then run:
 
@@ -321,8 +355,6 @@ Windows - Mocha installed locally:
 
 ```
 
-
-<a name="coverage"></a>
 ## Code Coverage
 You will need jscoverage installed in order to run code coverage.  There seems to be many forks of the jscoverage project, but the recommended one is [node-jscoverage](https://github.com/visionmedia/node-jscoverage), because we use [node-coveralls](https://github.com/cainus/node-coveralls) to report coverage to http://coveralls.io.  node-coveralls requires output from [mocha-lcov-reporter](https://github.com/StevenLooman/mocha-lcov-reporter), whose documentation mentions node-jscoverage.
 
@@ -363,7 +395,7 @@ We are pretty flexible about these guidelines, but the closer you follow them th
 ## Roadmap
 
 1. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
-2. Include `CDN` and `DNS` services.
+2. Add `CDN`, `BlockStorage`, `LoadBalancer` services.
 3. Implement `fs` compatible file API.
 4. Support additional service providers.
 
