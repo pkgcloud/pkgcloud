@@ -281,7 +281,7 @@ Each instance of `pkgcloud.dns.Client` returned from `pkgcloud.dns.createClient`
 ### Record
 * `client.getRecords(zone, function (err, records) { })`
 * `client.getRecord(zone, record, function (err, record) { })`
-* `client.createRecord(zoen, record, function (err, record) { })`
+* `client.createRecord(zone, record, function (err, record) { })`
 * `client.updateRecord(zone, record, function (err, record) { })`
 * `client.deleteRecord(zone, record, function (err) { })`
 
