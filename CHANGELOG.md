@@ -1,3 +1,6 @@
+## v0.8.10
+* Fixing a bug in rackspace.dns where status call can be an empty response
+
 ## v0.8.9
 * Fixing a bug when rackspace.dns.createRecord returns an array
 
