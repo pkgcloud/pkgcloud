@@ -1,3 +1,6 @@
+## v0.8.11
+* Added more robust error handling for openstack.identity admin methods
+
 ## v0.8.10
 * Fixing a bug in rackspace.dns where status call can be an empty response
 
