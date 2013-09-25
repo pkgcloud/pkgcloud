@@ -1,3 +1,6 @@
+## v0.8.12
+* Changed the callback signature for openstack.identity.getTenantInfo to include body
+
 ## v0.8.11
 * Added more robust error handling for openstack.identity admin methods
 
