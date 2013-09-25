@@ -47,7 +47,7 @@ A Record for Rackspace DNS has the following properties:
 
 ```Javascript
 {
-    id: 'NS-8978855', // The Rackspace ID for the record
+    id: 'A-12345', // The Rackspace ID for the record
     name: 'www.example.com', // The DNS record
     type: 'A', // The type of record
     ttl: 3600, // TTL of the record, in seconds
@@ -59,56 +59,70 @@ A Record for Rackspace DNS has the following properties:
 
 ### Zone APIs
 
-* [`client.getZones(details, function(err, zones) { })`](#clientgetzones-details-functionerr-zones--)
+* [`client.getZones(details, function(err, zones) { })`](#clientgetzonesdetails-functionerr-zones--)
 * [`client.getZone(zone, function(err, zone) { })`](#clientgetzonezone-functionerr-zone--)
 * [`client.createZone(zone, function(err, zone) { })`](#clientcreatezonezone-functionerr-zone--)
-* [`client.createZones(zones, function(err, zones) { })`](#clientcreatezonezone-functionerr-zone--)
-* [`client.importZone(zone, function(err, zone) { })`](#clientcreatezonezone-functionerr-zone--)
-* [`client.exportZone(zone, function(err, result) { })`](#clientcreatezonezone-functionerr-zone--)
-* [`client.updateZone(zone, function(err) { })`](#clientupdatezonemetadatazone-functionerr-zone--)
-* [`client.updateZones(zones, function(err) { })`](#clientupdatezonemetadatazone-functionerr-zone--)
-* [`client.deleteZone(zone, function(err) { })`](#clientremovezonemetadatazone-metadatatoremove-functionerr-zone--)
-* [`client.deleteZones(zones, function(err) { })`](#clientremovezonemetadatazone-metadatatoremove-functionerr-zone--)
-* [`client.getZoneChanges(zone, metadataToRemove, function(err, zone) { })`](#clientremovezonemetadatazone-metadatatoremove-functionerr-zone--)
-* [`client.cloneZone(zone, metadataToRemove, function(err, zone) { })`](#clientremovezonemetadatazone-metadatatoremove-functionerr-zone--)
-* [`client.getSubZones(zone, metadataToRemove, function(err, zone) { })`](#clientremovecontainermetadatacontainer-metadatatoremove-functionerr-container--)
+* [`client.createZones(zones, function(err, zones) { })`](#clientcreatezoneszones-functionerr-zones--)
+* [`client.importZone(details, function(err, zone) { })`](#clientimportzonezone-functionerr-zone--)
+* [`client.exportZone(zone, function(err, result) { })`](#clientexportzonezone-functionerr-result--)
+* [`client.updateZone(zone, function(err) { })`](#clientupdatezonezone-functionerr--)
+* [`client.updateZones(zones, function(err) { })`](#clientupdatezoneszones-functionerr--)
+* [`client.deleteZone(zone, function(err) { })`](#clientdeletezonezone-functionerr--)
+* [`client.deleteZones(zones, function(err) { })`](#clientdeletezonesszones-functionerr-)
+* [`client.getZoneChanges(zone, options, function(err, changes) { })`](#clientgetzonechangeszone-options-functionerr-changes--)
+* [`client.cloneZone(zone, options, function(err, zone) { })`](#clientclonezonezone-options-functionerr-zone--)
+* [`client.getSubZones(zone, function(err, zones) { })`](#clientgetsubzoneszone-functionerr-zones--)
 
-### Container API Details
+### Zone API Details
 
-For all of the container methods, you can pass either an instance of [`container`](#container) or the container name as `container`. For example:
+For all of the zone methods that require a zone, you can pass either an instance of a [`zone`](#zone-model) or the zone id as `zone`. For example:
 
 ```Javascript
-client.getContainer('my-container', function(err, container) { ... });
+client.getZone(12345678, function(err, zone) { ... });
 ```
 
 This call is functionally equivalent to:
 
 ```Javascript
-var myContainer = new Container({ name: 'my-container' });
+var myZone = new Zone({ id: 12345 });
 
-client.getContainer(myContainer, function(err, container) { ... });
+client.getZone(myZone, function(err, zone) { ... });
 ```
 
-#### client.getContainers(function(err, containers) { })
+#### client.getZones(details, function(err, zones) { })
 
-Retreives the containers for the current client instance as an array of [`container`](#container-model)
+Retrieves the zones for the current client instance as an array of [`zone`](#zone-model)
 
-#### client.getContainer(container, function(err, container) { })
+#### client.getZone(zone, function(err, zone) { })
 
-Retrieves the specified [`container`](#container-model) from the current client instance.
+Retrieves the specified [`zone`](#zone-model) from the current client instance.
 
-#### client.createContainer(container, function(err, container) { })
+#### client.createZone(zone, function(err, zone) { })
 
-Creates a new [`container`](#container-model) with the name from argument `container`. You can optionally provide `metadata` on the request:
+Creates a new [`zone`](#zone-model) with attributes from the argument `zone`:
 
 ```javascript
-client.createContainer({
- name: 'my-container',
- metadata: {
-  brand: 'bmw',
-  model: '335i'
-  year: 2009
- }}, function(err, container) {
+client.createZone({
+ name: 'example.org', // required
+ email: 'hostmaster@example.org', // required, contact email for SOA
+ ttl: 300, // optional, default ttl in seconds for records on this domain
+ comment: 'my domain for examples' // optional comment
+ }, function(err, zone) {
+  // ...
+ })
+```
+
+#### client.createZones(zones, function(err, zone) { })
+
+Batch creates multiple [`zones`](#zone-model) from any array of `zones`. Each zone should have the same properties as referenced in `createZone`.
+
+```javascript
+client.createZones([{
+ name: 'example.org', // required
+ email: 'hostmaster@example.org', // required, contact email for SOA
+ ttl: 300, // optional, default ttl in seconds for records on this domain
+ comment: 'my domain for examples' // optional comment
+ }], function(err, zones) {
   // ...
  })
 ```
