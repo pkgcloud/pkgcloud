@@ -12,13 +12,65 @@ Creating a block-storage client is straight-forward:
 
 [More options for creating clients](README.md)
 
-### API Methods
+Note: For **attaching volumes to compute instances**, please see the [compute volume attachments](compute.md#volume-attachments) documentation.
 
-* [Volumes](#volumes)
-* [Snapshots](#snapshots)
-* [VolumeTypes](#volume-types)
+* Volume
+  * [Model](#volume-model)
+  * [APIs](#volume-apis)
+* Snapshot
+  * [Model](#snapshot-model)
+  * [APIs](#snapshot-apis)
+* VolumeType
+  * [Model](#volumetype-model)
+  * [APIs](#volumetype-apis)
 
-### Volumes
+### Volume Model
+
+A Volume for BlockStorage has following properties:
+
+```Javascript
+{
+  id: '12345678-1111-2222-3333-123456789012', // id of the volume
+  name: 'foo3',
+  description: 'my volume',
+  status: 'available', // status of the volume
+  size: 100, // in GB
+  volumeType: 'SATA',
+  attachments: [], // array of the attachments for this volume
+  snapshotId: null, // snapshotId, if any, for this volume
+  createdAt: '2013-07-26T15:54:04.000000'
+}
+```
+
+### Snapshot Model
+
+A Snapshot for BlockStorage has the following properties:
+
+```Javascript
+{
+  id: '12345678-1111-2222-3333-123456789012', // id of the snapshot
+  name: 'foo3',
+  description: 'my snapshot',
+  status: 'available', // status of the snapshot
+  size: 100, // in GB
+  volumeId: '12345678-1111-2222-3333-123456789012',
+  createdAt: '2013-07-26T15:54:04.000000'
+}
+```
+
+### VolumeType Model
+
+A VolumeType for BlockStorage has the following properties:
+
+```Javascript
+{
+  id: '12345678-1111-2222-3333-123456789012', // id of the snapshot
+  name: 'SSD',
+  extra_specs: {} // not used presently
+}
+```
+
+### Volume APIs
 
 #### client.getVolumes(detailed, callback)
 Lists all volumes that are available to use on your Rackspace account
@@ -57,7 +109,7 @@ Updates the name & description on the provided volume. Does not support resize.
 
 Returns callback with a confirmation
 
-### Snapshots
+### Snapshot APIs
 
 #### client.getSnapshots(detailed, callback)
 Lists all snapshots that are available to use on your Rackspace account
@@ -95,7 +147,7 @@ Updates the name & description on the provided snapshot.
 
 Returns callback with a confirmation
 
-### Volume Types
+### VolumeType APIs
 
 Volume types are used to define which kind of new volume to create.
 
