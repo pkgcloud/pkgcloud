@@ -112,3 +112,31 @@ Returns the newly created image
 Destroys the specified image and returns a confirmation
 
 `f(err, {ok: imageId})`
+
+## Volume Attachments
+
+Attaching a volume to a compute instance requires using a rackspace compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
+
+#### client.getVolumeAttachments(server, callback)
+
+Gets an array of volumeAttachments for the provided server.
+
+`f(err, volumeAttachments)`
+
+#### client.getVolumeAttachmentDetails(server, attachment, callback)
+
+Gets the details for a provided server and attachment. `attachment` may either be the `attachmentId` or an object with `attachmentId` as a property.
+
+`f(err, volumeAttachment)`
+
+#### client.attachVolume(server, volume, callback)
+
+Attaches the provided `volume` to the `server`. `volume` may either be the `volumeId` or an instance of `Volume`.
+
+`f(err, volumeAttachment)`
+
+#### client.detachVolume(server, attachment, callback)
+
+Detaches the provided `attachment` from the server. `attachment` may either be the `attachmentId` or an object with `attachmentId` as a property. If the `volume` is mounted this call will return an err.
+
+`f(err)`
