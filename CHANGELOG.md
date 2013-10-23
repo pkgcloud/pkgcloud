@@ -1,3 +1,6 @@
+## v0.8.13
+* Added support for Rackspace Cloud BlockStorage
+
 ## v0.8.12
 * Changed the callback signature for openstack.identity.getTenantInfo to include body
 
