@@ -383,9 +383,9 @@ fs.readFile('my-certificate.key', function(err, contents) {
     });
   });
 });
+```
 
 More information can be found on the [Rackspace Cloud Load Balancers API documentation](http://docs.rackspace.com/loadbalancers/api/v1.0/clb-devguide/content/SSLTermination-d1e2479.html).
-```
 
 #### client.removeSSLConfig(loadBalancer, callback)
 
