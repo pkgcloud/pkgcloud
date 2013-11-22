@@ -1,3 +1,6 @@
+## v0.8.15
+* Add *beta* support for Rackspace Cloud Load Balancers
+
 ## v0.8.14
 * Added support to specify network in openstack.createServer
 * More robust error handling for API inconsistencies in Rackspace/Openstack

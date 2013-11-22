@@ -11,7 +11,9 @@ pkgcloud is a standard library for node.js that abstracts away differences among
   * [Uploading Files](#uploading)
   * [Downloading Files](#downloading)
 * [Database](#databases)
-* [DNS](#dns)
+* [DNS](#dns----beta) *(beta)*
+* [Block Storage](#block-storage----beta) *(beta)*
+* [Load Balancers](#load-balancers----beta) *(beta)*
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
@@ -22,14 +24,16 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 <a name="getting-started"></a>
 ## Getting Started
 
-Currently there are four service types which are handled by pkgcloud:
+Currently there are six service types which are handled by pkgcloud:
 
 * [Compute](#compute)
 * [Storage](#storage)
 * [Database](#databases)
-* [DNS](#dns)
+* [DNS](#dns----beta) *(beta)*
+* [Block Storage](#block-storage----beta) *(beta)*
+* [Load Balancers](#load-balancers----beta) *(beta)*
 
-In our [Roadmap](#roadmap), we plan to add support for Block Storage, Load Balancers, CDN services and more, but _these are not currently available._
+In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
 <a name="basic-apis"></a>
 ### Basic APIs for pkgcloud
@@ -72,10 +76,14 @@ Due to the differences between the vocabulary for each service provider, **[pkgc
 * **Storage:** [Container](#container), [File](#file)
 * **DNS:** [Zone](#zone), [Record](#record)
 
+**Note:** Unified vocabularies may not yet be defined for *beta* services.
+
 <a name="supported-apis"></a>
 ### Supported APIs
 
 Supporting every API for every cloud service provider in Node.js is a huge undertaking, but _that is the long-term goal of `pkgcloud`_. **Special attention has been made to ensure that each service type has enough providers for a critical mass of portability between providers** (i.e. Each service implemented has multiple providers).
+
+If a service does not have at least two providers, it is considered a *beta* interface; We reserve the right to improve the API as multiple providers will allow generalization to be better determined.
 
 * **[Compute](#compute)**
   * [Joyent](docs/providers/joyent.md#using-compute)
@@ -92,9 +100,13 @@ Supporting every API for every cloud service provider in Node.js is a huge under
   * [Rackspace](docs/providers/rackspace/database.md)
   * [MongoHQ](docs/providers/mongohq.md)
   * [RedisToGo](docs/providers/redistogo.md)
-* **[DNS](#dns)**
+* **[DNS](#dns----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/dns.md)
-  
+* **[Block Storage](#block-storage----beta)** *(beta)*
+  * [Rackspace](docs/providers/rackspace/block-storage.md)
+* **[Load Balancers](#load-balancers----beta)** *(beta)*
+  * [Rackspace](docs/providers/rackspace/load-balancers.md)
+
 ## Compute
 
 The `pkgcloud.compute` service is designed to make it easy to provision and work with VMs. To get started with a `pkgcloud.compute` client just create one:
@@ -246,9 +258,11 @@ Due to the various differences in how these DBaaS providers provision databases 
 
 All of the individual methods are documented for each DBaaS provider listed above.
 
-## DNS
+## DNS -- Beta
 
-The `pkgcloud.dns` service is designed to make it easy to manage DNS zones and records on varius infrastructure providers. **_Special attention has been paid so that methods are streams and pipe-capable._**
+##### Note: DNS is considered Beta until there are multiple providers; presently only Rackspace are supported.
+
+The `pkgcloud.dns` service is designed to make it easy to manage DNS zones and records on various infrastructure providers. **_Special attention has been paid so that methods are streams and pipe-capable._**
 
 To get started with a `pkgcloud.dns` client just create one:
 
@@ -265,7 +279,7 @@ To get started with a `pkgcloud.dns` client just create one:
   });
 ```
 
-Currently, the only provider for DNS is [Rackspace](docs/providers/rackspace/dns.md). For more information please read the [Rackspace DNS](docs/providers/rackspace/storage.md) documentation.
+#### Providers
 
 * [Rackspace](docs/providers/rackspace/dns.md)
 
@@ -284,6 +298,87 @@ Each instance of `pkgcloud.dns.Client` returned from `pkgcloud.dns.createClient`
 * `client.createRecord(zone, record, function (err, record) { })`
 * `client.updateRecord(zone, record, function (err, record) { })`
 * `client.deleteRecord(zone, record, function (err) { })`
+
+## Block Storage -- Beta
+
+##### Note: Block Storage is considered Beta until there are multiple providers; presently only Rackspace are supported.
+
+The `pkgcloud.blockstorage` service is designed to make it easy to create and manage block storage volumes and snapshots.
+
+To get started with a `pkgcloud.blockstorage` client just create one:
+
+``` js
+  var client = require('pkgcloud').blockstorage.createClient({
+    //
+    // The name of the provider (e.g. "rackspace")
+    //
+    provider: 'provider-name',
+  
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Rackspace](docs/providers/rackspace/blockstorage.md)
+
+Each instance of `pkgcloud.blockstorage.Client` returned from `pkgcloud.blockstorage.createClient` has a set of uniform APIs:
+
+### Volume
+* `client.getVolumes(options, function (err, volumes) { })`
+* `client.getVolume(volume, function (err, volume) { })`
+* `client.createVolume(details, function (err, volume) { })`
+* `client.updateVolume(volume, function (err, volume) { })`
+* `client.deleteVolume(volume, function (err) { })`
+
+### Snapshot
+* `client.getSnapshots(options, function (err, snapshots) { })`
+* `client.getSnapshot(snapshot, function (err, snapshot) { })`
+* `client.createSnapshot(details, function (err, snapshot) { })`
+* `client.updateSnapshot(snapshot, function (err, snapshot) { })`
+* `client.deleteSnapshot(snapshot, function (err) { })`
+
+## Load Balancers -- Beta
+
+##### Note: Load Balancers is considered Beta until there are multiple providers; presently only Rackspace are supported.
+
+The `pkgcloud.loadbalancer` service is designed to make it easy to create and manage block storage volumes and snapshots.
+
+To get started with a `pkgcloud.loadbalancer` client just create one:
+
+``` js
+  var client = require('pkgcloud').loadbalancer.createClient({
+    //
+    // The name of the provider (e.g. "rackspace")
+    //
+    provider: 'provider-name',
+  
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Rackspace](docs/providers/rackspace/loadbalancer.md)
+
+Each instance of `pkgcloud.loadbalancer.Client` returned from `pkgcloud.loadbalancer.createClient` has a set of uniform APIs:
+
+### LoadBalancers
+* `client.getLoadBalancers(options, function (err, loadBalancers) { })`
+* `client.getLoadBalancer(loadBalancer, function (err, loadBalancer) { })`
+* `client.createLoadBalancer(details, function (err, loadBalancer) { })`
+* `client.updateLoadBalancer(loadBalancer, function (err) { })`
+* `client.deleteLoadBalancer(loadBalancer, function (err) { })`
+
+### Nodes
+* `client.getNodes(loadBalancer, function (err, nodes) { })`
+* `client.addNodes(loadBalancer, nodes, function (err, nodes) { })`
+* `client.updateNode(loadBalancer, node, function (err) { })`
+* `client.removeNode(loadBalancer, node, function (err) { })`
 
 ## Installation
 
@@ -395,9 +490,10 @@ We are pretty flexible about these guidelines, but the closer you follow them th
 ## Roadmap
 
 1. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
-2. Add `CDN`, `BlockStorage`, `LoadBalancer` services.
-3. Implement `fs` compatible file API.
-4. Support additional service providers.
+2. Implement more providers for Block Storage, DNS, and Load Balancing
+3. Add more services: Monitoring, Queueing, Autoscale.
+4. Implement `fs` compatible file API.
+5. Support additional service providers.
 
 #### Author: [Nodejitsu Inc.](http://nodejitsu.com)
 #### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), [Daniel Aristizabal](https://github.com/cronopio), [Marak Squires](https://github.com/marak), [Dale Stammen](https://github.com/stammen), [Ken Perkins](https://github.com/kenperkins)
