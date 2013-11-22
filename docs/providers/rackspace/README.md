@@ -5,6 +5,9 @@ The Rackspace provider in pkgcloud supports the following services:
 * [**Compute**](compute.md) (Cloud Servers)
 * [**Storage**](storage.md) (Cloud Files)
 * [**Databases**](databases.md) (Cloud Databases)
+* [**DNS**](dns.md) (Cloud DNS) *(beta)*
+* [**Block Storage**](blockstorage.md) (Cloud Block Storage) *(beta)*
+* [**Load Balancers**](loadbalancer.md) (Cloud Load Balancers) *(beta)*
 
 ### Getting Started with Compute
 
