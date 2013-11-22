@@ -103,9 +103,9 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **[DNS](#dns----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/dns.md)
 * **[Block Storage](#block-storage----beta)** *(beta)*
-  * [Rackspace](docs/providers/rackspace/block-storage.md)
+  * [Rackspace](docs/providers/rackspace/blockstorage.md)
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
-  * [Rackspace](docs/providers/rackspace/load-balancers.md)
+  * [Rackspace](docs/providers/rackspace/loadbalancer.md)
 
 ## Compute
 

@@ -1,5 +1,7 @@
 ##Using the Rackspace Block Storage provider
 
+#### BETA - This API may change as additional providers for block storage are added to pkgcloud
+
 Creating a block-storage client is straight-forward:
 
 ``` js
@@ -72,10 +74,10 @@ A VolumeType for BlockStorage has the following properties:
 
 ### Volume APIs
 
-#### client.getVolumes(detailed, callback)
+#### client.getVolumes(options, callback)
 Lists all volumes that are available to use on your Rackspace account
 
-Callback returns `f(err, volumes)` where `volumes` is an `Array`. `detailed` is an optional `boolean` which will return the full volume details if true.
+Callback returns `f(err, volumes)` where `volumes` is an `Array`. `options` is an optional `boolean` which will return the full volume details if true.
 
 #### client.getVolume(volume, callback)
 Gets specified volume.
@@ -83,8 +85,8 @@ Gets specified volume.
 Takes volume or volumeId as an argument and returns the volume in the callback
 `f(err, volume)`
 
-#### client.createVolume(options, callback)
-Creates a volume with the options specified
+#### client.createVolume(details, callback)
+Creates a volume with the details specified
 
 Options are as follows:
 
@@ -111,10 +113,10 @@ Returns callback with a confirmation
 
 ### Snapshot APIs
 
-#### client.getSnapshots(detailed, callback)
+#### client.getSnapshots(options, callback)
 Lists all snapshots that are available to use on your Rackspace account
 
-Callback returns `f(err, snapshots)` where `snapshots` is an `Array`. `detailed` is an optional `boolean` which will return the full snapshot details if true.
+Callback returns `f(err, snapshots)` where `snapshots` is an `Array`. `options` is an optional `boolean` which will return the full snapshot details if true.
 
 #### client.getSnapshot(snapshot, callback)
 Gets specified snapshot.
@@ -122,8 +124,8 @@ Gets specified snapshot.
 Takes snapshot or snapshotId as an argument and returns the snapshot in the callback
 `f(err, snapshot)`
 
-#### client.createSnapshot(options, callback)
-Creates a snapshot with the options specified
+#### client.createSnapshot(details, callback)
+Creates a snapshot with the details specified
 
 Options are as follows:
 
