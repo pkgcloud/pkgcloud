@@ -439,7 +439,7 @@ Callback is `f(err)`.
 
 ### Health Monitoring
 
-Rackspace Cloud Load Balancers allow two types of health monitoring for the nodes: TCP Ping (`'CONNECT'`) and `HTTP` or `HTTPS`.
+Rackspace Cloud Load Balancers allow two types of health monitoring for the nodes: TCP Ping (`CONNECT`) and `HTTP` or `HTTPS`.
 
 #### client.getHealthMonitor(loadBalancer, callback)
 
@@ -454,7 +454,7 @@ There are two types of health monitors:
 * CONNECT
 * HTTP/HTTPS
 
-Use the `'CONNECT'` monitor as a basic ping probe to make sure your box is present. Use the `'HTTP'` or `'HTTPS'` monitors to make an HTTP call to validate a more complex health check.
+Use the `CONNECT` monitor as a basic ping probe to make sure your box is present. Use the `HTTP` or `HTTPS` monitors to make an HTTP call to validate a more complex health check.
 
 ##### Connect Details
 ```Javascript
@@ -494,7 +494,7 @@ Session persistence allows forcing requests from the same client+protocol to rou
 * HTTP_COOKIE
 * SOURCE_IP
 
-`'HTTP_COOKIE'` is only enabled for HTTP load balancers (with or without SSL termination), all other protocols must use `'SOURCE_IP`'.
+`HTTP_COOKIE` is only enabled for HTTP load balancers (with or without SSL termination), all other protocols must use `SOURCE_IP`.
 
 #### client.getSessionPersistence(loadBalancer, callback)
 
