@@ -370,7 +370,7 @@ function setupServerMock(client, provider, servers) {
       .post('/v2/123456/servers', {
         server: {
           name: 'create-test-setWait',
-          flavorRef: 2,
+          flavorRef: '2',
           imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346',
           personality: [],
           key_name: null
@@ -387,7 +387,7 @@ function setupServerMock(client, provider, servers) {
       .post('/v2/72e90ecb69c44d0296072ea39e537041/servers', {
         server: {
           name: 'create-test-setWait',
-          flavorRef: 1,
+          flavorRef: '1',
           imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66',
           personality: [],
           key_name: null
