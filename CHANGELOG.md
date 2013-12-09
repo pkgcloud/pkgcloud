@@ -1,3 +1,8 @@
+## v0.8.15
+* Various fixes in openstack/rackspace compute provider
+* Added doc updates for rackspace storage provider
+* fixed a bug in rackspace dns provider
+
 ## v0.8.14
 * Added support to specify network in openstack.createServer
 * More robust error handling for API inconsistencies in Rackspace/Openstack
