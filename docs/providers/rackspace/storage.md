@@ -13,7 +13,8 @@ Creating a client is straight-forward:
   var rackspace = pkgcloud.storage.createClient({
     provider: 'rackspace',
     username: 'your-user-name',
-    apiKey: 'your-api-key'
+    apiKey: 'your-api-key',
+    region: 'your-region'
   });
 ```
 
