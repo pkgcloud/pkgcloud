@@ -242,7 +242,7 @@ Get an array of `Node` for the provided `loadBalancer`. Takes `loadBalancer` or 
 
 Callback is `f(err, nodes)`.
 
-#### client.addNodes(nodes, callback)
+#### client.addNodes(loadBalancer, nodes, callback)
 
 Add a single or array of nodes to the provided `loadBalancer`. Takes `loadBalancer` or `loadBalancerId` as an argument. `nodes` should be a single or array of objects.
 
