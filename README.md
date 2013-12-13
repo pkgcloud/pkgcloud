@@ -90,6 +90,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Azure](docs/providers/azure.md#using-compute)
   * [Rackspace](docs/providers/rackspace/compute.md)
   * [Amazon](docs/providers/amazon.md#using-compute)
+  * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
 * **[Storage](#storage)**
   * [Azure](docs/providers/azure.md#using-storage)
   * [Rackspace](docs/providers/rackspace/storage.md)
@@ -169,7 +170,7 @@ To get started with a `pkgcloud.storage` client just create one:
   });
 ```
 
-Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
+Each storage provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
 * [Azure](docs/providers/azure.md#using-storage)
 * [Rackspace](docs/providers/rackspace/storage.md)

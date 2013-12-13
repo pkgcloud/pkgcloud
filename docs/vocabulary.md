@@ -12,6 +12,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <th>Amazon</th>
     <th>Azure</th>
     <th>Rackspace</th>
+    <th>DigitalOcean</th>
   </tr>
   <tr>
     <td>Server</td>
@@ -20,12 +21,14 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <td>Instance</td>
     <td>Virtual Machine</td>
     <td>Server</td>
+    <td>Droplet</td>
   </tr>
   <tr>
     <td>Image</td>
     <td>Image</td>
     <td>Dataset</td>
     <td>AMI</td>
+    <td>Image</td>
     <td>Image</td>
     <td>Image</td>
   </tr>
@@ -36,6 +39,7 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
     <td>InstanceType</td>
     <td>RoleSize</td>
     <td>Flavor</td>
+    <td>Size</td>
   </tr>
 </table>
 
