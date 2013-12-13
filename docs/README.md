@@ -19,6 +19,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Azure](providers/azure.md#using-compute)
   * [Rackspace](providers/rackspace/compute.md)
   * [Amazon](providers/amazon.md#using-compute)
+  * [DigitalOcean](providers/digitalocean.md#using-compute)
 * **Storage**
   * [Azure](providers/azure.md#using-storage)
   * [Rackspace](providers/rackspace/storage.md)
