@@ -6,7 +6,7 @@ node_js:
 notifications:
   email:
     - travis@nodejitsu.com
-  irc: "irc.freenode.org#nodejitsu"
+  irc: "irc.freenode.org#pkgcloud"
 
 before_script:
   - git clone git://github.com/visionmedia/node-jscoverage.git
