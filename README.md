@@ -17,6 +17,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
+  * [Logging](#logging)
   * [Code Coverage](#code-coverage)
   * [Contribute!](#contributing)
   * [Roadmap](#roadmap)
@@ -456,6 +457,26 @@ Windows - Mocha installed locally:
  $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/iriscouch/*/*-test.js
 
 ```
+
+## Logging
+Any client you create with `createClient` can emit logging events. If you're interested in more detail from the internals of `pkgcloud`, you can wire up an event handler for log events.
+
+```Javascript
+var client = pkgcloud.compute.createClient(options);
+
+client.on('log::*', function(message, object) {
+  if (object) {
+   console.log(this.event.split('::')[1] + ' ' + message)
+   console.dir(object);
+  }
+  else {
+    console.log(this.event.split('::')[1]  + ' ' + message);
+  }
+});
+
+```
+
+The valid log events raised are `log::debug`, `log::verbose`, `log::info`, `log::warn`, and `log::error`.
 
 ## Code Coverage
 You will need jscoverage installed in order to run code coverage.  There seems to be many forks of the jscoverage project, but the recommended one is [node-jscoverage](https://github.com/visionmedia/node-jscoverage), because we use [node-coveralls](https://github.com/cainus/node-coveralls) to report coverage to http://coveralls.io.  node-coveralls requires output from [mocha-lcov-reporter](https://github.com/StevenLooman/mocha-lcov-reporter), whose documentation mentions node-jscoverage.
