@@ -476,7 +476,7 @@ client.on('log::*', function(message, object) {
 
 ```
 
-The valid log events raised are `log::debug`, `log::verbose`, `log::info`, `log::warn`, and `log::error`.
+The valid log events raised are `log::debug`, `log::verbose`, `log::info`, `log::warn`, and `log::error`. There is also a [more detailed logging example using pkgcloud with Winston](docs/logging-with-winston.md).
 
 ## Code Coverage
 You will need jscoverage installed in order to run code coverage.  There seems to be many forks of the jscoverage project, but the recommended one is [node-jscoverage](https://github.com/visionmedia/node-jscoverage), because we use [node-coveralls](https://github.com/cainus/node-coveralls) to report coverage to http://coveralls.io.  node-coveralls requires output from [mocha-lcov-reporter](https://github.com/StevenLooman/mocha-lcov-reporter), whose documentation mentions node-jscoverage.
