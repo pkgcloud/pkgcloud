@@ -9,7 +9,7 @@ var rackspace = pkgcloud.storage.createClient({
   region: 'IAD'//storage requires region or else assumes default
 });
 
-// Basic container and file operations. Please note that due to the asynchrous nature of JS programming,
+// Basic container and file operations. Please note that due to the asynchronous nature of JS programming,
 // the code sample below will cause unexpected results if run as-a-whole and are meant for documentation 
 // and illustration purposes.
 
