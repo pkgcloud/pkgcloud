@@ -13,7 +13,7 @@ var rackspace = pkgcloud.dns.createClient({
 
 // 1 - Get all DNS "Zones" associates with your account
 rackspace.getZones({}, function (err, zones) {
-	if(!err) {
+	if(!err && zones.length > 0) {
 		_.each(zones, function (z) { 
 			console.log(z.id + ' ' + z.name);
 		});
@@ -32,7 +32,7 @@ rackspace.createZone(details, function (err, zone) {
 
 // 3 - Let's get the "Zone" we just created and let's see its records
 rackspace.getZones({name:'clearthefog.com'}, function (err, zones) {
-	if(!err) {
+	if(!err && zones.length > 0) {
 		console.log('We have parent Zone');
 		rackspace.getRecords(zones[0], function (err, records) {
 			if (!err) {
@@ -50,7 +50,7 @@ rackspace.getZones({name:'clearthefog.com'}, function (err, zones) {
 // 4 - Let's add a new DNS A-record to a "Zone". Record has three required fields: type, name, data
 var _rec = {name: 'sub.clearthefog.com', type: 'A', data: '127.0.0.1'};
 rackspace.getZones({name:'clearthefog.com'}, function (err, zones) {
-	if(!err) {
+	if(!err && zones.length > 0) {
 		console.log('We have parent Zone');
 		rackspace.createRecord(zones[0], _rec, function (err, rec) {
 			if (!err) {
@@ -61,7 +61,7 @@ rackspace.getZones({name:'clearthefog.com'}, function (err, zones) {
 	}
 });
 
-// 5 - Now let's remove the zone and all its children records.
+// 5 - Now let's remove the "Zone" and all of its children records.
 rackspace.getZones({name:'clearthefog.com'}, function (err, zones) {
 	if(!err && zones.length > 0) {
 		console.log('We have parent Zone');
