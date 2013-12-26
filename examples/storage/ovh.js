@@ -16,7 +16,7 @@ var ovh = pkgcloud.storage.createClient({
   provider: 'ovh',
   username: 'username', //ex. md12345-1234567
   password: 'password',    //ex. ksadkRjnhtr
-  tenantName: 'tenantName' // ex. T_md12345-1234567
+  tenantName: 'tenant' // ex. T_md12345-1234567
 });
 
 // Basic container and file operations. Please note that due to the asynchronous nature of Javascript programming,
@@ -71,7 +71,6 @@ var example3= function (err, container) {
   }
 
   var myPicture = fs.createReadStream('/path/to/some/file/picture.jpg');
-
   myPicture.pipe(ovh.upload({
       container: container.name,
       remote: 'profile-picture.jpg'
