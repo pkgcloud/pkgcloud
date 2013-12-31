@@ -1,3 +1,6 @@
+## v0.8.17
+* Make default for destroyServer (DigitalOcean) to scrub data #215
+
 ## v0.8.16
 * Add *beta* support for Rackspace Cloud Load Balancers
 
