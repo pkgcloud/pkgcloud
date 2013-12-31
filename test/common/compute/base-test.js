@@ -512,6 +512,7 @@ function setupDestroyMock(client, provider, servers) {
 
     servers.server
       .get('/droplets/354526/destroy?' + qs.stringify({
+        scrub_data: '1',
         client_id: account.clientId,
         api_key: account.apiKey
       }))
