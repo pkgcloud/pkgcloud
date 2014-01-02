@@ -41,9 +41,9 @@ providers.forEach(function (provider) {
       should.ok(client.rebootServer.length >= 2);
     });
 
-    it('client.destroyServer should take 2 arguments', function () {
+    it('client.destroyServer should take at least 2 arguments', function () {
       client.destroyServer.should.be.a('function');
-      client.destroyServer.should.have.length(2);
+      should.ok(client.destroyServer.length >= 2);
     });
 
     it('client.getFlavor should take 2 arguments', function () {
