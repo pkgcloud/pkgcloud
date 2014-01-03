@@ -47,7 +47,20 @@
         "endpoints_links": [], 
         "type": "compute",
         "name": "nova"
-      }, {
+      },
+      {
+        "endpoints": [
+          {
+            "region": "Calxeda-AUS1",
+            "tenantId": "MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00",
+            "publicURL": "http://localhost:12345/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00",
+            "internalURL": "https://snet-storage101.ord1.clouddrive.com/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00"
+          }
+        ],
+        "name": "swift",
+        "type": "object-store"
+      },
+      {
         "endpoints": [
           {
             "adminURL": "http://10.225.0.8:35357/v2.0",

@@ -21,6 +21,7 @@ var fs = require('fs'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
     File = require('../../../lib/pkgcloud/core/storage/file').File,
     mock = !!process.env.MOCK,
+    pkgcloud = require('../../../lib/pkgcloud'),
     fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
 
 providers.filter(function (provider) {
@@ -450,6 +451,34 @@ function setupCreateContainerMock(provider, client, servers) {
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(201);
   }
+  else if (provider === 'openstack') {
+    servers.authServer
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          }
+        }
+      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/initialToken.json'))
+      .get('/v2.0/tenants', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          },
+          tenantId: '72e90ecb69c44d0296072ea39e537041'
+        }
+      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(200, helpers.getOpenstackAuthResponse());
+
+    servers.server
+      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(201);
+  }
   else if (provider === 'amazon') {
 
     // Override the clients getUrl method as it tries to prefix the container name onto the request
@@ -486,7 +515,7 @@ function setupCreateContainerMock(provider, client, servers) {
 }
 
 function setupGetContainersMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('rackspace/postContainers.json'));
@@ -504,7 +533,7 @@ function setupGetContainersMock(provider, client, servers) {
 }
 
 function setupUploadStreamMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
@@ -524,7 +553,7 @@ function setupUploadStreamMock(provider, client, servers) {
 }
 
 function setupDownloadStreamMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, { 'content-length': fillerama.length + 2})
@@ -542,7 +571,7 @@ function setupDownloadStreamMock(provider, client, servers) {
 }
 
 function setupGetFileMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 })
@@ -560,7 +589,7 @@ function setupGetFileMock(provider, client, servers) {
 }
 
 function setupGetFilesMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
       .reply(200, [{
@@ -582,7 +611,7 @@ function setupGetFilesMock(provider, client, servers) {
 }
 
 function setupRemoveFileMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '');
@@ -600,7 +629,7 @@ function setupRemoveFileMock(provider, client, servers) {
 }
 
 function setupDestroyContainerMock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
       .reply(200, [
@@ -632,7 +661,7 @@ function setupDestroyContainerMock(provider, client, servers) {
 }
 
 function setupGetContainers2Mock(provider, client, servers) {
-  if (provider === 'rackspace') {
+  if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('rackspace/preContainers.json'));
