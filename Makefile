@@ -25,10 +25,10 @@ test-coveralls:	lib-cov
 	mv lib lib-bak
 	mv lib-cov lib
 	$(MAKE) test REPORTER=mocha-lcov-reporter > pkgcloud.lcov.raw
+	rm -rf lib
+	mv lib-bak lib
 	sed "s#SF:#SF:$(PWD)/lib/#g" pkgcloud.lcov.raw > pkgcloud.lcov
 	./node_modules/coveralls/bin/coveralls.js < pkgcloud.lcov
 	rm pkgcloud.lcov pkgcloud.lcov.raw
-	rm -rf lib
-	mv lib-bak lib
 
 .PHONY: test

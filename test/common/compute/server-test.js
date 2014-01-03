@@ -351,9 +351,7 @@ function setupServerMock(client, provider, servers) {
         server: {
           name: 'create-test-ids2',
           flavorRef: '2',
-          imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346',
-          personality: [],
-          key_name: null
+          imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346'
         }
       })
       .replyWithFile(202, __dirname + '/../../fixtures/rackspace/createdServer.json')
@@ -363,7 +361,7 @@ function setupServerMock(client, provider, servers) {
   else if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/servers',
-      {server: {name: 'create-test-ids2', flavorRef: '1', imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66', personality: [], key_name: null}})
+      {server: {name: 'create-test-ids2', flavorRef: '1', imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'}})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/creatingServer.json')
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
