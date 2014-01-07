@@ -26,6 +26,33 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
 
     var client, server, authServer;
 
+    /**
+     * Generates a container file list response of specified size for large container tests.
+     * Results remain alphabetical by appending incrementing numbers to the file names, e.g. FILE00000, FILE019999.
+     * @param start
+     * @param end
+     * @returns {Array}
+     */
+    var generateFilesResponse = function (start, end) {
+      var files = [];
+      function padToFive(number) {
+        if (number<=99999) { number = ("0000"+number).slice(-5); }
+        return number;
+      }
+
+      for (var i = start; i < end; i++) {
+        files.push({
+          "hash": "cb5c530452af82fb875dc0fb1a00a2c4",
+          "last_modified": "2013-05-20T22:48:08.059180",
+          "bytes": 2027,
+          "name": "FILE" + padToFive(i),
+          "content_type": "application/octet-stream"
+        });
+      }
+
+      return files;
+    };
+
     before(function (done) {
       client = helpers.createClient('rackspace', 'storage');
 
@@ -81,6 +108,52 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
         files.forEach(function (f) {
           f.should.be.instanceof(File);
         });
+        authServer && authServer.done();
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getFiles should return all files by default (even if more than 10k)', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
+          .reply(200, generateFilesResponse(0, 10000))
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
+          .reply(200, generateFilesResponse(10000, 20000))
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE19999')
+          .reply(200, generateFilesResponse(20000, 20123));
+      } else {
+        return done();
+      }
+
+      client.getFiles('0.1.7-215', function (err, files) {
+        should.not.exist(err);
+        should.exist(files);
+        files.length.should.equal(20123);
+        authServer && authServer.done();
+        server && server.done();
+        done();
+      });
+    });
+
+    it('getFiles should return all files by default (even if exactly 10k)', function (done) {
+
+      if (mock) {
+        server
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
+          .reply(200, generateFilesResponse(0, 10000))
+          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
+          .reply(200, []);
+      } else {
+        return done();
+      }
+
+      client.getFiles('0.1.7-215', function (err, files) {
+        should.not.exist(err);
+        should.exist(files);
+        files.length.should.equal(10000);
         authServer && authServer.done();
         server && server.done();
         done();
@@ -148,7 +221,7 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
       });
     });
 
-    it('getFiles with marker and limit should start offset appropriatley', function (done) {
+    it('getFiles with marker and limit should start offset appropriately', function (done) {
 
       if (mock) {
         server
