@@ -114,47 +114,20 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
       });
     });
 
-    it('getFiles should return all files by default (even if more than 10k)', function (done) {
+    it('getFiles with undefined limit should return up to 10,000 files', function (done) {
 
-      if (mock) {
-        server
-          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
-          .reply(200, generateFilesResponse(0, 10000))
-          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
-          .reply(200, generateFilesResponse(10000, 20000))
-          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE19999')
-          .reply(200, generateFilesResponse(20000, 20123));
-      } else {
+      if (!mock) {
         return done();
       }
 
-      client.getFiles('0.1.7-215', function (err, files) {
-        should.not.exist(err);
-        should.exist(files);
-        files.length.should.equal(20123);
-        authServer && authServer.done();
-        server && server.done();
-        done();
-      });
-    });
-
-    it('getFiles should return all files by default (even if exactly 10k)', function (done) {
-
-      if (mock) {
-        server
-          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
-          .reply(200, generateFilesResponse(0, 10000))
-          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
-          .reply(200, []);
-      } else {
-        return done();
-      }
+      server
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
+        .reply(200, generateFilesResponse(0, 10000));
 
       client.getFiles('0.1.7-215', function (err, files) {
         should.not.exist(err);
         should.exist(files);
         files.length.should.equal(10000);
-        authServer && authServer.done();
         server && server.done();
         done();
       });
@@ -180,26 +153,51 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
       });
     });
 
-    it('getFiles with limit should return reduced set', function (done) {
+    it('getFiles with limit > 10,000 should make multiple requests as necessary', function (done) {
 
-      if (mock) {
-        server
-          .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&limit=3')
-          .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getFilesLimit.json');
+      if (!mock) {
+        return done();
       }
 
-      client.getFiles('0.1.7-215', { limit: 3 }, function (err, files) {
+      server
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
+        .reply(200, generateFilesResponse(0, 10000))
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
+        .reply(200, generateFilesResponse(10000, 20000))
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&limit=3400&marker=FILE19999')
+        .reply(200, generateFilesResponse(20000, 23400));
+
+      client.getFiles('0.1.7-215', { limit: 23400 }, function (err, files) {
         should.not.exist(err);
         should.exist(files);
-        files.should.have.length(3);
-        files.forEach(function (f) {
-          f.should.be.instanceof(File);
-        });
+        files.should.have.length(23400);
         server && server.done();
         done();
       });
     });
 
+    it('getFiles with limit = 0 should return all files', function (done) {
+
+      if (!mock) {
+        return done();
+      }
+
+      server
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
+        .reply(200, generateFilesResponse(0, 10000))
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
+        .reply(200, generateFilesResponse(10000, 20000))
+        .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE19999')
+        .reply(200, []);
+
+      client.getFiles('0.1.7-215', { limit: 0 }, function (err, files) {
+        should.not.exist(err);
+        should.exist(files);
+        files.should.have.length(20000);
+        server && server.done();
+        done();
+      });
+    });
 
     it('getFiles with marker should start offset appropriately', function (done) {
 
