@@ -128,11 +128,15 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       });
 
       it('should respond with a token', function () {
-        should.exist(client.identity.token);
+        should.exist(client._identity.token);
       });
 
       it('should update the config with appropriate urls', function () {
-        should.exist(client.identity);
+        should.exist(client._identity);
+      });
+
+      afterEach(function() {
+        delete client._identity.token;
       });
     });
 
