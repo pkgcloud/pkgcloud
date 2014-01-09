@@ -130,7 +130,7 @@ client.removeContainerMetadata(container, { year: false }, function(err, c) {
 * [`client.upload(options, function(err, result) { })`](#clientuploadoptions-functionerr-result--)
 * [`client.download(options, function(err, file) { })`](#clientdownloadoptions-functionerr-file--)
 * [`client.getFile(container, file, function(err, file) { })`](#clientgetfilecontainer-file-functionerr-file--)
-* [`client.getFiles(container, [options], function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
+* [`client.getFiles(container, [options], function(err, file) { })`](#clientgetfilescontainer-options-functionerr-files--)
 * [`client.removeFile(container, file, function(err, result) { })`](#clientremovefilecontainer-file-functionerr-result--)
 * [`client.updateFileMetadata(container, file, function(err, file) { })`](#clientupdatefilemetadatacontainer-file-functionerr-file--)
 
