@@ -176,7 +176,7 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
       });
     });
 
-    it('getFiles with limit = 0 should return all files', function (done) {
+    it('getFiles with limit = Infinity should return all files', function (done) {
 
       if (!mock) {
         return done();
@@ -190,7 +190,7 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
         .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE19999')
         .reply(200, []);
 
-      client.getFiles('0.1.7-215', { limit: 0 }, function (err, files) {
+      client.getFiles('0.1.7-215', { limit: Infinity }, function (err, files) {
         should.not.exist(err);
         should.exist(files);
         files.should.have.length(20000);

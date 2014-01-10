@@ -283,7 +283,7 @@ By default, without the `limit` option being specified, a single request is made
 
 If `limit` is set to a be greater than 10,000, requests will be made until the limit is reached or all files in the container have been retrieved.
 
-If `limit` is 0, requests will be made until all files in the container have been retrieved.
+Set `limit` to the global `Infinity` to ensure a complete listing of the container.
 
 #### client.removeFile(container, file, function(err, result) { })
 
