@@ -108,7 +108,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       });
 
       it('should update the config with appropriate urls', function () {
-        client.identity.should.be.a('object');
+        client._identity.should.be.a('object');
       });
 
       it('the getLimits() method should return the proper limits', function (done) {
@@ -214,8 +214,8 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       });
 
       it('should update the config with appropriate urls', function () {
-        client.identity.should.be.a('object');
-        client.identity.token.expires.toString().should.equal(tokenExpiry);
+        client._identity.should.be.a('object');
+        client._identity.token.expires.toString().should.equal(tokenExpiry);
       });
 
       it('should expire the token and set authorized to false', function(done) {
