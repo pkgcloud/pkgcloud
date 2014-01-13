@@ -15,15 +15,17 @@ Supporting every API for every cloud service provider in Node.js is a huge under
 If a service does not have at least two providers, it is considered a *beta* interface; We reserve the right to improve the API as multiple providers will allow generalization to be better determined.
 
 * **Compute** [*Compute Client Commonality*](compute-commonality.md)
-  * [Joyent](providers/joyent.md#using-compute)
-  * [Azure](providers/azure.md#using-compute)
-  * [Rackspace](providers/rackspace/compute.md)
   * [Amazon](providers/amazon.md#using-compute)
+  * [Azure](providers/azure.md#using-compute)
   * [DigitalOcean](providers/digitalocean.md#using-compute)
+  * [Joyent](providers/joyent.md#using-compute)
+  * [Openstack](providers/openstack/compute.md)
+  * [Rackspace](providers/rackspace/compute.md)
 * **Storage**
-  * [Azure](providers/azure.md#using-storage)
-  * [Rackspace](providers/rackspace/storage.md)
   * [Amazon](providers/amazon.md#using-storage)
+  * [Azure](providers/azure.md#using-storage)
+  * [Openstack](providers/openstack/storage.md)
+  * [Rackspace](providers/rackspace/storage.md)
 * **Databases**
   * [IrisCouch](providers/iriscouch.md)
   * [MongoLab](providers/mongolab.md)

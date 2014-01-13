@@ -93,15 +93,17 @@ Supporting every API for every cloud service provider in Node.js is a huge under
 If a service does not have at least two providers, it is considered a *beta* interface; We reserve the right to improve the API as multiple providers will allow generalization to be better determined.
 
 * **[Compute](#compute)**
-  * [Joyent](docs/providers/joyent.md#using-compute)
-  * [Azure](docs/providers/azure.md#using-compute)
-  * [Rackspace](docs/providers/rackspace/compute.md)
   * [Amazon](docs/providers/amazon.md#using-compute)
+  * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+  * [Joyent](docs/providers/joyent.md#using-compute)
+  * [Openstack](docs/providers/openstack/compute.md)
+  * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
-  * [Azure](docs/providers/azure.md#using-storage)
-  * [Rackspace](docs/providers/rackspace/storage.md)
   * [Amazon](docs/providers/amazon.md#using-storage)
+  * [Azure](docs/providers/azure.md#using-storage)
+  * [Openstack](docs/providers/openstack/storage.md)
+  * [Rackspace](docs/providers/rackspace/storage.md)
 * **[Database](#databases)**
   * [IrisCouch](docs/providers/iriscouch.md)
   * [MongoLab](docs/providers/mongolab.md)
@@ -134,10 +136,12 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
 
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Joyent](docs/providers/joyent.md#using-compute)
-* [Azure](docs/providers/azure.md#using-compute)
-* [Rackspace](docs/providers/rackspace/compute.md)
 * [Amazon](docs/providers/amazon.md#using-compute)
+* [Azure](docs/providers/azure.md#using-compute)
+* [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+* [Joyent](docs/providers/joyent.md#using-compute)
+* [Openstack](docs/providers/openstack/compute.md)
+* [Rackspace](docs/providers/rackspace/compute.md)
 
 Each instance of `pkgcloud.compute.Client` returned from `pkgcloud.compute.createClient` has a set of uniform APIs:
 
@@ -179,9 +183,10 @@ To get started with a `pkgcloud.storage` client just create one:
 
 Each storage provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Azure](docs/providers/azure.md#using-storage)
-* [Rackspace](docs/providers/rackspace/storage.md)
 * [Amazon](docs/providers/amazon.md#using-storage)
+* [Azure](docs/providers/azure.md#using-storage)
+* [Openstack](docs/providers/openstack/storage.md)
+* [Rackspace](docs/providers/rackspace/storage.md)
 
 Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.createClient` has a set of uniform APIs:
 

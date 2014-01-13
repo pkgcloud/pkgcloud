@@ -1,4 +1,4 @@
-## Using the Rackspace Storage provider
+## Using the Openstack Storage provider
 
 * Container
   * [Model](#container-model)
@@ -22,7 +22,7 @@ Learn about [more options for creating clients](README.md) in the Openstack `sto
 
 ### Container Model
 
-A Container for Rackspace has following properties:
+A Container for Openstack has following properties:
 
 ```Javascript
 {
@@ -37,7 +37,7 @@ A Container for Rackspace has following properties:
 
 ### File Model
 
-A File for Rackspace has the following properties:
+A File for Openstack has the following properties:
 
 ```Javascript
 {
