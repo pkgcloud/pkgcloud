@@ -22,7 +22,7 @@ describe('pkgcloud/azure/databases', function () {
       return done();
     }
 
-    client.getUrl = function(options) {
+    client._getUrl = function(options) {
       options = options || {};
 
       return urlJoin('http://localhost:12345/',

@@ -12,11 +12,11 @@ describe('pkgcloud/core/base/client', function () {
   describe('The pkgcloud base client request method', function() {
     it('with a wrong request with a cb', function(done) {
       var cli = new Client();
-      cli.getUrl = function () {
+      cli._getUrl = function () {
         return "badurl";
       };
       cli.failCodes = {};
-      cli.request({ path: '/' }, function(err) {
+      cli._request({ path: '/' }, function(err) {
         should.exist(err);
         done();
       });
@@ -25,11 +25,11 @@ describe('pkgcloud/core/base/client', function () {
     it('with a wrong request without a cb', function (done) {
       var cli = new Client();
 
-      cli.getUrl = function () {
+      cli._getUrl = function () {
         return "badurl";
       };
       cli.failCodes = {};
-      var stream = cli.request({ path: '/' });
+      var stream = cli._request({ path: '/' });
       stream.on('error', function () {
         return handleResponse(true);
       });
@@ -46,14 +46,14 @@ describe('pkgcloud/core/base/client', function () {
 
     it('the before filters throwing an error with a callback should return the error on the cb', function(done) {
       var cli = new Client();
-      cli.getUrl = function () {
+      cli._getUrl = function () {
         return "badurl";
       };
       cli.failCodes = {};
       cli.before = [function () {
         throw new Error('Foo!');
       }];
-      cli.request({ path: '/' }, function(err) {
+      cli._request({ path: '/' }, function(err) {
         should.exist(err);
         done();
       });
@@ -62,11 +62,11 @@ describe('pkgcloud/core/base/client', function () {
     it('the before filters throwing an error without a callback should return the error on the EE', function(done) {
       var cli = new Client();
 
-      cli.getUrl = function () {
+      cli._getUrl = function () {
         return "badurl";
       };
       cli.failCodes = {};
-      var stream = cli.request({ path: '/' });
+      var stream = cli._request({ path: '/' });
       stream.on('error', function () {
         handleResponse(true);
       });

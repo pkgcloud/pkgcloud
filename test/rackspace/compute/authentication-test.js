@@ -220,7 +220,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       it('should expire the token and set authorized to false', function(done) {
         setTimeout(function() {
-          client.isAuthorized().should.equal(false);
+          client._isAuthorized().should.equal(false);
           done();
         }, 5);
       });
@@ -245,9 +245,9 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         }
 
         setTimeout(function () {
-          client.isAuthorized().should.equal(false);
+          client._isAuthorized().should.equal(false);
           client.getImages(function(err, images) {
-            client.isAuthorized().should.equal(true);
+            client._isAuthorized().should.equal(true);
             should.not.exist(err);
             should.exist(images);
             server && server.done();
