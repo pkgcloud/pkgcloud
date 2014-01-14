@@ -130,7 +130,7 @@ client.removeContainerMetadata(container, { year: false }, function(err, c) {
 * [`client.upload(options, function(err, result) { })`](#clientuploadoptions-functionerr-result--)
 * [`client.download(options, function(err, file) { })`](#clientdownloadoptions-functionerr-file--)
 * [`client.getFile(container, file, function(err, file) { })`](#clientgetfilecontainer-file-functionerr-file--)
-* [`client.getFiles(container, function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
+* [`client.getFiles(container, [options], function(err, file) { })`](#clientgetfilescontainer-options-functionerr-files--)
 * [`client.removeFile(container, file, function(err, result) { })`](#clientremovefilecontainer-file-functionerr-result--)
 * [`client.updateFileMetadata(container, file, function(err, file) { })`](#clientupdatefilemetadatacontainer-file-functionerr-file--)
 
@@ -270,9 +270,20 @@ This is functionally equivalent to piping from an `fs.createWriteStream`, but ha
 
 Retrieves the specified [`file`](#file-model) details in the specified [`container`](#container-model) from the current client instance.
 
-#### client.getFiles(container, function(err, files) { })
+#### client.getFiles(container, [options], function(err, files) { })
 
-Retreives an array of [`file`](#file-model) for the provided [`container`](#container-model).
+Retrieves an array of [`file`](#file-model) for the provided [`container`](#container-model) in alphabetical order.
+
+The following `option` properties are currently supported:
+
+ - `limit` an integer which limits the number of returned files
+ - `marker` a string used to specify the start of the listing
+
+By default, without the `limit` option being specified, a single request is made and a maximum of 10,000 files will be returned.
+
+If `limit` is set to a be greater than 10,000, requests will be made until the limit is reached or all files in the container have been retrieved.
+
+Set `limit` to the global `Infinity` to ensure a complete listing of the container.
 
 #### client.removeFile(container, file, function(err, result) { })
 
