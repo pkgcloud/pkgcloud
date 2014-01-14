@@ -21,7 +21,7 @@ if (!mock) {
   return; // these tests are disabled when running for real
 }
 
-describe('pkgcloud/rackspace/storage/stroage-object', function () {
+describe('pkgcloud/rackspace/storage/storage-object', function () {
   describe('The pkgcloud Rackspace Storage client', function () {
 
     var client, server, authServer;
@@ -238,7 +238,23 @@ describe('pkgcloud/rackspace/storage/stroage-object', function () {
         done();
       });
     });
-    
+
+    it('getFile should URL encode the file name', function (done) {
+      if (mock) {
+        server
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/~!%40%23%24%25%5E%26*()_%2B/~!%40%23%24%25%5E%26*()_%2B?format=json')
+          .reply(200);
+      }
+
+      client.getFile('0.1.7-215', '~!@#$%^&*()_+/~!@#$%^&*()_+', function (err, file) {
+        should.not.exist(err);
+        should.exist(file);
+        file.should.be.instanceof(File);
+        server && server.done();
+        done();
+      });
+    });
+
     it('extract should ask server to extract the uploaded tar file', function(done) {
       
       var data = "H4sIABub81EAA+3TzUrEMBAH8CiIeNKTXvMC1nxuVzx58CiC9uBNam1kQZt1N4X1XXwDX9IJXVi6UDxo6sH/D4akadJOmY7z/owlJkhubTdOulEo040dJpXMTS6tjuuSriTjNnViUbsM5YJztvCPs+atHdxH25wbI6FxOap/9hDqZcjCKqR5RyzwxJjB+iurN/WXiuqvpdGMizTp9P3z+rO94322y9h1WfGbO37P1+IaO6BQFO8U8fqzd/Jo6JGXRXG7nsYTHxSHW1t2NusnlX/Nyvn8pc6KehWumso/zZpnutkGdzq9kNrQv3E+Nb/yudAX+z9t93/f/0LIrf5XNEP/j0H+dQIAAAAAAAAAAAAAAAAAAADwY194ELb5ACgAAA==";
