@@ -255,6 +255,102 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
       });
     });
 
+    it('upload should complete successfully when returned checksum matches - local file upload', function (done) {
+      var filepath = __dirname + '/../../fixtures/fillerama.txt';
+
+      if (mock) {
+        server
+          .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/upload.txt', fs.readFileSync(filepath, 'utf8'))
+          .reply(201, '', {
+            ETag: '9b0d0a115145c13f1281818adc2bbcbe'
+          });
+      }
+
+      client.upload({
+        container: '0.1.7-215',
+        remote: 'upload.txt',
+        local: filepath
+      }, function (err, result) {
+        should.not.exist(err);
+        server && server.done();
+        done();
+      });
+    });
+
+    it('upload should complete successfully when returned checksum matches - stream upload', function (done) {
+      var filepath = __dirname + '/../../fixtures/fillerama.txt';
+
+      if (mock) {
+        server
+          .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/upload.txt', fs.readFileSync(filepath, 'utf8'))
+          .reply(201, '', {
+            ETag: '9b0d0a115145c13f1281818adc2bbcbe'
+          });
+      }
+
+      var stream = client.upload({
+        container: '0.1.7-215',
+        remote: 'upload.txt'
+      }, function (err, result) {
+        should.not.exist(err);
+        server && server.done();
+        done();
+      });
+
+      fs.createReadStream(filepath).pipe(stream);
+    });
+
+    it('upload should remove file and return error on checksum mismatch - local file upload', function (done) {
+      var filepath = __dirname + '/../../fixtures/fillerama.txt';
+
+      if (mock) {
+        server
+          .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/upload.txt', fs.readFileSync(filepath, 'utf8'))
+          .reply(201, '', {
+            ETag: '12bad12bad12bad12bad12bad12bad12'
+          })
+          .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/upload.txt')
+          .reply(204);
+      }
+
+      client.upload({
+        container: '0.1.7-215',
+        remote: 'upload.txt',
+        local: filepath
+      }, function (err, result) {
+        should.exist(err);
+        err.should.be.an.instanceOf(Error);
+        server && server.done();
+        done();
+      });
+    });
+
+    it('upload should remove file and return error on checksum mismatch - stream upload', function (done) {
+      var filepath = __dirname + '/../../fixtures/fillerama.txt';
+
+      if (mock) {
+        server
+          .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/upload.txt', fs.readFileSync(filepath, 'utf8'))
+          .reply(201, '', {
+            ETag: '12bad12bad12bad12bad12bad12bad12'
+          })
+          .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/upload.txt')
+          .reply(204);
+      }
+
+      var stream = client.upload({
+        container: '0.1.7-215',
+        remote: 'upload.txt'
+      }, function (err, result) {
+        should.exist(err);
+        err.should.be.an.instanceOf(Error);
+        server && server.done();
+        done();
+      });
+
+      fs.createReadStream(filepath).pipe(stream);
+    });
+
     it('extract should ask server to extract the uploaded tar file', function(done) {
       
       var data = "H4sIABub81EAA+3TzUrEMBAH8CiIeNKTXvMC1nxuVzx58CiC9uBNam1kQZt1N4X1XXwDX9IJXVi6UDxo6sH/D4akadJOmY7z/owlJkhubTdOulEo040dJpXMTS6tjuuSriTjNnViUbsM5YJztvCPs+atHdxH25wbI6FxOap/9hDqZcjCKqR5RyzwxJjB+iurN/WXiuqvpdGMizTp9P3z+rO94322y9h1WfGbO37P1+IaO6BQFO8U8fqzd/Jo6JGXRXG7nsYTHxSHW1t2NusnlX/Nyvn8pc6KehWumso/zZpnutkGdzq9kNrQv3E+Nb/yudAX+z9t93/f/0LIrf5XNEP/j0H+dQIAAAAAAAAAAAAAAAAAAADwY194ELb5ACgAAA==";

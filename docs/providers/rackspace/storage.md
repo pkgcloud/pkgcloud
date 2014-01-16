@@ -154,6 +154,8 @@ client.getFile(myContainer, 'my-file', function(err, file) { ... });
 
 Returns a writeable stream. Upload a new file to a [`container`](#container-model). `result` will be `true` on success.
 
+The MD5 checksum of the provided file or stream is calculated on the client side, and compared to the checksum calculated by Rackspace. This ensures round-trip data integrity.
+
 To upload a file, you need to provide an `options` argument:
 
 ```Javascript

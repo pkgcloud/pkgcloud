@@ -39,7 +39,8 @@
     "request":       "2.22.x",
     "underscore":    "1.4.x",
     "url-join":      "0.0.x",
-    "utile":         "0.x.x"
+    "utile":         "0.x.x",
+    "digest-stream": "0.2.x"
   },
   "devDependencies": {
     "hock" : "0.2.x",
