@@ -482,7 +482,7 @@ function setupCreateContainerMock(provider, client, servers) {
   else if (provider === 'amazon') {
 
     // Override the clients getUrl method as it tries to prefix the container name onto the request
-    client.getUrl = function (options) {
+    client._getUrl = function (options) {
       options = options || {};
 
       if (typeof options === 'string') {
@@ -499,7 +499,7 @@ function setupCreateContainerMock(provider, client, servers) {
   else if (provider === 'azure') {
 
     // Override the clients getUrl method as it tries to prefix the container name onto the request
-    client.getUrl = function (options) {
+    client._getUrl = function (options) {
       options = options || {};
 
       return urlJoin('http://localhost:12345/',
