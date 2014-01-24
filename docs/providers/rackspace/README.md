@@ -22,7 +22,7 @@ var client = require('pkgcloud').compute.createClient({
     provider: 'rackspace',
     username: 'your-user-name',
     apiKey: 'your-api-key'
-});s
+});
 ```
 
 In addition to your `apiKey`, you could alternately provide your `password` as an option to `createClient`.
