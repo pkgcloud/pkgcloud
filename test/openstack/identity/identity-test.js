@@ -132,7 +132,10 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .reply(200, helpers.getOpenstackAuthResponse())
+          .reply(200, helpers.getOpenstackAuthResponse());
+
+
+        adminServer
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -153,9 +156,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537123'
             }
           })
-          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'));
-
-        adminServer
+          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'))
           .get('/v2.0/tokens/4bc7c5dabf3e4a49918683437d386b8a?belongsTo=72e90ecb69c44d0296072ea39e537041')
           .reply(200);
       }
@@ -168,10 +169,10 @@ describe('pkgcloud/openstack/identity', function () {
       });
 
       var adminClient = identity.createClient({
-        authUrl: 'http://localhost:12346',
-        useAdmin: true,
+        authUrl: 'http://localhost:12347',
         username: 'MOCK-ADMIN',
         password: 'asdf1234',
+        useServiceCatalog: false,
         region: 'Calxeda-AUS1'
       });
 
@@ -212,6 +213,9 @@ describe('pkgcloud/openstack/identity', function () {
             }
           })
           .reply(200, helpers.getOpenstackAuthResponse())
+
+
+        adminServer
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -232,9 +236,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537123'
             }
           })
-          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'));
-
-        adminServer
+          .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'))
           .get('/v2.0/tenants/72e90ecb69c44d0296072ea39e537041', { 'X-Auth-Token': '4bc7c5dabf3e4a49918683437d386b8b' })
           .reply(200)
           .get('/v2.0/tenants/72e90ecb69c44d0296072ea39e537123', { 'X-Auth-Token': '4bc7c5dabf3e4a49918683437d386b8a' })
@@ -250,10 +252,11 @@ describe('pkgcloud/openstack/identity', function () {
       });
 
       var adminClient = identity.createClient({
-        authUrl: 'http://localhost:12346',
+        authUrl: 'http://localhost:12347',
         useAdmin: true,
         username: 'MOCK-ADMIN',
         password: 'asdf1234',
+        useServiceCatalog: false,
         region: 'Calxeda-AUS1'
       });
 
