@@ -1,4 +1,9 @@
 ## v0.9.0
+* OpenStack Documentation
+* Openstack Storage Provider
+* fixed a bug with piping downloads from storage services #195
+* internal refactor for leaky abstractions
+* OpenStack identity client as a proper client
 
 ## v0.8.17
 * Make default for destroyServer (DigitalOcean) to scrub data #215
