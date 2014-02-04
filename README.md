@@ -1,4 +1,4 @@
-# pkgcloud [![Build Status](https://secure.travis-ci.org/nodejitsu/pkgcloud.png?branch=master)](http://travis-ci.org/nodejitsu/pkgcloud) [![NPM version](https://badge.fury.io/js/pkgcloud.png)](http://badge.fury.io/js/pkgcloud)
+# pkgcloud [![Build Status](https://secure.travis-ci.org/pkgcloud/pkgcloud.png?branch=master)](http://travis-ci.org/pkgcloud/pkgcloud) [![NPM version](https://badge.fury.io/js/pkgcloud.png)](http://badge.fury.io/js/pkgcloud)
 
 pkgcloud is a standard library for node.js that abstracts away differences among multiple cloud providers.
 
@@ -508,9 +508,9 @@ Please make sure jscoverage has been installed following the instructions at [no
 ### Run Coverage locally and send to coveralls.io
 
 Travis takes care of coveralls, so this shouldn't be necessary unless you're troubleshooting a problem with Travis/Coveralls.
-You'll need to have access to the coveralls repo_token, which should only be visible to nodejitsu/pkgcloud admins.
+You'll need to have access to the coveralls repo_token, which should only be visible to pkgcloud/pkgcloud admins.
 
-1. Create a .coveralls.yml containing the repo_token from https://coveralls.io/r/nodejitsu/pkgcloud
+1. Create a .coveralls.yml containing the repo_token from https://coveralls.io/r/pkgcloud/pkgcloud
 2. Run <code>make test-coveralls</code>
 
 <a name="contributing"></a>

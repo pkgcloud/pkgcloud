@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url" : "http://github.com/nodejitsu/pkgcloud.git"
+    "url" : "http://github.com/pkgcloud/pkgcloud.git"
   },
   "keywords": [
     "cloud", "cloud computing",

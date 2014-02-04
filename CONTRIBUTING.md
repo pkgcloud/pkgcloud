@@ -75,4 +75,4 @@ if (mock) {
 
 ## License
 
-By contributing your code, you agree to license your contribution under the terms of the MIT: https://github.com/nodejitsu/pkgcloud/blob/master/LICENSE
+By contributing your code, you agree to license your contribution under the terms of the MIT: https://github.com/pkgcloud/pkgcloud/blob/master/LICENSE
