@@ -182,7 +182,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         client = helpers.createClient('rackspace', 'compute');
 
         client.on('log::*', function(message, obj) {
-          if (this.event !== 'log::debug') {
+          if (this.event !== 'log::trace') {
             console.log(message);
             console.dir(obj);
           }
