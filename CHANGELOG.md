@@ -1,3 +1,10 @@
+## v0.9.1
+* Removing an unnecessary continuity check in openstack identity client
+* Switching Debug events to trace events
+* Be more explicit with content types for openstack authentication
+* Allow passing tenant to the context authenticator
+* Fixing the networks property to be on server options for openstack compute
+
 ## v0.9.0
 * OpenStack Documentation
 * Openstack Storage Provider
