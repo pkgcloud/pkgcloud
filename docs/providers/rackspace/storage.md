@@ -11,10 +11,10 @@ Creating a client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.storage.createClient({
-    provider: 'openstack',
-    username: 'your-user-name',
-    password: 'your-password',
-    authUrl: 'https://your-identity-service'
+    provider: 'rackspace',
+    username: 'your-rax-user-name',
+    apiKey: 'your-rax-api-key',
+    region: 'IAD'
   });
 ```
 
