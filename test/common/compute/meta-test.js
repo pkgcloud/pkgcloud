@@ -81,17 +81,21 @@ providers.forEach(function (provider) {
     });
 
 
-    it('the updateImageMeta() method should update the image metadate', function (done) {
+    it('the updateImageMeta() method should update the image metadata', function (done) {
       if (mock) {
         setupMetaMock(client, provider, {
           authServer: authServer,
           server: server
         });
       }
-
-      client.updateImageMeta(context.images[0].id, {"os_type" : "windows"}, function (err, img) {
+	
+      var testMetadata = {"os_type" : "windows"};
+	
+      client.updateImageMeta(context.images[0].id, testMetadata, function (err, reply) {
         should.not.exist(err);
-        should.exist(img);
+        should.exist(reply);
+        should.exist(reply.metadata.os_type);
+        reply.metadata.os_type.should.equal('windows');
 
         context.currentServer = server;
 
