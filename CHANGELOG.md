@@ -1,3 +1,7 @@
+## v0.9.3
+* Added support for os-security-groups compute extension
+* Updated deps in package.json
+
 ## v0.9.2
 * fixed a bug where CDN containers were broken with Rackspace CloudFiles #257
 
