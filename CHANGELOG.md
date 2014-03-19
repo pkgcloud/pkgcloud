@@ -1,3 +1,9 @@
+## v0.9.4
+* Added support for os-security-groups compute extension
+
+## v0.9.2
+* fixed a bug where CDN containers were broken with Rackspace CloudFiles #257
+
 ## v0.9.1
 * Removing an unnecessary continuity check in openstack identity client
 * Switching Debug events to trace events
