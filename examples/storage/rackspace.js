@@ -71,7 +71,28 @@ rackspace.createContainer({
     }));
 });
 
-// 4 -- to get a container, empty it, then finally destroying it
+// 4 -- setup container as CDN
+rackspace.getContainer('container-name', function (err, container) {
+  if (!err) {
+    rackspace.setCdnEnabled(container, true, function (error, cont) {
+      if (!error) {
+        console.log('Successfully Created CDN Bucket')
+
+      }
+      else {
+        console.log('There was an error setting container as CDN:\n');
+        console.dir(error);
+      }
+    });
+  }
+  else {
+    console.log('There was an error retrieving container:\n');
+    console.dir(err);
+  }
+
+});
+
+// 5 -- to get a container, empty it, then finally destroying it
 rackspace.getContainer('sample-container', function (err, container) {
   if (err) {
     console.dir(err);
@@ -87,4 +108,5 @@ rackspace.getContainer('sample-container', function (err, container) {
 
     console.log('Container ' + container.name + ' was successfully destroyed.')
   });
+
 });
