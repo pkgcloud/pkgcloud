@@ -85,7 +85,7 @@ rackspace.getContainer('container-name', function (err, container) {
       console.dir(error);
       return;
     }
-    console.log('Successfully Created CDN Bucket');
+    console.log('Successfully set bucket as CDN bucket');
   });  
 });
 
