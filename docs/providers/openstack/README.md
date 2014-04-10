@@ -1,6 +1,6 @@
 ## Using the Openstack provider in pkgcloud
 
-The Rackspace provider in pkgcloud supports the following services:
+The OpenStack provider in pkgcloud supports the following services:
 
 * [**Compute**](compute.md) (Nova)
 * [**Storage**](storage.md) (Swift)
