@@ -116,5 +116,22 @@ describe('pkgcloud openstack context Service Class', function() {
 
     service.getEndpointUrl().should.equal('http://volume.myownendpoint.org:8776/v1/72e90ecb69c44d0296072ea39e537041');
   });
-});
 
+  it('with valid options getEndpointUrl without region when single region is available return correctly', function () {
+    var service = new context.Service({
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.9:8776/v1/72e90ecb69c44d0296072ea39e537041",
+            "internalURL": "http://10.225.0.9:8776/v1/72e90ecb69c44d0296072ea39e537041",
+            "publicURL": "http://volume2.myownendpoint.org:8776/v1/72e90ecb69c44d0296072ea39e537041",
+            "region": "ORD"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "volume",
+        "name": "volume"
+      });
+
+    service.getEndpointUrl().should.equal('http://volume2.myownendpoint.org:8776/v1/72e90ecb69c44d0296072ea39e537041');
+  });
+});
