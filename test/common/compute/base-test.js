@@ -260,6 +260,34 @@ function setupVersionMock(client, provider, servers) {
       .get('/v2/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
   }
+  else if (provider === 'hp') {
+    servers.authServer
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          }
+        }
+      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(200, helpers._getOpenstackStandardResponse('../fixtures/hp/initialToken.json'))
+      .get('/v2.0/tenants', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          },
+          tenantId: '72e90ecb69c44d0296072ea39e537041'
+        }
+      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(200, helpers.gethpAuthResponse());
+
+    servers.server
+      .get('/v2/', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/versions.json');
+  }
   else if (provider === 'joyent') {
     servers.server
       .get('/' + client.account + '/datacenters',
@@ -294,6 +322,12 @@ function setupFlavorMock(client, provider, servers) {
         api_key: account.apiKey
       }))
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/flavors.json');
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail',
+        {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/flavors.json');
   }
 }
 

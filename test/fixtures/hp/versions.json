@@ -1,0 +1,30 @@
+{
+  "version": {
+    "status": "CURRENT",
+    "updated": "2011-01-21T11:33:21Z",
+    "media-types": [
+      {
+        "base": "application/xml",
+        "type": "application/vnd.openstack.compute+xml;version=2"
+      }, {
+        "base": "application/json",
+        "type": "application/vnd.openstack.compute+json;version=2"
+      }
+    ],
+    "id": "v1",
+    "links": [
+      {
+        "href": "http://compute.myownendpoint.org:8774/v2/",
+        "rel": "self"
+      }, {
+        "href": "http://docs.openstack.org/api/openstack-compute/1.1/os-compute-devguide-1.1.pdf",
+        "type": "application/pdf",
+        "rel": "describedby"
+      }, {
+        "href": "http://docs.openstack.org/api/openstack-compute/1.1/wadl/os-compute-1.1.wadl",
+        "type": "application/vnd.sun.wadl+xml",
+        "rel": "describedby"
+      }
+    ]
+  }
+}

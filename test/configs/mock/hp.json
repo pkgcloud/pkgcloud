@@ -1,0 +1,6 @@
+{
+  "username":"MOCK-USERNAME",
+  "password":"MOCK-PASSWORD",
+  "authUrl":"http://localhost:12346",
+  "region": "Calxeda-AUS1"
+}
