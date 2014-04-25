@@ -1,0 +1,11 @@
+{
+  "tenants_links": [],
+  "tenants": [
+    {
+      "enabled": "true",
+      "description": "MOCK-ADMIN",
+      "name": "MOCK-ADMIN",
+      "id": "72e90ecb69c44d0296072ea39e537123"
+    }
+  ]
+}

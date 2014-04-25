@@ -1,0 +1,16 @@
+{
+  "access": {
+    "token": {
+      "expires": "2012-12-26T18:25:45Z",
+      "id": "e93be67f91724754aeb9409c9c69d304"
+    },
+    "serviceCatalog": {},
+    "user": {
+      "username": "MOCK-USERNAME",
+      "roles_links": [],
+      "id": "bf3b85477d06430c8044d5b2e5e6dc5f",
+      "roles": [],
+      "name": "MOCK-USERNAME"
+    }
+  }
+}

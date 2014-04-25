@@ -1,0 +1,48 @@
+{
+	"servers": [{
+		"OS-EXT-STS:task_state": "deleting", 
+		"addresses": {
+			"private": [{
+				"version": 4, "addr": "208.123.85.203"
+			}]
+		}, 
+		"links": [{
+			"href": "http://208.123.85.197:8774/v2/72e90ecb69c44d0296072ea39e537041/servers/c94e7443-6a35-4f8b-b4e5-da59881a9451", 
+			"rel": "self"
+		}, {
+			"href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/servers/c94e7443-6a35-4f8b-b4e5-da59881a9451",
+			"rel": "bookmark"
+		}], 
+		"image": {
+			"id": "506d077e-66bf-44ff-907a-588c5c79fa66", 
+			"links": [{
+				"href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66",
+				"rel": "bookmark"
+			}]
+		}, 
+		"OS-EXT-STS:vm_state": "active", 
+		"flavor": {
+			"id": "1",
+			"links": [{
+				"href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/flavors/1",
+				"rel": "bookmark"
+			}]
+		},
+		"id": "5a023de8-957b-4822-ad84-8c7a9ef83c07",
+		"user_id": "bf3b85477d06430c8044d5b2e5e6dc5f",
+		"OS-DCF:diskConfig": "MANUAL",
+		"accessIPv4": "",
+		"accessIPv6": "",
+		"progress": 0,
+		"OS-EXT-STS:power_state": 1,
+		"config_drive": "",
+		"status": "ACTIVE",
+		"updated": "2013-02-14T20:24:52Z",
+		"hostId": "ab50598d09cc91aa5c32f6afabe30fd1ded4cf8100eb77f782dd3e19",
+		"key_name": "",
+		"name": "create-test-ids2",
+		"created": "2013-02-14T20:24:42Z",
+		"tenant_id": "72e90ecb69c44d0296072ea39e537041",
+		"metadata": {}
+	}]
+}
