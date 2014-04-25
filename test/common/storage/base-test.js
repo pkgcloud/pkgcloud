@@ -512,6 +512,34 @@ function setupCreateContainerMock(provider, client, servers) {
       .put('/pkgcloud-test-container?restype=container')
       .reply(201, '', helpers.azureResponseHeaders());
   }
+  else if (provider === 'hp') {
+    servers.authServer
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          }
+        }
+      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(200, helpers._getOpenstackStandardResponse('../fixtures/hp/initialToken.json'))
+      .get('/v2.0/tenants', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          },
+          tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
+        }
+      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(200, helpers.getOpenstackAuthResponse());
+
+    servers.server
+      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(201);
+  }
 }
 
 function setupGetContainersMock(provider, client, servers) {
@@ -529,6 +557,11 @@ function setupGetContainersMock(provider, client, servers) {
     servers.server
       .get('/?comp=list')
       .reply(200, helpers.loadFixture('azure/list-containers.xml'),helpers.azureResponseHeaders())
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
+      .reply(200, helpers.loadFixture('hp/postContainers.json'));
   }
 }
 
@@ -550,6 +583,11 @@ function setupUploadStreamMock(provider, client, servers) {
       .put('/pkgcloud-test-container/test-file.txt?comp=blocklist', "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList><Latest>block000000000000000</Latest></BlockList>")
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
   }
+  else if (provider === 'hp') {
+    servers.server
+      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
+      .reply(200)
+  }
 }
 
 function setupDownloadStreamMock(provider, client, servers) {
@@ -568,6 +606,11 @@ function setupDownloadStreamMock(provider, client, servers) {
       .get('/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2,'content-type': 'text/plain'}))
   }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .reply(200, fillerama, { 'content-length': fillerama.length + 2})
+  }
 }
 
 function setupGetFileMock(provider, client, servers) {
@@ -585,6 +628,11 @@ function setupGetFileMock(provider, client, servers) {
     servers.server
       .get('/pkgcloud-test-container/test-file.txt')
       .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}))
+  }
+   if (provider === 'hp') {
+    servers.server
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
+      .reply(200, '', { 'content-length': fillerama.length + 2 })
   }
 }
 
@@ -608,6 +656,15 @@ function setupGetFilesMock(provider, client, servers) {
       .get('/pkgcloud-test-container?restype=container&comp=list')
       .reply(200, helpers.loadFixture('azure/list-container-files.xml'), helpers.azureResponseHeaders({'content-type': 'application/xml'}))
   }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .reply(200, [{
+        bytes: fillerama.length,
+        name: 'test-file.txt',
+        content_type: 'text/plain'
+      }]);
+  }
 }
 
 function setupRemoveFileMock(provider, client, servers) {
@@ -625,6 +682,11 @@ function setupRemoveFileMock(provider, client, servers) {
     servers.server
       .delete('/pkgcloud-test-container/test-file.txt')
       .reply(202, '', helpers.azureDeleteResponseHeaders())
+  }
+  if (provider === 'hp') {
+    servers.server
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .reply(204, '');
   }
 }
 
@@ -658,6 +720,21 @@ function setupDestroyContainerMock(provider, client, servers) {
       .delete('/pkgcloud-test-container?restype=container')
       .reply(202, '', helpers.azureDeleteResponseHeaders());
   }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .reply(200, [
+        {
+          bytes: fillerama.length,
+          name: 'test-file.txt',
+          content_type: 'text/plain'
+        }
+      ])
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .reply(204, '')
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(204);
+  }
 }
 
 function setupGetContainers2Mock(provider, client, servers) {
@@ -675,5 +752,10 @@ function setupGetContainers2Mock(provider, client, servers) {
     servers.server
       .get('/?comp=list')
       .reply(200, helpers.loadFixture('azure/list-containers2.xml'), helpers.azureResponseHeaders())
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
+      .reply(200, helpers.loadFixture('hp/preContainers.json'));
   }
 }

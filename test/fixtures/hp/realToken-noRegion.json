@@ -5,7 +5,7 @@
       "id": "4bc7c5dabf3e4a49918683437d386b8a",
       "tenant": {
         "enabled": true,
-        "id": "72e90ecb69c44d0296072ea39e537041",
+        "id": "5ACED3DC3AA740ABAA41711243CC6949",
         "name": "MOCK-USERNAME",
         "description": "MOCK-USERNAME"
       }
@@ -14,9 +14,9 @@
       {
         "endpoints": [
           {
-            "adminURL": "http://10.225.0.8:8776/v1/72e90ecb69c44d0296072ea39e537041",
-            "internalURL": "http://10.225.0.8:8776/v1/72e90ecb69c44d0296072ea39e537041",
-            "publicURL": "http://volume.myownendpoint.org:8776/v1/72e90ecb69c44d0296072ea39e537041"
+            "adminURL": "http://10.225.0.8:8776/v1/5ACED3DC3AA740ABAA41711243CC6949",
+            "internalURL": "http://10.225.0.8:8776/v1/5ACED3DC3AA740ABAA41711243CC6949",
+            "publicURL": "http://volume.myownendpoint.org:8776/v1/5ACED3DC3AA740ABAA41711243CC6949"
           }
         ],
         "endpoints_links": [],
@@ -38,9 +38,9 @@
       {
         "endpoints": [
           {
-            "adminURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
-            "internalURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
-            "publicURL": "http://compute.myownendpoint.org:8774/v2/72e90ecb69c44d0296072ea39e537041"
+            "adminURL": "http://10.225.0.8:8774/v2/5ACED3DC3AA740ABAA41711243CC6949",
+            "internalURL": "http://10.225.0.8:8774/v2/5ACED3DC3AA740ABAA41711243CC6949",
+            "publicURL": "http://compute.myownendpoint.org:8774/v2/5ACED3DC3AA740ABAA41711243CC6949"
           }
         ],
         "endpoints_links": [],
