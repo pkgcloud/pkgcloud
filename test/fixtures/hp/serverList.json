@@ -7,16 +7,16 @@
 			}]
 		}, 
 		"links": [{
-			"href": "http://208.123.85.197:8774/v2/72e90ecb69c44d0296072ea39e537041/servers/c94e7443-6a35-4f8b-b4e5-da59881a9451", 
+			"href": "http://208.123.85.197:8774/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/c94e7443-6a35-4f8b-b4e5-da59881a9451", 
 			"rel": "self"
 		}, {
-			"href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/servers/c94e7443-6a35-4f8b-b4e5-da59881a9451",
+			"href": "http://208.123.85.197:8774/5ACED3DC3AA740ABAA41711243CC6949/servers/c94e7443-6a35-4f8b-b4e5-da59881a9451",
 			"rel": "bookmark"
 		}], 
 		"image": {
 			"id": "506d077e-66bf-44ff-907a-588c5c79fa66", 
 			"links": [{
-				"href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66",
+				"href": "http://208.123.85.197:8774/5ACED3DC3AA740ABAA41711243CC6949/images/506d077e-66bf-44ff-907a-588c5c79fa66",
 				"rel": "bookmark"
 			}]
 		}, 
@@ -24,7 +24,7 @@
 		"flavor": {
 			"id": "1",
 			"links": [{
-				"href": "http://208.123.85.197:8774/72e90ecb69c44d0296072ea39e537041/flavors/1",
+				"href": "http://208.123.85.197:8774/5ACED3DC3AA740ABAA41711243CC6949/flavors/1",
 				"rel": "bookmark"
 			}]
 		},
@@ -42,7 +42,7 @@
 		"key_name": "",
 		"name": "create-test-ids2",
 		"created": "2013-02-14T20:24:42Z",
-		"tenant_id": "72e90ecb69c44d0296072ea39e537041",
+		"tenant_id": "5ACED3DC3AA740ABAA41711243CC6949",
 		"metadata": {}
 	}]
 }

@@ -279,7 +279,7 @@ function setupVersionMock(client, provider, servers) {
             username: 'MOCK-USERNAME',
             password: 'MOCK-PASSWORD'
           },
-          tenantId: '72e90ecb69c44d0296072ea39e537041'
+          tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
         }
       }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(200, helpers.gethpAuthResponse());
@@ -325,9 +325,9 @@ function setupFlavorMock(client, provider, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail',
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail',
         {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/flavors.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
   }
 }
 
@@ -371,6 +371,12 @@ function setupImagesMock(client, provider, servers) {
         api_key: account.apiKey
       }))
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/images.json');
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail',
+        {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
   }
 }
 
@@ -523,6 +529,21 @@ function setupServerMock(client, provider, servers) {
       {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/azure/operation-succeeded.xml');
   }
+  else if (provider === 'hp') {
+    servers.server
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers', {
+        server: {
+          name: 'create-test-setWait',
+          flavorRef: '1',
+          imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'
+        }
+      },
+      {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(202, __dirname + '/../../fixtures/hp/creatingServer.json')
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07',
+        {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/serverCreated.json');
+  }
 }
 
 function setupDestroyMock(client, provider, servers) {
@@ -535,6 +556,11 @@ function setupDestroyMock(client, provider, servers) {
   else if (provider === 'openstack') {
     servers.server
       .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .reply(204);
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .delete('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(204);
   }
   else if (provider === 'digitalocean') {
