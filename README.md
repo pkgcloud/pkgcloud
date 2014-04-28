@@ -49,13 +49,13 @@ Services provided by `pkgcloud` are exposed in two ways:
 
 * **By service type:** For example, if you wanted to create an API client to communicate with a compute service you could simply:
 
-``` js 
+``` js
   var client = require('pkgcloud').compute.createClient({
     //
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-    
+
     //
     // ... Provider specific credentials
     //
@@ -96,12 +96,14 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Amazon](docs/providers/amazon.md#using-compute)
   * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+  * [HP](docs/providers/hp.md#using-compute)
   * [Joyent](docs/providers/joyent.md#using-compute)
   * [Openstack](docs/providers/openstack/compute.md)
   * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
   * [Amazon](docs/providers/amazon.md#using-storage)
   * [Azure](docs/providers/azure.md#using-storage)
+  * [HP](docs/providers/storage.md)
   * [Openstack](docs/providers/openstack/storage.md)
   * [Rackspace](docs/providers/rackspace/storage.md)
 * **[Database](#databases)**
@@ -127,7 +129,7 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -139,6 +141,7 @@ Each compute provider takes different credentials to authenticate; these details
 * [Amazon](docs/providers/amazon.md#using-compute)
 * [Azure](docs/providers/azure.md#using-compute)
 * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+* [HP](docs/providers/hp.md#using-compute)
 * [Joyent](docs/providers/joyent.md#using-compute)
 * [Openstack](docs/providers/openstack/compute.md)
 * [Rackspace](docs/providers/rackspace/compute.md)
@@ -174,7 +177,7 @@ To get started with a `pkgcloud.storage` client just create one:
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -185,6 +188,7 @@ Each storage provider takes different credentials to authenticate; these details
 
 * [Amazon](docs/providers/amazon.md#using-storage)
 * [Azure](docs/providers/azure.md#using-storage)
+* [HP](docs/providers/hp.md#using-storage)
 * [Openstack](docs/providers/openstack/storage.md)
 * [Rackspace](docs/providers/rackspace/storage.md)
 
@@ -209,9 +213,9 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 ``` js
   var pkgcloud = require('pkgcloud'),
       fs = require('fs');
-  
+
   var client = pkgcloud.storage.createClient({ /* ... */ });
-  
+
   fs.createReadStream('a-file.txt').pipe(client.upload({
     container: 'a-container',
     remote: 'remote-file-name.txt'
@@ -222,9 +226,9 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 ``` js
   var pkgcloud = require('pkgcloud'),
       fs = require('fs');
-  
+
   var client = pkgcloud.storage.createClient({ /* ... */ });
-  
+
   client.download({
     container: 'a-container',
     remote: 'remote-file-name.txt'
@@ -233,7 +237,7 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 
 ## Databases
 
-The `pkgcloud.database` service is designed to consistently work with a variety of Database-as-a-Service (DBaaS) providers. 
+The `pkgcloud.database` service is designed to consistently work with a variety of Database-as-a-Service (DBaaS) providers.
 
 To get started with a `pkgcloud.storage` client just create one:
 
@@ -243,7 +247,7 @@ To get started with a `pkgcloud.storage` client just create one:
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -285,7 +289,7 @@ To get started with a `pkgcloud.dns` client just create one:
     // The name of the provider (e.g. "rackspace")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -326,7 +330,7 @@ To get started with a `pkgcloud.blockstorage` client just create one:
     // The name of the provider (e.g. "rackspace")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -367,7 +371,7 @@ To get started with a `pkgcloud.loadbalancer` client just create one:
     // The name of the provider (e.g. "rackspace")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -435,13 +439,13 @@ Also you can run the tests directly using `mocha` with `hock` enabled:
 ``` bash
 Linux/Mac - Mocha installed globally:
  $ MOCK=on mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
- 
+
 Linux/Mac - Mocha installed locally:
  $ MOCK=on node_modules/.bin/mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
 Windows - Mocha installed globally:
  $ set MOCK=on&mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
- 
+
 Windows - Mocha installed locally:
  $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 ```
@@ -457,7 +461,7 @@ Linux/Mac - Mocha installed locally:
 
 Windows - Mocha installed globally:
  $ set MOCK=on&mocha -R spec test/iriscouch/*/*-test.js
- 
+
 Windows - Mocha installed locally:
  $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/iriscouch/*/*-test.js
 
