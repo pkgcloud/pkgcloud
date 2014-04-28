@@ -516,9 +516,9 @@ function setupCreateContainerMock(provider, client, servers) {
     servers.authServer
       .post('/v2.0/tokens', {
         auth: {
-          passwordCredentials: {
-            username: 'MOCK-USERNAME',
-            password: 'MOCK-PASSWORD'
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
           }
         }
       }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
@@ -527,9 +527,9 @@ function setupCreateContainerMock(provider, client, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
       .post('/v2.0/tokens', {
         auth: {
-          passwordCredentials: {
-            username: 'MOCK-USERNAME',
-            password: 'MOCK-PASSWORD'
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
           },
           tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
         }
