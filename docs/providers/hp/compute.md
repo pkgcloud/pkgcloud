@@ -115,7 +115,7 @@ Destroys the specified image and returns a confirmation
 
 ## Volume Attachments
 
-Attaching a volume to a compute instance requires using a rackspace compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
+Attaching a volume to a compute instance requires using a hp compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
 
 #### client.getVolumeAttachments(server, callback)
 
