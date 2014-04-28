@@ -141,7 +141,7 @@ Each compute provider takes different credentials to authenticate; these details
 * [Amazon](docs/providers/amazon.md#using-compute)
 * [Azure](docs/providers/azure.md#using-compute)
 * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
-* [HP](docs/providers/hp.md#using-compute)
+* [HP](docs/providers/hp/compute.md)
 * [Joyent](docs/providers/joyent.md#using-compute)
 * [Openstack](docs/providers/openstack/compute.md)
 * [Rackspace](docs/providers/rackspace/compute.md)
@@ -188,7 +188,7 @@ Each storage provider takes different credentials to authenticate; these details
 
 * [Amazon](docs/providers/amazon.md#using-storage)
 * [Azure](docs/providers/azure.md#using-storage)
-* [HP](docs/providers/hp.md#using-storage)
+* [HP](docs/providers/hp/storage.md)
 * [Openstack](docs/providers/openstack/storage.md)
 * [Rackspace](docs/providers/rackspace/storage.md)
 
