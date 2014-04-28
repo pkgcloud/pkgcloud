@@ -3,7 +3,7 @@
 Creating a client is straight-forward:
 
 ``` js
-  var hpCompute = pkgcloud.compute.createClient({
+  var HPCompute = pkgcloud.compute.createClient({
     provider: 'hp',
     username: 'your-user-name',
     password: 'your-password',
@@ -115,7 +115,7 @@ Destroys the specified image and returns a confirmation
 
 ## Volume Attachments
 
-Attaching a volume to a compute instance requires using a hp compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
+Attaching a volume to a compute instance requires using a HP compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
 
 #### client.getVolumeAttachments(server, callback)
 

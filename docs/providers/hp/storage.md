@@ -19,11 +19,11 @@ Creating a client is straight-forward:
   });
 ```
 
-Learn about [more options for creating clients](README.md) in the Openstack `storage` provider.
+Learn about [more options for creating clients](README.md) in the HP `storage` provider.
 
 ### Container Model
 
-A Container for Openstack has following properties:
+A Container for HP has following properties:
 
 ```Javascript
 {
@@ -38,7 +38,7 @@ A Container for Openstack has following properties:
 
 ### File Model
 
-A File for Openstack has the following properties:
+A File for HP has the following properties:
 
 ```Javascript
 {
