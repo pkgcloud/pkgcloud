@@ -67,7 +67,7 @@ describe('pkgcloud/hp/client', function () {
             "region": eastUSRegion
           });
 
-      eastUSClient.config.should.have.property('authUrl','https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/');
+      eastUSClient.config.should.have.property('authUrl','https://region-b.geo-1.identity.hpcloudsvc.com:35357/');
     });
 
     it('Client will auto-locate identity service for East US region : storage client', function() {
@@ -78,7 +78,7 @@ describe('pkgcloud/hp/client', function () {
             "region": eastUSRegion
           });
 
-      eastUSClient.config.should.have.property('authUrl','https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/');
+      eastUSClient.config.should.have.property('authUrl','https://region-b.geo-1.identity.hpcloudsvc.com:35357/');
     });
 
     it('Client will auto-locate identity service for West US region : compute client', function() {
@@ -89,7 +89,7 @@ describe('pkgcloud/hp/client', function () {
             "region": westUSRegion
           });
 
-      westUSClient.config.should.have.property('authUrl','https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/');
+      westUSClient.config.should.have.property('authUrl','https://region-a.geo-1.identity.hpcloudsvc.com:35357/');
     });
 
     it('Client will auto-locate identity service for West US region : storage client', function() {
@@ -100,7 +100,7 @@ describe('pkgcloud/hp/client', function () {
             "region": westUSRegion
           });
 
-      westUSClient.config.should.have.property('authUrl','https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/');
+      westUSClient.config.should.have.property('authUrl','https://region-a.geo-1.identity.hpcloudsvc.com:35357/');
     });
   });
 });
