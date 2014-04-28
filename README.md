@@ -96,7 +96,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Amazon](docs/providers/amazon.md#using-compute)
   * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
-  * [HP](docs/providers/compute.md)
+  * [HP](docs/providers/hp/compute.md)
   * [Joyent](docs/providers/joyent.md#using-compute)
   * [Openstack](docs/providers/openstack/compute.md)
   * [Rackspace](docs/providers/rackspace/compute.md)
