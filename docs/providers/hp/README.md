@@ -14,7 +14,7 @@ For all of the HP Cloud services, you create a client with the same options:
 
 ```Javascript
 var client = require('pkgcloud').compute.createClient({
-    provider: 'rackspace',
+    provider: 'hp',
     username: 'your-user-name',
     password: 'your-api-key'
 });
@@ -24,20 +24,20 @@ In addition to your `apiKey`, you could alternately provide your `password` as a
 
 ### Authentication Endpoints and Regions
 
-All of the Rackspace `createClient` calls have a few options that can be provided:
+All of the hp `createClient` calls have a few options that can be provided:
 
 #### authUrl
 
-`authUrl` specifies the authentication endpoint used to create a token for your Rackspace client. By default, this is set to the Global endpoint: https://identity.api.rackspacecloud.com.
+`authUrl` specifies the authentication endpoint used to create a token for your hp client. By default, this is set to the Global endpoint: https://identity.api.hpcloud.com.
 
 ##### Authenticating against the London endpoint
 
 ```Javascript
 var client = require('pkgcloud').compute.createClient({
-    provider: 'rackspace',
+    provider: 'hp',
     username: 'your-user-name',
     apiKey: 'your-api-key',
-    authUrl: 'https://lon.identity.api.rackspacecloud.com'
+    authUrl: 'https://lon.identity.api.hpcloud.com'
 });
 ```
 
@@ -49,7 +49,7 @@ var client = require('pkgcloud').compute.createClient({
 
 ```Javascript
 var client = require('pkgcloud').compute.createClient({
-    provider: 'rackspace',
+    provider: 'hp',
     username: 'your-user-name',
     apiKey: 'your-api-key',
     region: 'ORD'
@@ -58,7 +58,7 @@ var client = require('pkgcloud').compute.createClient({
 
 #### Tokens and Expiration
 
-When you make your first call to a Rackspace provider, your client is authenticated transparent to your API call. Rackspace will issue you a token, with an expiration. When that token expires, the client will automatically re-authenticate and retrieve a new token. The caller shouldn't have to worry about this happening.
+When you make your first call to a hp provider, your client is authenticated transparent to your API call. hp will issue you a token, with an expiration. When that token expires, the client will automatically re-authenticate and retrieve a new token. The caller shouldn't have to worry about this happening.
 
 #### Internal URLs
 
@@ -66,7 +66,7 @@ As part of the options, you can tell `pkgcloud` to use the Internal (Service Net
 
  ```Javascript
  var client = require('pkgcloud').storage.createClient({
-     provider: 'rackspace',
+     provider: 'hp',
      username: 'your-user-name',
      apiKey: 'your-api-key',
      useInternal: true

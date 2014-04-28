@@ -183,7 +183,7 @@ You need not provide either `stream` or `local`. `client.upload` returns a write
 var fs = require('fs'),
     pkgcloud = require('pkgcloud');
 
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
+var client = pkgcloud.providers.hp.storage.createClient({ ... });
 
 var myFile = fs.createReadStream('/my/local/file');
 
@@ -200,7 +200,7 @@ You could also upload a local file via the `local` property on `options`:
 ```Javascript
 var pkgcloud = require('pkgcloud');
 
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
+var client = pkgcloud.providers.hp.storage.createClient({ ... });
 
 client.upload({
     container: 'my-container',
@@ -237,7 +237,7 @@ You need not provide either `stream` or `local`. `client.download` returns a rea
 var fs = require('fs'),
     pkgcloud = require('pkgcloud');
 
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
+var client = pkgcloud.providers.hp.storage.createClient({ ... });
 
 var myFile = fs.createWriteStream('/my/local/file');
 
@@ -254,7 +254,7 @@ You could also download to a local file via the `local` property on `options`:
 ```Javascript
 var pkgcloud = require('pkgcloud');
 
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
+var client = pkgcloud.providers.hp.storage.createClient({ ... });
 
 client.download({
     container: 'my-container',
