@@ -300,9 +300,9 @@ function setupImagesMock(client, provider, servers) {
     servers.authServer
       .post('/v2.0/tokens', {
         auth: {
-          passwordCredentials: {
-            username: 'MOCK-USERNAME',
-            password: 'MOCK-PASSWORD'
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
           }
         }
       })
@@ -311,9 +311,9 @@ function setupImagesMock(client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
       .post('/v2.0/tokens', {
         auth: {
-          passwordCredentials: {
-            username: 'MOCK-USERNAME',
-            password: 'MOCK-PASSWORD'
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
           },
           tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
         }

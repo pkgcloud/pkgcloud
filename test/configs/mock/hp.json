@@ -1,6 +1,6 @@
 {
   "username":"MOCK-USERNAME",
-  "password":"MOCK-PASSWORD",
+  "apiKey": "MOCK-API-KEY",
   "authUrl":"http://localhost:12346",
   "region": "Calxeda-AUS1"
 }
