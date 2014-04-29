@@ -433,7 +433,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupCreateContainerMock(provider, client, servers) {
+  function setupCreateContainerMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -537,7 +537,7 @@ function setupCreateContainerMock(provider, client, servers) {
       .reply(200, helpers.gethpAuthResponse());
 
     servers.server
-      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(201);
   }
 }
@@ -560,7 +560,7 @@ function setupGetContainersMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('hp/postContainers.json'));
   }
 }
@@ -585,7 +585,7 @@ function setupUploadStreamMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
+      .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
   }
 }
@@ -608,7 +608,7 @@ function setupDownloadStreamMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, { 'content-length': fillerama.length + 2})
   }
 }
@@ -631,7 +631,7 @@ function setupGetFileMock(provider, client, servers) {
   }
    if (provider === 'hp') {
     servers.server
-      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
+      .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 })
   }
 }
@@ -658,7 +658,7 @@ function setupGetFilesMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
       .reply(200, [{
         bytes: fillerama.length,
         name: 'test-file.txt',
@@ -685,7 +685,7 @@ function setupRemoveFileMock(provider, client, servers) {
   }
   if (provider === 'hp') {
     servers.server
-      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .delete('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '');
   }
 }
@@ -722,7 +722,7 @@ function setupDestroyContainerMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
       .reply(200, [
         {
           bytes: fillerama.length,
@@ -730,9 +730,9 @@ function setupDestroyContainerMock(provider, client, servers) {
           content_type: 'text/plain'
         }
       ])
-      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .delete('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '')
-      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .delete('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(204);
   }
 }
@@ -755,7 +755,7 @@ function setupGetContainers2Mock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('hp/preContainers.json'));
   }
 }
