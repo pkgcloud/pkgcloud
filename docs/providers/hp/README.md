@@ -28,8 +28,8 @@ All of the HP `createClient` calls have a few options that can be provided:
 #### authUrl
 
 `authUrl` specifies the authentication endpoint used to create a token for your HP client.
-The HP Identity Service is currently available in two regions which can be accessed via these URLs.
 See here for more details : [Regions](http://docs.hpcloud.com/api/identity/#2.2RegionsandAvailabilityZones)
+If you're targeting an HP Private Cloud instance, please contact your administrator for the authUrl.
 
 ##### Authenticating against the US-West endpoint
 
@@ -57,8 +57,9 @@ var client = require('pkgcloud').compute.createClient({
 
 #### region
 
-`region` specifies which region of a service to use. HP has authentication endpoints specific to each region.
-Please see section above for the endpoints and regions.
+`region` specifies which region of a service to use. HP has services deployed in multiple regions.
+See here for more details : [Regions](http://docs.hpcloud.com/api/identity/#2.2RegionsandAvailabilityZones)
+If you're targeting an HP Private Cloud instance, please contact your administrator for region names.
 
 ##### Specifying a custom region
 
@@ -74,18 +75,3 @@ var client = require('pkgcloud').compute.createClient({
 #### Tokens and Expiration
 
 When you make your first call to a HP provider, your client is authenticated transparent to your API call. HP will issue you a token, with an expiration. When that token expires, the client will automatically re-authenticate and retrieve a new token. The caller shouldn't have to worry about this happening.
-
-#### Internal URLs
-
-As part of the options, you can tell `pkgcloud` to use the Internal (Service Net) URLs for a service, if possible.
-
- ```Javascript
- var client = require('pkgcloud').storage.createClient({
-     provider: 'hp',
-     username: 'your-user-name',
-     password: 'your-password',
-     useInternal: true
- });
- ```
-
- This setting is explicit. If you set it to true, and you have no connectivity to the internal URL for a service, your connections will timeout.
