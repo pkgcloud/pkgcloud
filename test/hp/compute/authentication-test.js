@@ -1,7 +1,7 @@
 /*
 * authentication-test.js: Tests for pkgcloud hp compute authentication
 *
-* (C) 2014 HP.
+* (C) 2014 Hewlett-Packard Development Company, L.P.
 *
 */
 

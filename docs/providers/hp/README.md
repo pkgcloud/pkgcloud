@@ -2,8 +2,8 @@
 
 The HP Cloud provider in pkgcloud supports the following services:
 
-* [**Compute**](compute.md) (Cloud Servers)
-* [**Storage**](storage.md) (Cloud Files)
+* [**Compute**](compute.md) (cloud compute)
+* [**Storage**](storage.md) (object storage)
 
 ### Getting Started with Compute
 
