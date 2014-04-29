@@ -12,6 +12,7 @@ var should = require('should'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/hp/client', function () {
+
   describe('Region validation', function () {
     var eastUSRegion = 'region-b.geo-1', westUSRegion='region-a.geo-1';
     it('User should specify region: compute client', function() {
@@ -58,49 +59,60 @@ describe('pkgcloud/hp/client', function () {
 
       customRegionClient.config.should.have.property('region','mycustomregion');
     });
+  });
 
-    it('Client will auto-locate identity service for East US region : compute client', function() {
-      var eastUSClient = pkgcloud.compute.createClient({
+  describe('Private cloud Uri resolution', function () {
+    var eastUSRegion = 'region-b.geo-1', westUSRegion='region-a.geo-1';
+    it('Client will not resolve URI if useInternal is true : East US',function(){
+      (function () {
+          pkgcloud.compute.createClient({
             "provider": "hp",
             "username": "username",
             "password": "password",
+            "useInternal": true,
             "region": eastUSRegion
           });
+      }).should.throw("authUrl is invalid");
 
-      eastUSClient.config.should.have.property('authUrl','https://region-b.geo-1.identity.hpcloudsvc.com:35357/');
     });
 
-    it('Client will auto-locate identity service for East US region : storage client', function() {
-      var eastUSClient = pkgcloud.storage.createClient({
+    it('Client will not resolve URI if useInternal is true : West US',function(){
+      (function () {
+          pkgcloud.compute.createClient({
             "provider": "hp",
             "username": "username",
             "password": "password",
-            "region": eastUSRegion
+            "useInternal": true,
+            "region": westUSRegion
           });
+      }).should.throw("authUrl is invalid");
 
-      eastUSClient.config.should.have.property('authUrl','https://region-b.geo-1.identity.hpcloudsvc.com:35357/');
-    });
-
-    it('Client will auto-locate identity service for West US region : compute client', function() {
-      var westUSClient = pkgcloud.compute.createClient({
+    it('User can specify custom url for private cloud : West US',function(){
+      var privateClient = pkgcloud.compute.createClient({
             "provider": "hp",
             "username": "username",
             "password": "password",
+            "useInternal": true,
+            "authUrl": "http://my-internal-identity-service.com",
             "region": westUSRegion
           });
 
-      westUSClient.config.should.have.property('authUrl','https://region-a.geo-1.identity.hpcloudsvc.com:35357/');
-    });
+      privateClient.config.should.have.property('authUrl','http://my-internal-identity-service.com');
+     });
 
-    it('Client will auto-locate identity service for West US region : storage client', function() {
-      var westUSClient = pkgcloud.storage.createClient({
-            "provider": "hp",
-            "username": "username",
-            "password": "password",
-            "region": westUSRegion
-          });
+     it('User can specify custom url for private cloud : East US',function(){
+       var privateClient = pkgcloud.compute.createClient({
+             "provider": "hp",
+             "username": "username",
+             "password": "password",
+             "useInternal": true,
+             "authUrl": "http://my-internal-identity-service.com",
+             "region": eastUSRegion
+           });
 
-      westUSClient.config.should.have.property('authUrl','https://region-a.geo-1.identity.hpcloudsvc.com:35357/');
+       privateClient.config.should.have.property('authUrl','http://my-internal-identity-service.com');
+      });
+
     });
   });
 });
