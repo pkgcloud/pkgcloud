@@ -1,7 +1,7 @@
 /*
 * authentication-test.js: Tests for pkgcloud hp storage authentication
 *
-* (C) 2010 Nodejitsu Inc.
+* (C) 2014 HP.
 *
 */
 
