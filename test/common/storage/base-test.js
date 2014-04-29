@@ -534,7 +534,7 @@ function setupCreateContainerMock(provider, client, servers) {
           tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
         }
       }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .reply(200, helpers.getOpenstackAuthResponse());
+      .reply(200, helpers.gethpAuthResponse());
 
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
