@@ -15,7 +15,7 @@
         "endpoints": [
           {
             "adminURL": "http://10.225.0.8:8776/v1/5ACED3DC3AA740ABAA41711243CC6949",
-            "region": "Calxeda-AUS1",
+            "region": "region-a.geo-1",
             "internalURL": "http://10.225.0.8:8776/v1/5ACED3DC3AA740ABAA41711243CC6949",
             "publicURL": "http://volume.myownendpoint.org:8776/v1/5ACED3DC3AA740ABAA41711243CC6949"
           }
@@ -27,11 +27,11 @@
         "endpoints": [
           {
             "adminURL": "http://10.225.0.8:9292/v1",
-            "region": "Calxeda-AUS1",
+            "region": "region-a.geo-1",
             "internalURL": "http://10.225.0.8:9292/v1",
             "publicURL": "http://image.myownendpoint.org:9292/v1"
           }
-        ], 
+        ],
         "endpoints_links": [],
         "type": "image",
         "name": "glance"
@@ -39,19 +39,19 @@
         "endpoints": [
           {
             "adminURL": "http://10.225.0.8:8774/v2/5ACED3DC3AA740ABAA41711243CC6949",
-            "region": "Calxeda-AUS1",
+            "region": "region-a.geo-1",
             "internalURL": "http://10.225.0.8:8774/v2/5ACED3DC3AA740ABAA41711243CC6949",
             "publicURL": "http://localhost:12345/v2/5ACED3DC3AA740ABAA41711243CC6949"
           }
-        ], 
-        "endpoints_links": [], 
+        ],
+        "endpoints_links": [],
         "type": "compute",
         "name": "nova"
       },
       {
         "endpoints": [
           {
-            "region": "Calxeda-AUS1",
+            "region": "region-a.geo-1",
             "tenantId": "MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00",
             "publicURL": "http://localhost:12345/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00",
             "internalURL": "https://snet-storage101.ord1.clouddrive.com/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00"
@@ -64,7 +64,7 @@
         "endpoints": [
           {
             "adminURL": "http://10.225.0.8:35357/v2.0",
-            "region": "Calxeda-AUS1",
+            "region": "region-a.geo-1",
             "internalURL": "http://10.225.0.8:5000/v2.0",
             "publicURL": "http://identity.myownendpoint.org:5000/v2.0"
           }
