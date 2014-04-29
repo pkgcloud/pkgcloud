@@ -2,7 +2,7 @@
 
 The HP node.js SDK is available as part of `pkgcloud`, a multi-provider cloud provisioning package
 
-Pkgcloud currently supports Openstack Nova (compute) and Openstack Swift (storage).
+Pkgcloud currently supports HP Cloud Nova (cloud compute) and HP Cloud Swift (object-storage).
 
 To install `pkgcloud` from the command line:
 
@@ -14,7 +14,7 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 
 ## Using pkgcloud
 
-In this example, we're going to create a HP Cloud compute client, create two servers, and then output their details to the command line.
+In this example, we're going to create a HP Cloud Compute client, create two servers, and then output their details to the command line.
 
 *Note: We're going to use [underscore.js](http://underscorejs.org) for some convenience functions.*
 
@@ -45,11 +45,12 @@ client.getFlavors(function (err, flavors) {
             return;
         }
 
-        // Pick a 512MB instance flavor
-        var flavor = _.findWhere(flavors, { name: '512MB Standard Instance' });
+         // Pick a medium instance flavor
+         // see here for more instance flavors: http://www.hpcloud.com/products-services/hp-cloud-compute-13_5
+        var flavor = _.findWhere(flavors, { name: 'standard.medium' });
 
-        // Pick an image based on Ubuntu 12.04
-        var image = _.findWhere(images, { name: 'Ubuntu 12.04 LTS (Precise Pangolin)' });
+        // Pick an image based on CentOS 6.3
+        var image = _.findWhere(images, { name: 'CentOS 6.3 Server 64-bit 20130116' });
 
         // Create our first server
         client.createServer({

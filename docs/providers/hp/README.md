@@ -67,7 +67,7 @@ var client = require('pkgcloud').compute.createClient({
     provider: 'hp',
     username: 'your-user-name',
     password: 'your-password',
-    region: 'ORD'
+    region: 'region-a.custom.corp'
 });
 ```
 
