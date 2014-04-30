@@ -2,7 +2,7 @@
 
 The HP node.js SDK is available as part of `pkgcloud`, a multi-provider cloud provisioning package
 
-Pkgcloud currently supports HP Cloud Nova (cloud compute) and HP Cloud Swift (object-storage).
+Pkgcloud currently supports HP Cloud Compute and HP Cloud Object Storage.
 
 To install `pkgcloud` from the command line:
 
