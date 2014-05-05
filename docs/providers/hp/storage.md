@@ -23,7 +23,7 @@ Learn about [more options for creating clients](README.md) in the HP `storage` p
 
 ### Container Model
 
-A Container for HP has following properties:
+A Container for HP Object Storage has following properties:
 
 ```Javascript
 {
@@ -38,7 +38,7 @@ A Container for HP has following properties:
 
 ### File Model
 
-A File for HP has the following properties:
+A File for HP Object Storage has the following properties:
 
 ```Javascript
 {
