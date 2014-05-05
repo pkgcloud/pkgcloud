@@ -5,6 +5,9 @@ The HP Cloud provider in pkgcloud supports the following services:
 * [**Compute**](compute.md) (cloud compute)
 * [**Storage**](storage.md) (object storage)
 
+### Activating your HP Cloud services
+
+If this is your first time using HP Cloud Services, please follow [this](https://community.hpcloud.com/article/hp-public-cloud-quick-start-guide) guide to get started.
 ### Getting Started with Compute
 
 We've provided a [simple compute example](getting-started-compute.md) where it creates a couple of compute instances.
