@@ -16,20 +16,16 @@ var fs = require('fs'),
   _ = require('underscore'),
   providers = require('../../configs/providers.json'),
   versions = require('../../fixtures/versions.json'),
-  Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-  Image = require('../../../lib/pkgcloud/core/compute/image').Image,
-  Server = require('../../../lib/pkgcloud/core/compute/server').Server,
-  azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
   pkgcloud = require('../../../lib/pkgcloud'),
   mock = !!process.env.MOCK;
 
 providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].networking;
+  return !!helpers.pkgcloud.providers[provider].network;
 }).forEach(function(provider) {
-    describe('pkgcloud/common/compute/base [' + provider + ']', function () {
+    describe.only('pkgcloud/common/network/base [' + provider + ']', function () {
       it('provider should implement networking client', function () {
-        var networkingClient = helpers.createClient(provider, 'networking');
-        should.exist(networkingClient);
+        var networkClient = helpers.createClient(provider, 'network');
+        should.exist(networkClient);
       });
     });
   });
