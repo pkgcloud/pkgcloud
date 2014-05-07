@@ -22,7 +22,7 @@ var fs = require('fs'),
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].network;
 }).forEach(function(provider) {
-    describe.only('pkgcloud/common/network/base [' + provider + ']', function () {
+    describe('pkgcloud/common/network/base [' + provider + ']', function () {
       it('provider should implement networking client', function () {
         var networkClient = helpers.createClient(provider, 'network');
         should.exist(networkClient);
