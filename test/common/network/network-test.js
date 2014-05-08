@@ -127,13 +127,31 @@ providers.filter(function (provider) {
         }, context.currentNetwork);
       }
 
-      context.currentNetwork.destroy(function (err) {
+      client.destroyNetwork(context.currentNetwork, function (err) {
         should.not.exist(err);
         done();
       });
     });
 
-    it('the network.Create() method should create a network', function (done) {
+    it('the updateNetwork() method should update a network', function (done) {
+
+      var networkToUpdate = { id : context.currentNetwork.id, admin_state_up : false};
+      networkToUpdate.id = context.currentNetwork.id;
+      networkToUpdate.admin_state_up = false;
+      if (mock) {
+        setupUpdateNetworkMock(client, provider, {
+          authServer: authServer,
+          server: server
+        }, networkToUpdate);
+      }
+
+      client.updateNetwork(networkToUpdate, function(err,network){
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the network.create() method should create a network', function (done) {
       var m = mock ? 0.1 : 10;
 
       if (mock) {
@@ -213,7 +231,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupDestroyNetworkMock(client,provider,servers,currentNetwork){
+function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
@@ -221,8 +239,16 @@ function setupDestroyNetworkMock(client,provider,servers,currentNetwork){
   }
 }
 
+function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
+  if (provider === 'openstack') {
+    servers.server
+        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id),
+        { network: { id: currentNetwork.id, admin_state_up: false }})
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
+}
 
-function setupModelDestroyedNetworkMock(client,provider,servers,currentNetwork){
+function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
@@ -266,7 +292,7 @@ function setupNetworkMock(client, provider, servers) {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
       {network: {name: 'create-test-ids2'}})
-      .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
+      .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
 
