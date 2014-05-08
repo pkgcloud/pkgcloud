@@ -421,6 +421,7 @@ To get started with a `pkgcloud.network` client just create one:
 #### Providers
 
 * [Openstack](docs/providers/openstack/network.md)
+
 Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
 
 ### Volume
