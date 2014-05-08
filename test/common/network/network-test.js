@@ -17,7 +17,8 @@ var fs = require('fs'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Network = require('../../../lib/pkgcloud/core/network/network').Network,
-    mock = !!process.env.MOCK;
+    mock = !!process.env.MOCK,
+    urlJoin = require('url-join');
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].network;
@@ -75,6 +76,28 @@ providers.filter(function (provider) {
       });
     });
 
+    it('the getNetwork() method should get a network instance', function (done) {
+      if (mock) {
+        setupGetNetworkMock(client, provider, {
+          authServer: authServer,
+          server: server
+        });
+      }
+
+      client.getNetwork(context.networks[0].id, function (err, network) {
+        should.not.exist(err);
+        should.exist(network);
+        network.should.be.an.instanceOf(Network);
+        network.should.have.property('id', context.networks[0].id);
+        context.currentNetwork = network;
+
+        authServer && authServer.done();
+        server && server.done();
+        done();
+
+      });
+    });
+
     it('the createNetwork() method should create a network', function (done) {
       var m = mock ? 0.1 : 10;
 
@@ -96,36 +119,55 @@ providers.filter(function (provider) {
       });
     });
 
-    it('the getNetwork() method should get a network instance', function (done) {
+    it('the destroyNetwork() method should delete a network', function (done) {
       if (mock) {
-        setupGetNetworkMock(client, provider, {
+        setupDestroyNetworkMock(client, provider, {
           authServer: authServer,
           server: server
-        });
+        }, context.currentNetwork);
       }
 
-      client.getNetwork(context.networks[0].id, function (err, network) {
+      context.currentNetwork.destroy(function (err) {
         should.not.exist(err);
-        should.exist(network);
-
-        context.currentNetwork = network;
-
-        authServer && authServer.done();
-        server && server.done();
         done();
-
       });
     });
 
-    it.skip('the destroyServer() method should delete a server instance', function (done) {
+    it('the network.Create() method should create a network', function (done) {
+      var m = mock ? 0.1 : 10;
+
       if (mock) {
-        setupRebootMock(client, provider, {
+        setupNetworkModelCreateMock(client, provider, {
           authServer: authServer,
           server: server
         });
       }
 
-      context.currentServer.reboot(function (err) {
+      var network = new Network(client);
+      network.name= "model created network";
+      network.create(function (err, createdNetwork) {
+        should.not.exist(err);
+        should.exist(createdNetwork);
+        authServer && authServer.done();
+        server && server.done();
+        done();
+      });
+    });
+
+    it('the network.destroy() method should delete a network', function (done) {
+      var network = new Network(client);
+      network.name = "model deleted network";
+      network.id = "THISISANETWORKID";
+
+      if (mock) {
+        setupModelDestroyedNetworkMock(client, provider, {
+          authServer: authServer,
+          server: server
+        }, network);
+      }
+
+      network.destroy(function (err) {
+        should.not.exist(err);
         done();
       });
     });
@@ -147,6 +189,23 @@ providers.filter(function (provider) {
 
   });
 });
+
+function setupDestroyNetworkMock(client,provider,servers,currentNetwork){
+  if (provider === 'openstack') {
+    servers.server
+      .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
+      .reply(204, helpers.getOpenstackAuthResponse());
+  }
+}
+
+
+function setupModelDestroyedNetworkMock(client,provider,servers,currentNetwork){
+  if (provider === 'openstack') {
+    servers.server
+      .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
+      .reply(204, helpers.getOpenstackAuthResponse());
+  }
+}
 
 function setupNetworksMock(client, provider, servers) {
   if (provider === 'openstack') {
@@ -184,6 +243,15 @@ function setupNetworkMock(client, provider, servers) {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
       {network: {name: 'create-test-ids2'}})
+      .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
+  }
+}
+
+function setupNetworkModelCreateMock(client, provider, servers) {
+  if (provider === 'openstack') {
+    servers.server
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
+      {network: {name: 'model created network'}})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
