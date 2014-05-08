@@ -399,7 +399,7 @@ Each instance of `pkgcloud.loadbalancer.Client` returned from `pkgcloud.loadbala
 
 ## Network -- Beta
 
-##### Note: Network is considered Beta until there are multiple providers; presently only Rackspace are supported.
+##### Note: Network is considered Beta until there are multiple providers; presently only Openstack providers are supported.
 
 The `pkgcloud.network` service is designed to make it easy to create and manage networks.
 
