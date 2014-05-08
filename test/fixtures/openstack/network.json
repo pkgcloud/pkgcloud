@@ -1,0 +1,18 @@
+{
+   "network":
+      {
+         "status":"ACTIVE",
+         "subnets":[
+            "54d6f61d-db07-451c-9ab3-b9609b6b6f0b"
+         ],
+         "name":"private-network",
+         "provider:physical_network":null,
+         "admin_state_up":true,
+         "tenant_id":"4fd44f30292945e481c7b8a0c8908869",
+         "provider:network_type":"local",
+         "router:external":true,
+         "shared":true,
+         "id":"d32019d3-bc6e-4319-9c1d-6722fc136a22",
+         "provider:segmentation_id":null
+      }
+}
