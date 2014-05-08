@@ -154,6 +154,29 @@ providers.filter(function (provider) {
       });
     });
 
+    it('the network.refresh() method should get a network', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      var network = new Network(client);
+      network.id = "d32019d3-bc6e-4319-9c1d-6722fc136a22";
+
+      if (mock) {
+        setupRefreshNetworkMock(client, provider, {
+          authServer: authServer,
+          server: server
+        }, network);
+      }
+
+      network.refresh(function (err, refreshedNetwork) {
+        should.not.exist(err);
+        should.exist(refreshedNetwork);
+        refreshedNetwork.should.have.property('name', 'private-network');
+        authServer && authServer.done();
+        server && server.done();
+        done();
+      });
+    });
+
     it('the network.destroy() method should delete a network', function (done) {
       var network = new Network(client);
       network.name = "model deleted network";
@@ -244,6 +267,14 @@ function setupNetworkMock(client, provider, servers) {
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
       {network: {name: 'create-test-ids2'}})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
+  }
+}
+
+function setupRefreshNetworkMock(client, provider, servers, network) {
+  if (provider === 'openstack') {
+    servers.server
+      .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',network.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
 
