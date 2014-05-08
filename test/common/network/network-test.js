@@ -1,7 +1,7 @@
 /*
-* server-test.js: Test that should be common to all providers.
+* network-test.js: Test that should be common to all providers.
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2014 Hewlett-Packard Development Company, L.P.
 *
 */
 
@@ -50,7 +50,7 @@ providers.filter(function (provider) {
             next();
           });
         }
-      ], done)
+      ], done);
     });
 
     it('the getNetworks() function should return a list of networks', function(done) {
@@ -75,35 +75,24 @@ providers.filter(function (provider) {
       });
     });
 
-    it.skip('the createServer() method with image and flavor should create a server', function (done) {
-      var m = mock ? .1 : 10;
+    it('the createNetwork() method should create a network', function (done) {
+      var m = mock ? 0.1 : 10;
 
       if (mock) {
-        setupServerMock(client, provider, {
+        setupNetworkMock(client, provider, {
           authServer: authServer,
           server: server
         });
       }
 
-      client.createServer(utile.mixin({
-        name: 'create-test-ids2',
-        image: context.images[0].id,
-        flavor: context.flavors[0].id
-      }, provider === 'azure' ? azureOptions : {}), function (err, srv1) {
+      client.createNetwork(utile.mixin({
+        name: 'create-test-ids2'
+      }), function (err, network) {
         should.not.exist(err);
-        should.exist(srv1);
-
-        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, function (err, srv2) {
-          should.not.exist(err);
-          should.exist(srv2);
-          srv2.should.be.instanceOf(Server);
-          srv2.name.should.equal('create-test-ids2');
-          srv2.imageId.should.equal(context.images[0].id);
-
-          authServer && authServer.done();
-          server && server.done();
-          done();
-        });
+        should.exist(network);
+        authServer && authServer.done();
+        server && server.done();
+        done();
       });
     });
 
@@ -153,7 +142,7 @@ providers.filter(function (provider) {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });
@@ -190,22 +179,12 @@ function setupNetworksMock(client, provider, servers) {
   }
 }
 
-function setupServerMock(client, provider, servers) {
+function setupNetworkMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/servers',
-      {server: {name: 'create-test-ids2', flavorRef: '1', imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'}})
-      .replyWithFile(202, __dirname + '/../../fixtures/openstack/creatingServer.json')
-      .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
-  }
-}
-
-function setupGetServersMock(client, provider, servers) {
-  if (provider === 'openstack') {
-    servers.server
-      .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverList.json');
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
+      {network: {name: 'create-test-ids2'}})
+      .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
 
