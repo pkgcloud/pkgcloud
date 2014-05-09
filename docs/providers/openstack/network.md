@@ -113,3 +113,60 @@ Returns the subnet in the callback `f(err, subnet)`
 Destroys the specified subnet
 
 Takes subnet or subnetId as an argument  and returns the id of the destroyed subnet in the callback `f(err, subnetId)`
+
+**Ports**
+
+#### client.getPorts(callback)
+Lists all ports that are available to use on your Openstack account
+
+Callback returns `f(err, ports)` where `ports` is an `Array`
+
+#### client.getPort(port, callback)
+Gets specified port
+
+Takes port or portId as an argument and returns the port in the callback
+`f(err, port)`
+
+#### client.createPort(options, callback)
+Creates a port with the options specified
+
+Options are as follows:
+
+```js
+{
+  name: 'portName', // optional
+  admin_state_up : true,  // optional, The administrative status of the router. Admin-only
+  network_id : '<network-id>',  // required, The ID of the attached network.
+  status  : 'text status',    // optional, The status of the port.
+  tenant_id : '<tenant-id>'     // optional, The ID of the tenant who owns the network. Admin-only
+  mac_address: 'mac address'     // optional
+  fixed_ips : ['ip address1', 'ip address 2'], // optional.
+  security_groups : ['security group1', 'security group2'] // optional, Specify one or more security group IDs.
+}
+```
+Returns the port in the callback `f(err, port)`
+
+#### client.updatePort(options, callback)
+Updates a port with the options specified
+
+Options are as follows:
+
+```js
+{
+  id : '<port-id>', // required
+  name: 'portName', // optional
+  admin_state_up : true,  // optional, The administrative status of the router. Admin-only
+  network_id : '<network-id>',  // required, The ID of the attached network.
+  status  : 'text status',    // optional, The status of the port.
+  tenant_id : '<tenant-id>'     // optional, The ID of the tenant who owns the network. Admin-only
+  mac_address: 'mac address'     // optional
+  fixed_ips : ['ip address1', 'ip address 2'], // optional.
+  security_groups : ['security group1', 'security group2'] // optional, Specify one or more security group IDs.
+}
+```
+Returns the port in the callback `f(err, port)`
+
+#### client.destroyPort(port, callback)
+Destroys the specified port
+
+Takes port or portId as an argument  and returns the id of the destroyed port in the callback `f(err, portId)`

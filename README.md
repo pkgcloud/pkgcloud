@@ -439,6 +439,13 @@ Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.creat
 * `client.updateSubnet(subnet, function (err, subnet) { })`
 * `client.deleteSubnet(subnet, function (err, subnetId) { })`
 
+### Ports
+* `client.getPorts(options, function (err, ports) { })`
+* `client.getPort(port, function (err, port) { })`
+* `client.createPort(options, function (err, port) { })`
+* `client.updatePort(port, function (err, port) { })`
+* `client.deletePort(port, function (err, portId) { })`
+
 ## Installation
 
 ``` bash
