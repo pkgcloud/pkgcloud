@@ -282,7 +282,7 @@ function setupNetworksMock(client, provider, servers) {
       .reply(200, helpers.getOpenstackAuthResponse());
 
     servers.server
-      .get('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks?format=json')
+      .get('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/networks.json');
   }
 }
