@@ -424,12 +424,20 @@ To get started with a `pkgcloud.network` client just create one:
 
 Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
 
-### Volume
+### Networks
 * `client.getNetworks(options, function (err, networks) { })`
 * `client.getNetwork(network, function (err, network) { })`
 * `client.createNetwork(options, function (err, network) { })`
 * `client.updateNetwork(network, function (err, network) { })`
 * `client.deleteNetwork(network, function (err, networkId) { })`
+
+
+### Subnets
+* `client.getSubnets(options, function (err, subnets) { })`
+* `client.getSubnet(subnet, function (err, subnet) { })`
+* `client.createSubnet(options, function (err, subnet) { })`
+* `client.updateSubnet(subnet, function (err, subnet) { })`
+* `client.deleteSubnet(subnet, function (err, subnetId) { })`
 
 ## Installation
 
