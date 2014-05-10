@@ -1,0 +1,9 @@
+{
+  "camelcase": true,
+  "expr": false,
+  "laxbreak": false,
+  "immed": false,
+  "node": true,
+  "indent": true,
+  "strict": false
+}

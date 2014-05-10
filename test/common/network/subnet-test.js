@@ -137,7 +137,9 @@ providers.filter(function (provider) {
 
     it('the updateSubnet() method should update a subnet', function (done) {
 
-      var subnetToUpdate = { id : context.currentSubnet.id, enable_dhcp : false};
+      var subnetToUpdate = context.currentSubnet;
+      subnetToUpdate.enableDhcp = false;
+
       if (mock) {
         setupUpdateSubnetMock(client, provider, {
           authServer: authServer,
@@ -243,7 +245,12 @@ function setupUpdateSubnetMock(client, provider, servers, currentSubnet){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id),
-        { subnet: { id: currentSubnet.id, enable_dhcp: false }})
+        {"subnet":{"name":"my_subnet",
+        "network_id":"d32019d3-bc6e-4319-9c1d-6722fc136a22",
+        "tenant_id":"4fd44f30292945e481c7b8a0c8908869",
+        "allocation_pools":[{"start":"192.0.0.2","end":"192.255.255.254"}],
+        "gateway_ip":"192.0.0.1","ip_version":4,"cidr":"192.0.0.0/8",
+        "enable_dhcp":false}})
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
   }
 }

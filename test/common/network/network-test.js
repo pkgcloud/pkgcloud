@@ -135,9 +135,9 @@ providers.filter(function (provider) {
 
     it('the updateNetwork() method should update a network', function (done) {
 
-      var networkToUpdate = { id : context.currentNetwork.id, admin_state_up : false};
-      networkToUpdate.id = context.currentNetwork.id;
-      networkToUpdate.admin_state_up = false;
+      var networkToUpdate = context.currentNetwork;
+      networkToUpdate.adminStateUp = false;
+
       if (mock) {
         setupUpdateNetworkMock(client, provider, {
           authServer: authServer,
@@ -162,7 +162,7 @@ providers.filter(function (provider) {
       }
 
       var network = new Network(client);
-      network.name= "model created network";
+      network.name = "model created network";
       network.create(function (err, createdNetwork) {
         should.not.exist(err);
         should.exist(createdNetwork);
@@ -243,7 +243,7 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id),
-        { network: { id: currentNetwork.id, admin_state_up: false }})
+        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
