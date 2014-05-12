@@ -7,7 +7,7 @@ Creating a client is straight-forward:
     provider: 'openstack',
     username: 'your-user-name',
     password: 'your-password',
-    authUrl: 'https://your-identity-service'
+    authUrl: 'https://yourIdentity-service'
   });
 ```
 ### API Methods
@@ -33,9 +33,9 @@ Options are as follows:
 ```js
 {
   name: 'networkName', // optional
-  admin_state_up : true,  // optional
+  adminStateUp : true,  // optional
   shared : true,    // optional, Admin only
-  tenant_id : '<tenant-id>'     // optional, Admin only
+  tenantId : 'tenantId'     // optional, Admin only
 }
 ```
 Returns the network in the callback `f(err, network)`
@@ -47,11 +47,11 @@ Options are as follows:
 
 ```js
 {
-  id : '<network-id>', // required
+  id : 'networkId', // required
   name: 'networkName', // optional
-  admin_state_up : true,  // optional
+  adminStateUp : true,  // optional
   shared : true,    // optional, Admin only
-  tenant_id : '<tenant-id>'     // optional, Admin only
+  tenantId : 'tenantId'     // optional, Admin only
 }
 ```
 Returns the network in the callback `f(err, network)`
@@ -82,11 +82,11 @@ Options are as follows:
 ```js
 {
   name: 'subnetName', // optional
-  network_id : '<network-id>',  // required, The ID of the attached network.
+  networkId : 'networkId',  // required, The ID of the attached network.
   shared : true,    // optional, Admin only
-  tenant_id : '<tenant-id>'     // optional, The ID of the tenant who owns the network. Admin-only
-  gateway_ip : 'gateway ip address', // optional,The gateway IP address.
-  enable_dhcp : true // Set to true if DHCP is enabled and false if DHCP is disabled.
+  tenantId : 'tenantId'     // optional, The ID of the tenant who owns the network. Admin-only
+  gatewayIp : 'gateway ip address', // optional,The gateway IP address.
+  enableDhcp : true // Set to true if DHCP is enabled and false if DHCP is disabled.
 }
 ```
 Returns the subnet in the callback `f(err, subnet)`
@@ -98,13 +98,13 @@ Options are as follows:
 
 ```js
 {
-  id : '<subnet-id>', // required
+  id : 'subnetId', // required
   name: 'subnetName', // optional
-  network_id : '<network-id>',  // required, The ID of the attached network.
+  networkId : 'networkId',  // required, The ID of the attached network.
   shared : true,    // optional, Admin only
-  tenant_id : '<tenant-id>'     // optional, The ID of the tenant who owns the network. Admin-only
-  gateway_ip : 'gateway ip address', // optional,The gateway IP address.
-  enable_dhcp : true // Set to true if DHCP is enabled and false if DHCP is disabled.
+  tenantId : 'tenantId'     // optional, The ID of the tenant who owns the network. Admin-only
+  gatewayIp : 'gateway ip address', // optional,The gateway IP address.
+  enableDhcp : true // Set to true if DHCP is enabled and false if DHCP is disabled.
 }
 ```
 Returns the subnet in the callback `f(err, subnet)`
@@ -135,13 +135,13 @@ Options are as follows:
 ```js
 {
   name: 'portName', // optional
-  admin_state_up : true,  // optional, The administrative status of the router. Admin-only
-  network_id : '<network-id>',  // required, The ID of the attached network.
+  adminStateUp : true,  // optional, The administrative status of the router. Admin-only
+  networkId : 'networkId',  // required, The ID of the attached network.
   status  : 'text status',    // optional, The status of the port.
-  tenant_id : '<tenant-id>'     // optional, The ID of the tenant who owns the network. Admin-only
-  mac_address: 'mac address'     // optional
-  fixed_ips : ['ip address1', 'ip address 2'], // optional.
-  security_groups : ['security group1', 'security group2'] // optional, Specify one or more security group IDs.
+  tenantId : 'tenantId'     // optional, The ID of the tenant who owns the network. Admin-only
+  macAddress: 'mac address'     // optional
+  fixedIps : ['ip address1', 'ip address 2'], // optional.
+  securityGroups : ['security group1', 'security group2'] // optional, Specify one or more security group IDs.
 }
 ```
 Returns the port in the callback `f(err, port)`
@@ -153,15 +153,15 @@ Options are as follows:
 
 ```js
 {
-  id : '<port-id>', // required
+  id : 'portId', // required
   name: 'portName', // optional
-  admin_state_up : true,  // optional, The administrative status of the router. Admin-only
-  network_id : '<network-id>',  // required, The ID of the attached network.
+  adminStateUp : true,  // optional, The administrative status of the router. Admin-only
+  networkId : 'networkId',  // required, The ID of the attached network.
   status  : 'text status',    // optional, The status of the port.
-  tenant_id : '<tenant-id>'     // optional, The ID of the tenant who owns the network. Admin-only
-  mac_address: 'mac address'     // optional
-  fixed_ips : ['ip address1', 'ip address 2'], // optional.
-  security_groups : ['security group1', 'security group2'] // optional, Specify one or more security group IDs.
+  tenantId : 'tenantId'     // optional, The ID of the tenant who owns the network. Admin-only
+  macAddress: 'mac address'     // optional
+  fixedIps : ['ip address1', 'ip address 2'], // optional.
+  securityGroups : ['security group1', 'security group2'] // optional, Specify one or more security group IDs.
 }
 ```
 Returns the port in the callback `f(err, port)`

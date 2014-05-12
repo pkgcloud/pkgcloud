@@ -133,6 +133,20 @@ providers.filter(function (provider) {
       });
     });
 
+    it('the destroyNetwork() method should take an id, delete a network', function (done) {
+      if (mock) {
+        setupDestroyNetworkMock(client, provider, {
+          authServer: authServer,
+          server: server
+        }, context.currentNetwork);
+      }
+
+      client.destroyNetwork(context.currentNetwork.id, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
     it('the updateNetwork() method should update a network', function (done) {
 
       var networkToUpdate = context.currentNetwork;

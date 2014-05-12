@@ -135,6 +135,20 @@ providers.filter(function (provider) {
       });
     });
 
+    it('the destroyPort() method should take an id, delete a port', function (done) {
+      if (mock) {
+        setupDestroyPortMock(client, provider, {
+          authServer: authServer,
+          server: server
+        }, context.currentPort);
+      }
+
+      client.destroyPort(context.currentPort.id, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
     it('the updatePort() method should update a port', function (done) {
 
       var portToUpdate = context.currentPort;

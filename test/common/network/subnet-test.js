@@ -135,6 +135,20 @@ providers.filter(function (provider) {
       });
     });
 
+    it('the destroySubnet() method should take an id, delete a subnet', function (done) {
+      if (mock) {
+        setupDestroySubnetMock(client, provider, {
+          authServer: authServer,
+          server: server
+        }, context.currentSubnet);
+      }
+
+      client.destroySubnet(context.currentSubnet.id, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
     it('the updateSubnet() method should update a subnet', function (done) {
 
       var subnetToUpdate = context.currentSubnet;
