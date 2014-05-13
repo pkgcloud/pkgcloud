@@ -121,6 +121,7 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
 * **[Network](#network----beta)** *(beta)*
+    * [HP](docs/providers/hp/network.md)
     * [Openstack](docs/providers/openstack/network.md)
 
 ## Compute
@@ -403,7 +404,7 @@ Each instance of `pkgcloud.loadbalancer.Client` returned from `pkgcloud.loadbala
 
 ## Network -- Beta
 
-##### Note: Network is considered Beta until there are multiple providers; presently only Openstack providers are supported.
+##### Note: Network is considered Beta until there are multiple providers; presently only HP & Openstack providers are supported.
 
 The `pkgcloud.network` service is designed to make it easy to create and manage networks.
 
@@ -424,7 +425,9 @@ To get started with a `pkgcloud.network` client just create one:
 
 #### Providers
 
+* [HP](docs/providers/hp/network.md)
 * [Openstack](docs/providers/openstack/network.md)
+
 
 Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
 
