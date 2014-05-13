@@ -40,3 +40,5 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](providers/rackspace/blockstorage.md)
 * **Load Balancers** *(beta)*
   * [Rackspace](providers/rackspace/loadbalancer.md)
+* **Networking** *(beta)*
+    * [Openstack](providers/openstack/network.md)

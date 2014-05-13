@@ -293,7 +293,7 @@ Removes the provided [`file`](#file-model) from the provided [`container`](#cont
 
 Updates the [`file`](#file-model) metadata in the the provided [`container`](#container-model).
 
-File metadata is completely replaced with each callt o updateFileMetadata. This is different than container metadata. To delete a property, just remove it from the metadata attribute on the `File` and call `updateFileMetadata`.
+File metadata is completely replaced with each call to updateFileMetadata. This is different than container metadata. To delete a property, just remove it from the metadata attribute on the `File` and call `updateFileMetadata`.
 ```javascript
 file.metadata = {
  campaign = '2011 website'

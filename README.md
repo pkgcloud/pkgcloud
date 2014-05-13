@@ -14,6 +14,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [DNS](#dns----beta) *(beta)*
 * [Block Storage](#block-storage----beta) *(beta)*
 * [Load Balancers](#load-balancers----beta) *(beta)*
+* [Network](#network----beta) *(beta)*
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
@@ -39,6 +40,7 @@ Currently there are six service types which are handled by pkgcloud:
 * [DNS](#dns----beta) *(beta)*
 * [Block Storage](#block-storage----beta) *(beta)*
 * [Load Balancers](#load-balancers----beta) *(beta)*
+* [Network](#dns----beta) *(beta)*
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
@@ -118,6 +120,8 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/blockstorage.md)
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
+* **[Network](#network----beta)** *(beta)*
+    * [Openstack](docs/providers/openstack/network.md)
 
 ## Compute
 
@@ -396,6 +400,55 @@ Each instance of `pkgcloud.loadbalancer.Client` returned from `pkgcloud.loadbala
 * `client.addNodes(loadBalancer, nodes, function (err, nodes) { })`
 * `client.updateNode(loadBalancer, node, function (err) { })`
 * `client.removeNode(loadBalancer, node, function (err) { })`
+
+## Network -- Beta
+
+##### Note: Network is considered Beta until there are multiple providers; presently only Openstack providers are supported.
+
+The `pkgcloud.network` service is designed to make it easy to create and manage networks.
+
+To get started with a `pkgcloud.network` client just create one:
+
+``` js
+  var client = require('pkgcloud').network.createClient({
+    //
+    // The name of the provider (e.g. "openstack")
+    //
+    provider: 'provider-name',
+
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Openstack](docs/providers/openstack/network.md)
+
+Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
+
+### Networks
+* `client.getNetworks(options, function (err, networks) { })`
+* `client.getNetwork(network, function (err, network) { })`
+* `client.createNetwork(options, function (err, network) { })`
+* `client.updateNetwork(network, function (err, network) { })`
+* `client.deleteNetwork(network, function (err, networkId) { })`
+
+
+### Subnets
+* `client.getSubnets(options, function (err, subnets) { })`
+* `client.getSubnet(subnet, function (err, subnet) { })`
+* `client.createSubnet(options, function (err, subnet) { })`
+* `client.updateSubnet(subnet, function (err, subnet) { })`
+* `client.deleteSubnet(subnet, function (err, subnetId) { })`
+
+### Ports
+* `client.getPorts(options, function (err, ports) { })`
+* `client.getPort(port, function (err, port) { })`
+* `client.createPort(options, function (err, port) { })`
+* `client.updatePort(port, function (err, port) { })`
+* `client.deletePort(port, function (err, portId) { })`
 
 ## Installation
 

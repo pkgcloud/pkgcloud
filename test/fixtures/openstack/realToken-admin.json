@@ -59,6 +59,18 @@
         "endpoints_links": [],
         "type": "identity",
         "name": "keystone"
+      }, {
+        "endpoints": [
+          {
+            "adminURL": "http://localhost:12347/v2.0",
+            "region": "Calxeda-AUS1",
+            "internalURL": "http://10.225.0.8:9000/v2.0",
+            "publicURL": "http://network.myownendpoint.org:5000/v2.0"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "network",
+        "name": "network"
       }
     ],
     "user": {
