@@ -21,24 +21,14 @@ var should = require('should'),
       'loadbalancer',
       'blockstorage',
       'storage'
-    ];
+    ],
+    modelTypes = [];
 
-providers.forEach(function (provider) {
-  describe('pkgcloud/core/base/model5 [' + provider + ']', function () {
-    services.filter(function (service) {
-      return !!helpers.pkgcloud.providers[provider][service];
-    }).forEach(function(service){
-      it (' provider [' + provider + '] service [' + service + ']',function () {
-        var exportedTypes = require('../../../lib/pkgcloud/' + provider + '/' + service);
-        for (var exportedTypeName in exportedTypes) {
-          var exportedType = exportedTypes[exportedTypeName];
-          if (exportedType.prototype && exportedType.prototype._setProperties) {
-             should.exist(exportedType.prototype.toJSON, 'expected method toJSON() on ' +
-             'model type [' + exportedTypeName + '] in provider [' + provider +
-              ']' + ', service [' + service + ']');
-          }
-        }
-      });
-    });
-  });
+modelTypes = helpers.getModelTypes();
+modelTypes.forEach( function (modelType) {
+  describe('pkgcloud/core/base/models8 [' + modelType.provider + '] service ['+ modelType.service +'] model [' + modelType.modelName + ']', function () {
+   it( 'model [' + modelType.modelName + '] has a toJSON method', function () {
+     should.exist(modelType.modelType.prototype.toJSON);
+   });
+ });
 });

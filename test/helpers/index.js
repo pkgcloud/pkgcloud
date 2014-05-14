@@ -1,7 +1,18 @@
 var fs = require('fs'),
     path = require('path'),
     qs = require('querystring'),
-    pkgcloud = require('../../lib/pkgcloud');
+    providers = require('../configs/providers.json'),
+    pkgcloud = require('../../lib/pkgcloud'),
+    services = [
+      'network',
+      'compute',
+      'cdn',
+      'database',
+      'dns',
+      'loadbalancer',
+      'blockstorage',
+      'storage'
+    ];
 
 var helpers = exports;
 
@@ -190,6 +201,32 @@ helpers._getOpenstackStandardResponse = function(file, time) {
   response.access.token.expires = time.toString();
 
   return response;
-}
+};
+
+helpers.getModelTypes = function () {
+  var modelTypes = [];
+  providers.forEach(function (provider) {
+    services.filter(function (service) {
+      return !!helpers.pkgcloud.providers[provider][service];
+    }).forEach(function(service){
+      var exportedTypes = require('../../lib/pkgcloud/' + provider + '/' + service);
+        for (var exportedTypeName in exportedTypes) {
+          var exportedType = exportedTypes[exportedTypeName];
+          // If an exported type has the _setProperties method, we can
+          // assume that this is a model type.
+          if (exportedType.prototype && exportedType.prototype._setProperties) {
+             modelTypes.push({
+               provider: provider,
+               service: service,
+               modelType: exportedType,
+               modelName: exportedTypeName
+             });
+          }
+        }
+    });
+  });
+
+  return modelTypes;
+};
 
 helpers.pkgcloud = pkgcloud;
