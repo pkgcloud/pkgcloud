@@ -33,9 +33,9 @@ providers.forEach(function (provider) {
         for (var exportedTypeName in exportedTypes) {
           var exportedType = exportedTypes[exportedTypeName];
           if (exportedType.prototype._setProperties) {
-             should.exist(exportedType.toJSON, 'expected method toJSON() on model type \'' +
-              exportedTypeName + '\' in provider \'' + provider + '\'' +
-              ' , service \'' + service + '\'');
+             should.exist(exportedType.toJSON, 'expected method toJSON() on ' +
+             'model type [' + exportedTypeName + '] in provider [' + provider +
+              ']' + ', service [' + service + ']');
           }
         }
       });
