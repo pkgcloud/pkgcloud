@@ -32,8 +32,8 @@ providers.forEach(function (provider) {
         var exportedTypes = require('../../../lib/pkgcloud/' + provider + '/' + service);
         for (var exportedTypeName in exportedTypes) {
           var exportedType = exportedTypes[exportedTypeName];
-          if (exportedType.prototype._setProperties) {
-             should.exist(exportedType.toJSON, 'expected method toJSON() on ' +
+          if (exportedType.prototype && exportedType.prototype._setProperties) {
+             should.exist(exportedType.prototype.toJSON, 'expected method toJSON() on ' +
              'model type [' + exportedTypeName + '] in provider [' + provider +
               ']' + ', service [' + service + ']');
           }
