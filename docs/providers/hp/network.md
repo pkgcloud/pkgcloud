@@ -6,7 +6,7 @@ Creating a client is straight-forward:
   var hPNetwork = pkgcloud.network.createClient({
     provider: 'hp',
     username: 'your-user-name',
-    password: 'your-password',
+    apiKey: 'your-api-key',
     region: 'region of identity service',
     authUrl: 'https://your-identity-service'
   });

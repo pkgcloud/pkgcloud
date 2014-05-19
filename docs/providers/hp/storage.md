@@ -13,7 +13,7 @@ Creating a client is straight-forward:
   var hpStorage = pkgcloud.storage.createClient({
     provider: 'hp',
     username: 'your-user-name',
-    password: 'your-password',
+    apiKey: 'your-api-key',
     region: 'region of identity service',
     authUrl: 'https://your-identity-service'
   });

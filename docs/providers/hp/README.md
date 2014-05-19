@@ -20,9 +20,13 @@ For all of the HP Cloud services, you create a client with the same options:
 var client = require('pkgcloud').compute.createClient({
     provider: 'hp',
     username: 'your-user-name',
-    password: 'your-password'
+    apiKey: 'your-api-key'
 });
 ```
+### Getting your API key
+
+You can provision API keys in your cloud management console.
+Please see [here](https://community.hpcloud.com/article/managing-your-access-keys) for more instructions.
 
 ### Authentication Endpoints and Regions
 
@@ -40,7 +44,7 @@ If you're targeting an HP Private Cloud instance, please contact your administra
 var client = require('pkgcloud').compute.createClient({
     provider: 'hp',
     username: 'your-user-name',
-    password: 'your-password',
+    apiKey: 'your-api-key',
     region: 'region-a.geo-1',
     authUrl: 'https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/'
 });
@@ -52,7 +56,7 @@ var client = require('pkgcloud').compute.createClient({
 var client = require('pkgcloud').compute.createClient({
     provider: 'hp',
     username: 'your-user-name',
-    password: 'your-password',
+    apiKey: 'your-api-key',
     region: 'region-b.geo-1',
     authUrl: 'https://region-b.geo-1.identity.hpcloudsvc.com:35357/v2.0/'
 });
@@ -70,7 +74,7 @@ If you're targeting an HP Private Cloud instance, please contact your administra
 var client = require('pkgcloud').compute.createClient({
     provider: 'hp',
     username: 'your-user-name',
-    password: 'your-password',
+    apiKey: 'your-api-key',
     region: 'region-a.custom.corp'
 });
 ```
