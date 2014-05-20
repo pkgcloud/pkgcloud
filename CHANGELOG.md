@@ -1,3 +1,7 @@
+## v0.9.5
+* Openstack Network Provider
+* Added support for HP Cloud provider
+ 
 ## v0.9.4
 * Added support for os-security-groups compute extension
 
