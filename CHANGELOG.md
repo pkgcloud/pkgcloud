@@ -1,3 +1,7 @@
+## v0.9.5
+* Openstack Network service.
+* Added support for HP Cloud provider.
+
 ## v0.9.4
 * Added support for os-security-groups compute extension
 
@@ -91,4 +95,3 @@
 ## v0.7.2
 * Added a pkgcloud User-Agent for outbound HTTP requests #134
 * Added tests for core compute method signatures
-
