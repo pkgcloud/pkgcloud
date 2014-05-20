@@ -1,0 +1,6 @@
+{
+  "username":"MOCK-USERNAME",
+  "apiKey": "MOCK-API-KEY",
+  "authUrl":"http://localhost:12346",
+  "region": "region-a.geo-1"
+}

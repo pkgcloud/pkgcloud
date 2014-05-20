@@ -98,12 +98,14 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Amazon](docs/providers/amazon.md#using-compute)
   * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+  * [HP](docs/providers/hp/compute.md)
   * [Joyent](docs/providers/joyent.md#using-compute)
   * [Openstack](docs/providers/openstack/compute.md)
   * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
   * [Amazon](docs/providers/amazon.md#using-storage)
   * [Azure](docs/providers/azure.md#using-storage)
+  * [HP](docs/providers/hp/storage.md)
   * [Openstack](docs/providers/openstack/storage.md)
   * [Rackspace](docs/providers/rackspace/storage.md)
 * **[Database](#databases)**
@@ -119,6 +121,7 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
 * **[Network](#network----beta)** *(beta)*
+    * [HP](docs/providers/hp/network.md)
     * [Openstack](docs/providers/openstack/network.md)
 
 ## Compute
@@ -143,6 +146,7 @@ Each compute provider takes different credentials to authenticate; these details
 * [Amazon](docs/providers/amazon.md#using-compute)
 * [Azure](docs/providers/azure.md#using-compute)
 * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+* [HP](docs/providers/hp/compute.md)
 * [Joyent](docs/providers/joyent.md#using-compute)
 * [Openstack](docs/providers/openstack/compute.md)
 * [Rackspace](docs/providers/rackspace/compute.md)
@@ -189,6 +193,7 @@ Each storage provider takes different credentials to authenticate; these details
 
 * [Amazon](docs/providers/amazon.md#using-storage)
 * [Azure](docs/providers/azure.md#using-storage)
+* [HP](docs/providers/hp/storage.md)
 * [Openstack](docs/providers/openstack/storage.md)
 * [Rackspace](docs/providers/rackspace/storage.md)
 
@@ -399,7 +404,7 @@ Each instance of `pkgcloud.loadbalancer.Client` returned from `pkgcloud.loadbala
 
 ## Network -- Beta
 
-##### Note: Network is considered Beta until there are multiple providers; presently only Openstack providers are supported.
+##### Note: Network is considered Beta until there are multiple providers; presently only HP & Openstack providers are supported.
 
 The `pkgcloud.network` service is designed to make it easy to create and manage networks.
 
@@ -420,7 +425,9 @@ To get started with a `pkgcloud.network` client just create one:
 
 #### Providers
 
+* [HP](docs/providers/hp/network.md)
 * [Openstack](docs/providers/openstack/network.md)
+
 
 Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
 
