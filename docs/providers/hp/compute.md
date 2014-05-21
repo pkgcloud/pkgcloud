@@ -1,4 +1,6 @@
-##Using the HP Cloud Compute provider
+![HP Helion icon](http://www8.hp.com/hpnext/sites/default/files/content/documents/HP%20Helion%20Logo_Cloud_Martin%20Fink_New%20Style%20of%20IT_Hewlett-Packard.PNG)
+
+##Using the HP  Helion Cloud Compute provider
 
 Creating a client is straight-forward:
 
