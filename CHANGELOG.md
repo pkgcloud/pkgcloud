@@ -1,6 +1,7 @@
 ## v0.9.5
 * Openstack Network service.
 * Added support for HP Cloud provider.
+* Added support for Rackspace Storage Temporary URLs
 
 ## v0.9.4
 * Added support for os-security-groups compute extension
