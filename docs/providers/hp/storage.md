@@ -1,3 +1,5 @@
+![HP Helion icon](http://www8.hp.com/hpnext/sites/default/files/content/documents/HP%20Helion%20Logo_Cloud_Martin%20Fink_New%20Style%20of%20IT_Hewlett-Packard.PNG)
+
 ## Using the HP Object Storage provider
 
 * Container

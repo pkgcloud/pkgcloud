@@ -1,8 +1,8 @@
-# Getting started with pkgcloud & HP
-
+![HP Helion icon](http://www8.hp.com/hpnext/sites/default/files/content/documents/HP%20Helion%20Logo_Cloud_Martin%20Fink_New%20Style%20of%20IT_Hewlett-Packard.PNG)
+# Getting started with pkgcloud & HP Helion Cloud
 The HP node.js SDK is available as part of `pkgcloud`, a multi-provider cloud provisioning package
 
-Pkgcloud currently supports HP Cloud Compute and HP Cloud Object Storage.
+Pkgcloud currently supports HP Helion Cloud Compute and HP Helion Cloud Object Storage, and HP Helion Cloud Networking.
 
 To install `pkgcloud` from the command line:
 
@@ -14,7 +14,7 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 
 ## Using pkgcloud
 
-In this example, we're going to create a HP Cloud Compute client, create two servers, and then output their details to the command line.
+In this example, we're going to create a HP Helion Cloud Compute client, create two servers, and then output their details to the command line.
 
 *Note: We're going to use [underscore.js](http://underscorejs.org) for some convenience functions.*
 

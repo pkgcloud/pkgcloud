@@ -1,13 +1,16 @@
-## Using the HP Cloud provider in pkgcloud
+![HP Helion icon](http://www8.hp.com/hpnext/sites/default/files/content/documents/HP%20Helion%20Logo_Cloud_Martin%20Fink_New%20Style%20of%20IT_Hewlett-Packard.PNG)
 
-The HP Cloud provider in pkgcloud supports the following services:
+## Using the HP Helion Cloud provider in pkgcloud
+
+The HP  Helion Cloud provider in pkgcloud supports the following services:
 
 * [**Compute**](compute.md) (cloud compute)
+* [**Network**](network.md) (network)
 * [**Storage**](storage.md) (object storage)
 
-### Activating your HP Cloud services
+### Activating your HP  Helion Cloud services
 
-If this is your first time using HP Cloud Services, please follow [this](https://community.hpcloud.com/article/hp-public-cloud-quick-start-guide) guide to get started.
+If this is your first time using HP  Helion Cloud Services, please follow [this](https://community.hpcloud.com/article/hp-public-cloud-quick-start-guide) guide to get started.
 ### Getting Started with Compute
 
 We've provided a [simple compute example](getting-started-compute.md) where it creates a couple of compute instances.

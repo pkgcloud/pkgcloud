@@ -40,7 +40,7 @@ Currently there are six service types which are handled by pkgcloud:
 * [DNS](#dns----beta) *(beta)*
 * [Block Storage](#block-storage----beta) *(beta)*
 * [Load Balancers](#load-balancers----beta) *(beta)*
-* [Network](#dns----beta) *(beta)*
+* [Network](#network----beta) *(beta)*
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
