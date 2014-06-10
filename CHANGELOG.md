@@ -1,3 +1,6 @@
+## v0.9.6
+* Fixed a long-standing bug in openstack.compute.getFlavor #292
+
 ## v0.9.5
 * Openstack Network service.
 * Added support for HP Cloud provider.
