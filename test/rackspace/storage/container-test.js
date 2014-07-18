@@ -292,6 +292,38 @@ describe('pkgcloud/rackspace/storage/containers', function () {
 
     });
 
+    it('getContainer should allow 403 cdn response (for ACL)', function (done) {
+
+      if (mock) {
+        server
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+          )
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(403);
+      }
+
+      client.getContainer('0.1.3-85', function (err, container) {
+        should.not.exist(err);
+        should.exist(container);
+
+        container.should.be.instanceof(Container);
+
+        server && server.done();
+        done();
+      });
+    });
+
     it('getContainer should include cdn metadata', function (done) {
 
       if (mock) {
