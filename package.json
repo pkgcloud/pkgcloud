@@ -37,8 +37,7 @@
     "qs":            "1.2.1",
     "request":       "2.40.x",
     "underscore":    "1.6.x",
-    "url-join":      "0.0.x",
-    "utile":         "0.x.x"
+    "url-join":      "0.0.x"
   },
   "devDependencies": {
     "hock" : "0.2.x",

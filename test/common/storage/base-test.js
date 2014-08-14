@@ -11,7 +11,7 @@ var fs = require('fs'),
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers'),
     should = require('should'),
-    utile = require('utile'),
+    util = require('util'),
     async = require('async'),
     hock = require('hock'),
     urlJoin = require('url-join'),
@@ -460,9 +460,9 @@ providers.filter(function (provider) {
             password: 'MOCK-PASSWORD'
           }
         }
-      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/initialToken.json'))
-      .get('/v2.0/tenants', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2.0/tenants', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
       .post('/v2.0/tokens', {
         auth: {
@@ -472,7 +472,7 @@ providers.filter(function (provider) {
           },
           tenantId: '72e90ecb69c44d0296072ea39e537041'
         }
-      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(200, helpers.getOpenstackAuthResponse());
 
     servers.server
@@ -521,9 +521,9 @@ providers.filter(function (provider) {
             secretKey: 'MOCK-API-KEY'
           }
         }
-      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(200, helpers._getOpenstackStandardResponse('../fixtures/hp/initialToken.json'))
-      .get('/v2.0/tenants', {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2.0/tenants', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
       .post('/v2.0/tokens', {
         auth: {
@@ -533,7 +533,7 @@ providers.filter(function (provider) {
           },
           tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
         }
-      }, {'User-Agent': utile.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(200, helpers.gethpAuthResponse());
 
     servers.server

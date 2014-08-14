@@ -9,11 +9,10 @@ var fs = require('fs'),
     path = require('path'),
     qs = require('qs'),
     should = require('should'),
-    utile = require('utile'),
+    util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
-    async = require('async'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
@@ -112,7 +111,7 @@ providers.forEach(function (provider) {
         });
       }
 
-      client.createServer(utile.mixin({
+      client.createServer(_.extend({
         name: 'create-test-ids2',
         image: context.images[0].id,
         flavor: context.flavors[0].id
@@ -619,7 +618,7 @@ function setupGetServerMock(client, provider, servers) {
 //    "the rebootServer() method": {
 //      topic: function () {
 //        var self = this;
-//        client.createServer(utile.mixin({
+//        client.createServer(_.extend({
 //            name  : "test-reboot",
 //            image : testContext.images[0].id,
 //            flavor: testContext.flavors[0].id

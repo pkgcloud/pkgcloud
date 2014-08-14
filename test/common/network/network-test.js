@@ -9,11 +9,10 @@ var fs = require('fs'),
     path = require('path'),
     qs = require('qs'),
     should = require('should'),
-    utile = require('utile'),
+    util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
-    async = require('async'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Network = require('../../../lib/pkgcloud/core/network/network').Network,
@@ -108,7 +107,7 @@ providers.filter(function (provider) {
         });
       }
 
-      client.createNetwork(utile.mixin({
+      client.createNetwork(_.extend({
         name: 'create-test-ids2'
       }), function (err, network) {
         should.not.exist(err);
