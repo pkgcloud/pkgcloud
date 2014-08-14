@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "async":         "0.9.x",
-    "errs":          "0.2.x",
+    "errs":          "0.3.x",
     "eventemitter2": "0.4.x",
     "filed":         "0.0.7",
     "ip":            "0.0.x",
