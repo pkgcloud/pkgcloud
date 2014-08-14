@@ -36,7 +36,7 @@
     "through":       "~2.3",
     "pkginfo":       "0.2.x",
     "qs":            "1.2.1",
-    "request":       "2.22.x",
+    "request":       "2.40.x",
     "underscore":    "1.4.x",
     "url-join":      "0.0.x",
     "utile":         "0.x.x"
