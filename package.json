@@ -34,7 +34,6 @@
     "xml2js":        "0.1.x",
     "mime":          "1.2.x",
     "through":       "~2.3",
-    "pkginfo":       "0.2.x",
     "qs":            "1.2.1",
     "request":       "2.40.x",
     "underscore":    "1.6.x",
