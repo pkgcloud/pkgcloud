@@ -229,7 +229,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
         client.getUsers({ instance: instance }, function (err, list) {
           should.not.exist(err);
           should.exist(list);
-          list.should.be.instanceOf(Array);
+          list.should.be.an.Array;
           list.forEach(function (user) {
             user.should.be.instanceOf(User);
           });
@@ -294,7 +294,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           client.getUsers({ instance: instance, offset: testContext.marker }, function (err, list, offset) {
             should.not.exist(err);
             should.exist(list);
-            list.should.be.instanceOf(Array);
+            list.should.be.an.Array;
             list.should.have.length(2);
             should.not.exist(offset);
             server && server.done();
@@ -320,7 +320,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             offset:testContext.marker }, function(err, list, offset) {
             should.not.exist(err);
             should.exist(list);
-            list.should.be.instanceOf(Array);
+            list.should.be.an.Array;
             list.should.have.length(1);
             should.exist(offset);
             server && server.done();
@@ -396,7 +396,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.exist(response);
           response.statusCode.should.equal(200);
           should.exist(response.body);
-          response.body.user.should.be.a('object');
+          response.body.user.should.be.a.Object;
           should.exist(response.body.user.password);
           response.body.user.name.should.equal('root');
           server && server.done();

@@ -41,8 +41,8 @@
   },
   "devDependencies": {
     "hock" : "0.2.x",
-    "mocha": "1.9.x",
-    "should": "1.2.x",
+    "mocha": "1.21.x",
+    "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",
     "coveralls": "2.x.x"
   },

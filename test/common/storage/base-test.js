@@ -100,7 +100,7 @@ providers.filter(function (provider) {
       client.getContainers(function (err, containers) {
         should.not.exist(err);
         should.exist(containers);
-        containers.should.be.instanceOf(Array);
+        containers.should.be.an.Array;
 
         containers.forEach(function(container) {
           container.should.be.instanceOf(Container);
@@ -268,7 +268,7 @@ providers.filter(function (provider) {
         should.not.exist(err);
         should.exist(files);
 
-        files.should.be.instanceOf(Array);
+        files.should.be.an.Array;
 
         files.forEach(function(file) {
           file.should.be.instanceOf(File);

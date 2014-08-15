@@ -108,7 +108,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       });
 
       it('should update the config with appropriate urls', function () {
-        client._identity.should.be.a('object');
+        client._identity.should.be.a.Object;
       });
 
       it('the getLimits() method should return the proper limits', function (done) {
@@ -123,7 +123,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
           should.exist(limits);
           should.exist(limits.absolute);
           should.exist(limits.rate);
-          limits.rate.should.be.instanceOf(Array);
+          limits.rate.should.be.an.Array;
           server && server.done();
           done();
         });
@@ -214,7 +214,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       });
 
       it('should update the config with appropriate urls', function () {
-        client._identity.should.be.a('object');
+        client._identity.should.be.a.Object;
         client._identity.token.expires.toString().should.equal(tokenExpiry);
       });
 

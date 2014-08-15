@@ -145,7 +145,7 @@ providers.forEach(function (provider) {
         should.not.exist(err);
         should.exist(servers);
 
-        servers.should.be.instanceOf(Array);
+        servers.should.be.an.Array;
 
         servers.forEach(function(srv) {
           srv.should.be.instanceOf(Server);

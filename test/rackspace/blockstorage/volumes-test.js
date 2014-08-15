@@ -71,7 +71,7 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
       client.getVolumes(function (err, volumes) {
         should.not.exist(err);
         should.exist(volumes);
-        volumes.should.be.instanceOf(Array);
+        volumes.should.be.an.Array;
         volumes.length.should.equal(0);
         authServer && authServer.done();
         server && server.done();
@@ -119,7 +119,7 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
       client.getVolumes(function (err, volumes) {
         should.not.exist(err);
         should.exist(volumes);
-        volumes.should.be.instanceOf(Array);
+        volumes.should.be.an.Array;
         volumes.forEach(function(volume) {
           volume.should.be.instanceOf(Volume);
         });
