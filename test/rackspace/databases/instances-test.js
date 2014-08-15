@@ -141,7 +141,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         it('should return the list of instances', function () {
           should.not.exist(err);
           should.exist(instances);
-          instances.should.be.instanceOf(Array);
+          instances.should.be.an.Array;
           instances.length.should.be.above(0);
 
           testContext.instancesQuantity = instances.length;
@@ -157,10 +157,10 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           instances.forEach(function (instance) {
             should.exist(instance.id);
-            instance.links.should.be.instanceOf(Array);
-            instance.flavor.should.be.a('object');
-            instance.volume.should.be.a('object');
-            instance.volume.size.should.be.a('number');
+            instance.links.should.be.an.Array;
+            instance.flavor.should.be.a.Object;
+            instance.volume.should.be.a.Object;
+            instance.volume.size.should.be.a.Number;
           });
         });
 
@@ -205,7 +205,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         it('should respond at least 2 elements', function() {
           should.not.exist(err);
           should.exist(instances);
-          instances.should.be.instanceOf(Array);
+          instances.should.be.an.Array;
           instances.should.have.length(2);
         });
 
@@ -272,7 +272,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         client.getInstances({ offset: testContext.marker }, function (err, instances, offset) {
           should.not.exist(err);
           should.exist(instances);
-          instances.should.be.instanceOf(Array);
+          instances.should.be.an.Array;
           should.ok(instances.length >= 2
             && instances.length < testContext.instancesQuantity);
           server && server.done();
@@ -292,7 +292,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         client.getInstances({limit: 1, offset: testContext.marker }, function (err, instances, offset) {
           should.not.exist(err);
           should.exist(instances);
-          instances.should.be.instanceOf(Array);
+          instances.should.be.an.Array;
           should.exist(offset);
           instances.should.have.length(1);
           server && server.done();
@@ -528,7 +528,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 });
 
 function assertLinks(links) {
-  links.should.be.instanceOf(Array);
+  links.should.be.an.Array;
   links.forEach(function (link) {
     should.exist(link.href);
     should.exist(link.rel);

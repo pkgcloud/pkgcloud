@@ -74,7 +74,7 @@ describe('pkgcloud/amazon/groups', function () {
 
     client.listGroups(function (err, data) {
       should.not.exist(err);
-      data.should.be.instanceOf(Array);
+      data.should.be.an.Array;
       server && server.done();
       done();
     });

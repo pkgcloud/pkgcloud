@@ -93,7 +93,7 @@ describe('pkgcloud/azure/databases', function () {
       client.list(function (err, databases) {
         should.not.exist(err);
         should.exist(databases);
-        databases.should.be.instanceOf(Array);
+        databases.should.be.an.Array;
         databases.should.have.length(1);
 
         server && server.done();

@@ -195,7 +195,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.exist(list);
           should.exist(list[0])
           list[0].name.should.equal('TestDatabase');
-          list[0].name.should.be.a('string');
+          list[0].name.should.be.a.String;
           server && server.done();
           done();
         });
@@ -288,7 +288,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           function (err, instances, offset) {
             should.not.exist(err);
             should.exist(instances);
-            instances.should.be.instanceOf(Array);
+            instances.should.be.an.Array;
             instances.should.have.length(1);
             should.not.exist(offset);
             server && server.done();

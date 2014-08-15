@@ -77,7 +77,7 @@ describe('pkgcloud/hp/network/authentication', function () {
       });
 
       it('should update the config with appropriate urls', function () {
-        client._identity.should.be.a('object');
+        client._identity.should.be.a.Object;
       });
     });
 
@@ -166,7 +166,7 @@ describe('pkgcloud/hp/network/authentication', function () {
       });
 
       it('should update the config with appropriate urls', function () {
-        client._identity.should.be.a('object');
+        client._identity.should.be.a.Object;
         client._identity.token.expires.toString().should.equal(tokenExpiry);
       });
 
