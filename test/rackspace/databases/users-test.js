@@ -69,7 +69,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
               {
                 name: 'joeTest',
                 password: 'joepasswd',
-                databases: []
+                databases: [ { name: 'TestDatabase' } ]
               }
             ]
           })
@@ -94,6 +94,43 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
     });
 
+    it('the createUser() method should work with databases argument', function (done) {
+      if (mock) {
+        server
+          .get('/v1.0/123456/instances')
+          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+            users: [
+              {
+                name: 'joeTest',
+                password: 'joepasswd',
+                databases: [
+                  { name: 'TestDatabase' }
+                ]
+              }
+            ]
+          })
+          .reply(202);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.createUser({
+          username: 'joeTest',
+          password: 'joepasswd',
+          databases: ['TestDatabase'],
+          instance: instance
+        }, function (err, response) {
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
+          authServer && authServer.done();
+          server && server.done();
+          done();
+        });
+      });
+
+    });
+
     it('create an other user for test pagination should response correctly', function (done) {
 
       if (mock) {
@@ -105,7 +142,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
               {
                 name: 'joeTestTwo',
                 password: 'joepasswd',
-                databases: []
+                databases: [
+                  { name: 'TestDatabase' }
+                ]
               }
             ]
           })
@@ -115,7 +154,9 @@ describe('pkgcloud/rackspace/databases/users', function () {
               {
                 name: 'joeTestThree',
                 password: 'joepasswd',
-                databases: []
+                databases: [
+                  { name: 'TestDatabase' }
+                ]
               }
             ]
           })
@@ -156,12 +197,16 @@ describe('pkgcloud/rackspace/databases/users', function () {
               {
                 name: 'joeTestFour',
                 password: 'joepasswd',
-                databases: []
+                databases: [
+                  { name: 'TestDatabase' }
+                ]
               },
               {
                 name: 'joeTestFive',
                 password: 'joepasswd',
-                databases: []
+                databases: [
+                  { name: 'TestDatabase' }
+                ]
               }
             ]
           })
