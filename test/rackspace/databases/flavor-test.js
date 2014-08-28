@@ -74,7 +74,7 @@ describe('pkgcloud/rackspace/databases/errors', function () {
       getFlavors(true, function (err, flavors) {
         should.not.exist(err);
         should.exist(flavors);
-        flavors.should.be.instanceOf(Array);
+        flavors.should.be.an.Array;
         flavors.forEach(function (flavor) {
           flavor.should.be.instanceOf(Flavor);
         });
@@ -90,10 +90,10 @@ describe('pkgcloud/rackspace/databases/errors', function () {
       getFlavors(false, function (err, flavors) {
         should.not.exist(err);
         should.exist(flavors);
-        flavors.should.be.instanceOf(Array);
+        flavors.should.be.an.Array;
         flavors.forEach(function (flavor) {
-          flavor.ram.should.be.a('number');
-          flavor.href.should.be.a('string');
+          flavor.ram.should.be.a.Number;
+          flavor.href.should.be.a.String;
         });
         server && server.done();
         done();

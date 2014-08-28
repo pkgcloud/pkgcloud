@@ -1,7 +1,7 @@
 {
   "name":        "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version":     "0.9.0",
+  "version":     "0.9.6",
   "author":      "Nodejitsu Inc <info@nodejitsu.com>",
   "contributors": [
     { "name": "Charlie Robbins",    "email": "charlie@nodejitsu.com" },
@@ -26,25 +26,23 @@
     "redistogo"
   ],
   "dependencies": {
-    "async":         "0.1.x",
-    "errs":          "0.2.x",
+    "async":         "0.9.x",
+    "errs":          "0.3.x",
     "eventemitter2": "0.4.x",
-    "filed":         "0.0.7",
-    "ip":            "0.0.x",
+    "filed":         "0.1.x",
+    "ip":            "0.3.x",
     "xml2js":        "0.1.x",
     "mime":          "1.2.x",
-    "through":       "~2.3",
-    "pkginfo":       "0.2.x",
-    "qs":            "0.6.x",
-    "request":       "2.22.x",
-    "underscore":    "1.4.x",
-    "url-join":      "0.0.x",
-    "utile":         "0.x.x"
+    "through":       "2.3.x",
+    "qs":            "1.2.x",
+    "request":       "2.40.x",
+    "underscore":    "1.6.x",
+    "url-join":      "0.0.x"
   },
   "devDependencies": {
     "hock" : "0.2.x",
-    "mocha": "1.9.x",
-    "should": "1.2.x",
+    "mocha": "1.21.x",
+    "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",
     "coveralls": "2.x.x"
   },

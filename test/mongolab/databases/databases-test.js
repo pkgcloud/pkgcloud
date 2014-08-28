@@ -162,7 +162,7 @@ describe('pkgcloud/mongolab/databases', function () {
     client.getAccounts(function(err, accounts) {
       should.not.exist(err);
       should.exist(accounts);
-      accounts.should.be.instanceOf(Array);
+      accounts.should.be.an.Array;
       accounts.should.have.length(2);
       accounts.forEach(function(account) {
         should.exist(account.username);
@@ -264,9 +264,9 @@ describe('pkgcloud/mongolab/databases', function () {
       client.getDatabases(context.account.username, function (err, databases) {
         should.not.exist(err);
         should.exist(databases);
-        databases.should.be.instanceOf(Array);
+        databases.should.be.an.Array;
         databases.should.have.length(1);
-        databases[0].should.be.a('object');
+        databases[0].should.be.a.Object;
         databases[0].name.should.equal(context.account.username + '_testDatabase');
         context.databaseName = databases[0].name;
         
@@ -300,7 +300,7 @@ describe('pkgcloud/mongolab/databases', function () {
         function (err, database) {
           should.not.exist(err);
           should.exist(database);
-          database.should.be.a('object');
+          database.should.be.a.Object;
           database.name.should.equal(context.account.username + '_testDatabase');
 
           server && server.done();
@@ -367,7 +367,7 @@ describe('pkgcloud/mongolab/databases', function () {
       client.getDatabases(context.account.username, function (err, databases) {
         should.not.exist(err);
         should.exist(databases);
-        databases.should.be.instanceOf(Array);
+        databases.should.be.an.Array;
         databases.should.have.length(0);
 
         server && server.done();

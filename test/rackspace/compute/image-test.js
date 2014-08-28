@@ -69,7 +69,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
       client.getServers(function(err, servers) {
         should.not.exist(err);
         should.exist(servers);
-        servers.should.be.instanceOf(Array);
+        servers.should.be.an.Array;
         testContext.servers = servers;
         authServer && authServer.done();
         server && server.done();

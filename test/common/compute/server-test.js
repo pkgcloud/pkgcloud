@@ -9,11 +9,10 @@ var fs = require('fs'),
     path = require('path'),
     qs = require('qs'),
     should = require('should'),
-    utile = require('utile'),
+    util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
-    async = require('async'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
@@ -112,7 +111,7 @@ providers.forEach(function (provider) {
         });
       }
 
-      client.createServer(utile.mixin({
+      client.createServer(_.extend({
         name: 'create-test-ids2',
         image: context.images[0].id,
         flavor: context.flavors[0].id
@@ -146,7 +145,7 @@ providers.forEach(function (provider) {
         should.not.exist(err);
         should.exist(servers);
 
-        servers.should.be.instanceOf(Array);
+        servers.should.be.an.Array;
 
         servers.forEach(function(srv) {
           srv.should.be.instanceOf(Server);
@@ -296,6 +295,34 @@ function setupImagesMock(client, provider, servers) {
       }))
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/images.json');
   }
+  else if (provider === 'hp') {
+    servers.authServer
+      .post('/v2.0/tokens', {
+        auth: {
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/initialToken.json')
+      .get('/v2.0/tenants')
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
+          },
+          tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
+        }
+      })
+      .reply(200, helpers.gethpAuthResponse());
+
+    servers.server
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail')
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
+  }
 }
 
 function setupFlavorMock(client, provider, servers) {
@@ -322,6 +349,11 @@ function setupFlavorMock(client, provider, servers) {
         api_key: account.apiKey
       }))
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/flavors.json');
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail')
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
   }
 }
 
@@ -434,6 +466,14 @@ function setupServerMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
   }
+  else if (provider === 'hp') {
+    servers.server
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers',
+      {server: {name: 'create-test-ids2', flavorRef: '1', imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'}})
+      .replyWithFile(202, __dirname + '/../../fixtures/openstack/creatingServer.json')
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
+  }
 }
 
 function setupGetServersMock(client, provider, servers) {
@@ -478,6 +518,11 @@ function setupGetServersMock(client, provider, servers) {
       }))
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/list-servers.json');
   }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/detail')
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/serverList.json');
+  }
 }
 
 function setupGetServerMock(client, provider, servers) {
@@ -512,6 +557,11 @@ function setupGetServerMock(client, provider, servers) {
       .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>")
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
 }
 //
@@ -568,7 +618,7 @@ function setupGetServerMock(client, provider, servers) {
 //    "the rebootServer() method": {
 //      topic: function () {
 //        var self = this;
-//        client.createServer(utile.mixin({
+//        client.createServer(_.extend({
 //            name  : "test-reboot",
 //            image : testContext.images[0].id,
 //            flavor: testContext.flavors[0].id

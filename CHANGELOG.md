@@ -1,3 +1,24 @@
+## v0.9.6
+* Fixed a long-standing bug in openstack.compute.getFlavor #292
+
+## v0.9.5
+* Openstack Network service.
+* Added support for HP Cloud provider.
+* Added support for Rackspace Storage Temporary URLs
+
+## v0.9.4
+* Added support for os-security-groups compute extension
+
+## v0.9.2
+* fixed a bug where CDN containers were broken with Rackspace CloudFiles #257
+
+## v0.9.1
+* Removing an unnecessary continuity check in openstack identity client
+* Switching Debug events to trace events
+* Be more explicit with content types for openstack authentication
+* Allow passing tenant to the context authenticator
+* Fixing the networks property to be on server options for openstack compute
+
 ## v0.9.0
 * OpenStack Documentation
 * Openstack Storage Provider
@@ -78,4 +99,3 @@
 ## v0.7.2
 * Added a pkgcloud User-Agent for outbound HTTP requests #134
 * Added tests for core compute method signatures
-

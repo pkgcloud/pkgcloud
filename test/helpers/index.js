@@ -180,6 +180,10 @@ helpers.getOpenstackAuthResponse = function (time) {
   return helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken.json', time);
 };
 
+helpers.gethpAuthResponse = function (time) {
+  return helpers._getOpenstackStandardResponse('../fixtures/hp/realToken.json', time);
+};
+
 helpers._getOpenstackStandardResponse = function(file, time) {
   if (!time) {
     time = new Date(new Date().getTime() + (1000 * 60 * 60 * 24));

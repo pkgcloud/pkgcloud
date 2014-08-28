@@ -354,13 +354,11 @@ describe('pkgcloud/rackspace/storage/containers', function () {
             'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
             date: 'Thu, 13 Jun 2013 15:18:17 GMT',
             connection: 'keep-alive' }
-        )
+          )
+          .post('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85', null, null)
+          .reply(202)
           .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
           .reply(404)
-          .post('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85', '', {
-            'x-cdn-enabled': true
-          })
-          .reply(202)
           .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
           .reply(200, '', { 'content-length': '0',
             'x-container-object-count': '144',
@@ -398,10 +396,9 @@ describe('pkgcloud/rackspace/storage/containers', function () {
         container.cdnEnabled.should.equal(false);
         should.not.exist(container.cdnUri);
 
-        container.updateCdn({ enabled: true }, function(err, container) {
+        container.updateCdn({ enabled: true }, function (err, container) {
           should.not.exist(err);
           should.exist(container);
-
           container.should.be.instanceof(Container);
 
           container.cdnEnabled.should.equal(true);

@@ -11,14 +11,14 @@ Creating a client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.storage.createClient({
-    provider: 'openstack',
-    username: 'your-user-name',
-    password: 'your-password',
-    authUrl: 'https://your-identity-service'
+    provider: 'rackspace',
+    username: 'your-rax-user-name',
+    apiKey: 'your-rax-api-key',
+    region: 'IAD'
   });
 ```
 
-Learn about [more options for creating clients](README.md) in the Openstack `storage` provider.
+Learn about [more options for creating clients](README.md) in the Openstack `storage` provider. `region` parameter can be any [Rackspace Region](http://www.rackspace.com/about/datacenters/). 
 
 ### Container Model
 
@@ -293,7 +293,7 @@ Removes the provided [`file`](#file-model) from the provided [`container`](#cont
 
 Updates the [`file`](#file-model) metadata in the the provided [`container`](#container-model).
 
-File metadata is completely replaced with each callt o updateFileMetadata. This is different than container metadata. To delete a property, just remove it from the metadata attribute on the `File` and call `updateFileMetadata`.
+File metadata is completely replaced with each call to updateFileMetadata. This is different than container metadata. To delete a property, just remove it from the metadata attribute on the `File` and call `updateFileMetadata`.
 ```javascript
 file.metadata = {
  campaign = '2011 website'

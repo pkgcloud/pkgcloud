@@ -86,7 +86,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       client.getVersion(function (err, versions) {
         should.not.exist(err);
         should.exist(versions);
-        versions.should.be.instanceOf(Array);
+        versions.should.be.an.Array;
         versions.should.have.length(1);
 
         server && server.done();

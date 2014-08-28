@@ -14,6 +14,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [DNS](#dns----beta) *(beta)*
 * [Block Storage](#block-storage----beta) *(beta)*
 * [Load Balancers](#load-balancers----beta) *(beta)*
+* [Network](#network----beta) *(beta)*
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
@@ -39,6 +40,7 @@ Currently there are six service types which are handled by pkgcloud:
 * [DNS](#dns----beta) *(beta)*
 * [Block Storage](#block-storage----beta) *(beta)*
 * [Load Balancers](#load-balancers----beta) *(beta)*
+* [Network](#network----beta) *(beta)*
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
@@ -49,13 +51,13 @@ Services provided by `pkgcloud` are exposed in two ways:
 
 * **By service type:** For example, if you wanted to create an API client to communicate with a compute service you could simply:
 
-``` js 
+``` js
   var client = require('pkgcloud').compute.createClient({
     //
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-    
+
     //
     // ... Provider specific credentials
     //
@@ -96,12 +98,14 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Amazon](docs/providers/amazon.md#using-compute)
   * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+  * [HP](docs/providers/hp/compute.md)
   * [Joyent](docs/providers/joyent.md#using-compute)
   * [Openstack](docs/providers/openstack/compute.md)
   * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
   * [Amazon](docs/providers/amazon.md#using-storage)
   * [Azure](docs/providers/azure.md#using-storage)
+  * [HP](docs/providers/hp/storage.md)
   * [Openstack](docs/providers/openstack/storage.md)
   * [Rackspace](docs/providers/rackspace/storage.md)
 * **[Database](#databases)**
@@ -116,6 +120,9 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/blockstorage.md)
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
+* **[Network](#network----beta)** *(beta)*
+    * [HP](docs/providers/hp/network.md)
+    * [Openstack](docs/providers/openstack/network.md)
 
 ## Compute
 
@@ -127,7 +134,7 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -139,6 +146,7 @@ Each compute provider takes different credentials to authenticate; these details
 * [Amazon](docs/providers/amazon.md#using-compute)
 * [Azure](docs/providers/azure.md#using-compute)
 * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
+* [HP](docs/providers/hp/compute.md)
 * [Joyent](docs/providers/joyent.md#using-compute)
 * [Openstack](docs/providers/openstack/compute.md)
 * [Rackspace](docs/providers/rackspace/compute.md)
@@ -174,7 +182,7 @@ To get started with a `pkgcloud.storage` client just create one:
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -185,6 +193,7 @@ Each storage provider takes different credentials to authenticate; these details
 
 * [Amazon](docs/providers/amazon.md#using-storage)
 * [Azure](docs/providers/azure.md#using-storage)
+* [HP](docs/providers/hp/storage.md)
 * [Openstack](docs/providers/openstack/storage.md)
 * [Rackspace](docs/providers/rackspace/storage.md)
 
@@ -209,9 +218,9 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 ``` js
   var pkgcloud = require('pkgcloud'),
       fs = require('fs');
-  
+
   var client = pkgcloud.storage.createClient({ /* ... */ });
-  
+
   fs.createReadStream('a-file.txt').pipe(client.upload({
     container: 'a-container',
     remote: 'remote-file-name.txt'
@@ -222,9 +231,9 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 ``` js
   var pkgcloud = require('pkgcloud'),
       fs = require('fs');
-  
+
   var client = pkgcloud.storage.createClient({ /* ... */ });
-  
+
   client.download({
     container: 'a-container',
     remote: 'remote-file-name.txt'
@@ -233,7 +242,7 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 
 ## Databases
 
-The `pkgcloud.database` service is designed to consistently work with a variety of Database-as-a-Service (DBaaS) providers. 
+The `pkgcloud.database` service is designed to consistently work with a variety of Database-as-a-Service (DBaaS) providers.
 
 To get started with a `pkgcloud.storage` client just create one:
 
@@ -243,7 +252,7 @@ To get started with a `pkgcloud.storage` client just create one:
     // The name of the provider (e.g. "joyent")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -285,7 +294,7 @@ To get started with a `pkgcloud.dns` client just create one:
     // The name of the provider (e.g. "rackspace")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -326,7 +335,7 @@ To get started with a `pkgcloud.blockstorage` client just create one:
     // The name of the provider (e.g. "rackspace")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -367,7 +376,7 @@ To get started with a `pkgcloud.loadbalancer` client just create one:
     // The name of the provider (e.g. "rackspace")
     //
     provider: 'provider-name',
-  
+
     //
     // ... Provider specific credentials
     //
@@ -392,6 +401,57 @@ Each instance of `pkgcloud.loadbalancer.Client` returned from `pkgcloud.loadbala
 * `client.addNodes(loadBalancer, nodes, function (err, nodes) { })`
 * `client.updateNode(loadBalancer, node, function (err) { })`
 * `client.removeNode(loadBalancer, node, function (err) { })`
+
+## Network -- Beta
+
+##### Note: Network is considered Beta until there are multiple providers; presently only HP & Openstack providers are supported.
+
+The `pkgcloud.network` service is designed to make it easy to create and manage networks.
+
+To get started with a `pkgcloud.network` client just create one:
+
+``` js
+  var client = require('pkgcloud').network.createClient({
+    //
+    // The name of the provider (e.g. "openstack")
+    //
+    provider: 'provider-name',
+
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [HP](docs/providers/hp/network.md)
+* [Openstack](docs/providers/openstack/network.md)
+
+
+Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
+
+### Networks
+* `client.getNetworks(options, function (err, networks) { })`
+* `client.getNetwork(network, function (err, network) { })`
+* `client.createNetwork(options, function (err, network) { })`
+* `client.updateNetwork(network, function (err, network) { })`
+* `client.deleteNetwork(network, function (err, networkId) { })`
+
+
+### Subnets
+* `client.getSubnets(options, function (err, subnets) { })`
+* `client.getSubnet(subnet, function (err, subnet) { })`
+* `client.createSubnet(options, function (err, subnet) { })`
+* `client.updateSubnet(subnet, function (err, subnet) { })`
+* `client.deleteSubnet(subnet, function (err, subnetId) { })`
+
+### Ports
+* `client.getPorts(options, function (err, ports) { })`
+* `client.getPort(port, function (err, port) { })`
+* `client.createPort(options, function (err, port) { })`
+* `client.updatePort(port, function (err, port) { })`
+* `client.deletePort(port, function (err, portId) { })`
 
 ## Installation
 
@@ -435,13 +495,13 @@ Also you can run the tests directly using `mocha` with `hock` enabled:
 ``` bash
 Linux/Mac - Mocha installed globally:
  $ MOCK=on mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
- 
+
 Linux/Mac - Mocha installed locally:
  $ MOCK=on node_modules/.bin/mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 
 Windows - Mocha installed globally:
  $ set MOCK=on&mocha -R spec test/*/*/*-test.js test/*/*/*/*-test.js
- 
+
 Windows - Mocha installed locally:
  $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/*/*/*-test.js test/*/*/*/*-test.js
 ```
@@ -457,7 +517,7 @@ Linux/Mac - Mocha installed locally:
 
 Windows - Mocha installed globally:
  $ set MOCK=on&mocha -R spec test/iriscouch/*/*-test.js
- 
+
 Windows - Mocha installed locally:
  $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/iriscouch/*/*-test.js
 

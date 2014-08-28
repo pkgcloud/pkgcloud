@@ -1,0 +1,16 @@
+{
+  "server": {
+    "OS-DCF:diskConfig": "MANUAL",
+    "id": "5a023de8-957b-4822-ad84-8c7a9ef83c07",
+    "links": [
+      {
+        "href": "http://compute.myownendpoint.org:8774/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07",
+        "rel": "self"
+      }, {
+        "href": "http://compute.myownendpoint.org:8774/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07",
+        "rel": "bookmark"
+      }
+    ],
+    "adminPass": "i9SaeyU3sxKX"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "tenants_links": [],
+  "tenants": [
+    {
+      "enabled": "true",
+      "description": "MOCK-USERNAME",
+      "name": "MOCK-USERNAME",
+      "id": "5ACED3DC3AA740ABAA41711243CC6949"
+    }
+  ]
+}
