@@ -442,6 +442,142 @@ describe('pkgcloud/rackspace/storage/containers', function () {
       });
     });
 
+    it('getContainer and set static website index page and error page ', function (done) {
+
+      if (mock) {
+        server
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+        )
+          .post('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85', null, null)
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-container-meta-web-index': 'index.htm',
+            'x-container-meta-web-error': 'error.htm',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+        )
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-container-meta-web-index': 'index.htm',
+            'x-container-meta-web-error': 'error.htm',
+            'x-log-retention': 'True',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25'});
+      }
+
+      client.getContainer('0.1.3-85', function (err, container) {
+        should.not.exist(err);
+        should.exist(container);
+
+        container.should.be.instanceof(Container);
+
+        (container.metadata['web-index'] == undefined).should.be.true;
+        (container.metadata['web-error'] == undefined).should.be.true;
+
+        container.setStaticWebsite({indexFile: 'index.htm', errorFile: 'error.htm'}, function (err, container) {
+          should.not.exist(err);
+          should.exist(container);
+          container.should.be.instanceof(Container);
+
+          container.metadata['web-index'].should.equal('index.htm');
+          container.metadata['web-error'].should.equal('error.htm');
+
+          server && server.done();
+          done();
+        });
+      });
+    });
+
+    it('getContainer and remove static website', function (done) {
+
+      if (mock) {
+        server
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-container-meta-web-index': 'index.htm',
+            'x-container-meta-web-error': 'error.htm',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+        )
+          .post('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85', null, null)
+          .reply(200, '', { 'content-length': '0',
+            'x-container-object-count': '144',
+            'x-container-meta-awesome': 'Tue Jun 04 2013 07:58:52 GMT-0700 (PDT)',
+            'x-timestamp': '1368837729.84945',
+            'x-container-meta-foo': 'baz',
+            'x-container-bytes-used': '134015617',
+            'content-type': 'application/json; charset=utf-8',
+            'accept-ranges': 'bytes',
+            'x-trans-id': 'txb0bcacabf853476e87f846ff0e85a22f',
+            date: 'Thu, 13 Jun 2013 15:18:17 GMT',
+            connection: 'keep-alive' }
+        )
+          .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.3-85')
+          .reply(200, '', {
+            'x-cdn-ssl-uri': 'https://c98c1215ec09a78cd287-edfcb31ae70ea7c07367728d50539bc7.ssl.cf1.rackcdn.com',
+            'x-ttl': '186400',
+            'x-log-retention': 'True',
+            'content-type': 'text/html; charset=UTF-8',
+            'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
+            'content-length': '0',
+            'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
+            date: 'Wed, 12 Jun 2013 19:04:25'});
+      }
+
+      client.getContainer('0.1.3-85', function (err, container) {
+        should.not.exist(err);
+        should.exist(container);
+
+        container.should.be.instanceof(Container);
+
+        container.metadata['web-index'].should.equal('index.htm');
+        container.metadata['web-error'].should.equal('error.htm');
+
+        container.removeStaticWebsite(function (err, container) {
+          should.not.exist(err);
+          should.exist(container);
+          container.should.be.instanceof(Container);
+
+          (container.metadata['web-index'] == undefined).should.be.true;
+          (container.metadata['web-error'] == undefined).should.be.true;
+
+          server && server.done();
+          done();
+        });
+      });
+    });
+
     it('updateContainerMetadata should throw if passed non container', function() {
       (function() {
         client.updateContainerMetadata({ name: 'foo' })
