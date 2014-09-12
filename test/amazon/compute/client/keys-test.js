@@ -1,11 +1,12 @@
 var helpers = require('../../../helpers'),
+    http = require('http'),
     should = require('should'),
     hock = require('hock'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/amazon/keys', function () {
 
-  var client, server;
+  var client, server, hockInstance;
 
   before(function (done) {
     client = helpers.createClient('amazon', 'compute');
@@ -14,20 +15,17 @@ describe('pkgcloud/amazon/keys', function () {
       return done();
     }
 
-    hock.createHock(12345, function (err, hockClient) {
-      should.not.exist(err);
-      should.exist(hockClient);
+    hockInstance = hock.createHock();
+    hockInstance.filteringRequestBody(helpers.authFilter);
 
-      server = hockClient.filteringRequestBody(helpers.authFilter);
-
-      done();
-    });
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
   });
 
   it('add KeyPair should succeed', function(done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=ImportKeyPair', {
           KeyName: 'unittest',
           PublicKeyMaterial: 'c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFDblhidGZGTTNrNExFb3hMaENGQ3lucnBibmtPYWphQ2xFUVVzdWRaazBTVWxVenl0Y2laRjArN25VaDg1VDZjZWMyNjdnazZ4ZTBZWEJqalhWc2xqcGtBVnIyc21ycFRwc2FJWk1qdXdPNlZHNFdYMG54NFhJaG1lTy9WcmdvYzY5Q0liTFJqNnkySlI1UTlaaHVqZVZJK1FZVkg3RnZ0OTZMZjh5SkN6YzRQdDZIVCswU2pudnlqSVZRTkcrWFVuS21GMWNVTGZiWTZOK2JwbUhJQWpxNW1mLzR4T2lKeHFUa0N0NmhoNGk4aE4vOHJmMzUwL0dDUE1GYTA0Umh2Si9hQVRWMmhxLzR4UXZVUXhzdzVsWnUzM3dZMENiQXI1Z3Z2bHZQd1grV0pFQjQ3RU9adEwrdm1nZVdieGJETGNFNUVaSnIxejJIV2ZSQkIweC9uQng='
@@ -41,7 +39,7 @@ describe('pkgcloud/amazon/keys', function () {
     }, function(err, data) {
       should.not.exist(err);
       data.should.equal(true);
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -49,7 +47,7 @@ describe('pkgcloud/amazon/keys', function () {
   it('destroy KeyPair should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=DeleteKeyPair', {
           KeyName: 'unittest'
         })
@@ -59,7 +57,7 @@ describe('pkgcloud/amazon/keys', function () {
     client.destroyKey('unittest', function (err, data) {
       should.not.exist(err);
       data.should.equal(true);
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -67,7 +65,7 @@ describe('pkgcloud/amazon/keys', function () {
   it('list KeyPairs should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=DescribeKeyPairs', {})
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/list-keys.xml');
     }
@@ -75,7 +73,7 @@ describe('pkgcloud/amazon/keys', function () {
     client.listKeys(function (err, data) {
       should.not.exist(err);
       data.should.be.an.Array;
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -83,7 +81,7 @@ describe('pkgcloud/amazon/keys', function () {
   it('get KeyPair should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=DescribeKeyPairs', {
           'KeyName.1': 'unittest'
         })
@@ -93,7 +91,7 @@ describe('pkgcloud/amazon/keys', function () {
     client.getKey('unittest', function (err, data) {
       should.not.exist(err);
       // TODO
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });

@@ -8,13 +8,14 @@
 
 var should = require('should'),
     hock = require('hock'),
+    http = require('http'),
     async = require('async'),
     helpers = require('../../helpers'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/databases', function() {
 
-  var client, testContext = {}, server, authServer;
+  var client, testContext = {}, hockInstance, authHockInstance, server, authServer;
 
   describe('The pkgcloud Rackspace Database client', function() {
 
@@ -25,31 +26,25 @@ describe('pkgcloud/rackspace/databases/databases', function() {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            authServer = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            server = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done);
     });
 
     it('the createDatabases() method should respond correctly', function(done) {
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -60,7 +55,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
@@ -77,8 +72,8 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          authServer && authServer.done();
-          server && server.done();
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -87,7 +82,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('create another database for pagination test should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
@@ -104,7 +99,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -113,7 +108,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the create() method should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
@@ -130,7 +125,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -157,7 +152,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the getDatabases() method should return a list of databases', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
@@ -170,7 +165,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.exist(list);
           list.should.be.an.instanceOf(Array);
           list.should.have.length(2);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -179,7 +174,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the getDatabases() method should return a list of databases with names', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
@@ -196,7 +191,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.exist(list[0])
           list[0].name.should.equal('TestDatabase');
           list[0].name.should.be.a.String;
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -205,7 +200,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the getDatabases() method with limit should respond one element', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
@@ -220,7 +215,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.exist(instances);
           instances.should.be.an.instanceOf(Array);
           instances.should.have.length(1);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -229,7 +224,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the getDatabases() method with limit should pass as third argument the offset mark', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1')
@@ -243,7 +238,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.exist(offset);
           offset.should.equal('TestDatabase');
           testContext.marker = offset;
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -252,7 +247,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the getDatabases() method with offset should respond less quantity', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?marker=TestDatabase')
@@ -266,7 +261,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
             should.exist(instances);
             instances.should.have.length(1);
             should.not.exist(offset);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
         });
       });
@@ -276,7 +271,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
       'should respond just one result with no more next points', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases?limit=1&marker=TestDatabase')
@@ -291,7 +286,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
             instances.should.be.an.Array;
             instances.should.have.length(1);
             should.not.exist(offset);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
       });
@@ -300,7 +295,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the destroyDatabase() method with first db should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
@@ -312,7 +307,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -321,7 +316,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
     it('the destroyDatabase() method with last db should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
@@ -333,7 +328,7 @@ describe('pkgcloud/rackspace/databases/databases', function() {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -346,10 +341,10 @@ describe('pkgcloud/rackspace/databases/databases', function() {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });

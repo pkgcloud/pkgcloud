@@ -11,12 +11,13 @@ var fs = require('fs'),
     should = require('should'),
     async = require('async'),
     hock = require('hock'),
+    http = require('http'),
     helpers = require('../../helpers'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/compute/images', function () {
   var client,
-      testContext = {}, authServer, server;
+      testContext = {}, authHockInstance, hockInstance, authServer, server;
 
   before(function (done) {
     client = helpers.createClient('rackspace', 'compute');
@@ -25,24 +26,18 @@ describe('pkgcloud/rackspace/compute/images', function () {
       return done();
     }
 
+    hockInstance = hock.createHock({ throwOnUnmatched: false });
+    authHockInstance = hock.createHock();
+
+    server = http.createServer(hockInstance.handler);
+    authServer = http.createServer(authHockInstance.handler);
+
     async.parallel([
       function (next) {
-        hock.createHock(12346, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          authServer = hockClient;
-          next();
-        });
+        server.listen(12345, next);
       },
       function (next) {
-        hock.createHock(12345, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          server = hockClient;
-          next();
-        });
+        authServer.listen(12346, next);
       }
     ], done);
   });
@@ -50,7 +45,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
   describe('The pkgcloud Rackspace Compute client', function () {
     before(function(done) {
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -61,7 +56,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/v2/123456/servers/detail')
           .reply(200, helpers.loadFixture('rackspace/servers.json'));
       }
@@ -71,15 +66,15 @@ describe('pkgcloud/rackspace/compute/images', function () {
         should.exist(servers);
         servers.should.be.an.Array;
         testContext.servers = servers;
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
 
     it('the createImage() method with a serverId should create a new image', function(done) {
       if (mock) {
-        server
+        hockInstance
           .post('/v2/123456/servers/a0a5f183-b94e-4a41-a854-00aa00aa00aa/action', {
             createImage: { name: 'test-img-id' }
           })
@@ -97,7 +92,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
         should.not.exist(err);
         should.exist(image);
         testContext.image = image;
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -105,14 +100,14 @@ describe('pkgcloud/rackspace/compute/images', function () {
     after(function(done) {
 
       if (mock) {
-        server
+        hockInstance
           .delete('/v2/123456/images/a52cce1f-73fa-49ed-8382-0ab1c9caa322')
           .reply(204, '', {});
       }
 
       client.destroyImage(testContext.image, function(err) {
         should.not.exist(err);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -125,10 +120,10 @@ describe('pkgcloud/rackspace/compute/images', function () {
 
     async.parallel([
       function (next) {
-        authServer.close(next);
+        server.close(next);
       },
       function (next) {
-        server.close(next);
+        authServer.close(next);
       }
     ], done)
   });

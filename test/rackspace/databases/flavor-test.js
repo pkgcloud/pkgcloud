@@ -7,14 +7,15 @@
 
 var should = require('should'),
     hock = require('hock'),
+    http = require('http'),
     async = require('async'),
     helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
     mock = !!process.env.MOCK;
 
-describe('pkgcloud/rackspace/databases/errors', function () {
+describe('pkgcloud/rackspace/databases/flavors', function () {
   var testContext = {},
-      client, authServer, server;
+      client, authHockInstance, hockInstance, server, authServer;
 
   describe('The pkgcloud Rackspace Database client', function () {
 
@@ -25,24 +26,18 @@ describe('pkgcloud/rackspace/databases/errors', function () {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            authServer = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            server = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done);
     });
@@ -50,7 +45,7 @@ describe('pkgcloud/rackspace/databases/errors', function () {
     function getFlavors(auth, callback) {
       if (mock) {
         if (auth) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -62,7 +57,7 @@ describe('pkgcloud/rackspace/databases/errors', function () {
             .reply(200, helpers.getRackspaceAuthResponse());
         }
 
-        server
+        hockInstance
           .get('/v1.0/123456/flavors')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'))
       }
@@ -79,8 +74,8 @@ describe('pkgcloud/rackspace/databases/errors', function () {
           flavor.should.be.instanceOf(Flavor);
         });
 
-        server && server.done();
-        authServer && authServer.done();
+        hockInstance && hockInstance.done();
+        authHockInstance && authHockInstance.done();
         testContext.flavors = flavors;
         done();
       });
@@ -95,14 +90,14 @@ describe('pkgcloud/rackspace/databases/errors', function () {
           flavor.ram.should.be.a.Number;
           flavor.href.should.be.a.String;
         });
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
 
     it('the getFlavor() method should return a valid flavor', function(done) {
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/flavors/3')
           .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
       }
@@ -112,7 +107,7 @@ describe('pkgcloud/rackspace/databases/errors', function () {
         should.exist(flavor);
         flavor.should.be.instanceOf(Flavor);
         flavor.id.should.equal(testContext.flavors[2].id);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -124,10 +119,10 @@ describe('pkgcloud/rackspace/databases/errors', function () {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });

@@ -13,7 +13,7 @@ var fs = require('fs'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
-    async = require('async'),
+    http = require('http'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Port = require('../../../lib/pkgcloud/core/network/port').Port,
@@ -27,7 +27,8 @@ providers.filter(function (provider) {
 
     var client = helpers.createClient(provider, 'network'),
       context = {},
-      authServer, server;
+      authServer, server,
+      authHockInstance, hockInstance;
 
     before(function (done) {
 
@@ -35,31 +36,28 @@ providers.filter(function (provider) {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock({
-            port: 12345,
-            throwOnUnmatched: false
-          }, function (err, hockClient) {
-            server = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
-      ], done);
+      ], done)
     });
 
     it('the getPorts() function should return a list of ports', function(done) {
 
       if (mock) {
         setupPortsMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -69,8 +67,8 @@ providers.filter(function (provider) {
 
         context.ports = ports;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         done();
       });
@@ -79,8 +77,8 @@ providers.filter(function (provider) {
     it('the getPort() method should get a port instance', function (done) {
       if (mock) {
         setupGetPortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, context.ports[0]);
       }
 
@@ -91,8 +89,8 @@ providers.filter(function (provider) {
         port.should.have.property('id', context.ports[0].id);
         context.currentPort = port;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
 
       });
@@ -103,8 +101,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupCreatePortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -115,8 +113,8 @@ providers.filter(function (provider) {
         should.exist(port);
         port.should.be.an.instanceOf(Port);
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -124,8 +122,8 @@ providers.filter(function (provider) {
     it('the destroyPort() method should delete a port', function (done) {
       if (mock) {
         setupDestroyPortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, context.currentPort);
       }
 
@@ -138,8 +136,8 @@ providers.filter(function (provider) {
     it('the destroyPort() method should take an id, delete a port', function (done) {
       if (mock) {
         setupDestroyPortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, context.currentPort);
       }
 
@@ -156,8 +154,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupUpdatePortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, portToUpdate);
       }
 
@@ -172,8 +170,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupPortModelCreateMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -182,8 +180,8 @@ providers.filter(function (provider) {
       port.create(function (err, createdPort) {
         should.not.exist(err);
         should.exist(createdPort);
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -196,8 +194,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupRefreshPortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, port);
       }
 
@@ -205,8 +203,8 @@ providers.filter(function (provider) {
         should.not.exist(err);
         should.exist(refreshedPort);
         refreshedPort.should.have.property('name', 'my_port');
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -218,8 +216,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupModelDestroyedPortMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, port);
       }
 
@@ -236,10 +234,10 @@ providers.filter(function (provider) {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done);
     });

@@ -9,13 +9,14 @@
 var should = require('should'),
   async = require('async'),
   hock = require('hock'),
+  http = require('http'),
   helpers = require('../../helpers'),
   User = require('../../../lib/pkgcloud/rackspace/database/user').User,
   mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/users', function () {
   var testContext = {},
-    client, authServer, server;
+    client, authHockInstance, hockInstance, authServer, server;
 
   describe('The pkgcloud Rackspace Database client', function () {
 
@@ -26,31 +27,25 @@ describe('pkgcloud/rackspace/databases/users', function () {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            authServer = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            server = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done);
     });
     
     it('the createUser() method should respond correctly', function (done) {
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -61,7 +56,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -86,8 +81,8 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          authServer && authServer.done();
-          server && server.done();
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -96,7 +91,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
     it('the createUser() method should work with databases argument', function (done) {
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -123,8 +118,8 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          authServer && authServer.done();
-          server && server.done();
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -134,7 +129,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('create an other user for test pagination should response correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -179,7 +174,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             should.not.exist(err);
             should.exist(response);
             response.statusCode.should.equal(202);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -189,7 +184,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('create multiple users in one request should response correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
@@ -231,7 +226,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.not.exist(err);
           should.exist(response);
           response.statusCode.should.equal(202);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -240,7 +235,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('create users with questionable characters should respond with error', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
       }
@@ -254,7 +249,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
         }, function (err, response) {
           should.exist(err);
           should.not.exist(response);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -263,7 +258,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('the getUsers() method should get the list of users', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
@@ -278,7 +273,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           list.forEach(function (user) {
             user.should.be.instanceOf(User);
           });
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -291,7 +286,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       before(function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
@@ -303,7 +298,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             err = e;
             list = l;
             offset = o;
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -323,7 +318,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('with offset should respond less quantity', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest')
@@ -342,7 +337,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             list.should.be.an.Array;
             list.should.have.length(2);
             should.not.exist(offset);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -351,7 +346,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('with limit and offset should responsd with just result with more next points', function(done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1&marker=joeTest')
@@ -368,7 +363,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             list.should.be.an.Array;
             list.should.have.length(1);
             should.exist(offset);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -379,7 +374,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('should respond correctly', function(done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
@@ -391,7 +386,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             should.not.exist(err);
             should.exist(response);
             response.statusCode.should.equal(202);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -400,7 +395,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
       it('should destroy the user used for pagination', function(done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
@@ -412,7 +407,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
             should.not.exist(err);
             should.exist(response);
             response.statusCode.should.equal(202);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -422,7 +417,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('the enableRoot() method should respond correctly', function(done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
@@ -444,7 +439,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           response.body.user.should.be.a.Object;
           should.exist(response.body.user.password);
           response.body.user.name.should.equal('root');
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -453,7 +448,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
     it('the enableRoot() method should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1.0/123456/instances')
           .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
@@ -466,7 +461,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
           should.exist(root);
           should.exist(response);
           response.statusCode.should.equal(200);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -479,10 +474,10 @@ describe('pkgcloud/rackspace/databases/users', function () {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });

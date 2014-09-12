@@ -10,6 +10,7 @@ var fs = require('fs'),
   qs = require('qs'),
   should = require('should'),
   helpers = require('../../helpers'),
+  http = require('http'),
   hock = require('hock'),
   async = require('async'),
   _ = require('underscore'),
@@ -23,7 +24,9 @@ providers.forEach(function (provider) {
 
     var client = helpers.createClient(provider, 'compute'),
       context = {},
-      authServer, server;
+      authServer, server,
+      authHockInstance,
+      hockInstance;
 
     before(function (done) {
 
@@ -31,21 +34,18 @@ providers.forEach(function (provider) {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock({
-            port: 12345,
-            throwOnUnmatched: false
-          }, function (err, hockClient) {
-            server = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done)
     });
@@ -54,8 +54,8 @@ providers.forEach(function (provider) {
 
       if (mock) {
         setupImagesMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -63,15 +63,14 @@ providers.forEach(function (provider) {
         should.not.exist(err);
         should.exist(images);
 
-        context.images = images
+        context.images = images;
 
         images.forEach(function(img) {
           img.should.be.instanceOf(Image);
         });
 
-
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         done();
       });
@@ -81,8 +80,8 @@ providers.forEach(function (provider) {
     it('the updateImageMeta() method should update the image metadata', function (done) {
       if (mock) {
         setupMetaMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 	
@@ -96,8 +95,8 @@ providers.forEach(function (provider) {
 
         context.currentServer = server;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
 
       });

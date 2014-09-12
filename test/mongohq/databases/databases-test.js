@@ -9,10 +9,11 @@
 var helpers = require('../../helpers'),
   should = require('should'),
   hock = require('hock'),
+  http = require('http'),
   mock = !!process.env.MOCK;
 
 describe('pkgcloud/mongohq/databases', function () {
-  var context = {}, client, server;
+  var context = {}, client, hockInstance, server;
 
   before(function (done) {
     client = helpers.createClient('mongohq', 'database');
@@ -21,19 +22,15 @@ describe('pkgcloud/mongohq/databases', function () {
       return done();
     }
 
-    hock.createHock(12345, function (err, hockClient) {
-      should.not.exist(err);
-      should.exist(hockClient);
-
-      server = hockClient;
-      done();
-    });
+    hockInstance = hock.createHock();
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
   });
 
   it('the create() method with correct options should respond correctly', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/provider/resources', "app_id=testDatabase&plan=free")
         .reply(200, helpers.loadFixture('mongohq/database.json'));
     }
@@ -50,7 +47,7 @@ describe('pkgcloud/mongohq/databases', function () {
       should.exist(database.password);
       context.databaseId = database.id;
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -58,7 +55,7 @@ describe('pkgcloud/mongohq/databases', function () {
   it('the remove() method with correct options should respond correctly', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .delete('/provider/resources/63562')
         .reply(200, "OK");
     }
@@ -68,7 +65,7 @@ describe('pkgcloud/mongohq/databases', function () {
       should.exist(confirm);
       confirm.should.equal('deleted');;
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });

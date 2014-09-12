@@ -11,6 +11,7 @@ var helpers = require('../../../helpers');
 var should = require('should'),
     async = require('async'),
     hock = require('hock'),
+    http = require('http'),
     mock = !!process.env.MOCK;
 
 
@@ -20,7 +21,7 @@ var options = {};
 
   describe('pkgcloud/common/compute/server[openstack]', function () {
 
-    var authServer, server;
+    var authHockInstance, hockInstance, authServer, server;
 
     before(function (done) {
 
@@ -28,28 +29,25 @@ var options = {};
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock({
-            port: 12345,
-            throwOnUnmatched: false
-          }, function (err, hockClient) {
-            server = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the server.startServer() method should start a server instance', function (done) {
       if (mock) {
-		authServer
+		authHockInstance
 		  .post('/v2.0/tokens', {
 			auth: {
 			  passwordCredentials: {
@@ -72,7 +70,7 @@ var options = {};
 		  })
 		  .reply(200, helpers.getOpenstackAuthResponse());
 
-		server
+		hockInstance
 		  .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action', {"os-start":null})
 		  .reply(202, '');
 	  }
@@ -80,8 +78,8 @@ var options = {};
       client.startServer('a2e90ecb69c44d0296072ea39e53704a', function (err) {
         should.not.exist(err);
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         done();
       });
@@ -96,10 +94,10 @@ var options = {};
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });

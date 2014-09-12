@@ -3,10 +3,11 @@ var identity = require('../../../lib/pkgcloud/openstack/identity'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
+    http = require('http'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/openstack/identity', function () {
-  var server, adminServer;
+  var hockInstance, adminHockInstance, server, adminServer;
 
   before(function (done) {
 
@@ -14,32 +15,27 @@ describe('pkgcloud/openstack/identity', function () {
       return done();
     }
 
+    hockInstance = hock.createHock({ throwOnUnmatched: false });
+    adminHockInstance = hock.createHock();
+
+    server = http.createServer(hockInstance.handler);
+    adminServer = http.createServer(adminHockInstance.handler);
+
     async.parallel([
-      function(next) {
-        hock.createHock(12346, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          server = hockClient;
-          next();
-        });
+      function (next) {
+        server.listen(12346, next);
       },
-      function(next) {
-        hock.createHock(12347, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          adminServer = hockClient;
-          next();
-        });
-      }], done);
+      function (next) {
+        adminServer.listen(12347, next);
+      }
+    ], done);
   });
 
   describe('the pkgcloud openstack identity.createIdentity() function', function() {
     it('with valid inputs should return an identity', function(done) {
 
       if (mock) {
-        server
+        hockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -72,7 +68,7 @@ describe('pkgcloud/openstack/identity', function () {
 
       client.auth(function(err) {
         should.not.exist(err);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -80,7 +76,7 @@ describe('pkgcloud/openstack/identity', function () {
     it('with no tenants listed from /v2.0/tenants should return an error', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -104,14 +100,14 @@ describe('pkgcloud/openstack/identity', function () {
         should.exist(err);
         err.message.should.equal('Unable to find tenants');
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
 
     it('user token should validate with admin token', function(done) {
       if (mock) {
-        server
+        hockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -135,7 +131,7 @@ describe('pkgcloud/openstack/identity', function () {
           .reply(200, helpers.getOpenstackAuthResponse());
 
 
-        adminServer
+        adminHockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -191,7 +187,7 @@ describe('pkgcloud/openstack/identity', function () {
 
     it('get the tenant info with admin token', function(done) {
       if (mock) {
-        server
+        hockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -215,7 +211,7 @@ describe('pkgcloud/openstack/identity', function () {
           .reply(200, helpers.getOpenstackAuthResponse())
 
 
-        adminServer
+        adminHockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -288,7 +284,7 @@ describe('pkgcloud/openstack/identity', function () {
     it('with no active tenants listed from /v2.0/tenants should return an error', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .post('/v2.0/tokens', {
             auth: {
               passwordCredentials: {
@@ -313,7 +309,7 @@ describe('pkgcloud/openstack/identity', function () {
         should.exist(err);
         err.message.should.equal('Unable to find an active tenant');
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });

@@ -1,11 +1,12 @@
 var helpers = require('../../../helpers'),
+    http = require('http'),
     should = require('should'),
     hock = require('hock'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/amazon/groups', function () {
 
-  var client, server;
+  var client, server, hockInstance;
 
   before(function (done) {
     client = helpers.createClient('amazon', 'compute');
@@ -14,20 +15,17 @@ describe('pkgcloud/amazon/groups', function () {
       return done();
     }
 
-    hock.createHock(12345, function (err, hockClient) {
-      should.not.exist(err);
-      should.exist(hockClient);
+    hockInstance = hock.createHock();
+    hockInstance.filteringRequestBody(helpers.authFilter);
 
-      server = hockClient.filteringRequestBody(helpers.authFilter);
-
-      done();
-    });
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
   });
 
   it('add SecurityGroup should succeed', function(done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=CreateSecurityGroup', {
           GroupDescription: 'unit test',
           GroupName: 'unit test'
@@ -41,7 +39,7 @@ describe('pkgcloud/amazon/groups', function () {
     }, function(err, data) {
       should.not.exist(err);
       data.should.equal(true);
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -49,7 +47,7 @@ describe('pkgcloud/amazon/groups', function () {
   it('destroy SecurityGroup should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=DeleteSecurityGroup', {
           GroupName: 'unit test'
         })
@@ -59,7 +57,7 @@ describe('pkgcloud/amazon/groups', function () {
     client.destroyGroup('unit test', function (err, data) {
       should.not.exist(err);
       data.should.equal(true);
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -67,7 +65,7 @@ describe('pkgcloud/amazon/groups', function () {
   it('list SecurityGroups should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=DescribeSecurityGroups', {})
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/list-groups.xml');
     }
@@ -75,7 +73,7 @@ describe('pkgcloud/amazon/groups', function () {
     client.listGroups(function (err, data) {
       should.not.exist(err);
       data.should.be.an.Array;
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -83,7 +81,7 @@ describe('pkgcloud/amazon/groups', function () {
   it('get SecurityGroup should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=DescribeSecurityGroups', {
           'GroupName.1': 'unit test'
         })
@@ -93,7 +91,7 @@ describe('pkgcloud/amazon/groups', function () {
     client.getGroup('unit test', function (err, data) {
       should.not.exist(err);
       // TODO
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -101,7 +99,7 @@ describe('pkgcloud/amazon/groups', function () {
   it('add Rules should succeed', function(done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=AuthorizeSecurityGroupIngress', {
           GroupName: 'unit test',
           'IpPermissions.1.FromPort': '0',
@@ -123,7 +121,7 @@ describe('pkgcloud/amazon/groups', function () {
     }, function(err, data) {
       should.not.exist(err);
       data.should.equal(true);
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -131,7 +129,7 @@ describe('pkgcloud/amazon/groups', function () {
   it('delete Rules should succeed', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/?Action=RevokeSecurityGroupIngress', {
           GroupName: 'unit test',
           'IpPermissions.1.FromPort': '0',
@@ -153,7 +151,7 @@ describe('pkgcloud/amazon/groups', function () {
     }, function (err, data) {
       should.not.exist(err);
       data.should.equal(true);
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
