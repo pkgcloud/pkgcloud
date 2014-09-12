@@ -6,6 +6,7 @@
 */
 
 var helpers = require('../../helpers'),
+    http = require('http'),
     should = require('should'),
     urlJoin = require('url-join'),
     hock = require('hock'),
@@ -13,7 +14,7 @@ var helpers = require('../../helpers'),
 
 describe('pkgcloud/azure/databases', function () {
 
-  var client, server, testContext = {};
+  var client, server, testContext = {}, hockInstance;
 
   before(function (done) {
     client = helpers.createClient('azure', 'database');
@@ -31,21 +32,18 @@ describe('pkgcloud/azure/databases', function () {
           : options.path));
     };
 
-    hock.createHock(12345, function (err, hockClient) {
-      should.not.exist(err);
-      should.exist(hockClient);
+    hockInstance = hock.createHock();
+    hockInstance.filteringRequestBodyRegEx(/.*/, '*');
 
-      server = hockClient.filteringRequestBodyRegEx(/.*/, '*');
-
-      done();
-    });
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
   });
 
   describe('the pkgcloud azure db client', function() {
     it('the create() method with correct options should respond correctly', function(done) {
 
       if (mock) {
-        server
+        hockInstance
           .post('/Tables', '*')
           .replyWithFile(201, __dirname + '/../../fixtures/azure/database/createTableResponse.xml');
       }
@@ -61,7 +59,7 @@ describe('pkgcloud/azure/databases', function () {
         database.password.should.equal('');
         testContext.databaseId = database.id;
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -85,7 +83,7 @@ describe('pkgcloud/azure/databases', function () {
     it('the list() method with correct options should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/Tables')
           .replyWithFile(201, __dirname + '/../../fixtures/azure/database/listTables.xml');
       }
@@ -96,7 +94,7 @@ describe('pkgcloud/azure/databases', function () {
         databases.should.be.an.Array;
         databases.should.have.length(1);
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -104,7 +102,7 @@ describe('pkgcloud/azure/databases', function () {
     it('the remove() method with correct options should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .delete("/Tables%28%27testDatabase%27%29")
           .reply(204, '', {'content-length': '0'});
       }
@@ -112,7 +110,7 @@ describe('pkgcloud/azure/databases', function () {
       client.remove(testContext.databaseId, function (err, result) {
         should.not.exist(err);
         result.should.equal(true);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });

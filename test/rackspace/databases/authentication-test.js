@@ -10,11 +10,12 @@ var should = require('should'),
     macros = require('../macros'),
     async = require('async'),
     hock = require('hock'),
+    http = require('http'),
     helpers = require('../../helpers'),
     mock = process.env.MOCK;
 
 describe('pkgcloud/rackspace/database/authentication', function() {
-  var client, testContext = {}, authServer, server;
+  var client, testContext = {}, authHockInstance, hockInstance, authServer, server;
 
   before(function(done) {
     client = helpers.createClient('rackspace', 'database');
@@ -23,27 +24,20 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       return done();
     }
 
+    hockInstance = hock.createHock({ throwOnUnmatched: false });
+    authHockInstance = hock.createHock();
+
+    server = http.createServer(hockInstance.handler);
+    authServer = http.createServer(authHockInstance.handler);
+
     async.parallel([
-      function(next) {
-        hock.createHock(12346, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          authServer = hockClient;
-          next();
-        });
+      function (next) {
+        server.listen(12345, next);
       },
-      function(next) {
-        hock.createHock(12345, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          server = hockClient;
-          next();
-        });
+      function (next) {
+        authServer.listen(12346, next);
       }
-    ], done)
-
+    ], done);
   });
 
   describe('The pkgcloud Rackspace Database client', function() {
@@ -53,7 +47,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
     it('the getVersion() method should return the proper version', function(done) {
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -64,7 +58,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/')
           .reply(200, {
             versions: [
@@ -89,8 +83,8 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         versions.should.be.an.Array;
         versions.should.have.length(1);
 
-        server && server.done();
-        authServer && authServer.done();
+        hockInstance && hockInstance.done();
+        authHockInstance && authHockInstance.done();
         done();
       });
     });
@@ -103,7 +97,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       beforeEach(function(done) {
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -117,7 +111,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
         client.auth(function (e) {
           err = e;
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
 
@@ -154,7 +148,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       beforeEach(function (done) {
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -172,7 +166,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
         badClient.auth(function (e) {
           err = e;
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
       });
@@ -191,10 +185,10 @@ describe('pkgcloud/rackspace/database/authentication', function() {
 
     async.parallel([
       function (next) {
-        authServer.close(next);
+        server.close(next);
       },
       function (next) {
-        server.close(next);
+        authServer.close(next);
       }
     ], done)
   });

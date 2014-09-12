@@ -9,10 +9,11 @@
 var helpers = require('../../helpers'),
     should  = require('should'),
     hock    = require('hock'),
+    http    = require('http'),
     mock    = !!process.env.MOCK;
 
 describe('pkgcloud/iriscouch/databases-redis', function () {
-  var context = {}, client, server;
+  var context = {}, client, hockInstance, server;
 
   before(function (done) {
     client = helpers.createClient('iriscouch', 'database');
@@ -21,13 +22,9 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
       return done();
     }
 
-    hock.createHock(12345, function (err, hockClient) {
-      should.not.exist(err);
-      should.exist(hockClient);
-
-      server = hockClient;
-      done();
-    });
+    hockInstance = hock.createHock();
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
   });
 
   it('the create() method with correct options should respond correctly', function(done) {
@@ -35,7 +32,7 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
     context.tempPassword = (mock ? 'sTTi:lh9vCF[' : randomPassword(12).replace("\\", ""));
     
     if (mock) {
-      server
+      hockInstance
         .post('/hosting_public', helpers.loadFixture('iriscouch/database-redis.json'))
         .reply(201, { ok: true,
           id: 'Redis/nodejitsudb43639',
@@ -58,7 +55,7 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
       context.databaseId = database.id;
       database.password.should.equal([database.host, context.tempPassword].join(':'));
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });

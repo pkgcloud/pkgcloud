@@ -9,22 +9,23 @@
 var should  = require('should'),
     helpers = require('../../helpers'),
     hock    = require('hock'),
+    http    = require('http'),
     mock    = !!process.env.MOCK;
 
 describe('pkgcloud/redistogo/databases', function () {
   var testContext = {},
       client = helpers.createClient('redistogo', 'database'),
-      server = null;
+      hockInstance = null,
+      server;
 
   before(function(done) {
     if (!mock) {
       return done();
     }
 
-    hock.createHock(12345, function(err, hockClient) {
-      server = hockClient;
-      done();
-    });
+    hockInstance = hock.createHock();
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
 
   });
 
@@ -33,7 +34,7 @@ describe('pkgcloud/redistogo/databases', function () {
       it('with correct options should respond correctly', function(done) {
 
         if (mock) {
-          server
+          hockInstance
             .post('/instances.json', "instance%5Bplan%5D=nano")
             .replyWithFile(201, __dirname + '/../../fixtures/redistogo/database.json');
         }
@@ -46,7 +47,7 @@ describe('pkgcloud/redistogo/databases', function () {
           should.exist(database.username);
           should.exist(database.password);
           testContext.databaseId = database.id;
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -63,7 +64,7 @@ describe('pkgcloud/redistogo/databases', function () {
     describe('the get() method', function() {
       it('with correct options should respond correctly', function(done) {
         if (mock) {
-          server
+          hockInstance
             .get('/instances/253739.json')
             .replyWithFile(200, __dirname + '/../../fixtures/redistogo/database.json');
         }
@@ -75,7 +76,7 @@ describe('pkgcloud/redistogo/databases', function () {
           should.exist(database.uri);
           should.exist(database.username);
           should.exist(database.password);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -92,7 +93,7 @@ describe('pkgcloud/redistogo/databases', function () {
     describe('the remove() method', function () {
       it('with correct options should respond correctly', function (done) {
         if (mock) {
-          server
+          hockInstance
             .delete('/instances/253739.json')
             .reply(200);
         }
@@ -101,7 +102,7 @@ describe('pkgcloud/redistogo/databases', function () {
           should.not.exist(err);
           should.exist(confirm);
           confirm.should.equal('deleted');
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -117,7 +118,7 @@ describe('pkgcloud/redistogo/databases', function () {
   });
 
   after(function(done) {
-    if (server) {
+    if (hockInstance) {
       server.close(function() {
         done();
       });

@@ -12,6 +12,7 @@ var path = require('path'),
   pkgcloud = require('../../../lib/pkgcloud'),
   helpers = require('../../helpers'),
   async = require('async'),
+  http = require('http'),
   hock = require('hock'),
   File = require('../../../lib/pkgcloud/core/storage/file').File,
   mock = !!process.env.MOCK,
@@ -24,7 +25,7 @@ if (!mock) {
 describe('pkgcloud/rackspace/storage/storage-object', function () {
   describe('The pkgcloud Rackspace Storage client', function () {
 
-    var client, server, authServer;
+    var client, hockInstance, authHockInstance, server, authServer;
 
     /**
      * Generates a container file list response of specified size for large container tests.
@@ -60,24 +61,18 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            authServer = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            server = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done);
     });
@@ -85,7 +80,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
     it('getFiles should return a list of files', function (done) {
 
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -96,7 +91,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getFiles.json');
       }
@@ -108,8 +103,8 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         files.forEach(function (f) {
           f.should.be.instanceof(File);
         });
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -120,7 +115,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         return done();
       }
 
-      server
+      hockInstance
         .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
         .reply(200, generateFilesResponse(0, 10000));
 
@@ -128,7 +123,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         should.not.exist(err);
         should.exist(files);
         files.length.should.equal(10000);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -136,7 +131,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
     it('getFiles with limit should return reduced set', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&limit=3')
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getContainersLimit.json');
       }
@@ -148,7 +143,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         files.forEach(function (f) {
           f.should.be.instanceof(File);
         });
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -159,7 +154,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         return done();
       }
 
-      server
+      hockInstance
         .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
         .reply(200, generateFilesResponse(0, 10000))
         .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
@@ -171,7 +166,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         should.not.exist(err);
         should.exist(files);
         files.should.have.length(23400);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -182,7 +177,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         return done();
       }
 
-      server
+      hockInstance
         .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json')
         .reply(200, generateFilesResponse(0, 10000))
         .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=FILE09999')
@@ -194,7 +189,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         should.not.exist(err);
         should.exist(files);
         files.should.have.length(20000);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -202,7 +197,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
     it('getFiles with marker should start offset appropriately', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&marker=ubuntu-10.04-x86_64%2Fconf%2Fdistributions')
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getFilesMarker.json');
       }
@@ -214,7 +209,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         files.forEach(function (f) {
           f.should.be.instanceof(File);
         });
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -222,7 +217,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
     it('getFiles with marker and limit should start offset appropriately', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215?format=json&limit=4&marker=CHANGELOG')
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/getFilesLimitMarker.json');
       }
@@ -234,14 +229,14 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         files.forEach(function (f) {
           f.should.be.instanceof(File);
         });
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
 
     it('getFile should URL encode the file name', function (done) {
       if (mock) {
-        server
+        hockInstance
           .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/0.1.7-215/~!%40%23%24%25%5E%26*()_%2B/~!%40%23%24%25%5E%26*()_%2B?format=json')
           .reply(200);
       }
@@ -250,7 +245,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         should.not.exist(err);
         should.exist(file);
         file.should.be.instanceof(File);
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -262,7 +257,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
       fs.writeFileSync(tmp, new Buffer(data, "base64"));
       
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -273,7 +268,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?extract-archive=tar.gz', new Buffer(data, "base64").toString())
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/extract.json');
       }
@@ -285,7 +280,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
       }, function(e, ok, resp) {
         should.not.exist(e);
         should.exist(resp);
-        server && server.done();
+        hockInstance && hockInstance.done();
         
         fs.unlinkSync(tmp);
         done();
@@ -301,10 +296,10 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });

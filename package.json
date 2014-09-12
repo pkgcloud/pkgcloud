@@ -40,7 +40,7 @@
     "url-join":      "0.0.x"
   },
   "devDependencies": {
-    "hock" : "0.2.x",
+    "hock" : "1.0.x",
     "mocha": "1.21.x",
     "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",

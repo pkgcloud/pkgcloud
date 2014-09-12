@@ -8,12 +8,13 @@
 var should = require('should'),
     async = require('async'),
     hock = require('hock'),
+    http = require('http'),
     macros = require('../macros'),
     helpers = require('../../helpers'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/hp/network/authentication', function () {
-  var client, authServer, server;
+  var client, authHockInstance, hockInstance, authServer, server;
 
   describe('The pkgcloud hp network client', function () {
 
@@ -24,26 +25,20 @@ describe('pkgcloud/hp/network/authentication', function () {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
-          function (next) {
-            hock.createHock(12346, function (err, hockClient) {
-              should.not.exist(err);
-              should.exist(hockClient);
-
-              authServer = hockClient;
-              next();
-            });
-          },
-          function (next) {
-            hock.createHock(12345, function (err, hockClient) {
-              should.not.exist(err);
-              should.exist(hockClient);
-
-              server = hockClient;
-              next();
-            });
-          }
-        ], done);
+        function (next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
     });
 
     it('should have core methods defined', function() {
@@ -57,7 +52,7 @@ describe('pkgcloud/hp/network/authentication', function () {
 
         client = helpers.createClient('hp', 'compute');
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'apiAccessKeyCredentials': {
@@ -71,7 +66,7 @@ describe('pkgcloud/hp/network/authentication', function () {
 
         client.auth(function (e) {
           should.not.exist(e);
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
       });
@@ -96,7 +91,7 @@ describe('pkgcloud/hp/network/authentication', function () {
       beforeEach(function (done) {
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'apiAccessKeyCredentials': {
@@ -114,7 +109,7 @@ describe('pkgcloud/hp/network/authentication', function () {
 
         badClient.auth(function (e) {
           err = e;
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
 
@@ -146,7 +141,7 @@ describe('pkgcloud/hp/network/authentication', function () {
 
           tokenExpiry = response.access.token.expires;
 
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'apiAccessKeyCredentials': {
@@ -160,7 +155,7 @@ describe('pkgcloud/hp/network/authentication', function () {
 
         client.auth(function (e) {
           should.not.exist(e);
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
       });
@@ -180,7 +175,7 @@ describe('pkgcloud/hp/network/authentication', function () {
       it('should expire the token and reauth on next call', function (done) {
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'apiAccessKeyCredentials': {
@@ -191,7 +186,7 @@ describe('pkgcloud/hp/network/authentication', function () {
             })
             .reply(200, helpers.gethpAuthResponse());
 
-          server
+          hockInstance
             .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail')
             .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
         }
@@ -202,8 +197,8 @@ describe('pkgcloud/hp/network/authentication', function () {
             client._isAuthorized().should.equal(true);
             should.not.exist(err);
             should.exist(images);
-            server && server.done();
-            authServer && authServer.done();
+            hockInstance && hockInstance.done();
+            authHockInstance && authHockInstance.done();
             done();
           });
         }, 5);
@@ -217,10 +212,10 @@ describe('pkgcloud/hp/network/authentication', function () {
 
       async.parallel([
           function (next) {
-            authServer.close(next);
+            server.close(next);
           },
           function (next) {
-            server.close(next);
+            authServer.close(next);
           }
         ], done);
     });

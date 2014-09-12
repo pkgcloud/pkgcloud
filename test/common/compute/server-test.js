@@ -12,6 +12,7 @@ var fs = require('fs'),
     util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
+    http = require('http'),
     hock = require('hock'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
@@ -30,7 +31,9 @@ providers.forEach(function (provider) {
 
     var client = helpers.createClient(provider, 'compute'),
       context = {},
-      authServer, server;
+      authServer, server,
+      authHockInstance,
+      hockInstance;
 
     before(function (done) {
 
@@ -38,21 +41,18 @@ providers.forEach(function (provider) {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock({
-            port: 12345,
-            throwOnUnmatched: false
-          }, function (err, hockClient) {
-            server = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done)
     });
@@ -61,8 +61,8 @@ providers.forEach(function (provider) {
 
       if (mock) {
         setupImagesMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -70,10 +70,10 @@ providers.forEach(function (provider) {
         should.not.exist(err);
         should.exist(images);
 
-        context.images = images
+        context.images = images;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         done();
       });
@@ -83,8 +83,8 @@ providers.forEach(function (provider) {
 
       if (mock) {
         setupFlavorMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -92,10 +92,10 @@ providers.forEach(function (provider) {
         should.not.exist(err);
         should.exist(flavors);
 
-        context.flavors = flavors
+        context.flavors = flavors;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         done();
       });
@@ -106,8 +106,8 @@ providers.forEach(function (provider) {
 
       if (mock) {
         setupServerMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -126,8 +126,8 @@ providers.forEach(function (provider) {
           srv2.name.should.equal('create-test-ids2');
           srv2.imageId.should.equal(context.images[0].id);
 
-          authServer && authServer.done();
-          server && server.done();
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -136,8 +136,8 @@ providers.forEach(function (provider) {
     it('the getServers() method should return a list of servers', function (done) {
       if (mock) {
         setupGetServersMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -151,8 +151,8 @@ providers.forEach(function (provider) {
           srv.should.be.instanceOf(Server);
         });
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
 
       });
@@ -161,8 +161,8 @@ providers.forEach(function (provider) {
     it.skip('the getServer() method should get a server instance', function (done) {
       if (mock) {
         setupGetServerMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -172,10 +172,10 @@ providers.forEach(function (provider) {
 
         srv.should.be.instanceOf(Server);
 
-        context.currentServer = server;
+        context.currentServer = hockInstance;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
 
       });
@@ -184,8 +184,8 @@ providers.forEach(function (provider) {
     it.skip('the server.rebootServer() method should restart a server instance', function (done) {
       if (mock) {
         setupRebootMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -197,8 +197,8 @@ providers.forEach(function (provider) {
     it.skip('the destroyServer() method should delete a server instance', function (done) {
       if (mock) {
         setupRebootMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 

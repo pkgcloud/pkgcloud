@@ -10,6 +10,7 @@ var should = require('should'),
     helpers = require('../../helpers'),
     async = require('async'),
     hock = require('hock'),
+    http = require('http'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/hp/storage/authentication', function () {
@@ -21,23 +22,22 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
     describe('the auth() method', function() {
       describe('with a valid user name and api key', function() {
-        var authServer;
+        var authHockInstance, authServer
 
         before(function(done) {
           if (!mock) {
             return done();
           }
 
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            done();
-          });
+          authHockInstance = hock.createHock();
+          authServer = http.createServer(authHockInstance.handler);
+          authServer.listen(12346, done);
         });
 
         it('should respond with 204 and appropriate info', function (done) {
 
           if (mock) {
-            authServer
+            authHockInstance
               .post('/v2.0/tokens', {
                 auth: {
                   'apiAccessKeyCredentials': {
@@ -53,14 +53,14 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
           client.auth(function (err) {
             should.not.exist(err);
-            authServer && authServer.done();
+            authHockInstance && authHockInstance.done();
             done();
           });
         });
 
         it('should update the config with appropriate urls', function (done) {
           if (mock) {
-            authServer
+            authHockInstance
               .post('/v2.0/tokens', {
                 auth: {
                   'apiAccessKeyCredentials': {
@@ -76,7 +76,7 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
           client.auth(function (err) {
             should.not.exist(err);
-            authServer && authServer.done();
+            authHockInstance && authHockInstance.done();
             done();
           });
         });
@@ -94,23 +94,22 @@ describe('pkgcloud/hp/storage/authentication', function () {
       });
 
       describe('with an invalid user name and api key shouldn\'t authenticate', function () {
-        var authServer;
+        var authHockInstance, authServer;
 
         before(function (done) {
           if (!mock) {
             return done();
           }
 
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            done();
-          });
+          authHockInstance = hock.createHock();
+          authServer = http.createServer(authHockInstance.handler);
+          authServer.listen(12346, done);
         });
 
         it('should respond with 401 unauthorized', function (done) {
 
           if (mock) {
-            authServer
+            authHockInstance
               .post('/v2.0/tokens', {
                 auth: {
                   'apiAccessKeyCredentials': {
@@ -136,7 +135,7 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
           badClient.auth(function (err, res) {
             should.exist(err);
-            authServer && authServer.done();
+            authHockInstance && authHockInstance.done();
             done();
           });
         });

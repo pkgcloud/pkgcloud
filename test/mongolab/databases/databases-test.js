@@ -9,10 +9,11 @@
 var helpers = require('../../helpers'),
     should = require('should'),
     hock = require('hock'),
+    http = require('http'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/mongolab/databases', function () {
-  var context = {}, client, server;
+  var context = {}, client, hockInstance, server;
 
   before(function (done) {
     client = helpers.createClient('mongolab', 'database');
@@ -21,19 +22,15 @@ describe('pkgcloud/mongolab/databases', function () {
       return done();
     }
 
-    hock.createHock(12345, function (err, hockClient) {
-      should.not.exist(err);
-      should.exist(hockClient);
-
-      server = hockClient;
-      done();
-    });
+    hockInstance = hock.createHock();
+    server = http.createServer(hockInstance.handler);
+    server.listen(12345, done);
   });
 
   it('the createAccount() method with correct options should respond correctly', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/api/1/partners/nodejitsu/accounts', {
           name: 'nodejitsu_daniel',
           adminUser: {
@@ -55,7 +52,7 @@ describe('pkgcloud/mongolab/databases', function () {
       should.exist(response.account.password);
       context.account = response.account;
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -122,7 +119,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('with numbers should respond with success', function(done) {
       
       if (mock) {
-        server
+        hockInstance
           .post('/api/1/partners/nodejitsu/accounts', {
             name: 'nodejitsu_custompassword',
             adminUser: {
@@ -145,7 +142,7 @@ describe('pkgcloud/mongolab/databases', function () {
         should.exist(response.account.email);
         context.custompw = response.account;
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -154,7 +151,7 @@ describe('pkgcloud/mongolab/databases', function () {
   it('the getAccounts() method should respond with all accounts', function(done) {
     
     if (mock) {
-      server
+      hockInstance
         .get('/api/1/partners/nodejitsu/accounts')
         .reply(200, helpers.loadFixture('mongolab/userList.json'))
     }
@@ -169,7 +166,7 @@ describe('pkgcloud/mongolab/databases', function () {
         should.exist(account.email);
       });
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -177,7 +174,7 @@ describe('pkgcloud/mongolab/databases', function () {
   it('the getAccount() method should return the matching account', function(done) {
 
     if (mock) {
-      server
+      hockInstance
         .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
         .reply(200, {
           name: 'nodejitsu_daniel',
@@ -194,7 +191,7 @@ describe('pkgcloud/mongolab/databases', function () {
       account.username.should.equal(context.account.username);
       account.email.should.equal(context.account.email);
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
     
@@ -203,7 +200,7 @@ describe('pkgcloud/mongolab/databases', function () {
   it('the create() method with correct options should respond correctly', function (done) {
 
     if (mock) {
-      server
+      hockInstance
         .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', helpers.loadFixture('mongolab/reqDatabase.json'))
         .reply(200, helpers.loadFixture('mongolab/database.json'));
     }
@@ -221,7 +218,7 @@ describe('pkgcloud/mongolab/databases', function () {
       should.exist(database.password);
       context.databaseId = database.id;
 
-      server && server.done();
+      hockInstance && hockInstance.done();
       done();
     });
   });
@@ -256,7 +253,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('with valid options should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
           .reply(200, [ { name : 'nodejitsu_daniel_testDatabase' } ]);
       }
@@ -270,7 +267,7 @@ describe('pkgcloud/mongolab/databases', function () {
         databases[0].name.should.equal(context.account.username + '_testDatabase');
         context.databaseName = databases[0].name;
         
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -289,7 +286,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('with valid options should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
           .reply(200, { name : 'nodejitsu_daniel_testDatabase' });
       }
@@ -303,7 +300,7 @@ describe('pkgcloud/mongolab/databases', function () {
           database.should.be.a.Object;
           database.name.should.equal(context.account.username + '_testDatabase');
 
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
     });
@@ -340,7 +337,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('with valid options should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
           .reply(200, " null ")
       }
@@ -351,7 +348,7 @@ describe('pkgcloud/mongolab/databases', function () {
         function (err) {
           should.not.exist(err);
 
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
     });
@@ -359,7 +356,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('and have no databases left after getDatabases()', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .get('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases')
           .reply(200, []);
       }
@@ -370,7 +367,7 @@ describe('pkgcloud/mongolab/databases', function () {
         databases.should.be.an.Array;
         databases.should.have.length(0);
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -407,7 +404,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('with valid options should respond correctly', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
           .reply(200, " null ")
       }
@@ -416,7 +413,7 @@ describe('pkgcloud/mongolab/databases', function () {
         function (err) {
           should.not.exist(err);
 
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
     });
@@ -424,7 +421,7 @@ describe('pkgcloud/mongolab/databases', function () {
     it('and delete the other account', function (done) {
 
       if (mock) {
-        server
+        hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_custompassword')
           .reply(200, " null ");
       }
@@ -432,7 +429,7 @@ describe('pkgcloud/mongolab/databases', function () {
       client.deleteAccount(context.custompw.username, function (err, databases) {
         should.not.exist(err);
 
-        server && server.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });

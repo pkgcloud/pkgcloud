@@ -12,8 +12,8 @@ var fs = require('fs'),
     util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
+    http = require('http'),
     hock = require('hock'),
-    async = require('async'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Subnet = require('../../../lib/pkgcloud/core/network/subnet').Subnet,
@@ -27,7 +27,8 @@ providers.filter(function (provider) {
 
     var client = helpers.createClient(provider, 'network'),
       context = {},
-      authServer, server;
+      authServer, server,
+      authHockInstance, hockInstance;
 
     before(function (done) {
 
@@ -35,31 +36,28 @@ providers.filter(function (provider) {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock({
-            port: 12345,
-            throwOnUnmatched: false
-          }, function (err, hockClient) {
-            server = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            authServer = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
-      ], done);
+      ], done)
     });
 
     it('the getSubnets() function should return a list of subnets', function(done) {
 
       if (mock) {
         setupSubnetsMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -69,8 +67,8 @@ providers.filter(function (provider) {
 
         context.subnets = subnets;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         done();
       });
@@ -79,8 +77,8 @@ providers.filter(function (provider) {
     it('the getSubnet() method should get a subnet instance', function (done) {
       if (mock) {
         setupGetSubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         },context.subnets[0]);
       }
 
@@ -91,8 +89,8 @@ providers.filter(function (provider) {
         subnet.should.have.property('id', context.subnets[0].id);
         context.currentSubnet = subnet;
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
 
       });
@@ -103,8 +101,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupCreateSubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -115,8 +113,8 @@ providers.filter(function (provider) {
         should.exist(subnet);
         subnet.should.be.an.instanceOf(Subnet);
 
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -124,8 +122,8 @@ providers.filter(function (provider) {
     it('the destroySubnet() method should delete a subnet', function (done) {
       if (mock) {
         setupDestroySubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, context.currentSubnet);
       }
 
@@ -138,8 +136,8 @@ providers.filter(function (provider) {
     it('the destroySubnet() method should take an id, delete a subnet', function (done) {
       if (mock) {
         setupDestroySubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, context.currentSubnet);
       }
 
@@ -156,8 +154,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupUpdateSubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, subnetToUpdate);
       }
 
@@ -172,8 +170,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupSubnetModelCreateMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         });
       }
 
@@ -182,8 +180,8 @@ providers.filter(function (provider) {
       subnet.create(function (err, createdSubnet) {
         should.not.exist(err);
         should.exist(createdSubnet);
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -196,8 +194,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupRefreshSubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, subnet);
       }
 
@@ -205,8 +203,8 @@ providers.filter(function (provider) {
         should.not.exist(err);
         should.exist(refreshedSubnet);
         refreshedSubnet.should.have.property('name', 'my_subnet');
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -218,8 +216,8 @@ providers.filter(function (provider) {
 
       if (mock) {
         setupModelDestroyedSubnetMock(client, provider, {
-          authServer: authServer,
-          server: server
+          authServer: authHockInstance,
+          server: hockInstance
         }, subnet);
       }
 
@@ -236,10 +234,10 @@ providers.filter(function (provider) {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done);
     });

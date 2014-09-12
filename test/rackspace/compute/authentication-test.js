@@ -7,13 +7,14 @@
 
 var should = require('should'),
     async = require('async'),
+    http = require('http'),
     hock = require('hock'),
     macros = require('../macros'),
     helpers = require('../../helpers'),
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/compute/authentication', function () {
-  var client, authServer, server;
+  var client, authHockInstance, hockInstance, authServer, server;
 
   describe('The pkgcloud Rackspace Compute client', function () {
 
@@ -24,24 +25,18 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            authServer = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            server = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done);
     });
@@ -52,7 +47,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
     it('the getVersion() method should return the proper version', function (done) {
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -63,7 +58,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/v2/')
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
       }
@@ -72,8 +67,8 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         should.not.exist(err);
         should.exist(version);
         version.should.equal('v2');
-        server && server.done();
-        authServer && authServer.done();
+        hockInstance && hockInstance.done();
+        authHockInstance && authHockInstance.done();
         done();
       });
     });
@@ -88,7 +83,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         client = helpers.createClient('rackspace', 'compute');
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -102,7 +97,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
         client.auth(function (e) {
           should.not.exist(e);
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
       });
@@ -113,7 +108,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       it('the getLimits() method should return the proper limits', function (done) {
         if (mock) {
-          server
+          hockInstance
             .get('/v2/123456/limits')
             .reply(200, { limits: { absolute: { maxPrivateIPs: 0 }, rate: [] } }, {});
         }
@@ -124,7 +119,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
           should.exist(limits.absolute);
           should.exist(limits.rate);
           limits.rate.should.be.an.Array;
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -144,7 +139,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       beforeEach(function (done) {
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -162,7 +157,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
         badClient.auth(function (e) {
           err = e;
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
 
@@ -194,7 +189,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
           tokenExpiry = response.access.token.expires;
 
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -208,7 +203,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
         client.auth(function (e) {
           should.not.exist(e);
-          authServer && authServer.done();
+          authHockInstance && authHockInstance.done();
           done();
         });
       });
@@ -228,7 +223,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
       it('should expire the token and reauth on next call', function (done) {
 
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -239,7 +234,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
             })
             .reply(200, helpers.getRackspaceAuthResponse());
 
-          server
+          hockInstance
             .get('/v2/123456/images/detail')
             .replyWithFile(200, __dirname + '/../../fixtures/rackspace/images.json');
         }
@@ -250,8 +245,8 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
             client._isAuthorized().should.equal(true);
             should.not.exist(err);
             should.exist(images);
-            server && server.done();
-            authServer && authServer.done();
+            hockInstance && hockInstance.done();
+            authHockInstance && authHockInstance.done();
             done();
           });
         }, 5);
@@ -265,10 +260,10 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });

@@ -11,13 +11,14 @@ var fs = require('fs'),
     should = require('should'),
     async = require('async'),
     hock = require('hock'),
+    http = require('http'),
     helpers = require('../../helpers'),
     Volume = require('../../../lib/pkgcloud/rackspace/blockstorage/volume').Volume,
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/blockstorage/volumes', function () {
   var client,
-      testContext = {}, authServer, server;
+      testContext = {}, authHockInstance, hockInstance, server, authServer;
 
   before(function (done) {
     client = helpers.createClient('rackspace', 'blockstorage');
@@ -26,24 +27,18 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
       return done();
     }
 
+    hockInstance = hock.createHock({ throwOnUnmatched: false });
+    authHockInstance = hock.createHock();
+
+    server = http.createServer(hockInstance.handler);
+    authServer = http.createServer(authHockInstance.handler);
+
     async.parallel([
       function (next) {
-        hock.createHock(12346, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          authServer = hockClient;
-          next();
-        });
+        server.listen(12345, next);
       },
       function (next) {
-        hock.createHock(12345, function (err, hockClient) {
-          should.not.exist(err);
-          should.exist(hockClient);
-
-          server = hockClient;
-          next();
-        });
+        authServer.listen(12346, next);
       }
     ], done);
   });
@@ -52,7 +47,7 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
 
     it('should get an empty list of volumes', function(done) {
       if (mock) {
-        authServer
+        authHockInstance
           .post('/v2.0/tokens', {
             auth: {
               'RAX-KSKEY:apiKeyCredentials': {
@@ -63,7 +58,7 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
           })
           .reply(200, helpers.getRackspaceAuthResponse());
 
-        server
+        hockInstance
           .get('/v1/123456/volumes')
           .reply(200, { volumes: [] });
       }
@@ -73,8 +68,8 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
         should.exist(volumes);
         volumes.should.be.an.Array;
         volumes.length.should.equal(0);
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
 
@@ -82,7 +77,7 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
 
     it('should create a new volume', function (done) {
       if (mock) {
-        server
+        hockInstance
           .post('/v1/123456/volumes', {
             volume: {
               display_name: 'foo3',
@@ -102,8 +97,8 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
         should.exist(volume);
         volume.should.be.instanceOf(Volume);
         volume.name.should.equal('foo3');
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
 
@@ -111,7 +106,7 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
 
     it('should get a list of volumes', function (done) {
       if (mock) {
-        server
+        hockInstance
           .get('/v1/123456/volumes')
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/volumes.json');
       }
@@ -123,8 +118,8 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
         volumes.forEach(function(volume) {
           volume.should.be.instanceOf(Volume);
         });
-        authServer && authServer.done();
-        server && server.done();
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
         done();
       });
     });
@@ -177,10 +172,10 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
 
     async.parallel([
       function (next) {
-        authServer.close(next);
+        server.close(next);
       },
       function (next) {
-        server.close(next);
+        authServer.close(next);
       }
     ], done)
   });

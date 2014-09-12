@@ -8,6 +8,7 @@
 
 var should = require('should'),
     hock = require('hock'),
+    http = require('http'),
     async = require('async'),
     helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
@@ -16,7 +17,7 @@ var should = require('should'),
 
 describe('pkgcloud/rackspace/databases/instances', function () {
   var testContext = {},
-      client, authServer, server;
+      client, authHockInstance, hockInstance, authServer, server;
 
   describe('The pkgcloud Rackspace Database client', function () {
 
@@ -27,24 +28,18 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         return done();
       }
 
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
       async.parallel([
         function (next) {
-          hock.createHock(12346, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            authServer = hockClient;
-            next();
-          });
+          server.listen(12345, next);
         },
         function (next) {
-          hock.createHock(12345, function (err, hockClient) {
-            should.not.exist(err);
-            should.exist(hockClient);
-
-            server = hockClient;
-            next();
-          });
+          authServer.listen(12346, next);
         }
       ], done);
     });
@@ -56,7 +51,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       before(function(done) {
         
         if (mock) {
-          authServer
+          authHockInstance
             .post('/v2.0/tokens', {
               auth: {
                 'RAX-KSKEY:apiKeyCredentials': {
@@ -67,7 +62,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             })
             .reply(200, helpers.getRackspaceAuthResponse());
 
-          server
+          hockInstance
             .get('/v1.0/123456/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
 
@@ -95,8 +90,8 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           }, function(e, i) {
             err = e;
             instance = i;
-            authServer && authServer.done();
-            server && server.done();
+            authHockInstance && authHockInstance.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -124,7 +119,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         before(function(done) {
 
           if (mock) {
-            server
+            hockInstance
               .get('/v1.0/123456/instances')
               .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
           }
@@ -133,7 +128,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             err = e;
             instances = i;
             offset = o;
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -188,7 +183,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         before(function (done) {
 
           if (mock) {
-            server
+            hockInstance
               .get('/v1.0/123456/instances?limit=2')
               .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'))
           }
@@ -197,7 +192,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             err = e;
             instances = i;
             offset = o;
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -220,7 +215,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('should respond correctly', function(done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
@@ -233,7 +228,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             should.not.exist(err);
             should.exist(result);
             result.statusCode.should.equal(202);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -244,7 +239,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('should response with details', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
             .reply(200, helpers.loadFixture('rackspace/databaseInstance.json'))
         }
@@ -254,7 +249,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           should.exist(instance);
           instance.should.be.instanceOf(Instance);
           instance.id.should.equal(testContext.Instance.id);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -264,7 +259,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with offset should respond less quantity', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances?marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
             .reply(200, helpers.loadFixture('rackspace/databaseInstanceOffset.json'))
         }
@@ -275,7 +270,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           instances.should.be.an.Array;
           should.ok(instances.length >= 2
             && instances.length < testContext.instancesQuantity);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
 
@@ -284,7 +279,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with limit and offset should respond just one result with more next points', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances?limit=1&marker=55041e91-98ab-4cd5-8148-f3b3978b3262')
             .reply(200, helpers.loadFixture('rackspace/databaseInstanceLimitOffset.json'))
         }
@@ -295,7 +290,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
           instances.should.be.an.Array;
           should.exist(offset);
           instances.should.have.length(1);
-          server && server.done();
+          hockInstance && hockInstance.done();
           done();
         });
       });
@@ -312,7 +307,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without flavor parameter should get errors', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
@@ -320,7 +315,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.setFlavor(instance, function (err) {
             should.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -329,7 +324,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without instance parameter should get errors', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/flavors/2')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
         }
@@ -340,7 +335,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           client.setFlavor(flavor, function(err) {
             should.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -349,7 +344,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with correct inputs should respond correctly', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .get('/v1.0/123456/flavors/2')
@@ -369,7 +364,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             should.exist(flavor);
             client.setFlavor(instance, flavor, function (err) {
               should.not.exist(err);
-              server && server.done();
+              hockInstance && hockInstance.done();
               done();
             });
           });
@@ -388,7 +383,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without size parameter should get errors', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
@@ -396,7 +391,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.setVolumeSize(instance, function (err) {
             should.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -405,7 +400,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('without invalid size parameter should get errors', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
         }
@@ -413,7 +408,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.setVolumeSize(instance, 12, function (err) {
             should.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -422,7 +417,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       it('with correct inputs should respond correctly', function (done) {
 
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
@@ -440,7 +435,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
           client.setVolumeSize(instance, newSize, function (err) {
             should.not.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -464,7 +459,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
       it('with invalid size should respond with errors', function (done) {
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/flavors/1')
             .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
         }
@@ -476,7 +471,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
             size: '1'
           }, function(err) {
             should.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -493,7 +488,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
       it('with valid instance should restart', function (done) {
         if (mock) {
-          server
+          hockInstance
             .get('/v1.0/123456/instances')
             .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
             .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
@@ -503,7 +498,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
         helpers.selectInstance(client, function (instance) {
           client.restartInstance(instance, function (err) {
             should.not.exist(err);
-            server && server.done();
+            hockInstance && hockInstance.done();
             done();
           });
         });
@@ -517,10 +512,10 @@ describe('pkgcloud/rackspace/databases/instances', function () {
 
       async.parallel([
         function (next) {
-          authServer.close(next);
+          server.close(next);
         },
         function (next) {
-          server.close(next);
+          authServer.close(next);
         }
       ], done)
     });
