@@ -47,6 +47,9 @@ providers.filter(function (provider) {
       server = http.createServer(hockInstance.handler);
       authServer = http.createServer(authHockInstance.handler);
 
+      // setup a filtering path for aws
+      hockInstance.filteringPathRegEx(/https:\/\/[\w\-\.]*s3\.amazonaws\.com([\w\-\.\_0-9\/]*)/g, '$1');
+
       async.parallel([
         function (next) {
           server.listen(12345, next);
@@ -114,118 +117,118 @@ providers.filter(function (provider) {
 
       });
     });
-
-    it('the upload() method with container and filename should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupUploadStreamMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      var stream = client.upload({
-        container: context.container,
-        remote: 'test-file.txt',
-        headers: {'x-amz-acl': 'public-read'}
-      }, function(err, ok, response) {
-        should.not.exist(err);
-        should.exist(ok);
-
-        context.file = {
-          name: 'test-file.txt',
-          size: Buffer.byteLength(fillerama)
-        };
-
-        should.exist(response);
-        should.exist(response.statusCode);
-        should.exist(response.headers);
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-
-      var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
-      file.pipe(stream);
-    });
-
-    it('the download() method with container and filename should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupDownloadStreamMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      var stream = client.download({
-        container: context.container,
-        remote: context.file.name
-      }, function (err, file) {
-        should.not.exist(err);
-        should.exist(file);
-
-        file.name.should.equal(context.file.name);
-        context.fileContents.should.equal(fillerama);
-        file.size.should.equal(Buffer.byteLength(context.fileContents));
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-
-      context.fileContents = '';
-      stream.on('data', function (data) {
-        context.fileContents += data;
-      });
-      stream.end();
-    });
-
-    it('the download() method with container and filename should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupDownloadStreamMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      var stream = client.download({
-        container: context.container,
-        remote: context.file.name
-      }, function (err, file) {
-        should.not.exist(err);
-        should.exist(file);
-
-        file.name.should.equal(context.file.name);
-        context.fileContents.should.equal(fillerama);
-        file.size.should.equal(Buffer.byteLength(context.fileContents));
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-
-      context.fileContents = '';
-      stream.on('data', function (data) {
-        context.fileContents += data;
-      });
-      stream.end();
-    });
-
+//
+//    it('the upload() method with container and filename should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupUploadStreamMock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      var stream = client.upload({
+//        container: context.container,
+//        remote: 'test-file.txt',
+//        headers: {'x-amz-acl': 'public-read'}
+//      }, function(err, ok, response) {
+//        should.not.exist(err);
+//        should.exist(ok);
+//
+//        context.file = {
+//          name: 'test-file.txt',
+//          size: Buffer.byteLength(fillerama)
+//        };
+//
+//        should.exist(response);
+//        should.exist(response.statusCode);
+//        should.exist(response.headers);
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//
+//      var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
+//      file.pipe(stream);
+//    });
+//
+//    it('the download() method with container and filename should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupDownloadStreamMock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      var stream = client.download({
+//        container: context.container,
+//        remote: context.file.name
+//      }, function (err, file) {
+//        should.not.exist(err);
+//        should.exist(file);
+//
+//        file.name.should.equal(context.file.name);
+//        context.fileContents.should.equal(fillerama);
+//        file.size.should.equal(Buffer.byteLength(context.fileContents));
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//
+//      context.fileContents = '';
+//      stream.on('data', function (data) {
+//        context.fileContents += data;
+//      });
+//      stream.end();
+//    });
+//
+//    it('the download() method with container and filename should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupDownloadStreamMock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      var stream = client.download({
+//        container: context.container,
+//        remote: context.file.name
+//      }, function (err, file) {
+//        should.not.exist(err);
+//        should.exist(file);
+//
+//        file.name.should.equal(context.file.name);
+//        context.fileContents.should.equal(fillerama);
+//        file.size.should.equal(Buffer.byteLength(context.fileContents));
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//
+//      context.fileContents = '';
+//      stream.on('data', function (data) {
+//        context.fileContents += data;
+//      });
+//      stream.end();
+//    });
+//
     it('the getFile() method with container and filename should succeed', function (done) {
 
       if (mock) {
@@ -251,172 +254,172 @@ providers.filter(function (provider) {
           done();
         });
     });
-
-    it('the getFiles() method with container should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupGetFilesMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      client.getFiles(context.container, false, function (err, files) {
-        should.not.exist(err);
-        should.exist(files);
-
-        files.should.be.an.Array;
-
-        files.forEach(function(file) {
-          file.should.be.instanceOf(File);
-        })
-
-        // TODO look for context.file in array
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the removeFile() method with container and filename should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupRemoveFileMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      client.removeFile(context.container, context.file.name, function (err, ok) {
-        should.not.exist(err);
-        should.exist(ok);
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the upload() method with large file should succeed', function (done) {
-
-      if (mock) {
-        return done();
-        // TODO mock these out
-      }
-
-      var stream = client.upload({
-        container: context.container,
-        remote: 'bigfile.raw'
-      }, function (err, ok) {
-        should.not.exist(err);
-        should.exist(ok);
-
-        context.file = {
-          name: 'bigfile.raw',
-          size: fs.readFileSync(helpers.fixturePath('bigfile.raw')).length
-        };
-
-        done();
-      });
-
-      var file = fs.createReadStream(helpers.fixturePath('bigfile.raw'));
-      file.pipe(stream);
-    });
-
-    it('the download() method with large file should succeed', function (done) {
-
-      if (mock) {
-        return done();
-        // TODO mock these out
-      }
-
-      var stream = client.download({
-        container: context.container,
-        remote: context.file.name
-      }, function (err, file) {
-
-        should.not.exist(err);
-        should.exist(file);
-        file.should.be.instanceOf(File);
-
-        file.name.should.equal(context.file.name);
-        file.size.should.equal(context.fileContentsSize);
-
-        context.fileContents = Buffer.concat(context.fileContents,
-          file.size);
-
-        // Compare byte by byte
-        var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
-        for (var i = 0; i < file.size; i++) {
-          assert.equal(context.fileContents[i], original[i]);
-        }
-
-        done();
-      });
-
-      context.fileContents = [];
-      context.fileContentsSize = 0;
-      stream.on('data', function (data) {
-        context.fileContents.push(data);
-        context.fileContentsSize += data.length;
-      });
-      stream.end();
-    });
-
-    it('the destroyContainer() method with container should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupDestroyContainerMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      client.destroyContainer(context.container, function (err, ok) {
-        should.not.exist(err);
-        should.exist(ok);
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the getContainers() method should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupGetContainers2Mock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      client.getContainers(function (err, ok) {
-        should.not.exist(err);
-        should.exist(ok);
-
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
+//
+//    it('the getFiles() method with container should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupGetFilesMock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      client.getFiles(context.container, false, function (err, files) {
+//        should.not.exist(err);
+//        should.exist(files);
+//
+//        files.should.be.an.Array;
+//
+//        files.forEach(function(file) {
+//          file.should.be.instanceOf(File);
+//        })
+//
+//        // TODO look for context.file in array
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//    });
+//
+//    it('the removeFile() method with container and filename should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupRemoveFileMock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      client.removeFile(context.container, context.file.name, function (err, ok) {
+//        should.not.exist(err);
+//        should.exist(ok);
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//    });
+//
+//    it('the upload() method with large file should succeed', function (done) {
+//
+//      if (mock) {
+//        return done();
+//        // TODO mock these out
+//      }
+//
+//      var stream = client.upload({
+//        container: context.container,
+//        remote: 'bigfile.raw'
+//      }, function (err, ok) {
+//        should.not.exist(err);
+//        should.exist(ok);
+//
+//        context.file = {
+//          name: 'bigfile.raw',
+//          size: fs.readFileSync(helpers.fixturePath('bigfile.raw')).length
+//        };
+//
+//        done();
+//      });
+//
+//      var file = fs.createReadStream(helpers.fixturePath('bigfile.raw'));
+//      file.pipe(stream);
+//    });
+//
+//    it('the download() method with large file should succeed', function (done) {
+//
+//      if (mock) {
+//        return done();
+//        // TODO mock these out
+//      }
+//
+//      var stream = client.download({
+//        container: context.container,
+//        remote: context.file.name
+//      }, function (err, file) {
+//
+//        should.not.exist(err);
+//        should.exist(file);
+//        file.should.be.instanceOf(File);
+//
+//        file.name.should.equal(context.file.name);
+//        file.size.should.equal(context.fileContentsSize);
+//
+//        context.fileContents = Buffer.concat(context.fileContents,
+//          file.size);
+//
+//        // Compare byte by byte
+//        var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
+//        for (var i = 0; i < file.size; i++) {
+//          assert.equal(context.fileContents[i], original[i]);
+//        }
+//
+//        done();
+//      });
+//
+//      context.fileContents = [];
+//      context.fileContentsSize = 0;
+//      stream.on('data', function (data) {
+//        context.fileContents.push(data);
+//        context.fileContentsSize += data.length;
+//      });
+//      stream.end();
+//    });
+//
+//    it('the destroyContainer() method with container should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupDestroyContainerMock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      client.destroyContainer(context.container, function (err, ok) {
+//        should.not.exist(err);
+//        should.exist(ok);
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//    });
+//
+//    it('the getContainers() method should succeed', function (done) {
+//
+//      if (mock) {
+//        if (provider === 'joyent') {
+//          // TODO figure out why joyent was disabled in vows based tests
+//          return done();
+//        }
+//
+//        setupGetContainers2Mock(provider, client, {
+//          server: hockInstance,
+//          authServer: authHockInstance
+//        });
+//      }
+//
+//      client.getContainers(function (err, ok) {
+//        should.not.exist(err);
+//        should.exist(ok);
+//
+//        hockInstance && hockInstance.done();
+//        done();
+//      });
+//    });
 
     after(function (done) {
       if (!mock) {
