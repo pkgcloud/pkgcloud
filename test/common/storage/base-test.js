@@ -136,22 +136,27 @@ providers.filter(function (provider) {
         container: context.container,
         remote: 'test-file.txt',
         headers: {'x-amz-acl': 'public-read'}
-      }, function(err, ok, response) {
+      });
+
+      stream.on('error', function(err, response) {
         should.not.exist(err);
-        should.exist(ok);
+        should.not.exist(response);
+      });
+
+      stream.on('uploaded', complete);
+      stream.on('complete', complete);
+
+      function complete() {
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
 
         context.file = {
           name: 'test-file.txt',
           size: Buffer.byteLength(fillerama)
         };
 
-        should.exist(response);
-        should.exist(response.statusCode);
-        should.exist(response.headers);
-
-        hockInstance && hockInstance.done();
         done();
-      });
+      }
 
       var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
       file.pipe(stream);
@@ -174,59 +179,19 @@ providers.filter(function (provider) {
       var stream = client.download({
         container: context.container,
         remote: context.file.name
-      }, function (err, file) {
-        should.not.exist(err);
-        should.exist(file);
-
-        file.name.should.equal(context.file.name);
-        context.fileContents.should.equal(fillerama);
-        file.size.should.equal(Buffer.byteLength(context.fileContents));
-
-        hockInstance && hockInstance.done();
-        done();
       });
 
       context.fileContents = '';
+
       stream.on('data', function (data) {
         context.fileContents += data;
       });
-      stream.end();
-    });
 
-    it('the download() method with container and filename should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupDownloadStreamMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      var stream = client.download({
-        container: context.container,
-        remote: context.file.name
-      }, function (err, file) {
-        should.not.exist(err);
-        should.exist(file);
-
-        file.name.should.equal(context.file.name);
+      stream.on('end', function() {
         context.fileContents.should.equal(fillerama);
-        file.size.should.equal(Buffer.byteLength(context.fileContents));
-
         hockInstance && hockInstance.done();
         done();
       });
-
-      context.fileContents = '';
-      stream.on('data', function (data) {
-        context.fileContents += data;
-      });
-      stream.end();
     });
 
     it('the getFile() method with container and filename should succeed', function (done) {
@@ -578,8 +543,13 @@ function setupUploadStreamMock(provider, client, servers) {
   }
   else if (provider === 'amazon') {
     servers.server
-      .put('/test-file.txt', fillerama)
-      .reply(200, '', {})
+      .post('/test-file.txt?uploads')
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n<InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><UploadId>U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--</UploadId></InitiateMultipartUploadResult>', {})
+      .put('/test-file.txt?partNumber=1&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', fillerama)
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/test-file.txt</Location><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
+      .post('/test-file.txt?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag><PartNumber>1</PartNumber></Part></CompleteMultipartUpload>')
+      .reply(200);
+
   }
   else if (provider === 'azure') {
     servers.server
@@ -604,7 +574,7 @@ function setupDownloadStreamMock(provider, client, servers) {
   else if (provider === 'amazon') {
     servers.server
       .get('/test-file.txt')
-      .reply(200, fillerama, { 'content-length': fillerama.length + 2 })
+      .reply(200, fillerama, { 'content-length': fillerama.length + 2 });
   }
   else if (provider === 'azure') {
     servers.server

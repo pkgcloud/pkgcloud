@@ -59,7 +59,8 @@
     "request": "2.40.x",
     "underscore": "1.6.x",
     "url-join": "0.0.x",
-    "aws-sdk": "~2.0.17"
+    "aws-sdk": "~2.0.17",
+    "s3-upload-stream": "~1.0.0"
   },
   "devDependencies": {
     "hock": "1.0.x",
