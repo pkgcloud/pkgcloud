@@ -48,7 +48,7 @@ providers.filter(function (provider) {
       authServer = http.createServer(authHockInstance.handler);
 
       // setup a filtering path for aws
-      hockInstance.filteringPathRegEx(/https:\/\/[\w\-\.]*s3\.amazonaws\.com([\w\-\.\_0-9\/]*)/g, '$1');
+      hockInstance.filteringPathRegEx(/https:\/\/[\w\-\.]*s3-us-west-2\.amazonaws\.com([\w\-\.\_0-9\/]*)/g, '$1');
 
       async.parallel([
         function (next) {
@@ -403,7 +403,7 @@ providers.filter(function (provider) {
   });
 });
 
-  function setupCreateContainerMock(provider, client, servers) {
+function setupCreateContainerMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -450,20 +450,8 @@ providers.filter(function (provider) {
       .reply(201);
   }
   else if (provider === 'amazon') {
-
-    // Override the clients getUrl method as it tries to prefix the container name onto the request
-    client._getUrl = function (options) {
-      options = options || {};
-
-      if (typeof options === 'string') {
-        return urlJoin(this.protocol + this.serversUrl, options);
-      }
-
-      return urlJoin(this.protocol + this.serversUrl, options.path);
-    };
-
     servers.server
-      .put('/')
+      .put('/', '<CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>')
       .reply(200);
   }
   else if (provider === 'azure') {
