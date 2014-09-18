@@ -2,5 +2,6 @@
   "keyId": "MOCK-KEYID",
   "key": "MOCK-KEY",
   "serversUrl": "localhost:12345",
-  "protocol": "http://"
+  "protocol": "http://",
+  "region": "us-west-2"
 }

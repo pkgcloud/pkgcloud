@@ -18,6 +18,9 @@ describe('pkgcloud/amazon/keys', function () {
     hockInstance = hock.createHock();
     hockInstance.filteringRequestBody(helpers.authFilter);
 
+    // setup a filtering path for aws
+    hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
+
     server = http.createServer(hockInstance.handler);
     server.listen(12345, done);
   });
@@ -26,10 +29,11 @@ describe('pkgcloud/amazon/keys', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=ImportKeyPair', {
+        .post('/', {
+          Action: 'ImportKeyPair',
           KeyName: 'unittest',
-          PublicKeyMaterial: 'c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFDblhidGZGTTNrNExFb3hMaENGQ3lucnBibmtPYWphQ2xFUVVzdWRaazBTVWxVenl0Y2laRjArN25VaDg1VDZjZWMyNjdnazZ4ZTBZWEJqalhWc2xqcGtBVnIyc21ycFRwc2FJWk1qdXdPNlZHNFdYMG54NFhJaG1lTy9WcmdvYzY5Q0liTFJqNnkySlI1UTlaaHVqZVZJK1FZVkg3RnZ0OTZMZjh5SkN6YzRQdDZIVCswU2pudnlqSVZRTkcrWFVuS21GMWNVTGZiWTZOK2JwbUhJQWpxNW1mLzR4T2lKeHFUa0N0NmhoNGk4aE4vOHJmMzUwL0dDUE1GYTA0Umh2Si9hQVRWMmhxLzR4UXZVUXhzdzVsWnUzM3dZMENiQXI1Z3Z2bHZQd1grV0pFQjQ3RU9adEwrdm1nZVdieGJETGNFNUVaSnIxejJIV2ZSQkIweC9uQng='
-        })
+          PublicKeyMaterial: 'YzNOb0xYSnpZU0JCUVVGQlFqTk9lbUZETVhsak1rVkJRVUZCUkVGUlFVSkJRVUZDUVZGRGJsaGlkR1pHVFROck5FeEZiM2hNYUVOR1EzbHVjbkJpYm10UFlXcGhRMnhGVVZWemRXUmFhekJUVld4VmVubDBZMmxhUmpBck4yNVZhRGcxVkRaalpXTXlOamRuYXpaNFpUQlpXRUpxYWxoV2MyeHFjR3RCVm5JeWMyMXljRlJ3YzJGSldrMXFkWGRQTmxaSE5GZFlNRzU0TkZoSmFHMWxUeTlXY21kdll6WTVRMGxpVEZKcU5ua3lTbEkxVVRsYWFIVnFaVlpKSzFGWlZrZzNSblowT1RaTVpqaDVTa042WXpSUWREWklWQ3N3VTJwdWRubHFTVlpSVGtjcldGVnVTMjFHTVdOVlRHWmlXVFpPSzJKd2JVaEpRV3B4TlcxbUx6UjRUMmxLZUhGVWEwTjBObWhvTkdrNGFFNHZPSEptTXpVd0wwZERVRTFHWVRBMFVtaDJTaTloUVZSV01taHhMelI0VVhaVlVYaHpkelZzV25Vek0zZFpNRU5pUVhJMVozWjJiSFpRZDFnclYwcEZRalEzUlU5YWRFd3JkbTFuWlZkaWVHSkVUR05GTlVWYVNuSXhlakpJVjJaU1FrSXdlQzl1UW5nPQ=='
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/add-key.xml');
     }
 
@@ -48,9 +52,10 @@ describe('pkgcloud/amazon/keys', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=DeleteKeyPair', {
+        .post('/', {
+          Action: 'DeleteKeyPair',
           KeyName: 'unittest'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/destroy-key.xml');
     }
 
@@ -66,7 +71,7 @@ describe('pkgcloud/amazon/keys', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=DescribeKeyPairs', {})
+        .post('/', { Action: 'DescribeKeyPairs' }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/list-keys.xml');
     }
 
@@ -82,9 +87,10 @@ describe('pkgcloud/amazon/keys', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=DescribeKeyPairs', {
+        .post('/', {
+          Action: 'DescribeKeyPairs',
           'KeyName.1': 'unittest'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/list-keys.xml');
     }
 

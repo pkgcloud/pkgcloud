@@ -18,6 +18,9 @@ describe('pkgcloud/amazon/groups', function () {
     hockInstance = hock.createHock();
     hockInstance.filteringRequestBody(helpers.authFilter);
 
+    // setup a filtering path for aws
+    hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
+
     server = http.createServer(hockInstance.handler);
     server.listen(12345, done);
   });
@@ -26,10 +29,11 @@ describe('pkgcloud/amazon/groups', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=CreateSecurityGroup', {
+        .post('/', {
+          Action: 'CreateSecurityGroup',
           GroupDescription: 'unit test',
           GroupName: 'unit test'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/add-group.xml');
     }
 
@@ -38,7 +42,8 @@ describe('pkgcloud/amazon/groups', function () {
       description: 'unit test'
     }, function(err, data) {
       should.not.exist(err);
-      data.should.equal(true);
+      data.GroupId.should.equal('sg-a6e01ccd');
+
       hockInstance && hockInstance.done();
       done();
     });
@@ -48,9 +53,10 @@ describe('pkgcloud/amazon/groups', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=DeleteSecurityGroup', {
+        .post('/', {
+          Action: 'DeleteSecurityGroup',
           GroupName: 'unit test'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/destroy-group.xml');
     }
 
@@ -66,7 +72,7 @@ describe('pkgcloud/amazon/groups', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=DescribeSecurityGroups', {})
+        .post('/', { Action: 'DescribeSecurityGroups'}, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/list-groups.xml');
     }
 
@@ -82,9 +88,10 @@ describe('pkgcloud/amazon/groups', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=DescribeSecurityGroups', {
+        .post('/', {
+          Action: 'DescribeSecurityGroups',
           'GroupName.1': 'unit test'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/list-group.xml');
     }
 
@@ -100,24 +107,28 @@ describe('pkgcloud/amazon/groups', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=AuthorizeSecurityGroupIngress', {
+        .post('/', {
+          Action: 'AuthorizeSecurityGroupIngress',
           GroupName: 'unit test',
           'IpPermissions.1.FromPort': '0',
           'IpPermissions.1.Groups.1.GroupName': 'unit test',
           'IpPermissions.1.IpProtocol': 'tcp',
           'IpPermissions.1.ToPort': '65535'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/add-rules.xml');
     }
 
     client.addRules({
       name: 'unit test',
-      rules: {
-        'IpPermissions.1.IpProtocol': 'tcp',
-        'IpPermissions.1.Groups.1.GroupName': 'unit test',
-        'IpPermissions.1.FromPort': 0,
-        'IpPermissions.1.ToPort': 65535
-      }
+      rules: [
+        { IpProtocol: 'tcp',
+          FromPort: 0,
+          UserIdGroupPairs: [ {
+              GroupName: 'unit test'
+            } ],
+          ToPort: 65535
+        }
+      ]
     }, function(err, data) {
       should.not.exist(err);
       data.should.equal(true);
@@ -130,24 +141,30 @@ describe('pkgcloud/amazon/groups', function () {
 
     if (mock) {
       hockInstance
-        .post('/?Action=RevokeSecurityGroupIngress', {
+        .post('/', {
+          Action: 'RevokeSecurityGroupIngress',
           GroupName: 'unit test',
           'IpPermissions.1.FromPort': '0',
           'IpPermissions.1.Groups.1.GroupName': 'unit test',
           'IpPermissions.1.IpProtocol': 'tcp',
           'IpPermissions.1.ToPort': '65535'
-        })
+        }, { 'User-Agent': client.userAgent })
         .replyWithFile(200, __dirname + '/../../../fixtures/amazon/destroy-rules.xml');
     }
 
     client.delRules({
       name: 'unit test',
-      rules: {
-        'IpPermissions.1.IpProtocol': 'tcp',
-        'IpPermissions.1.Groups.1.GroupName': 'unit test',
-        'IpPermissions.1.FromPort': 0,
-        'IpPermissions.1.ToPort': 65535
-      }
+      rules:
+        [
+          { IpProtocol: 'tcp',
+            FromPort: 0,
+            UserIdGroupPairs: [
+              {
+                GroupName: 'unit test'
+              }
+            ],
+            ToPort: 65535
+          } ]
     }, function (err, data) {
       should.not.exist(err);
       data.should.equal(true);
