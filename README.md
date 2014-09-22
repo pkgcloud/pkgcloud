@@ -8,8 +8,8 @@ pkgcloud is a standard library for node.js that abstracts away differences among
   * [Supported APIs](#supported-apis)
 * [Compute](#compute)
 * [Storage](#storage)
-  * [Uploading Files](#uploading)
-  * [Downloading Files](#downloading)
+  * [Uploading Files](#upload-a-file)
+  * [Downloading Files](#download-a-file)
 * [Database](#databases)
 * [DNS](#dns----beta) *(beta)*
 * [Block Storage](#block-storage----beta) *(beta)*
