@@ -41,6 +41,7 @@ Currently there are six service types which are handled by pkgcloud:
 * [Block Storage](#block-storage----beta) *(beta)*
 * [Load Balancers](#load-balancers----beta) *(beta)*
 * [Network](#network----beta) *(beta)*
+* [Orchestration](#orchestration----beta) *(beta)*
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
@@ -120,9 +121,11 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/blockstorage.md)
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
+* **[Orchestration](#orchestration----beta)** *(beta)*
+  * [Openstack](docs/providers/openstack/orchestration.md)
 * **[Network](#network----beta)** *(beta)*
-    * [HP](docs/providers/hp/network.md)
-    * [Openstack](docs/providers/openstack/network.md)
+  * [HP](docs/providers/hp/network.md)
+  * [Openstack](docs/providers/openstack/network.md)
 
 ## Compute
 
@@ -438,7 +441,6 @@ Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.creat
 * `client.updateNetwork(network, function (err, network) { })`
 * `client.deleteNetwork(network, function (err, networkId) { })`
 
-
 ### Subnets
 * `client.getSubnets(options, function (err, subnets) { })`
 * `client.getSubnet(subnet, function (err, subnet) { })`
@@ -452,6 +454,59 @@ Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.creat
 * `client.createPort(options, function (err, port) { })`
 * `client.updatePort(port, function (err, port) { })`
 * `client.deletePort(port, function (err, portId) { })`
+
+## Orchestration -- Beta
+
+##### Note: Orchestration is considered Beta until there are multiple providers; presently only Openstack are supported.
+
+The `pkgcloud.orchestration` service is designed to allow you to access Openstack Heat via node.js. You can manage stacks and resources from within any node.js application.
+
+To get started with a `pkgcloud.orchestration` client just create one:
+
+``` js
+  var client = require('pkgcloud').orchestration.createClient({
+    //
+    // The name of the provider (e.g. "openstack")
+    //
+    provider: 'provider-name',
+
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Openstack](docs/providers/openstack/orchestration.md)
+
+Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchestration.createClient` has a set of uniform APIs:
+
+### Stack
+* `client.getStack(stack, function (err, stack) { })`
+* `client.getStacks(options, function (err, stacks) { })`
+* `client.createStack(details, function (err, stack) { })`
+* `client.previewStack(details, function (err, stack) { })`
+* `client.adoptStack(details, function (err, stack) { })`
+* `client.updateStack(stack, function (err, stack) { })`
+* `client.deleteStack(stack, function (err) { })`
+* `client.abandonStack(stack, function (err, abandonedStack) { })`
+* `client.getTemplate(stack, function (err, template) { })`
+
+### Resources
+* `client.getResource(stack, resource, function (err, resource) { })`
+* `client.getResources(stack, function (err, resources) { })`
+* `client.getResourceTypes(function (err, resourceTypes) { })`
+* `client.getResourceSchema(resourceType, function (err, resourceSchema) { })`
+* `client.getResourceTemplate(resourceType, function (err, resourceTemplate) { })`
+
+### Events
+* `client.getEvent(stack, resource, eventId, function (err, event) { })`
+* `client.getEvents(stack, function (err, events) { })`
+* `client.getResourceEvents(stack, resource, function (err, events) { })`
+
+### Templates
+* `client.validateTemplate(template, function (err, template) { })`
 
 ## Installation
 
