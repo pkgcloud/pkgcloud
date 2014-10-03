@@ -77,7 +77,7 @@ describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
           environment: '{}',
           'timeout_mins': 30,
           template_url: 'https://raw.githubusercontent.com/rackspace-orchestration-templates/minecraft/master/minecraft-server.yaml',
-          parameters: { terms: true }
+          environment: JSON.stringify({ parameters: { terms: true } })
         })
         .reply(201, { stack:
         { id: 'b39ecc51-8ac0-4396-a178-17fdc63f5d40',
@@ -95,7 +95,7 @@ describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
       name: 'stack-test',
       timeout: 30,
       templateUrl: 'https://raw.githubusercontent.com/rackspace-orchestration-templates/minecraft/master/minecraft-server.yaml',
-      parameters: { terms: true }
+      environment: { parameters: { terms: true } }
     },function (err, stack) {
       should.not.exist(err);
       stack.should.be.instanceof(Stack);

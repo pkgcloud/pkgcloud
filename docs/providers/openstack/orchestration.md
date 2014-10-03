@@ -67,7 +67,6 @@ The following values from the provided stack are updatable.
   timeout: 30,    // timeout, in minutes, required
   templateUrl: 'http://path.to.some.openstack.heat.template', // required, unless you pass template directly
   template: { ... }, // optional, unless you don't provide templateUrl
-  parameters: { ... },  // optional parameters for the stack
   environment: { ... },  // optional environment values for the stack
   files: { ... }, // optional files for the stack
 }
