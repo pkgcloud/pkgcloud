@@ -1,0 +1,39 @@
+{
+  "stack": {
+    "disable_rollback": true,
+    "description": "This is a Heat template to deploy a single Linux server running a Minecraft\nserver.  The Minecraft server will be setup leveraging Chef solo.\n",
+    "parameters": {
+      "server_hostname": "minecraft",
+      "terms": "True",
+      "OS::stack_id": "e20b614b-c3ee-4b8b-bf4f-c05aaca947a2",
+      "OS::stack_name": "stack-test",
+      "minecraft_server_port": "25565",
+      "image": "Ubuntu 14.04 LTS (Trusty Tahr)",
+      "minecraft_spawn_monsters": "true",
+      "minecraft_spawn_npcs": "true",
+      "minecraft_gamemode": "0",
+      "minecraft_version": "1.8",
+      "minecraft_spawn_animals": "true",
+      "flavor": "4 GB Performance",
+      "chef_version": "11.16.0",
+      "kitchen": "https://github.com/rackspace-orchestration-templates/minecraft"
+    },
+    "stack_status_reason": "Stack CREATE started",
+    "stack_name": "stack-test",
+    "stack_owner": null,
+    "creation_time": "2014-10-03T16:49:10Z",
+    "links": [
+      {
+        "href": "http://localhost:12345/v1/72e90ecb69c44d0296072ea39e537041/stacks/stack-test/e20b614b-c3ee-4b8b-bf4f-c05aaca947a2",
+        "rel": "self"
+      }
+    ],
+    "capabilities": [],
+    "notification_topics": [],
+    "timeout_mins": 30,
+    "stack_status": "CREATE_IN_PROGRESS",
+    "updated_time": null,
+    "id": "e20b614b-c3ee-4b8b-bf4f-c05aaca947a2",
+    "template_description": "This is a Heat template to deploy a single Linux server running a Minecraft\nserver.  The Minecraft server will be setup leveraging Chef solo.\n"
+  }
+}
