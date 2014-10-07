@@ -44,7 +44,10 @@
     "iriscouch",
     "mongohq",
     "openstack",
-    "redistogo"
+    "redistogo",
+    "hpcloud",
+    "hp",
+    "helion"
   ],
   "dependencies": {
     "async": "0.9.x",
