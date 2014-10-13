@@ -659,9 +659,39 @@ function setupRemoveFileMock(provider, client, servers) {
 }
 
 function setupDestroyContainerMock(provider, client, servers) {
-  if (provider === 'rackspace' || provider === 'openstack') {
+  if (provider === 'openstack') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json&limit=1001')
+      .reply(200, [
+        {
+          bytes: fillerama.length,
+          name: 'test-file.txt',
+          content_type: 'text/plain'
+        }
+      ])
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .reply(204, '')
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(204);
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json&limit=1001')
       .reply(200, [
         {
           bytes: fillerama.length,
@@ -690,7 +720,12 @@ function setupDestroyContainerMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json&limit=1001')
       .reply(200, [
         {
           bytes: fillerama.length,
