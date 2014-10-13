@@ -141,14 +141,13 @@ providers.filter(function (provider) {
       stream.on('error', function(err, response) {
         should.not.exist(err);
         should.not.exist(response);
+        done();
       });
 
-      stream.on('uploaded', complete);
-      stream.on('complete', complete);
-
-      function complete() {
+      stream.on('success', function(file) {
         authHockInstance && authHockInstance.done();
         hockInstance && hockInstance.done();
+        file.should.be.an.instanceof(File);
 
         context.file = {
           name: 'test-file.txt',
@@ -156,7 +155,7 @@ providers.filter(function (provider) {
         };
 
         done();
-      }
+      });
 
       var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
       file.pipe(stream);
@@ -528,6 +527,8 @@ function setupUploadStreamMock(provider, client, servers) {
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
+      .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
   else if (provider === 'amazon') {
     servers.server
@@ -545,11 +546,15 @@ function setupUploadStreamMock(provider, client, servers) {
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'mw0KEVFFwT8SgYGK3Cu8vg=='}))
       .put('/pkgcloud-test-container/test-file.txt?comp=blocklist', "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList><Latest>block000000000000000</Latest></BlockList>")
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
+      .get('/pkgcloud-test-container/test-file.txt')
+      .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}))
   }
   else if (provider === 'hp') {
     servers.server
       .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
+      .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
+      .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
 }
 
