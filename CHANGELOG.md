@@ -1,3 +1,6 @@
+## v1.0.1
+* Adding a rackspace orchestration provider
+
 ## v1.0.0
 * Requires node 0.10, dropping support for node v0.8
 * Fundamentally changed the streaming file api for upload. No longer takes a callback. See #332
