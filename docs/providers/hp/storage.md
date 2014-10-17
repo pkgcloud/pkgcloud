@@ -130,7 +130,7 @@ client.removeContainerMetadata(container, { year: false }, function(err, c) {
 
 ### File APIs
 
-* [`client.upload(options)`](#clientuploadoptions--)
+* [`client.upload(options)`](#clientuploadoptions)
 * [`client.download(options, function(err, file) { })`](#clientdownloadoptions-functionerr-file--)
 * [`client.getFile(container, file, function(err, file) { })`](#clientgetfilecontainer-file-functionerr-file--)
 * [`client.getFiles(container, function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
@@ -153,7 +153,7 @@ var myContainer = new Container({ name: 'my-container' });
 client.getFile(myContainer, 'my-file', function(err, file) { ... });
 ```
 
-#### client.upload(options) { })
+#### client.upload(options)
 
 Returns a `writableStream`. Upload a new file to a [`container`](#container-model). `writableStream` will emit `success` on completion of the upload, and will emit `error` on any failure. Function for `success` is `function(file) { ... }` where `file` is a [`file`](#file-model) model
 
