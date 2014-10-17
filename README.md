@@ -124,6 +124,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
 * **[Orchestration](#orchestration----beta)** *(beta)*
   * [Openstack](docs/providers/openstack/orchestration.md)
+  * [Rackspace](docs/providers/rackspace/orchestration.md)
 * **[Network](#network----beta)** *(beta)*
   * [HP](docs/providers/hp/network.md)
   * [Openstack](docs/providers/openstack/network.md)
@@ -491,6 +492,7 @@ To get started with a `pkgcloud.orchestration` client just create one:
 #### Providers
 
 * [Openstack](docs/providers/openstack/orchestration.md)
+* [Rackspace](docs/providers/rackspace/orchestration.md)
 
 Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchestration.createClient` has a set of uniform APIs:
 
