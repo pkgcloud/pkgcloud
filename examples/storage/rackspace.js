@@ -57,18 +57,20 @@ rackspace.createContainer({
 
   var myPicture = fs.createReadStream('/path/to/some/file/picture.jpg');
 
-  myPicture.pipe(rackspace.upload({
-      container: container.name,
-      remote: 'profile-picture.jpg'
-    },
-    function (err, result) {
-      if (err) {
-        console.dir(err);
-        return;
-      }
+  var upload = rackspace.upload({
+    container: container.name,
+    remote: 'profile-picture.jpg'
+  });
 
-      console.log(result);
-    }));
+  upload.on('error', function(err) {
+    console.error(err);
+  });
+
+  upload.on('success', function(file) {
+    console.log(file.toJSON());
+  });
+
+  myPicture.pipe(upload);
 });
 
 // 4 -- setup container as CDN

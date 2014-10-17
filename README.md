@@ -210,7 +210,7 @@ Each instance of `pkgcloud.storage.Client` returned from `pkgcloud.storage.creat
 * `client.getContainer(containerName, function (err, container) { })`
 
 ### File
-* `client.upload(options, function (err) { })`
+* `client.upload(options)`
 * `client.download(options, function (err) { })`
 * `client.getFiles(container, function (err, files) { })`
 * `client.getFile(container, file, function (err, server) { })`
@@ -225,10 +225,21 @@ Both the `.upload(options)` and `.download(options)` have had **careful attentio
 
   var client = pkgcloud.storage.createClient({ /* ... */ });
 
-  fs.createReadStream('a-file.txt').pipe(client.upload({
+  var readStream = fs.createReadStream('a-file.txt');
+  var writeStream = client.upload({
     container: 'a-container',
     remote: 'remote-file-name.txt'
-  }));
+  });
+
+  writeStream.on('error', function(err) {
+    // handle your error case
+  });
+
+  writeStream.on('success', function(file) {
+    // success, file will be a File model
+  });
+
+  readStream.pipe(writeStream);
 ```
 
 ### Download a File
