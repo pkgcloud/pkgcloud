@@ -233,7 +233,7 @@ providers.filter(function (provider) {
         });
       }
 
-      client.getFiles(context.container, function (err, files) {
+      client.getFiles(context.container, null, function (err, files) {
         should.not.exist(err);
         should.exist(files);
 
