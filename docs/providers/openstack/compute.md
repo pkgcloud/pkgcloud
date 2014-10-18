@@ -76,7 +76,7 @@ Returns a list of all possible server flavors available in the callback `f(err,
 flavors)`
 
 #### client.getFlavor(flavor, callback)
-Returns the specified rackspace flavor of Openstack Images by ID or flavor
+Returns the specified flavor of Openstack Images by ID or flavor
 object in the callback `f(err, flavor)`
 
 **images**
@@ -114,7 +114,7 @@ Destroys the specified image and returns a confirmation
 
 ## Volume Attachments
 
-Attaching a volume to a compute instance requires using a rackspace compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
+Attaching a volume to a compute instance requires using an openstack compute client, as well as possessing a `volume` or `volumeId`. Detaching volumes behaves the same way.
 
 #### client.getVolumeAttachments(server, callback)
 
