@@ -16,14 +16,17 @@ We've provided a [simple compute example](getting-started-compute.md) where it c
 
 For all of the Openstack services, you create a client with the same options:
 
-```Javascript
-var client = require('pkgcloud').compute.createClient({
-    provider: 'openstack',
-    username: 'your-user-name',
-    password: 'your-password',
-    authUrl: 'https://your-identity-service'
-});
+```javascript
+  var openstack = pkgcloud.storage.createClient({
+    provider: 'openstack', // required
+    username: 'your-user-name', // required
+    password: 'your-password', // required
+    authUrl: 'your identity service url' // required
+  });
 ```
+
+**Note:** *Due to variances between OpenStack deployments, you may or may not need a `region` option.*
+
 
 ### Authentication Endpoints and Regions
 
