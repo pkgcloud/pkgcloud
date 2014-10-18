@@ -1,3 +1,6 @@
+## v1.0.2
+* Adding support for OpenStack Cinder
+
 ## v1.0.1
 * Adding a rackspace orchestration provider
 

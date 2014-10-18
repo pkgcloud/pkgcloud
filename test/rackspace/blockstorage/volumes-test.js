@@ -13,7 +13,7 @@ var fs = require('fs'),
     hock = require('hock'),
     http = require('http'),
     helpers = require('../../helpers'),
-    Volume = require('../../../lib/pkgcloud/rackspace/blockstorage/volume').Volume,
+    Volume = require('../../../lib/pkgcloud/openstack/blockstorage/volume').Volume,
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/blockstorage/volumes', function () {

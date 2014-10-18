@@ -120,6 +120,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/dns.md)
 * **[Block Storage](#block-storage----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/blockstorage.md)
+  * [Openstack](docs/providers/openstack/blockstorage.md)
 * **[Load Balancers](#load-balancers----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/loadbalancer.md)
 * **[Orchestration](#orchestration----beta)** *(beta)*
@@ -339,7 +340,7 @@ Each instance of `pkgcloud.dns.Client` returned from `pkgcloud.dns.createClient`
 
 ## Block Storage -- Beta
 
-##### Note: Block Storage is considered Beta until there are multiple providers; presently only Rackspace are supported.
+##### Note: Block Storage is considered Beta until there are multiple providers; presently only Openstack and Rackspace are supported.
 
 The `pkgcloud.blockstorage` service is designed to make it easy to create and manage block storage volumes and snapshots.
 
@@ -361,6 +362,7 @@ To get started with a `pkgcloud.blockstorage` client just create one:
 #### Providers
 
 * [Rackspace](docs/providers/rackspace/blockstorage.md)
+* [Rackspace](docs/providers/openstack/blockstorage.md)
 
 Each instance of `pkgcloud.blockstorage.Client` returned from `pkgcloud.blockstorage.createClient` has a set of uniform APIs:
 
