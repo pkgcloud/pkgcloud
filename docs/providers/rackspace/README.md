@@ -32,6 +32,28 @@ In addition to your `apiKey`, you could alternately provide your `password` as a
 
 All of the Rackspace `createClient` calls have a few options that can be provided:
 
+#### region
+
+`region` specifies which region of a service to use. Different services have different regions enabled, and DNS doesn't require a region at all. The current list of regions is:
+
+- `DFW` (Dallas, Texas)
+- `ORD` (Chicago, Illinois)
+- `IAD` (Washington, DC)
+- `LON` (London, UK)
+- `SYD` (Sydney, Austrailia)
+- `HKG` (Hong Kong, China)
+
+##### Specifying a custom region
+
+```Javascript
+var client = require('pkgcloud').compute.createClient({
+    provider: 'rackspace',
+    username: 'your-user-name',
+    apiKey: 'your-api-key',
+    region: 'ORD'
+});
+```
+
 #### authUrl
 
 `authUrl` specifies the authentication endpoint used to create a token for your Rackspace client. By default, this is set to the Global endpoint: https://identity.api.rackspacecloud.com.
@@ -44,21 +66,6 @@ var client = require('pkgcloud').compute.createClient({
     username: 'your-user-name',
     apiKey: 'your-api-key',
     authUrl: 'https://lon.identity.api.rackspacecloud.com'
-});
-```
-
-#### region
-
-`region` specifies which region of a service to use. For example, when you authenticate with the global endpoint for compute, you have the option of either `DFW`, `ORD`, or `SYD`. The default region is `DFW`. Previous pkgcloud versions did not let you specify which region you used, so all calls were against `DFW`.
-
-##### Specifying a custom region
-
-```Javascript
-var client = require('pkgcloud').compute.createClient({
-    provider: 'rackspace',
-    username: 'your-user-name',
-    apiKey: 'your-api-key',
-    region: 'ORD'
 });
 ```
 
