@@ -6,11 +6,13 @@ Creating a block-storage client is straight-forward:
 
 ``` js
   var openstack = pkgcloud.blockstorage.createClient({
-    provider: 'openstack',
-    username: 'your-user-name',
-    apiKey: 'your-api-key'
+    provider: 'openstack', // required
+    username: 'your-user-name', // required
+    password: 'your-password', // required
+    authUrl: 'your identity service url' // required
   });
 ```
+**Note:** *Due to variances between OpenStack deployments, you may or may not need a `region` option.*
 
 [More options for creating clients](README.md)
 

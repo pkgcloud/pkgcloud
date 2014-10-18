@@ -4,12 +4,15 @@ Creating a client is straight-forward:
 
 ``` js
   var openstack = pkgcloud.network.createClient({
-    provider: 'openstack',
-    username: 'your-user-name',
-    password: 'your-password',
-    authUrl: 'https://yourIdentity-service'
+    provider: 'openstack', // required
+    username: 'your-user-name', // required
+    password: 'your-password', // required
+    authUrl: 'your identity service url' // required
   });
 ```
+
+**Note:** *Due to variances between OpenStack deployments, you may or may not need a `region` option.*
+
 ### API Methods
 
 **Networks**
