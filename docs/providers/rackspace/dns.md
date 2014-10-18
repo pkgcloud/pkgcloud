@@ -10,10 +10,13 @@
 Creating a client is straight-forward:
 
 ``` js
+  // Rackspace Cloud DNS is a global service, so no region is required
+
   var rackspace = pkgcloud.dns.createClient({
-    provider: 'rackspace',
-    username: 'your-user-name',
-    apiKey: 'your-api-key'
+    provider: 'rackspace', // required
+    username: 'your-user-name', // required
+    apiKey: 'your-api-key', // required
+    useInternal: false // optional, use to talk to serviceNet from a Rackspace machine
   });
 ```
 

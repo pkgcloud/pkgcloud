@@ -4,10 +4,12 @@ Creating a client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.orchestration.createClient({
-    provider: 'rackspace',
-    username: 'your-user-name',
-    password: 'your-password',
-    authUrl: 'https://your-identity-service'
+    provider: 'rackspace', // required
+    username: 'your-user-name', // required
+    apiKey: 'your-api-key', // required
+    region: 'IAD', // required, regions can be found at
+    // http://www.rackspace.com/knowledge_center/article/about-regions
+    useInternal: false // optional, use to talk to serviceNet from a Rackspace machine
   });
 ```
 

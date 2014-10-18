@@ -6,9 +6,12 @@ Creating a block-storage client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.blockstorage.createClient({
-    provider: 'rackspace',
-    username: 'your-user-name',
-    apiKey: 'your-api-key'
+    provider: 'rackspace', // required
+    username: 'your-user-name', // required
+    apiKey: 'your-api-key', // required
+    region: 'IAD', // required, regions can be found at
+    // http://www.rackspace.com/knowledge_center/article/about-regions
+    useInternal: false // optional, use to talk to serviceNet from a Rackspace machine
   });
 ```
 

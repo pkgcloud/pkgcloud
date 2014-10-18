@@ -11,10 +11,12 @@ Creating a client is straight-forward:
 
 ``` js
   var rackspace = pkgcloud.storage.createClient({
-    provider: 'rackspace',
-    username: 'your-rax-user-name',
-    apiKey: 'your-rax-api-key',
-    region: 'IAD'
+    provider: 'rackspace', // required
+    username: 'your-user-name', // required
+    apiKey: 'your-api-key', // required
+    region: 'IAD', // required, regions can be found at
+    // http://www.rackspace.com/knowledge_center/article/about-regions
+    useInternal: false // optional, use to talk to serviceNet from a Rackspace machine
   });
 ```
 
