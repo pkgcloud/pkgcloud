@@ -25,7 +25,8 @@ var pkgcloud = require('pkgcloud'),
 // create our client with your rackspace credentials
 var client = pkgcloud.providers.rackspace.compute.createClient({
   username: 'your-username',
-  apiKey:   'your-api-key'
+  apiKey:   'your-api-key',
+  region: 'your-region' // see http://www.rackspace.com/knowledge_center/article/about-regions
 });
 
 // first we're going to get our flavors
