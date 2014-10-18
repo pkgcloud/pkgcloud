@@ -1,3 +1,20 @@
+## v1.0.2
+* Adding support for OpenStack Cinder
+
+## v1.0.1
+* Adding a rackspace orchestration provider
+
+## v1.0.0
+* Requires node 0.10, dropping support for node v0.8
+* Fundamentally changed the streaming file api for upload. No longer takes a callback. See #332
+* Significant cleanup across storage apis across providers
+* Added `toJSON` on all models
+* Changed underlying Amazon provider to use aws-sdk
+* Added Openstack Heat provider
+* updated all package dependencies, including removing `utile`
+* static website support for Rackspace Cloud Files
+* Added compute.keys support for HP Compute provider
+
 ## v0.9.6
 * Fixed a long-standing bug in openstack.compute.getFlavor #292
 

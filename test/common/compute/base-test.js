@@ -46,6 +46,9 @@ providers.forEach(function(provider) {
       hockInstance = hock.createHock({ throwOnUnmatched: false });
       authHockInstance = hock.createHock();
 
+      // setup a filtering path for aws
+      hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
+
       server = http.createServer(hockInstance.handler);
       authServer = http.createServer(authHockInstance.handler);
 
@@ -136,7 +139,7 @@ providers.forEach(function(provider) {
       });
     });
 
-    it('the setWait() method waiting for a hockInstance to be operational should return a running hockInstance', function (done) {
+    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
       var m = mock ? 0.1 : 100;
 
       if (mock) {
@@ -154,7 +157,7 @@ providers.forEach(function(provider) {
         should.not.exist(err);
         should.exist(srv1);
 
-        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, function (err, srv2) {
+        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, 1000, function (err, srv2) {
           should.not.exist(err);
           should.exist(srv2);
           srv2.should.be.instanceOf(Server);
@@ -353,8 +356,8 @@ function setupImagesMock(client, provider, servers) {
   else if (provider === 'amazon') {
     servers.server
       .filteringRequestBody(helpers.authFilter)
-      .post('/?Action=DescribeImages', { 'Owner.0': 'self' },
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .post('/', { Action: 'DescribeImages', 'Owner.1': 'self' },
+        {'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/images.xml');
   }
   else if (provider === 'azure') {
@@ -452,15 +455,17 @@ function setupServerMock(client, provider, servers) {
   else if (provider === 'amazon') {
     servers.server
       .filteringRequestBody(helpers.authFilter)
-      .post('/?Action=RunInstances', {
+      .post('/', {
+        'Action':'RunInstances',
         'ImageId': 'ami-85db1cec',
         'InstanceType': 'm1.small',
         'MaxCount': '1',
         'MinCount': '1',
         'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3Qtc2V0V2FpdCJ9'
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/run-instances.xml')
-      .post('/?Action=DescribeInstances', {
+      .post('/', {
+        'Action': 'DescribeInstances',
         'Filter.1.Name': 'instance-state-code',
         'Filter.1.Value.1': '0',
         'Filter.1.Value.2': '16',
@@ -468,14 +473,16 @@ function setupServerMock(client, provider, servers) {
         'Filter.1.Value.4': '64',
         'Filter.1.Value.5': '80',
         'InstanceId.1': 'i-1d48637b'
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/pending-server.xml')
-      .post('/?Action=DescribeInstanceAttribute', {
+      .post('/', {
+        'Action': 'DescribeInstanceAttribute',
         'Attribute': 'userData',
         'InstanceId': 'i-1d48637b'
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server-attr.xml')
-      .post('/?Action=DescribeInstances', {
+      .post('/', {
+        'Action': 'DescribeInstances',
         'Filter.1.Name': 'instance-state-code',
         'Filter.1.Value.1': '0',
         'Filter.1.Value.2': '16',
@@ -483,12 +490,13 @@ function setupServerMock(client, provider, servers) {
         'Filter.1.Value.4': '64',
         'Filter.1.Value.5': '80',
         'InstanceId.1': 'i-1d48637b'
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml')
-      .post('/?Action=DescribeInstanceAttribute', {
+      .post('/', {
+        'Action': 'DescribeInstanceAttribute',
         'Attribute': 'userData',
         'InstanceId': 'i-1d48637b'
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server-attr.xml');
 
   }

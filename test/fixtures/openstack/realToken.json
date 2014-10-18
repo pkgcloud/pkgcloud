@@ -84,6 +84,16 @@
         "endpoints_links": [],
         "type": "identity",
         "name": "keystone"
+      },
+      {
+        "name": "heat",
+        "endpoints": [
+          {
+            "region": "Calxeda-AUS1",
+            "publicURL": "http://localhost:12345/v1/72e90ecb69c44d0296072ea39e537041"
+          }
+        ],
+        "type": "orchestration"
       }
     ],
     "user": {

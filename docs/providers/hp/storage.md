@@ -130,7 +130,7 @@ client.removeContainerMetadata(container, { year: false }, function(err, c) {
 
 ### File APIs
 
-* [`client.upload(options, function(err, result) { })`](#clientuploadoptions-functionerr-result--)
+* [`client.upload(options)`](#clientuploadoptions)
 * [`client.download(options, function(err, file) { })`](#clientdownloadoptions-functionerr-file--)
 * [`client.getFile(container, file, function(err, file) { })`](#clientgetfilecontainer-file-functionerr-file--)
 * [`client.getFiles(container, function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
@@ -153,9 +153,9 @@ var myContainer = new Container({ name: 'my-container' });
 client.getFile(myContainer, 'my-file', function(err, file) { ... });
 ```
 
-#### client.upload(options, function(err, result) { })
+#### client.upload(options)
 
-Returns a writeable stream. Upload a new file to a [`container`](#container-model). `result` will be `true` on success.
+Returns a `writableStream`. Upload a new file to a [`container`](#container-model). `writableStream` will emit `success` on completion of the upload, and will emit `error` on any failure. Function for `success` is `function(file) { ... }` where `file` is a [`file`](#file-model) model
 
 To upload a file, you need to provide an `options` argument:
 
@@ -164,56 +164,28 @@ var options = {
     // required options
     container: 'my-container', // this can be either the name or an instance of container
     remote: 'my-file', // name of the new file
-
-    // optional, either stream or local
-    stream: myStream, // any instance of a readable stream
-    local: '/path/to/local/file' // a path to any local file
-
-    // Other optional values
-    metadata: { // provide any number of property/values for metadata
-      campaign: '2012 magazine'
-    },
-    headers: { // optionally provide raw headers to send to cloud files
-      'content-type': 'application/json'
-    }
+    contentType: 'application/json', // optional mime type for the file, will attempt to auto-detect based on remote name
+    size: 1234 // size of the file
 };
 ```
 
-You need not provide either `stream` or `local`. `client.upload` returns a writeable stream, so you can simply pipe directly into it from your stream. For example:
-
 ```Javascript
-var fs = require('fs'),
-    pkgcloud = require('pkgcloud');
+  var readStream = fs.createReadStream('a-file.txt');
+  var writeStream = client.upload({
+    container: 'a-container',
+    remote: 'remote-file-name.txt'
+  });
 
-var client = pkgcloud.providers.hp.storage.createClient({ ... });
+  writeStream.on('error', function(err) {
+    // handle your error case
+  });
 
-var myFile = fs.createReadStream('/my/local/file');
+  writeStream.on('success', function(file) {
+    // success, file will be a File model
+  });
 
-myFile.pipe(client.upload({
-    container: 'my-container',
-    remote: 'my-file'
-}, function(err, result) {
-    // handle the upload result
-}));
+  readStream.pipe(writeStream);
 ```
-
-You could also upload a local file via the `local` property on `options`:
-
-```Javascript
-var pkgcloud = require('pkgcloud');
-
-var client = pkgcloud.providers.hp.storage.createClient({ ... });
-
-client.upload({
-    container: 'my-container',
-    remote: 'my-file',
-    local: '/path/to/my/file'
-}, function(err, result) {
-    // handle the upload result
-});
-```
-
-This is functionally equivalent to piping from an `fs.createReadStream`, but has a simplified calling convention.
 
 #### client.download(options, function(err, file) { })
 

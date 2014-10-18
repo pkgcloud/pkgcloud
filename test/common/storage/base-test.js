@@ -47,6 +47,9 @@ providers.filter(function (provider) {
       server = http.createServer(hockInstance.handler);
       authServer = http.createServer(authHockInstance.handler);
 
+      // setup a filtering path for aws
+      hockInstance.filteringPathRegEx(/https:\/\/[\w\-\.]*s3-us-west-2\.amazonaws\.com([\w\-\.\_0-9\/]*)/g, '$1');
+
       async.parallel([
         function (next) {
           server.listen(12345, next);
@@ -133,20 +136,24 @@ providers.filter(function (provider) {
         container: context.container,
         remote: 'test-file.txt',
         headers: {'x-amz-acl': 'public-read'}
-      }, function(err, ok, response) {
+      });
+
+      stream.on('error', function(err, response) {
         should.not.exist(err);
-        should.exist(ok);
+        should.not.exist(response);
+        done();
+      });
+
+      stream.on('success', function(file) {
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        file.should.be.an.instanceof(File);
 
         context.file = {
           name: 'test-file.txt',
           size: Buffer.byteLength(fillerama)
         };
 
-        should.exist(response);
-        should.exist(response.statusCode);
-        should.exist(response.headers);
-
-        hockInstance && hockInstance.done();
         done();
       });
 
@@ -171,59 +178,19 @@ providers.filter(function (provider) {
       var stream = client.download({
         container: context.container,
         remote: context.file.name
-      }, function (err, file) {
-        should.not.exist(err);
-        should.exist(file);
-
-        file.name.should.equal(context.file.name);
-        context.fileContents.should.equal(fillerama);
-        file.size.should.equal(Buffer.byteLength(context.fileContents));
-
-        hockInstance && hockInstance.done();
-        done();
       });
 
       context.fileContents = '';
+
       stream.on('data', function (data) {
         context.fileContents += data;
       });
-      stream.end();
-    });
 
-    it('the download() method with container and filename should succeed', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupDownloadStreamMock(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      var stream = client.download({
-        container: context.container,
-        remote: context.file.name
-      }, function (err, file) {
-        should.not.exist(err);
-        should.exist(file);
-
-        file.name.should.equal(context.file.name);
+      stream.on('end', function() {
         context.fileContents.should.equal(fillerama);
-        file.size.should.equal(Buffer.byteLength(context.fileContents));
-
         hockInstance && hockInstance.done();
         done();
       });
-
-      context.fileContents = '';
-      stream.on('data', function (data) {
-        context.fileContents += data;
-      });
-      stream.end();
     });
 
     it('the getFile() method with container and filename should succeed', function (done) {
@@ -266,7 +233,7 @@ providers.filter(function (provider) {
         });
       }
 
-      client.getFiles(context.container, false, function (err, files) {
+      client.getFiles(context.container, function (err, files) {
         should.not.exist(err);
         should.exist(files);
 
@@ -274,7 +241,7 @@ providers.filter(function (provider) {
 
         files.forEach(function(file) {
           file.should.be.instanceOf(File);
-        })
+        });
 
         // TODO look for context.file in array
 
@@ -435,7 +402,7 @@ providers.filter(function (provider) {
   });
 });
 
-  function setupCreateContainerMock(provider, client, servers) {
+function setupCreateContainerMock(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -482,20 +449,8 @@ providers.filter(function (provider) {
       .reply(201);
   }
   else if (provider === 'amazon') {
-
-    // Override the clients getUrl method as it tries to prefix the container name onto the request
-    client._getUrl = function (options) {
-      options = options || {};
-
-      if (typeof options === 'string') {
-        return urlJoin(this.protocol + this.serversUrl, options);
-      }
-
-      return urlJoin(this.protocol + this.serversUrl, options.path);
-    };
-
     servers.server
-      .put('/')
+      .put('/', '<CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>')
       .reply(200);
   }
   else if (provider === 'azure') {
@@ -572,11 +527,18 @@ function setupUploadStreamMock(provider, client, servers) {
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
+      .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
   else if (provider === 'amazon') {
     servers.server
-      .put('/test-file.txt', fillerama)
-      .reply(200, '', {})
+      .post('/test-file.txt?uploads')
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n<InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><UploadId>U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--</UploadId></InitiateMultipartUploadResult>', {})
+      .put('/test-file.txt?partNumber=1&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', fillerama)
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/test-file.txt</Location><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
+      .post('/test-file.txt?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag><PartNumber>1</PartNumber></Part></CompleteMultipartUpload>')
+      .reply(200);
+
   }
   else if (provider === 'azure') {
     servers.server
@@ -584,11 +546,15 @@ function setupUploadStreamMock(provider, client, servers) {
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'mw0KEVFFwT8SgYGK3Cu8vg=='}))
       .put('/pkgcloud-test-container/test-file.txt?comp=blocklist', "<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList><Latest>block000000000000000</Latest></BlockList>")
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
+      .get('/pkgcloud-test-container/test-file.txt')
+      .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}))
   }
   else if (provider === 'hp') {
     servers.server
       .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
       .reply(200)
+      .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
+      .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
 }
 
@@ -601,7 +567,7 @@ function setupDownloadStreamMock(provider, client, servers) {
   else if (provider === 'amazon') {
     servers.server
       .get('/test-file.txt')
-      .reply(200, fillerama, { 'content-length': fillerama.length + 2 })
+      .reply(200, fillerama, { 'content-length': fillerama.length + 2 });
   }
   else if (provider === 'azure') {
     servers.server
@@ -693,9 +659,39 @@ function setupRemoveFileMock(provider, client, servers) {
 }
 
 function setupDestroyContainerMock(provider, client, servers) {
-  if (provider === 'rackspace' || provider === 'openstack') {
+  if (provider === 'openstack') {
     servers.server
-      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json&limit=1001')
+      .reply(200, [
+        {
+          bytes: fillerama.length,
+          name: 'test-file.txt',
+          content_type: 'text/plain'
+        }
+      ])
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .reply(204, '')
+      .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(204);
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json&limit=1001')
       .reply(200, [
         {
           bytes: fillerama.length,
@@ -724,7 +720,12 @@ function setupDestroyContainerMock(provider, client, servers) {
   }
   else if (provider === 'hp') {
     servers.server
-      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
+      .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
+      .reply(200, {}, {
+        'x-container-object-count': 1,
+        'x-container-bytes-used': fillerama.length
+      })
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json&limit=1001')
       .reply(200, [
         {
           bytes: fillerama.length,
