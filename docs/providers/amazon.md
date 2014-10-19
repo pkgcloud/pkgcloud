@@ -1,26 +1,28 @@
-# Using Amazon Web Services (aws) with `pkgcloud`
+## Using the Amazon (AWS) provider in pkgcloud
 
-* [Using Compute](#using-compute)
-* [Using Storage](#using-storage)
+The Amazon provider in pkgcloud supports the following services:
 
-<a name="using-compute"></a>
-## Using Compute
+* **Compute** (EC2)
+* **Storage** S3 (Simple Storage Service)
 
-``` js
-  var amazon = pkgcloud.compute.createClient({
-    provider: 'amazon',
-    key: 'asdfkjas;dkj43498aj3n',
-    keyId: '98kja34lkj'
-  });
+### Client Creation
+
+For all of the Amazon services, you create a client with the same options:
+
+```Javascript
+var client = require('pkgcloud').compute.createClient({
+   provider: 'amazon',
+   key: 'your-secret-key-id', // secret key
+   keyId: 'your-access-key-id' // access key id
+   region: 'us-west-2' // region
+});
 ```
 
-<a name="using-storage"></a>
-## Using Storage
-
-``` js
-  var amazon = pkgcloud.storage.createClient({
-    provider: 'amazon', // 'aws', 's3'
-    key: 'asdfkjas;dkj43498aj3n',
-    keyId: '98kja34lkj'
-  });
+```Javascript
+var client = require('pkgcloud').storage.createClient({
+   provider: 'amazon',
+   key: 'your-secret-key-id', // secret key
+   keyId: 'your-access-key-id' // access key id
+   region: 'us-west-2' // region
+});
 ```
