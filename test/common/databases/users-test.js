@@ -12,16 +12,19 @@ var should = require('should'),
   http = require('http'),
   helpers = require('../../helpers'),
   User = require('../../../lib/pkgcloud/openstack/database/user').User,
+  providers = require('../../configs/providers.json'),
   mock = !!process.env.MOCK;
-
-describe('pkgcloud/rackspace/databases/users', function () {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].database;
+}).forEach(function (provider) {
+describe('pkgcloud/['+provider+']/databases/users', function () {
   var testContext = {},
     client, authHockInstance, hockInstance, authServer, server;
 
-  describe('The pkgcloud Rackspace Database client', function () {
+  describe('The pkgcloud '+provider+' Database client', function () {
 
     before(function (done) {
-      client = helpers.createClient('rackspace', 'database');
+      client = helpers.createClient(provider, 'database');
 
       if (!mock) {
         return done();
@@ -482,4 +485,5 @@ describe('pkgcloud/rackspace/databases/users', function () {
       ], done)
     });
   });
+});
 });
