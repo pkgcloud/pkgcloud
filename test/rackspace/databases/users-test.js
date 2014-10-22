@@ -11,7 +11,7 @@ var should = require('should'),
   hock = require('hock'),
   http = require('http'),
   helpers = require('../../helpers'),
-  User = require('../../../lib/pkgcloud/rackspace/database/user').User,
+  User = require('../../../lib/pkgcloud/openstack/database/user').User,
   mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/users', function () {
@@ -42,7 +42,7 @@ describe('pkgcloud/rackspace/databases/users', function () {
         }
       ], done);
     });
-    
+
     it('the createUser() method should respond correctly', function (done) {
       if (mock) {
         authHockInstance

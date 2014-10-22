@@ -12,7 +12,7 @@ var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-    Instance = require('../../../lib/pkgcloud/rackspace/database/instance').Instance,
+    Instance = require('../../../lib/pkgcloud/openstack/database/instance').Instance,
     mock = !!process.env.MOCK;
 
 describe('pkgcloud/rackspace/databases/instances', function () {
@@ -49,7 +49,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
       var err, instance;
 
       before(function(done) {
-        
+
         if (mock) {
           authHockInstance
             .post('/v2.0/tokens', {
@@ -77,7 +77,7 @@ describe('pkgcloud/rackspace/databases/instances', function () {
               }
             })
             .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
-          
+
         }
         client.getFlavor(1, function (err, flavor) {
           should.not.exist(err);
@@ -529,4 +529,3 @@ function assertLinks(links) {
     should.exist(link.rel);
   });
 }
-
