@@ -17,6 +17,7 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 In this example, we're going to create a Openstack compute client, create two servers, and then output their details to the command line.
 
 *Note: We're going to use [underscore.js](http://underscorejs.org) for some convenience functions.*
+*Note: For DevStack, change AuthUrl to http://*
 
 ```Javascript
 var pkgcloud = require('pkgcloud'),
@@ -27,6 +28,7 @@ var client = pkgcloud.compute.createClient({
   provider: 'openstack',
   username: 'your-user-name',
   password: 'your-password',
+  region: 'RegionOne'
   authUrl: 'https://your-identity-service'
 });
 
@@ -45,10 +47,10 @@ client.getFlavors(function (err, flavors) {
         }
 
         // Pick a 512MB instance flavor
-        var flavor = _.findWhere(flavors, { name: '512MB Standard Instance' });
+        var flavor = _.findWhere(flavors, { name: 'm1.tiny' });
 
         // Pick an image based on Ubuntu 12.04
-        var image = _.findWhere(images, { name: 'Ubuntu 12.04 LTS (Precise Pangolin)' });
+        var image = _.findWhere(images, { name: 'cirros-0.3.2-x86_64-uec' });
 
         // Create our first server
         client.createServer({
