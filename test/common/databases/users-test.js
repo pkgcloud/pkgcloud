@@ -1,5 +1,5 @@
 /*
- * users-test.js: Tests for Rackspace Cloud Database users within an instace
+ * users-test.js: Tests for Cloud Database users within an instace
  *
  * (C) 2010 Nodejitsu Inc.
  * MIT LICENSE
@@ -15,7 +15,8 @@ var should = require('should'),
   providers = require('../../configs/providers.json'),
   mock = !!process.env.MOCK;
 providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].database;
+  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
+  // return provider === 'openstack';
 }).forEach(function (provider) {
 describe('pkgcloud/['+provider+']/databases/users', function () {
   var testContext = {},
@@ -48,30 +49,8 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
 
     it('the createUser() method should respond correctly', function (done) {
       if (mock) {
-        authHockInstance
-          .post('/v2.0/tokens', {
-            auth: {
-              'RAX-KSKEY:apiKeyCredentials': {
-                username: 'MOCK-USERNAME',
-                apiKey: 'MOCK-API-KEY'
-              }
-            }
-          })
-          .reply(200, helpers.getRackspaceAuthResponse());
-
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
-            users: [
-              {
-                name: 'joeTest',
-                password: 'joepasswd',
-                databases: [ { name: 'TestDatabase' } ]
-              }
-            ]
-          })
-          .reply(202);
+        setupAuthenticationMock(authHockInstance, hockInstance, provider);
+        setupCreateUserMock(authHockInstance, hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -94,21 +73,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
 
     it('the createUser() method should work with databases argument', function (done) {
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
-            users: [
-              {
-                name: 'joeTest',
-                password: 'joepasswd',
-                databases: [
-                  { name: 'TestDatabase' }
-                ]
-              }
-            ]
-          })
-          .reply(202);
+          setupCreateUserMock(authHockInstance, hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -132,33 +97,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
     it('create an other user for test pagination should response correctly', function (done) {
 
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
-            users: [
-              {
-                name: 'joeTestTwo',
-                password: 'joepasswd',
-                databases: [
-                  { name: 'TestDatabase' }
-                ]
-              }
-            ]
-          })
-          .reply(202)
-          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
-            users: [
-              {
-                name: 'joeTestThree',
-                password: 'joepasswd',
-                databases: [
-                  { name: 'TestDatabase' }
-                ]
-              }
-            ]
-          })
-          .reply(202);
+        setupCreateAnotherUserMock(hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -187,28 +126,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
     it('create multiple users in one request should response correctly', function (done) {
 
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
-            users: [
-              {
-                name: 'joeTestFour',
-                password: 'joepasswd',
-                databases: [
-                  { name: 'TestDatabase' }
-                ]
-              },
-              {
-                name: 'joeTestFive',
-                password: 'joepasswd',
-                databases: [
-                  { name: 'TestDatabase' }
-                ]
-              }
-            ]
-          })
-          .reply(202);
+        setupCreateMultiplsUsersMock(hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -238,9 +156,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
     it('create users with questionable characters should respond with error', function (done) {
 
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
+        setupCreateUsersWithRestrictedCharacters(hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -261,11 +177,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
     it('the getUsers() method should get the list of users', function (done) {
 
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
-          .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'));
+        setupGetUsersMock(hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -282,106 +194,11 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
       });
     });
 
-    describe('the getUsers() method', function () {
-
-      var err, list, offset;
-
-      before(function (done) {
-
-        if (mock) {
-          hockInstance
-            .get('/v1.0/123456/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
-            .reply(200, helpers.loadFixture('rackspace/databaseUsersLimit.json'));
-        }
-
-        helpers.selectInstance(client, function (instance) {
-          client.getUsers({ instance: instance, limit: 1 }, function (e, l, o) {
-            err = e;
-            list = l;
-            offset = o;
-            hockInstance && hockInstance.done();
-            done();
-          });
-        });
-      });
-
-      it('with limit should respond with one element', function () {
-        should.not.exist(err);
-        should.exist(list);
-        list.should.have.length(1);
-      });
-
-      it('with limitshould pass as third argument the offset mark', function () {
-        should.exist(offset);
-        testContext.marker = offset;
-      });
-
-      it('with offset should respond less quantity', function (done) {
-
-        if (mock) {
-          hockInstance
-            .get('/v1.0/123456/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?marker=joeTest')
-            .reply(200, {
-              users: [
-                { name: 'joeTestTwo', databases: []},
-                { name: 'joeTestThree', databases: []}
-              ]
-            });
-        }
-
-        helpers.selectInstance(client, function (instance) {
-          client.getUsers({ instance: instance, offset: testContext.marker }, function (err, list, offset) {
-            should.not.exist(err);
-            should.exist(list);
-            list.should.be.an.Array;
-            list.should.have.length(2);
-            should.not.exist(offset);
-            hockInstance && hockInstance.done();
-            done();
-          });
-        });
-      });
-
-      it('with limit and offset should responsd with just result with more next points', function(done) {
-
-        if (mock) {
-          hockInstance
-            .get('/v1.0/123456/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1&marker=joeTest')
-            .reply(200, helpers.loadFixture('rackspace/databaseUsersLimitOffset.json'));
-        }
-
-        helpers.selectInstance(client, function (instance) {
-          client.getUsers({
-            instance: instance,
-            limit: 1,
-            offset:testContext.marker }, function(err, list, offset) {
-            should.not.exist(err);
-            should.exist(list);
-            list.should.be.an.Array;
-            list.should.have.length(1);
-            should.exist(offset);
-            hockInstance && hockInstance.done();
-            done();
-          });
-        });
-      });
-    });
-
     describe('the destroyUsers() method', function() {
       it('should respond correctly', function(done) {
 
         if (mock) {
-          hockInstance
-            .get('/v1.0/123456/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
-            .reply(202);
+          setupDestroyUsersMock(hockInstance, provider);
         }
 
         helpers.selectInstance(client, function (instance) {
@@ -398,11 +215,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
       it('should destroy the user used for pagination', function(done) {
 
         if (mock) {
-          hockInstance
-            .get('/v1.0/123456/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
-            .reply(202);
+          setupDestroyUsersMockWithPagination(hockInstance, provider);
         }
 
         helpers.selectInstance(client, function (instance) {
@@ -420,16 +233,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
     it('the enableRoot() method should respond correctly', function(done) {
 
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
-          .reply(200, {
-            user: {
-              password: 'dbba235b-d078-42ec-b992-dec1464c49cc',
-              name: 'root'
-            }
-          });
+        setupEnableRootMock(hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -451,11 +255,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
     it('the enableRoot() method should respond correctly', function (done) {
 
       if (mock) {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
-          .reply(200, { rootEnabled: true });
+        setupEnableRootMockWithStatus(hockInstance, provider);
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -487,3 +287,473 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
   });
 });
 });
+
+function setupAuthenticationMock (authHockInstance, hockInstance, provider)  {
+  if (provider === 'rackspace') {
+        authHockInstance
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .reply(200, helpers.getRackspaceAuthResponse());
+    }
+    else if (provider === 'openstack')   {
+      authHockInstance
+        .post('/v2.0/tokens', {
+          auth: {
+            passwordCredentials: {
+              username: 'MOCK-USERNAME',
+              password: 'MOCK-PASSWORD'
+            }
+          }
+        })
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken.json')
+        .get('/v2.0/tenants')
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
+        .post('/v2.0/tokens', {
+          auth: {
+            passwordCredentials: {
+              username: 'MOCK-USERNAME',
+              password: 'MOCK-PASSWORD'
+            },
+            tenantId: '72e90ecb69c44d0296072ea39e537041'
+          }
+        })
+        .reply(200, helpers.getOpenstackAuthResponse());
+    }
+    else if (provider === 'hp') {
+      authHockInstance.post('/v2.0/tokens', {
+        auth: {
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/initialToken.json')
+      .get('/v2.0/tenants')
+      .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
+          },
+          tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
+        }
+      })
+      .reply(200, helpers.gethpAuthResponse());
+    }
+    else if (provider === 'openstack') {
+      authHockInstance.post('/v2.0/tokens', {
+          auth: {
+            passwordCredentials: {
+              username: 'MOCK-USERNAME',
+              password: 'MOCK-PASSWORD'
+            }
+          }
+        })
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken.json')
+        .get('/v2.0/tenants')
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
+        .post('/v2.0/tokens', {
+          auth: {
+            passwordCredentials: {
+              username: 'MOCK-USERNAME',
+              password: 'MOCK-PASSWORD'
+            },
+            tenantId: '72e90ecb69c44d0296072ea39e537041'
+          }
+        })
+        .reply(200, helpers.getOpenstackAuthResponse());
+    }
+    else {
+      throw new Error('not supported');
+    }
+}
+
+function setupCreateUserMock(authHockInstance, hockInstance, provider) {
+  if (provider === 'rackspace') {
+        hockInstance
+          .get('/v1.0/123456/instances')
+          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+          .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+            users: [
+              {
+                name: 'joeTest',
+                password: 'joepasswd',
+                databases: [ { name: 'TestDatabase' } ]
+              }
+            ]
+          })
+          .reply(202);
+  }
+  else if ( provider === 'openstack' ){
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+        users: [
+          {
+            name: 'joeTest',
+            password: 'joepasswd',
+            databases: [ { name: 'TestDatabase' } ]
+          }
+        ]
+      })
+      .reply(202);
+  }
+  else if ( provider === 'hp' ){
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+        users: [
+          {
+            name: 'joeTest',
+            password: 'joepasswd',
+            databases: [ { name: 'TestDatabase' } ]
+          }
+        ]
+      })
+      .reply(202);
+  }
+  else {
+    throw new Error('not supported');
+  }
+}
+
+function setupCreateAnotherUserMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+        users: [
+          {
+            name: 'joeTestTwo',
+            password: 'joepasswd',
+            databases: [
+              { name: 'TestDatabase' }
+            ]
+          }
+        ]
+      })
+      .reply(202)
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+        users: [
+          {
+            name: 'joeTestThree',
+            password: 'joepasswd',
+            databases: [
+              { name: 'TestDatabase' }
+            ]
+          }
+        ]
+      })
+      .reply(202);
+    }
+    else if (provider === 'hp') {
+      hockInstance
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+        .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+        .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          users: [
+            {
+              name: 'joeTestTwo',
+              password: 'joepasswd',
+              databases: [
+                { name: 'TestDatabase' }
+              ]
+            }
+          ]
+        })
+        .reply(202)
+        .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          users: [
+            {
+              name: 'joeTestThree',
+              password: 'joepasswd',
+              databases: [
+                { name: 'TestDatabase' }
+              ]
+            }
+          ]
+        })
+        .reply(202);
+    }
+    else if (provider === 'openstack') {
+      hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+        .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+        .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          users: [
+            {
+              name: 'joeTestTwo',
+              password: 'joepasswd',
+              databases: [
+                { name: 'TestDatabase' }
+              ]
+            }
+          ]
+        })
+        .reply(202)
+        .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+          users: [
+            {
+              name: 'joeTestThree',
+              password: 'joepasswd',
+              databases: [
+                { name: 'TestDatabase' }
+              ]
+            }
+          ]
+        })
+        .reply(202);
+    }
+    else {
+      throw new Error('not supported');
+    }
+}
+
+function setupCreateMultiplsUsersMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+        hockInstance
+            .get('/v1.0/123456/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+              users: [
+                {
+                  name: 'joeTestFour',
+                  password: 'joepasswd',
+                  databases: [
+                    { name: 'TestDatabase' }
+                  ]
+                },
+                {
+                  name: 'joeTestFive',
+                  password: 'joepasswd',
+                  databases: [
+                    { name: 'TestDatabase' }
+                  ]
+                }
+              ]
+            })
+            .reply(202);
+  }
+  else if ( provider === 'hp' ){
+    hockInstance
+            .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+            .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+            .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+              users: [
+                {
+                  name: 'joeTestFour',
+                  password: 'joepasswd',
+                  databases: [
+                    { name: 'TestDatabase' }
+                  ]
+                },
+                {
+                  name: 'joeTestFive',
+                  password: 'joepasswd',
+                  databases: [
+                    { name: 'TestDatabase' }
+                  ]
+                }
+              ]
+            })
+            .reply(202);
+  }
+  else if ( provider === 'openstack' ){
+      hockInstance
+              .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+              .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+              .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users', {
+                users: [
+                  {
+                    name: 'joeTestFour',
+                    password: 'joepasswd',
+                    databases: [
+                      { name: 'TestDatabase' }
+                    ]
+                  },
+                  {
+                    name: 'joeTestFive',
+                    password: 'joepasswd',
+                    databases: [
+                      { name: 'TestDatabase' }
+                    ]
+                  }
+                ]
+              })
+              .reply(202);
+  }
+  else {
+    throw new Error('not supported');
+  }
+}
+
+function setupCreateUsersWithRestrictedCharacters(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
+  }
+  else if ( provider === 'openstack' ){
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'));
+  }
+  else if ( provider === 'hp' ){
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'));
+  }
+  else {
+    throw new Error('not supported');
+  }
+}
+
+function setupGetUsersMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+        .get('/v1.0/123456/instances')
+        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
+        .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'));
+  }
+  else if ( provider === 'openstack' ){
+    hockInstance
+          .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+          .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+          .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
+          .reply(200, helpers.loadFixture('openstack/databaseUsers.json'));
+  }
+  else if ( provider === 'hp' ){
+    hockInstance
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+        .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
+        .reply(200, helpers.loadFixture('hp/databaseUsers.json'));
+  }
+  else {
+    throw new Error('not supported');
+  }
+
+}
+
+function setupEnableRootMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        user: {
+          password: 'dbba235b-d078-42ec-b992-dec1464c49cc',
+          name: 'root'
+        }
+      });
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        user: {
+          password: 'dbba235b-d078-42ec-b992-dec1464c49cc',
+          name: 'root'
+        }
+      });
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        user: {
+          password: 'dbba235b-d078-42ec-b992-dec1464c49cc',
+          name: 'root'
+        }
+      });
+  }
+}
+
+function setupEnableRootMockWithStatus(hockInstance, provider) {
+  if (provider === 'rackspace') {
+  hockInstance
+    .get('/v1.0/123456/instances')
+    .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+    .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+    .reply(200, { rootEnabled: true });
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, { rootEnabled: true });
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, { rootEnabled: true });
+  }
+}
+
+function setupDestroyUsersMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
+      .reply(202);
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
+      .reply(202);
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
+      .reply(202);
+  }
+}
+
+function setupDestroyUsersMockWithPagination(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+        .get('/v1.0/123456/instances')
+        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
+        .reply(202);
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+        .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+        .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
+        .reply(202);
+  }
+  else if (provider === 'hp') {
+    hockInstance
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+        .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+        .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
+        .reply(202);
+  }
+}
