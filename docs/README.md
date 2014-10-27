@@ -29,8 +29,10 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Openstack](providers/openstack/storage.md)
   * [Rackspace](providers/rackspace/storage.md)
 * **Databases**
+  * [HP](providers/hp/database.md)
   * [IrisCouch](providers/iriscouch.md)
   * [MongoLab](providers/mongolab.md)
+  * [Openstack](providers/openstack/database.md)
   * [Rackspace](providers/rackspace/database.md)
   * [MongoHQ](providers/mongohq.md)
   * [RedisToGo](providers/redistogo.md)

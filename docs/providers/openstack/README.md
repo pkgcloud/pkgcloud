@@ -3,6 +3,7 @@
 The OpenStack provider in pkgcloud supports the following services:
 
 * [**Compute**](compute.md) (Nova)
+* [**Databases**](databases.md) (databases)
 * [**Storage**](storage.md) (Swift)
 * [**Network**](network.md) (Neutron)
 * [**Orchestration**](orchestration.md) (Heat)
