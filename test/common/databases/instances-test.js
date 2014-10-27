@@ -204,7 +204,7 @@ providers.filter(function (provider) {
         });
       });
 
-      describe.only('the getInstance() method', function () {
+      describe('the getInstance() method', function () {
         it('should response with details', function (done) {
 
           if (mock) {
