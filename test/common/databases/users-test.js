@@ -16,7 +16,6 @@ var should = require('should'),
   mock = !!process.env.MOCK;
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
-  // return provider === 'openstack';
 }).forEach(function (provider) {
 describe('pkgcloud/['+provider+']/databases/users', function () {
   var testContext = {},
