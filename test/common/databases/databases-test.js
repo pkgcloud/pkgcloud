@@ -1,8 +1,7 @@
 /*
- * databases-test.js: Tests for Rackspace Cloud Database instances
+ * databases-test.js: Tests for Openstack Trove Databases within an instances
  *
- * (C) 2010 Nodejitsu Inc.
- * MIT LICENSE
+ * (C) 2014 Hewlett-Packard Development Company, L.P.
  *
  */
 

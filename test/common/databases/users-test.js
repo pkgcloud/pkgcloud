@@ -1,8 +1,7 @@
 /*
- * users-test.js: Tests for Cloud Database users within an instace
+ * users-test.js: Tests for Openstack Trove users within an instace
  *
- * (C) 2010 Nodejitsu Inc.
- * MIT LICENSE
+ * (C) 2014 Hewlett-Packard Development Company, L.P.
  *
  */
 

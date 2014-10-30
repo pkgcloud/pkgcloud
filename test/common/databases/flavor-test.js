@@ -1,7 +1,7 @@
 /*
-* flavor-test.js: Test for pkgcloud Rackspace database flavor requests
+* flavor-test.js: Test for pkgcloud Openstack Trove database flavors.
 *
-* (C) 2010 Nodejitsu Inc.
+* (C) 2014 Hewlett-Packard Development Company, L.P.
 *
 */
 

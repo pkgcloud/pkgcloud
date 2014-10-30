@@ -1,8 +1,7 @@
 /*
-* errors-test.js: Tests for Rackspace Cloud Database instances
+* errors-test.js: Tests for Openstack Trove client errors
 *
-* (C) 2010 Nodejitsu Inc.
-* MIT LICENSE
+* (C) 2014 Hewlett-Packard Development Company, L.P.
 *
 */
 
