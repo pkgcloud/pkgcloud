@@ -1,0 +1,12 @@
+{
+  "users": [{
+    "name": "joeTest",
+    "databases": []
+  }, {
+    "name": "joeTestTwo",
+    "databases": []
+  }, {
+    "name": "jowTestThree",
+    "databases": []
+  }]
+}
