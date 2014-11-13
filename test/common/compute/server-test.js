@@ -20,13 +20,16 @@ var fs = require('fs'),
     Image = require('../../../lib/pkgcloud/core/compute/image').Image,
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
+    pkgcloud = require('../../../lib/pkgcloud'),
     mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
-providers.forEach(function (provider) {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function (provider) {
   describe('pkgcloud/common/compute/server [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'compute'),

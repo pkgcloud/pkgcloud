@@ -15,11 +15,14 @@ var fs = require('fs'),
   async = require('async'),
   _ = require('underscore'),
   Image = require('../../../lib/pkgcloud/core/compute/image').Image,
+  pkgcloud = require('../../../lib/pkgcloud'),
   mock = !!process.env.MOCK;
 
 var providers=["openstack"];
 
-providers.forEach(function (provider) {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function (provider) {
   describe('pkgcloud/common/compute/server [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'compute'),

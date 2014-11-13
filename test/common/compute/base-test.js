@@ -28,7 +28,9 @@ var azureOptions = require('../../fixtures/azure/azure-options.json');
 
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
-providers.forEach(function(provider) {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function(provider) {
   describe('pkgcloud/common/compute/base [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'compute'),
