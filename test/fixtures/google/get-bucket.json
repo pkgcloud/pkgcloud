@@ -1,9 +1,0 @@
-{
-  "kind": "storage#bucket",
-  "id": "test-bucket",
-  "selfLink": "https://www.googleapis.com/storage/v1/b/test-bucket",
-  "name": "test-bucket",
-  "location": "US",
-  "storageClass": "STANDARD",
-  "etag": "CAE="
-}

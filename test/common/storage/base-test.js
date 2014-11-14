@@ -17,6 +17,8 @@ var fs = require('fs'),
     http = require('http'),
     urlJoin = require('url-join'),
     _ = require('underscore'),
+    request = require('request'),
+    through = require('through2'),
     providers = require('../../configs/providers.json'),
     versions = require('../../fixtures/versions.json'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
@@ -30,7 +32,16 @@ providers.filter(function (provider) {
 }).forEach(function (provider) {
   describe('pkgcloud/common/storage/base [' + provider + ']', function () {
 
-    var client = helpers.createClient(provider, 'storage'),
+    var config = null;
+
+    if (!mock && provider === 'google') {
+      config = {
+        keyFilename: process.env.GCLOUD_KEYFILE,
+        projectId: process.env.GCLOUD_PROJECT_ID
+      };
+    }
+
+    var client = helpers.createClient(provider, 'storage', config),
       context = {},
       authServer, server,
       authHockInstance, hockInstance;
@@ -469,6 +480,40 @@ function setupCreateContainerMock(provider, client, servers) {
       .put('/pkgcloud-test-container?restype=container')
       .reply(201, '', helpers.azureResponseHeaders());
   }
+  else if (provider === 'google') {
+    servers.server
+      .post('/storage/v1/b?project=test-project', {
+        name: 'pkgcloud-test-container'
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/google/create-bucket.json');
+
+    client.storage.connection_.createAuthorizedReq = function (reqOpts, callback) {
+      reqOpts.uri = reqOpts.uri.replace(/.*\.com/, 'http://localhost:12345');
+      callback(null, reqOpts);
+    };
+
+    client.storage.connection_.req = function (reqOpts, callback) {
+      reqOpts.uri = reqOpts.uri.replace(/.*\.com/, 'http://localhost:12345');
+      client.storage.connection_.requester(reqOpts, callback);
+    };
+
+    client.storage.connection_.requester = function (reqOpts, callback) {
+      if (reqOpts.qs && reqOpts.qs.uploadType === 'multipart') {
+        var stream = through();
+        stream.on('finish', function () {
+          fs.readFile(__dirname + '/../../fixtures/google/create-file.json', function(err, file) {
+            if (err) {
+              return stream.emit('error', err);
+            }
+            stream.emit('complete', { body: JSON.parse(file) });
+          });
+        });
+        return stream;
+      }
+
+      return request(reqOpts, callback);
+    };
+  }
   else if (provider === 'hp') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -514,6 +559,11 @@ function setupGetContainersMock(provider, client, servers) {
     servers.server
       .get('/?comp=list')
       .reply(200, helpers.loadFixture('azure/list-containers.xml'),helpers.azureResponseHeaders())
+  }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b?project=test-project')
+      .replyWithFile(200, __dirname + '/../../fixtures/google/get-buckets.json');
   }
   else if (provider === 'hp') {
     servers.server
@@ -574,6 +624,13 @@ function setupDownloadStreamMock(provider, client, servers) {
       .get('/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2,'content-type': 'text/plain'}))
   }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
+      .reply(200, { mediaLink: 'http://localhost:12345/mediaLink' })
+      .get('/mediaLink')
+      .reply(200, fillerama);
+  }
   else if (provider === 'hp') {
     servers.server
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
@@ -597,7 +654,12 @@ function setupGetFileMock(provider, client, servers) {
       .get('/pkgcloud-test-container/test-file.txt')
       .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}))
   }
-   if (provider === 'hp') {
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/google/get-file.json');
+  }
+  else if (provider === 'hp') {
     servers.server
       .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 })
@@ -623,6 +685,11 @@ function setupGetFilesMock(provider, client, servers) {
     servers.server
       .get('/pkgcloud-test-container?restype=container&comp=list')
       .reply(200, helpers.loadFixture('azure/list-container-files.xml'), helpers.azureResponseHeaders({'content-type': 'application/xml'}))
+  }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b/pkgcloud-test-container/o')
+      .replyWithFile(200, __dirname + '/../../fixtures/google/get-files.json');
   }
   else if (provider === 'hp') {
     servers.server
@@ -651,7 +718,12 @@ function setupRemoveFileMock(provider, client, servers) {
       .delete('/pkgcloud-test-container/test-file.txt')
       .reply(202, '', helpers.azureDeleteResponseHeaders())
   }
-  if (provider === 'hp') {
+  else if (provider === 'google') {
+    servers.server
+      .delete('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
+      .reply(204, {});
+  }
+  else if (provider === 'hp') {
     servers.server
       .delete('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '');
@@ -718,6 +790,15 @@ function setupDestroyContainerMock(provider, client, servers) {
       .delete('/pkgcloud-test-container?restype=container')
       .reply(202, '', helpers.azureDeleteResponseHeaders());
   }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b/pkgcloud-test-container/o')
+      .replyWithFile(200, __dirname + '/../../fixtures/google/get-files.json')
+      .delete('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
+      .reply(204, {})
+      .delete('/storage/v1/b/pkgcloud-test-container')
+      .reply(204, {});
+  }
   else if (provider === 'hp') {
     servers.server
       .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
@@ -755,6 +836,11 @@ function setupGetContainers2Mock(provider, client, servers) {
     servers.server
       .get('/?comp=list')
       .reply(200, helpers.loadFixture('azure/list-containers2.xml'), helpers.azureResponseHeaders())
+  }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b?project=test-project')
+      .replyWithFile(200, __dirname + '/../../fixtures/google/get-buckets.json');
   }
   else if (provider === 'hp') {
     servers.server

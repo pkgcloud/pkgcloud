@@ -3,17 +3,17 @@
   "items": [
     {
       "kind": "storage#object",
-      "id": "test-bucket/package.json/1415899273437000",
-      "selfLink": "https://www.googleapis.com/storage/v1/b/test-bucket/o/package.json",
-      "name": "package.json",
-      "bucket": "test-bucket",
+      "id": "pkgcloud-test-container/test-file.txt/1415899273437000",
+      "selfLink": "https://www.googleapis.com/storage/v1/b/pkgcloud-test-container/o/test-file.txt",
+      "name": "test-file.txt",
+      "bucket": "pkgcloud-test-container",
       "generation": "1415899273437000",
-      "contentType": "image/png",
+      "contentType": "application/txt",
       "updated": "2014-11-13T17:21:13.436Z",
       "storageClass": "STANDARD",
-      "size": "49111",
+      "size": "1102",
       "md5Hash": "CatH1NCRnQx11HYkd8d4WA==",
-      "mediaLink": "https://www.googleapis.com/download/storage/v1/b/test-bucket/o/package.json?generation=1415899273437000&alt=media",
+      "mediaLink": "https://www.googleapis.com/download/storage/v1/b/pkgcloud-test-container/o/test-file.txt?generation=1415899273437000&alt=media",
       "crc32c": "xvcxag==",
       "etag": "CMi+7OmL+MECEAE="
     }
