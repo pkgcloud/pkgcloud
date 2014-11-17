@@ -1,12 +1,19 @@
-## Using the Google Cloud provider in pkgcloud
+# Using Google Cloud with `pkgcloud`
 
 The Google Cloud provider in pkgcloud supports the following services:
 
-* **Storage** Google Cloud Storage (Simple Storage Service)
+* **Storage** Google Cloud Storage
 
-### Client Creation
+Using the Google Cloud provider requires:
 
-For all of the Google services, you create a client with the same options:
+1. A project id
+2. A JSON key file
+
+Both are provided from the [Google Developers Console](https://console.developers.google.com/project). For detailed instructions, see this [Getting Started guide](https://github.com/GoogleCloudPlatform/gcloud-node/blob/v0.10.0/README.md#authorization).
+
+<br/>
+<a name="using-storage"></a>
+## Using Storage
 
 ```Javascript
 var client = require('pkgcloud').storage.createClient({
