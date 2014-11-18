@@ -1,0 +1,16 @@
+{
+  "kind": "storage#object",
+  "id": "pkgcloud-test-container/test-file.txt/1415899273437000",
+  "selfLink": "https://www.googleapis.com/storage/v1/b/pkgcloud-test-container/o/test-file.txt",
+  "name": "test-file.txt",
+  "bucket": "pkgcloud-test-container",
+  "generation": "1415899273437000",
+  "contentType": "application/txt",
+  "updated": "2014-11-13T17:21:13.436Z",
+  "storageClass": "STANDARD",
+  "size": "1102",
+  "md5Hash": "CatH1NCRnQx11HYkd8d4WA==",
+  "mediaLink": "https://www.googleapis.com/download/storage/v1/b/pkgcloud-test-container/o/test-file.txt?generation=1415899273437000&alt=media",
+  "crc32c": "xvcxag==",
+  "etag": "CMi+7OmL+MECEAE="
+}

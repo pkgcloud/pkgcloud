@@ -1,0 +1,23 @@
+{
+  "kind": "storage#buckets",
+  "items": [
+    {
+      "kind": "storage#bucket",
+      "id": "gcloud-pkgcloud-test-container-temp-d6daf200-6a92-11e4-81bd-493abfe0afb5",
+      "selfLink": "https://www.googleapis.com/storage/v1/b/gcloud-pkgcloud-test-container-temp-d6daf200-6a92-11e4-81bd-493abfe0afb5",
+      "name": "gcloud-pkgcloud-test-container-temp-d6daf200-6a92-11e4-81bd-493abfe0afb5",
+      "location": "US",
+      "storageClass": "STANDARD",
+      "etag": "CAE="
+    },
+    {
+      "kind": "storage#bucket",
+      "id": "gcloud-pkgcloud-test-container-temp-e992db50-6a93-11e4-b0ae-0f9ab23bdc30",
+      "selfLink": "https://www.googleapis.com/storage/v1/b/gcloud-pkgcloud-test-container-temp-e992db50-6a93-11e4-b0ae-0f9ab23bdc30",
+      "name": "gcloud-pkgcloud-test-container-temp-e992db50-6a93-11e4-b0ae-0f9ab23bdc30",
+      "location": "US",
+      "storageClass": "STANDARD",
+      "etag": "CAE="
+    }
+  ]
+}
