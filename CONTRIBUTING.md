@@ -46,7 +46,7 @@ The only issues we accept are bug reports or feature requests. Bugs must be isol
 
 ## Adding tests to my pull requests
 
-The tests are written using [mocha](http://visionmedia.github.io/mocha/) and given the nature of `pkgcloud` test against third-party APIs are very slow specially in case of IaaS providers, so, we encourage the use of [`hock`](https://github.com/mmalecki) for mocking the responses.
+The tests are written using [mocha](http://mochajs.org/) and given the nature of `pkgcloud` test against third-party APIs are very slow specially in case of IaaS providers, so, we encourage the use of [`hock`](https://github.com/mmalecki/hock) for mocking the responses.
 
 Be familiar with the whole test suite and its helpers and other utilities on `test/` directory, read it to see examples of tests.
 
@@ -57,7 +57,7 @@ var hock = require('hock');
 // ...
 ```
 
-As `hock` has a similar API to [nock](https://github.com/flatiron/nock), you can easily record the API calls using `nock`. do this using the `recorder.rec()` method offer by `nock` just add this before the test declaration:
+As `hock` has a similar API to [nock](https://github.com/pgte/nock), you can easily record the API calls using `nock`. do this using the `recorder.rec()` method offer by `nock` just add this before the test declaration:
 
 ``` js
 nock.recorder.rec();
