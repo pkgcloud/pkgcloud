@@ -129,6 +129,7 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **[Network](#network----beta)** *(beta)*
   * [HP](docs/providers/hp/network.md)
   * [Openstack](docs/providers/openstack/network.md)
+  * [Rackspace](docs/providers/rackspace/network.md)
 
 ## Compute
 
@@ -445,6 +446,7 @@ To get started with a `pkgcloud.network` client just create one:
 
 * [HP](docs/providers/hp/network.md)
 * [Openstack](docs/providers/openstack/network.md)
+* [Rackspace](docs/providers/rackspace/network.md)
 
 
 Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:
