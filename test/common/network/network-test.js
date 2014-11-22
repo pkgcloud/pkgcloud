@@ -254,6 +254,11 @@ function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id))
       .reply(204, helpers.getOpenstackAuthResponse());
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/networks', currentNetwork.id))
+      .reply(204, helpers.getOpenstackAuthResponse());
+  }
 }
 
 function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
@@ -269,6 +274,12 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
         {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+        .put(urlJoin('/v2.0/networks', currentNetwork.id),
+        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
 }
 
 function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwork){
@@ -280,6 +291,11 @@ function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwor
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id))
+      .reply(204, helpers.getOpenstackAuthResponse());
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/networks', currentNetwork.id))
       .reply(204, helpers.getOpenstackAuthResponse());
   }
 }
@@ -341,6 +357,22 @@ function setupNetworksMock(client, provider, servers) {
         .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks')
           .replyWithFile(200, __dirname + '/../../fixtures/openstack/networks.json');
   }
+  else if (provider === 'rackspace') {
+      servers.authServer
+        .post('/v2.0/tokens', {
+          auth: {
+            'RAX-KSKEY:apiKeyCredentials': {
+              username: 'MOCK-USERNAME',
+              apiKey: 'MOCK-API-KEY'
+            }
+          }
+        })
+        .reply(200, helpers.getRackspaceAuthResponse());
+
+      servers.server
+        .get('/v2.0/networks')
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/networks.json');
+  }
 }
 
 function setupNetworkMock(client, provider, servers) {
@@ -356,6 +388,12 @@ function setupNetworkMock(client, provider, servers) {
       {network: {name: 'create-test-ids2'}})
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/networks',
+      {network: {name: 'create-test-ids2'}})
+      .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
+  }
 }
 
 function setupRefreshNetworkMock(client, provider, servers, network) {
@@ -367,6 +405,11 @@ function setupRefreshNetworkMock(client, provider, servers, network) {
   else if (provider === 'hp') {
     servers.server
       .get(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks',network.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .get(urlJoin('/v2.0/networks',network.id))
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
@@ -384,6 +427,12 @@ function setupNetworkModelCreateMock(client, provider, servers) {
       {network: {name: 'model created network'}})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/networks',
+      {network: {name: 'model created network'}})
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
 }
 
 function setupGetNetworkMock(client, provider, servers) {
@@ -395,6 +444,11 @@ function setupGetNetworkMock(client, provider, servers) {
   else if (provider === 'hp') {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .get('/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
 }

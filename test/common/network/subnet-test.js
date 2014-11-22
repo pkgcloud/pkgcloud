@@ -256,6 +256,11 @@ function setupDestroySubnetMock(client, provider, servers, currentSubnet){
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets', currentSubnet.id))
       .reply(204, helpers.getOpenstackAuthResponse());
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/subnets', currentSubnet.id))
+      .reply(204, helpers.getOpenstackAuthResponse());
+  }
 }
 
 function setupUpdateSubnetMock(client, provider, servers, currentSubnet){
@@ -281,6 +286,17 @@ function setupUpdateSubnetMock(client, provider, servers, currentSubnet){
         "enable_dhcp":false}})
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+        .put(urlJoin('/v2.0/subnets', currentSubnet.id),
+        {"subnet":{"name":"my_subnet",
+        "network_id":"d32019d3-bc6e-4319-9c1d-6722fc136a22",
+        "tenant_id":"4fd44f30292945e481c7b8a0c8908869",
+        "allocation_pools":[{"start":"192.0.0.2","end":"192.255.255.254"}],
+        "gateway_ip":"192.0.0.1","ip_version":4,"cidr":"192.0.0.0/8",
+        "enable_dhcp":false}})
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
+  }
 }
 
 function setupModelDestroyedSubnetMock(client, provider, servers, currentSubnet){
@@ -292,6 +308,11 @@ function setupModelDestroyedSubnetMock(client, provider, servers, currentSubnet)
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets', currentSubnet.id))
+      .reply(204, helpers.getOpenstackAuthResponse());
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/subnets', currentSubnet.id))
       .reply(204, helpers.getOpenstackAuthResponse());
   }
 }
@@ -353,6 +374,22 @@ function setupSubnetsMock(client, provider, servers) {
         .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets')
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnets.json');
   }
+  else if (provider === 'rackspace') {
+      servers.authServer
+        .post('/v2.0/tokens', {
+          auth: {
+            'RAX-KSKEY:apiKeyCredentials': {
+              username: 'MOCK-USERNAME',
+              apiKey: 'MOCK-API-KEY'
+            }
+          }
+        })
+        .reply(200, helpers.getRackspaceAuthResponse());
+
+      servers.server
+        .get('/v2.0/subnets')
+        .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnets.json');
+  }
 }
 
 function setupCreateSubnetMock(client, provider, servers) {
@@ -368,6 +405,12 @@ function setupCreateSubnetMock(client, provider, servers) {
       {subnet: {name: 'create-test-ids2'}})
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/subnet.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/subnets',
+      {subnet: {name: 'create-test-ids2'}})
+      .replyWithFile(201, __dirname + '/../../fixtures/openstack/subnet.json');
+  }
 }
 
 function setupRefreshSubnetMock(client, provider, servers, subnet) {
@@ -379,6 +422,11 @@ function setupRefreshSubnetMock(client, provider, servers, subnet) {
   else if (provider === 'hp') {
     servers.server
       .get(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets', subnet.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .get(urlJoin('/v2.0/subnets', subnet.id))
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
   }
 }
@@ -396,6 +444,12 @@ function setupSubnetModelCreateMock(client, provider, servers) {
       {subnet: {name: 'model created network'}})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/subnet.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/subnets',
+      {subnet: {name: 'model created network'}})
+      .replyWithFile(202, __dirname + '/../../fixtures/openstack/subnet.json');
+  }
 }
 
 function setupGetSubnetMock(client, provider, servers, currentSubnet) {
@@ -407,6 +461,11 @@ function setupGetSubnetMock(client, provider, servers, currentSubnet) {
   else if (provider === 'hp') {
     servers.server
       .get(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets', currentSubnet.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .get(urlJoin('/v2.0/subnets', currentSubnet.id))
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
   }
 }
