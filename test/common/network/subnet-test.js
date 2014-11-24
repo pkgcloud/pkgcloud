@@ -325,7 +325,7 @@ function setupUpdateSubnetMock(client, provider, servers, currentSubnet){
             "enable_dhcp": false
           }
         })
-        .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
 }
 
@@ -418,7 +418,7 @@ function setupSubnetsMock(client, provider, servers) {
 
       servers.server
         .get('/v2.0/subnets')
-        .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnets.json');
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnets.json');
   }
 }
 
@@ -448,7 +448,7 @@ function setupCreateSubnetMock(client, provider, servers) {
           name: 'create-test-ids2'
         }
       })
-      .replyWithFile(201, __dirname + '/../../fixtures/openstack/subnet.json');
+      .replyWithFile(201, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
 }
 
@@ -466,7 +466,7 @@ function setupRefreshSubnetMock(client, provider, servers, subnet) {
   else if (provider === 'rackspace') {
     servers.server
       .get(urlJoin('/v2.0/subnets', subnet.id))
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
 }
 
@@ -496,7 +496,7 @@ function setupSubnetModelCreateMock(client, provider, servers) {
           name: 'model created network'
         }
       })
-      .replyWithFile(202, __dirname + '/../../fixtures/openstack/subnet.json');
+      .replyWithFile(202, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
 }
 
@@ -514,6 +514,6 @@ function setupGetSubnetMock(client, provider, servers, currentSubnet) {
   else if (provider === 'rackspace') {
     servers.server
       .get(urlJoin('/v2.0/subnets', currentSubnet.id))
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/subnet.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
 }

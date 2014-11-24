@@ -322,7 +322,7 @@ function setupUpdatePortMock(client, provider, servers, currentPort){
             "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
           }
         })
-        .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
 }
 
@@ -415,7 +415,7 @@ function setupPortsMock(client, provider, servers) {
 
       servers.server
         .get('/v2.0/ports')
-        .replyWithFile(200, __dirname + '/../../fixtures/openstack/ports.json');
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/ports.json');
   }
 }
 
@@ -445,7 +445,7 @@ function setupCreatePortMock(client, provider, servers) {
           name: 'create-test-ids2'
         }
       })
-      .replyWithFile(201, __dirname + '/../../fixtures/openstack/port.json');
+      .replyWithFile(201, __dirname + '/../../fixtures/rackspace/port.json');
   }
 }
 
@@ -463,7 +463,7 @@ function setupRefreshPortMock(client, provider, servers, port) {
   else if (provider === 'rackspace') {
     servers.server
       .get(urlJoin('/v2.0/ports', port.id))
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
 }
 
@@ -493,7 +493,7 @@ function setupPortModelCreateMock(client, provider, servers) {
           name: 'model created network'
         }
       })
-      .replyWithFile(202, __dirname + '/../../fixtures/openstack/port.json');
+      .replyWithFile(202, __dirname + '/../../fixtures/rackspace/port.json');
   }
 }
 
@@ -511,6 +511,6 @@ function setupGetPortMock(client, provider, servers, currentPort) {
   else if (provider === 'rackspace') {
     servers.server
       .get(urlJoin('/v2.0/ports', currentPort.id))
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
 }

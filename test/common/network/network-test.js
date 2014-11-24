@@ -296,7 +296,7 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
             "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
           }
         })
-        .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -389,7 +389,7 @@ function setupNetworksMock(client, provider, servers) {
 
       servers.server
         .get('/v2.0/networks')
-        .replyWithFile(200, __dirname + '/../../fixtures/openstack/networks.json');
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/networks.json');
   }
 }
 
@@ -419,7 +419,7 @@ function setupNetworkMock(client, provider, servers) {
           name: 'create-test-ids2'
         }
       })
-      .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
+      .replyWithFile(201, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -437,7 +437,7 @@ function setupRefreshNetworkMock(client, provider, servers, network) {
   else if (provider === 'rackspace') {
     servers.server
       .get(urlJoin('/v2.0/networks',network.id))
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -467,7 +467,7 @@ function setupNetworkModelCreateMock(client, provider, servers) {
           name: 'model created network'
         }
       })
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -485,7 +485,7 @@ function setupGetNetworkMock(client, provider, servers) {
   else if (provider === 'rackspace') {
     servers.server
       .get('/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
