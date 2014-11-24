@@ -1,4 +1,4 @@
-/*
+\/*
 * network-test.js: Test that should be common to all providers.
 *
 * (C) 2014 Hewlett-Packard Development Company, L.P.
@@ -277,7 +277,14 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   else if (provider === 'rackspace') {
     servers.server
         .put(urlJoin('/v2.0/networks', currentNetwork.id),
-        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
+          {
+            "network": {
+              "admin_state_up": false,
+              "name": "private-network",
+              "shared": true,
+              "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+            }
+          })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
