@@ -1,4 +1,4 @@
-\/*
+/*
 * network-test.js: Test that should be common to all providers.
 *
 * (C) 2014 Hewlett-Packard Development Company, L.P.
