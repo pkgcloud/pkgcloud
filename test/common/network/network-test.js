@@ -247,17 +247,17 @@ function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204)
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204)
   }
   else if (provider === 'rackspace') {
     servers.server
       .delete(urlJoin('/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204)
   }
 }
 
@@ -304,17 +304,17 @@ function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwor
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204)
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204)
   }
   else if (provider === 'rackspace') {
     servers.server
       .delete(urlJoin('/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204)
   }
 }
 
