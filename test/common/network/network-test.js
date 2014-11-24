@@ -264,14 +264,26 @@ function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
 function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
-        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id),
-        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
+        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id), {
+          "network": {
+            "admin_state_up": false,
+            "name": "private-network",
+            "shared": true,
+            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          }
+        })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'hp') {
     servers.server
-        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id),
-        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
+        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id), {
+          "network": {
+            "admin_state_up": false,
+            "name": "private-network",
+            "shared": true,
+            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          }
+        })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'rackspace') {
@@ -384,20 +396,29 @@ function setupNetworksMock(client, provider, servers) {
 function setupNetworkMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
-      {network: {name: 'create-test-ids2'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', {
+        network: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks',
-      {network: {name: 'create-test-ids2'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', {
+        network: {
+         name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'rackspace') {
     servers.server
-      .post('/v2.0/networks',
-      {network: {name: 'create-test-ids2'}})
+      .post('/v2.0/networks', {
+        network: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
   }
 }
@@ -423,20 +444,29 @@ function setupRefreshNetworkMock(client, provider, servers, network) {
 function setupNetworkModelCreateMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
-      {network: {name: 'model created network'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', {
+        network: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks',
-      {network: {name: 'model created network'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', {
+        network: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'rackspace') {
     servers.server
-      .post('/v2.0/networks',
-      {network: {name: 'model created network'}})
+      .post('/v2.0/networks', {
+        network: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
 }

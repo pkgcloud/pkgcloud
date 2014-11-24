@@ -266,28 +266,61 @@ function setupDestroyPortMock(client, provider, servers, currentPort){
 function setupUpdatePortMock(client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
-        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id),
-        {"port":{"status":"ACTIVE","name":"my_port","admin_state_up":false,"mac_address":"fa:16:3e:58:42:ed",
-            "fixed_ips":[{"subnet_id":"008ba151-0b8c-4a67-98b5-0d2b87666062","ip_address":"172.24.4.2"}],
-            "security_groups":[],"network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"}
+        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id), {
+          "port": {
+            "status": "ACTIVE",
+            "name": "my_port",
+            "admin_state_up": false,
+            "mac_address": "fa:16:3e:58:42:ed",
+            "fixed_ips": [
+              {
+                "subnet_id": "008ba151-0b8c-4a67-98b5-0d2b87666062",
+                "ip_address":"172.24.4.2"
+              }
+            ],
+            "security_groups":[],
+            "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
+          }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'hp') {
     servers.server
-        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id),
-        {"port":{"status":"ACTIVE","name":"my_port","admin_state_up":false,"mac_address":"fa:16:3e:58:42:ed",
-            "fixed_ips":[{"subnet_id":"008ba151-0b8c-4a67-98b5-0d2b87666062","ip_address":"172.24.4.2"}],
-            "security_groups":[],"network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"}
+        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id), {
+          "port": {
+            "status": "ACTIVE",
+            "name": "my_port",
+            "admin_state_up": false,
+            "mac_address": "fa:16:3e:58:42:ed",
+            "fixed_ips": [
+              {
+                "subnet_id": "008ba151-0b8c-4a67-98b5-0d2b87666062",
+                "ip_address":"172.24.4.2"
+              }
+            ],
+            "security_groups":[],
+            "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
+          }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'rackspace') {
     servers.server
-        .put(urlJoin('/v2.0/ports', currentPort.id),
-        {"port":{"status":"ACTIVE","name":"my_port","admin_state_up":false,"mac_address":"fa:16:3e:58:42:ed",
-            "fixed_ips":[{"subnet_id":"008ba151-0b8c-4a67-98b5-0d2b87666062","ip_address":"172.24.4.2"}],
-            "security_groups":[],"network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"}
+        .put(urlJoin('/v2.0/ports', currentPort.id), {
+          "port": {
+            "status": "ACTIVE",
+            "name": "my_port",
+            "admin_state_up": false,
+            "mac_address": "fa:16:3e:58:42:ed",
+            "fixed_ips": [
+              {
+                "subnet_id": "008ba151-0b8c-4a67-98b5-0d2b87666062",
+                "ip_address":"172.24.4.2"
+              }
+            ],
+            "security_groups":[],
+            "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
+          }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
@@ -389,20 +422,29 @@ function setupPortsMock(client, provider, servers) {
 function setupCreatePortMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports',
-      {port: {name: 'create-test-ids2'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', {
+        port: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports',
-      {port: {name: 'create-test-ids2'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', {
+        port: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'rackspace') {
     servers.server
-      .post('/v2.0/ports',
-      {port: {name: 'create-test-ids2'}})
+      .post('/v2.0/ports', {
+        port: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/port.json');
   }
 }
@@ -428,20 +470,29 @@ function setupRefreshPortMock(client, provider, servers, port) {
 function setupPortModelCreateMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports',
-      {port: {name: 'model created network'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', {
+        port: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports',
-      {port: {name: 'model created network'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', {
+        port: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'rackspace') {
     servers.server
-      .post('/v2.0/ports',
-      {port: {name: 'model created network'}})
+      .post('/v2.0/ports', {
+        port: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/port.json');
   }
 }
