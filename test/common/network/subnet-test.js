@@ -49,7 +49,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getSubnets() function should return a list of subnets', function(done) {
@@ -249,17 +249,17 @@ function setupDestroySubnetMock(client, provider, servers, currentSubnet){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id))
-      .reply(204)
+      .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets', currentSubnet.id))
-      .reply(204)
+      .reply(204);
   }
   else if (provider === 'rackspace') {
     servers.server
       .delete(urlJoin('/v2.0/subnets', currentSubnet.id))
-      .reply(204)
+      .reply(204);
   }
 }
 
@@ -333,17 +333,17 @@ function setupModelDestroyedSubnetMock(client, provider, servers, currentSubnet)
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id))
-      .reply(204)
+      .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/subnets', currentSubnet.id))
-      .reply(204)
+      .reply(204);
   }
   else if (provider === 'rackspace') {
     servers.server
       .delete(urlJoin('/v2.0/subnets', currentSubnet.id))
-      .reply(204)
+      .reply(204);
   }
 }
 
