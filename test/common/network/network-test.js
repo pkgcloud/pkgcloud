@@ -49,7 +49,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getNetworks() function should return a list of networks', function(done) {
@@ -247,27 +247,56 @@ function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/networks', currentNetwork.id))
+      .reply(204);
   }
 }
 
 function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
-        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id),
-        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
+        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id), {
+          "network": {
+            "admin_state_up": false,
+            "name": "private-network",
+            "shared": true,
+            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          }
+        })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'hp') {
     servers.server
-        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id),
-        {"network":{"admin_state_up":false,"name":"private-network","shared":true,"tenant_id":"4fd44f30292945e481c7b8a0c8908869"}})
+        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id), {
+          "network": {
+            "admin_state_up": false,
+            "name": "private-network",
+            "shared": true,
+            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          }
+        })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+        .put(urlJoin('/v2.0/networks', currentNetwork.id), {
+          "network": {
+            "admin_state_up": false,
+            "name": "private-network",
+            "shared": true,
+            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          }
+        })
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -275,12 +304,17 @@ function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwor
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/networks', currentNetwork.id))
+      .reply(204);
   }
 }
 
@@ -341,20 +375,51 @@ function setupNetworksMock(client, provider, servers) {
         .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks')
           .replyWithFile(200, __dirname + '/../../fixtures/openstack/networks.json');
   }
+  else if (provider === 'rackspace') {
+      servers.authServer
+        .post('/v2.0/tokens', {
+          auth: {
+            'RAX-KSKEY:apiKeyCredentials': {
+              username: 'MOCK-USERNAME',
+              apiKey: 'MOCK-API-KEY'
+            }
+          }
+        })
+        .reply(200, helpers.getRackspaceAuthResponse());
+
+      servers.server
+        .get('/v2.0/networks')
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/networks.json');
+  }
 }
 
 function setupNetworkMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
-      {network: {name: 'create-test-ids2'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', {
+        network: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks',
-      {network: {name: 'create-test-ids2'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', {
+        network: {
+         name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/network.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/networks', {
+        network: {
+          name: 'create-test-ids2'
+        }
+      })
+      .replyWithFile(201, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -369,20 +434,40 @@ function setupRefreshNetworkMock(client, provider, servers, network) {
       .get(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks',network.id))
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
   }
+  else if (provider === 'rackspace') {
+    servers.server
+      .get(urlJoin('/v2.0/networks',network.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
+  }
 }
 
 function setupNetworkModelCreateMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',
-      {network: {name: 'model created network'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', {
+        network: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks',
-      {network: {name: 'model created network'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', {
+        network: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/network.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/networks', {
+        network: {
+          name: 'model created network'
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
@@ -396,6 +481,11 @@ function setupGetNetworkMock(client, provider, servers) {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
+  }
+  else if (provider === 'rackspace') {
+    servers.server
+      .get('/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 }
 
