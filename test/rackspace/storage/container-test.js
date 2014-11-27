@@ -489,8 +489,8 @@ describe('pkgcloud/rackspace/storage/containers', function () {
 
         container.should.be.instanceof(Container);
 
-        (container.metadata['web-index'] == undefined).should.be.true;
-        (container.metadata['web-error'] == undefined).should.be.true;
+        (container.metadata['web-index'] === undefined).should.be.true;
+        (container.metadata['web-error'] === undefined).should.be.true;
 
         container.setStaticWebsite({indexFile: 'index.htm', errorFile: 'error.htm'}, function (err, container) {
           should.not.exist(err);
@@ -564,8 +564,8 @@ describe('pkgcloud/rackspace/storage/containers', function () {
           should.exist(container);
           container.should.be.instanceof(Container);
 
-          (container.metadata['web-index'] == undefined).should.be.true;
-          (container.metadata['web-error'] == undefined).should.be.true;
+          (container.metadata['web-index'] === undefined).should.be.true;
+          (container.metadata['web-error'] === undefined).should.be.true;
 
           hockInstance && hockInstance.done();
           done();
