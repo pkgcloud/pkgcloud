@@ -26,7 +26,8 @@ The only issues we accept are bug reports or feature requests. Bugs must be isol
 - Please tag your commit depending what it does (`[misc]`, `[docs]`, `[database]`, `[compute]`)
 - Follow the style guide in code and docs.
 - Your pull request should pass the tests and the `travis-ci` build. This will be reviewed by the maintainer.
-
+  - Before making the pull request, please run the unit tests using `npm test`.
+  - Before making the pull request, please run the lint tests using `npm run lint`.
 
 ## Coding standards: JS
 
