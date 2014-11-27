@@ -31,4 +31,7 @@ test-coveralls:	lib-cov
 	./node_modules/coveralls/bin/coveralls.js < pkgcloud.lcov
 	rm pkgcloud.lcov pkgcloud.lcov.raw
 
+lint:
+	./node_modules/.bin/jshint --exclude-path .gitignore .
+
 .PHONY: test

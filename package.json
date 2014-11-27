@@ -72,13 +72,15 @@
     "mocha": "1.21.x",
     "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",
-    "coveralls": "2.x.x"
+    "coveralls": "2.x.x",
+    "jshint": "2.x.x"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
     "test": "make test",
     "test-cov": "make test-cov",
-    "test-coveralls": "make test-coveralls"
+    "test-coveralls": "make test-coveralls",
+    "lint": "make lint"
   },
   "engines": {
     "node": ">=0.10.x"
