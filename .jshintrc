@@ -58,7 +58,8 @@
     "sub"           : true,     // true: Tolerate using `[]` notation when it can still be expressed in dot notation
     "supernew"      : true,     // true: Tolerate `new function () { ... };` and `new Object;`
     "validthis"     : true,     // true: Tolerate using this in a non-constructor function
-    "-W086"         : true,     // true: allow fall-through; see https://github.com/jshint/jshint/issues/18
+    "-W086"         : true,     // true: Allow fall-through; see https://github.com/jshint/jshint/issues/18
+    "-W008"         : true,     // true: Allow leading decimal point; see https://jslinterrors.com/a-leading-decimal-point-can-be-confused-with-a-dot-a
 
     // Environments
     "browser"       : false,     // Web Browser (window, document, etc)
