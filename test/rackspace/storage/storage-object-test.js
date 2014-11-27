@@ -301,7 +301,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });

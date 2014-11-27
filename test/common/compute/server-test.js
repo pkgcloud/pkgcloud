@@ -60,7 +60,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getImages() function should return a list of images', function(done) {
@@ -225,7 +225,7 @@ providers.filter(function (provider) {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });
@@ -476,7 +476,7 @@ function setupServerMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'hp') {
     servers.server
@@ -510,7 +510,7 @@ function setupGetServersMock(client, provider, servers) {
       .post('/', {
         Action: 'DescribeInstances'
       }, { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml')
+      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
   }
   else if (provider === 'azure') {
 
@@ -521,7 +521,7 @@ function setupGetServersMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/hostedservices')
       .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>")
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'digitalocean') {
     var account = require(__dirname + '/../../configs/mock/digitalocean');
@@ -559,7 +559,7 @@ function setupGetServerMock(client, provider, servers) {
     servers.server
       .filteringRequestBody(helpers.authFilter)
       .post('/?Action=DescribeInstances', {})
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml')
+      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
   }
   else if (provider === 'azure') {
 
@@ -570,7 +570,7 @@ function setupGetServerMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/hostedservices')
       .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>")
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'hp') {
     servers.server

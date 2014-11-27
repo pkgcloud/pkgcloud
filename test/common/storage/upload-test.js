@@ -107,7 +107,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });
@@ -127,7 +127,7 @@ function setupUploadStreamError(provider, client, servers) {
 
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
-      .reply(400)
+      .reply(400);
   }
   else if (provider === 'openstack') {
     servers.authServer
@@ -155,12 +155,12 @@ function setupUploadStreamError(provider, client, servers) {
 
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
-      .reply(400)
+      .reply(400);
   }
   else if (provider === 'amazon') {
     servers.server
       .post('/test-file.txt?uploads')
-      .reply(400)
+      .reply(400);
   }
   else if (provider === 'azure') {
 

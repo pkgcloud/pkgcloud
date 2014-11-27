@@ -126,6 +126,6 @@ describe('pkgcloud/redistogo/databases', function () {
     else {
       done();
     }
-  })
+  });
 });
 

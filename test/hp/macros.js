@@ -19,7 +19,7 @@ exports.shouldHaveCreds = function (client) {
     assert.include(client.config, 'apiKey');
 
     assert.isFunction(client.auth);
-  }
+  };
 };
 
 exports.shouldCreateContainer = function (client, name, message) {
@@ -48,7 +48,7 @@ exports.shouldDestroyContainer = function (client, name) {
     "The pkgcloud Rackspace storage client": {
       "the destroyContainer() method": {
         topic: function () {
-          client.destroyContainer(name, this.callback)
+          client.destroyContainer(name, this.callback);
         },
         "should return true": function (err, success) {
           assert.isTrue(success);
@@ -69,7 +69,7 @@ exports.upload.fullpath = function (client, options) {
     "should raise the `end` event": function () {
       assert.isTrue(true);
     }
-  }
+  };
 };
 
 exports.upload.stream = function (client, container, local, remote) {
@@ -87,7 +87,7 @@ exports.upload.stream = function (client, container, local, remote) {
     "should raise the `end` event": function () {
       assert.isTrue(true);
     }
-  }
+  };
 };
 
 exports.upload.piped = function (client, container, local, remote) {
@@ -99,10 +99,10 @@ exports.upload.piped = function (client, container, local, remote) {
       }, function () { });
 
       filed(local).pipe(ustream);
-      ustream.on('end', this.callback)
+      ustream.on('end', this.callback);
     },
     "should raise the `end` event": function () {
       assert.isTrue(true);
     }
-  }
+  };
 };

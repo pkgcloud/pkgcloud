@@ -125,6 +125,6 @@ describe('pkgcloud/rackspace/compute/images', function () {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 });

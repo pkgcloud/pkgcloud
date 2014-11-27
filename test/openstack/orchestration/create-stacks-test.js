@@ -120,7 +120,7 @@ describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 
 });

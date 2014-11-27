@@ -50,7 +50,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getImages() function should return a list of images', function(done) {
@@ -118,7 +118,7 @@ providers.filter(function (provider) {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });
@@ -159,6 +159,6 @@ function setupImagesMock(client, provider, servers) {
 
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
   }
 }

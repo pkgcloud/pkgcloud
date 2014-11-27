@@ -177,6 +177,6 @@ describe('pkgcloud/rackspace/blockstorage/volumes', function () {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 });

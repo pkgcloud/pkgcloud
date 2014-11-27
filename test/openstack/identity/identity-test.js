@@ -208,7 +208,7 @@ describe('pkgcloud/openstack/identity', function () {
               tenantId: '72e90ecb69c44d0296072ea39e537041'
             }
           })
-          .reply(200, helpers.getOpenstackAuthResponse())
+          .reply(200, helpers.getOpenstackAuthResponse());
 
 
         adminHockInstance

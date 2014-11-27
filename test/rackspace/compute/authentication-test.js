@@ -265,7 +265,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });

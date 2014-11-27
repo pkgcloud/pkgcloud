@@ -110,7 +110,7 @@ exports.serverTest = function (nock, testHelpers) {
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     .delete('/azure-account-subscription-id/services/disks/create-test-ids2-create-test-ids2-0-20121111181413')
-    .reply(200, "", {})
+    .reply(200, "", {});
 
   // VM image blob
   nock('http://test-storage-account.' + azureApi.STORAGE_ENDPOINT)

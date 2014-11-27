@@ -143,7 +143,7 @@ providers.filter(function (provider) {
           client.getDatabases({ instance: instance }, function (err, list) {
             should.not.exist(err);
             should.exist(list);
-            should.exist(list[0])
+            should.exist(list[0]);
             list[0].name.should.equal('TestDatabase');
             list[0].name.should.be.a.String;
             hockInstance && hockInstance.done();
@@ -305,7 +305,7 @@ providers.filter(function (provider) {
           function (next) {
             authServer.close(next);
           }
-        ], done)
+        ], done);
       });
 
     });

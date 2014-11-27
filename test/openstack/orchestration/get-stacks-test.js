@@ -194,7 +194,7 @@ describe('pkgcloud/openstack/orchestration/stacks[getStacks]', function () {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 
 });

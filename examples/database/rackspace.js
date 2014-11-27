@@ -46,5 +46,5 @@ client.getFlavors(function (err, flavors) {
         console.log(database);
       });
     });
-  })
+  });
 });

@@ -22,7 +22,7 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
     describe('the auth() method', function() {
       describe('with a valid user name and api key', function() {
-        var authHockInstance, authServer
+        var authHockInstance, authServer;
 
         before(function(done) {
           if (!mock) {
