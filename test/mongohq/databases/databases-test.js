@@ -63,7 +63,7 @@ describe('pkgcloud/mongohq/databases', function () {
     client.remove(context.databaseId, function (err, confirm) {
       should.not.exist(err);
       should.exist(confirm);
-      confirm.should.equal('deleted');;
+      confirm.should.equal('deleted');
 
       hockInstance && hockInstance.done();
       done();
