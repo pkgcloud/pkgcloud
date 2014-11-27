@@ -13,3 +13,4 @@ before_script:
   - ./configure
   - make
   - popd
+  - npm run lint
