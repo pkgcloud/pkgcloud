@@ -60,6 +60,7 @@
     "validthis"     : true,     // true: Tolerate using this in a non-constructor function
     "-W086"         : true,     // true: Allow fall-through; see https://github.com/jshint/jshint/issues/18
     "-W008"         : true,     // true: Allow leading decimal point; see https://jslinterrors.com/a-leading-decimal-point-can-be-confused-with-a-dot-a
+    "-W041"         : true,     // true: Ignore strict comparison checking; see https://github.com/jshint/jshint/blob/a643f3fec0632249dcd78d0cf5f200d9166b587d/src/messages.js#L115
 
     // Environments
     "browser"       : false,     // Web Browser (window, document, etc)
