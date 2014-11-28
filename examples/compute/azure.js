@@ -8,9 +8,9 @@ var pkgcloud = require('../../lib/pkgcloud'),
 //
 options = {
   provider: 'azure',
-  "storageAccount": "test-storage-account",
-  "storageAccessKey": "test-storage-access-key",
-  "subscriptionId": "azure-account-subscription-id",
+  storageAccount: 'test-storage-account',
+  storageAccessKey: 'test-storage-access-key',
+  subscriptionId: 'azure-account-subscription-id',
   key: fs.readFileSync('path to your account management key file', 'ascii'),
   cert: fs.readFileSync('path to your account management certificate pem file', 'ascii')
 };
@@ -39,15 +39,15 @@ options = {
   // Azure ports (endpoints)
   ports: [
     {
-      name : "foo",             // name of port
-      protocol : "tcp",         // tcp or udp
-      port: "12333",           // external port number
-      localPort: "12333"       // internal port number
+      name : 'foo',             // name of port
+      protocol : 'tcp',         // tcp or udp
+      port: '12333',           // external port number
+      localPort: '12333'       // internal port number
     }
   ]
 };
 
-console.log("creating server...");
+console.log('creating server...');
 
 client.createServer(options, function (err, server) {
   if (err) {
@@ -55,7 +55,7 @@ client.createServer(options, function (err, server) {
   } else {
     // Wait for the server to reach the RUNNING state.
     // This may take several minutes.
-    console.log("waiting for server RUNNING state...");
+    console.log('waiting for server RUNNING state...');
     server.setWait({ status: server.STATUS.running }, 10000, function (err, server) {
       if (err) {
         console.log(err);

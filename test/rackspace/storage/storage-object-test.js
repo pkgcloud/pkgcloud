@@ -16,7 +16,7 @@ var path = require('path'),
   hock = require('hock'),
   File = require('../../../lib/pkgcloud/core/storage/file').File,
   mock = !!process.env.MOCK,
-  Buffer = require("buffer").Buffer;
+  Buffer = require('buffer').Buffer;
 
 if (!mock) {
   return; // these tests are disabled when running for real
@@ -37,17 +37,17 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
     var generateFilesResponse = function (start, end) {
       var files = [];
       function padToFive(number) {
-        if (number<=99999) { number = ("0000"+number).slice(-5); }
+        if (number<=99999) { number = ('0000'+number).slice(-5); }
         return number;
       }
 
       for (var i = start; i < end; i++) {
         files.push({
-          "hash": "cb5c530452af82fb875dc0fb1a00a2c4",
-          "last_modified": "2013-05-20T22:48:08.059180",
-          "bytes": 2027,
-          "name": "FILE" + padToFive(i),
-          "content_type": "application/octet-stream"
+          hash: 'cb5c530452af82fb875dc0fb1a00a2c4',
+          last_modified: '2013-05-20T22:48:08.059180',
+          bytes: 2027,
+          name: 'FILE' + padToFive(i),
+          content_type: 'application/octet-stream'
         });
       }
 
@@ -252,9 +252,9 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
 
     it('extract should ask server to extract the uploaded tar file', function(done) {
       
-      var data = "H4sIABub81EAA+3TzUrEMBAH8CiIeNKTXvMC1nxuVzx58CiC9uBNam1kQZt1N4X1XXwDX9IJXVi6UDxo6sH/D4akadJOmY7z/owlJkhubTdOulEo040dJpXMTS6tjuuSriTjNnViUbsM5YJztvCPs+atHdxH25wbI6FxOap/9hDqZcjCKqR5RyzwxJjB+iurN/WXiuqvpdGMizTp9P3z+rO94322y9h1WfGbO37P1+IaO6BQFO8U8fqzd/Jo6JGXRXG7nsYTHxSHW1t2NusnlX/Nyvn8pc6KehWumso/zZpnutkGdzq9kNrQv3E+Nb/yudAX+z9t93/f/0LIrf5XNEP/j0H+dQIAAAAAAAAAAAAAAAAAAADwY194ELb5ACgAAA==";
-      var tmp = "./foo.tar.gz";
-      fs.writeFileSync(tmp, new Buffer(data, "base64"));
+      var data = 'H4sIABub81EAA+3TzUrEMBAH8CiIeNKTXvMC1nxuVzx58CiC9uBNam1kQZt1N4X1XXwDX9IJXVi6UDxo6sH/D4akadJOmY7z/owlJkhubTdOulEo040dJpXMTS6tjuuSriTjNnViUbsM5YJztvCPs+atHdxH25wbI6FxOap/9hDqZcjCKqR5RyzwxJjB+iurN/WXiuqvpdGMizTp9P3z+rO94322y9h1WfGbO37P1+IaO6BQFO8U8fqzd/Jo6JGXRXG7nsYTHxSHW1t2NusnlX/Nyvn8pc6KehWumso/zZpnutkGdzq9kNrQv3E+Nb/yudAX+z9t93/f/0LIrf5XNEP/j0H+dQIAAAAAAAAAAAAAAAAAAADwY194ELb5ACgAAA==';
+      var tmp = './foo.tar.gz';
+      fs.writeFileSync(tmp, new Buffer(data, 'base64'));
       
       if (mock) {
         authHockInstance
@@ -269,7 +269,7 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
           .reply(200, helpers.getRackspaceAuthResponse());
 
         hockInstance
-          .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?extract-archive=tar.gz', new Buffer(data, "base64").toString())
+          .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?extract-archive=tar.gz', new Buffer(data, 'base64').toString())
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/extract.json');
       }
       

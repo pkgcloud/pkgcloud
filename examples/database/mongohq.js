@@ -2,16 +2,16 @@ var pkgcloud = require('../../lib/pkgcloud');
 
 var client = pkgcloud.database.createClient({
   provider: 'mongohq',
-  username: "bob",
-  password: "1234"
+  username: 'bob',
+  password: '1234'
 });
 
 //
 // Create a MongoDB
 //
 client.create({
-  name: "mongo-instance",
-  plan: "free",
+  name: 'mongo-instance',
+  plan: 'free',
 }, function (err, result) {
   //
   // Check the result

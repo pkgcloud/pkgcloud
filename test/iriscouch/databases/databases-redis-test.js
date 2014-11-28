@@ -29,7 +29,7 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
 
   it('the create() method with correct options should respond correctly', function(done) {
     var subdomain = (mock ? 'nodejitsudb43639' : 'nodejitsudb' + Math.floor(Math.random() * 100000));
-    context.tempPassword = (mock ? 'sTTi:lh9vCF[' : randomPassword(12).replace("\\", ""));
+    context.tempPassword = (mock ? 'sTTi:lh9vCF[' : randomPassword(12).replace('\\', ''));
     
     if (mock) {
       hockInstance
@@ -42,10 +42,10 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
     
     client.create({
       subdomain: subdomain,
-      first_name: "Marak",
-      last_name: "Squires",
-      email: "marak.squires@gmail.com",
-      type: "redis", // For redis instead of couch just put type to redis
+      first_name: 'Marak',
+      last_name: 'Squires',
+      email: 'marak.squires@gmail.com',
+      type: 'redis', // For redis instead of couch just put type to redis
       password: context.tempPassword
     }, function(err, database) {
       should.not.exist(err);

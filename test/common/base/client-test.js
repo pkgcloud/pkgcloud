@@ -13,7 +13,7 @@ describe('pkgcloud/core/base/client', function () {
     it('with a wrong request with a cb', function(done) {
       var cli = new Client();
       cli._getUrl = function () {
-        return "badurl";
+        return 'badurl';
       };
       cli.failCodes = {};
       cli._request({ path: '/' }, function(err) {
@@ -26,7 +26,7 @@ describe('pkgcloud/core/base/client', function () {
       var cli = new Client();
 
       cli._getUrl = function () {
-        return "badurl";
+        return 'badurl';
       };
       cli.failCodes = {};
       var stream = cli._request({ path: '/' });
@@ -47,7 +47,7 @@ describe('pkgcloud/core/base/client', function () {
     it('the before filters throwing an error with a callback should return the error on the cb', function(done) {
       var cli = new Client();
       cli._getUrl = function () {
-        return "badurl";
+        return 'badurl';
       };
       cli.failCodes = {};
       cli.before = [function () {
@@ -63,7 +63,7 @@ describe('pkgcloud/core/base/client', function () {
       var cli = new Client();
 
       cli._getUrl = function () {
-        return "badurl";
+        return 'badurl';
       };
       cli.failCodes = {};
       var stream = cli._request({ path: '/' });

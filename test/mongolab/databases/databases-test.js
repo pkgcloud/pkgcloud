@@ -62,7 +62,7 @@ describe('pkgcloud/mongolab/databases', function () {
 //    if (mock) {
 //      server
 //        .delete('/provider/resources/63562')
-//        .reply(200, "OK");
+//        .reply(200, 'OK');
 //    }
 //
 //    client.remove(context.databaseId, function (err, confirm) {
@@ -339,7 +339,7 @@ describe('pkgcloud/mongolab/databases', function () {
       if (mock) {
         hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
-          .reply(200, " null ");
+          .reply(200, ' null ');
       }
 
       client.remove({
@@ -406,7 +406,7 @@ describe('pkgcloud/mongolab/databases', function () {
       if (mock) {
         hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
-          .reply(200, " null ");
+          .reply(200, ' null ');
       }
 
       client.deleteAccount(context.account.username,
@@ -423,7 +423,7 @@ describe('pkgcloud/mongolab/databases', function () {
       if (mock) {
         hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_custompassword')
-          .reply(200, " null ");
+          .reply(200, ' null ');
       }
 
       client.deleteAccount(context.custompw.username, function (err, databases) {

@@ -176,7 +176,7 @@ providers.filter(function (provider) {
       }
 
       var port = new Port(client);
-      port.name= "model created network";
+      port.name= 'model created network';
       port.create(function (err, createdPort) {
         should.not.exist(err);
         should.exist(createdPort);
@@ -211,8 +211,8 @@ providers.filter(function (provider) {
 
     it('the port.destroy() method should delete a port', function (done) {
       var port = new Port(client);
-      port.name = "model deleted port";
-      port.id = "THISISANETWORKID";
+      port.name = 'model deleted port';
+      port.id = 'THISISANETWORKID';
 
       if (mock) {
         setupModelDestroyedPortMock(client, provider, {
@@ -267,19 +267,19 @@ function setupUpdatePortMock(client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id), {
-          "port": {
-            "status": "ACTIVE",
-            "name": "my_port",
-            "admin_state_up": false,
-            "mac_address": "fa:16:3e:58:42:ed",
-            "fixed_ips": [
+          port: {
+            status: 'ACTIVE',
+            name: 'my_port',
+            admin_state_up: false,
+            mac_address: 'fa:16:3e:58:42:ed',
+            fixed_ips: [
               {
-                "subnet_id": "008ba151-0b8c-4a67-98b5-0d2b87666062",
-                "ip_address":"172.24.4.2"
+                subnet_id: '008ba151-0b8c-4a67-98b5-0d2b87666062',
+                ip_address: '172.24.4.2'
               }
             ],
-            "security_groups":[],
-            "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
+            security_groups:[],
+            network_id: '70c1db1f-b701-45bd-96e0-a313ee3430b3'
           }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
@@ -287,19 +287,19 @@ function setupUpdatePortMock(client, provider, servers, currentPort){
   else if (provider === 'hp') {
     servers.server
         .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id), {
-          "port": {
-            "status": "ACTIVE",
-            "name": "my_port",
-            "admin_state_up": false,
-            "mac_address": "fa:16:3e:58:42:ed",
-            "fixed_ips": [
+          port: {
+            status: 'ACTIVE',
+            name: 'my_port',
+            admin_state_up: false,
+            mac_address: 'fa:16:3e:58:42:ed',
+            fixed_ips: [
               {
-                "subnet_id": "008ba151-0b8c-4a67-98b5-0d2b87666062",
-                "ip_address":"172.24.4.2"
+                subnet_id: '008ba151-0b8c-4a67-98b5-0d2b87666062',
+                ip_address: '172.24.4.2'
               }
             ],
-            "security_groups":[],
-            "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
+            security_groups:[],
+            network_id: '70c1db1f-b701-45bd-96e0-a313ee3430b3'
           }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
@@ -307,19 +307,19 @@ function setupUpdatePortMock(client, provider, servers, currentPort){
   else if (provider === 'rackspace') {
     servers.server
         .put(urlJoin('/v2.0/ports', currentPort.id), {
-          "port": {
-            "status": "ACTIVE",
-            "name": "my_port",
-            "admin_state_up": false,
-            "mac_address": "fa:16:3e:58:42:ed",
-            "fixed_ips": [
+          port: {
+            status: 'ACTIVE',
+            name: 'my_port',
+            admin_state_up: false,
+            mac_address: 'fa:16:3e:58:42:ed',
+            fixed_ips: [
               {
-                "subnet_id": "008ba151-0b8c-4a67-98b5-0d2b87666062",
-                "ip_address":"172.24.4.2"
+                subnet_id: '008ba151-0b8c-4a67-98b5-0d2b87666062',
+                ip_address: '172.24.4.2'
               }
             ],
-            "security_groups":[],
-            "network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"
+            security_groups:[],
+            network_id: '70c1db1f-b701-45bd-96e0-a313ee3430b3'
           }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');

@@ -103,7 +103,7 @@ describe('pkgcloud/azure/databases', function () {
 
       if (mock) {
         hockInstance
-          .delete("/Tables%28%27testDatabase%27%29")
+          .delete('/Tables%28%27testDatabase%27%29')
           .reply(204, '', {'content-length': '0'});
       }
 

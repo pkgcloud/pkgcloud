@@ -31,7 +31,7 @@ describe('pkgcloud/mongohq/databases', function () {
 
     if (mock) {
       hockInstance
-        .post('/provider/resources', "app_id=testDatabase&plan=free")
+        .post('/provider/resources', 'app_id=testDatabase&plan=free')
         .reply(200, helpers.loadFixture('mongohq/database.json'));
     }
 
@@ -57,7 +57,7 @@ describe('pkgcloud/mongohq/databases', function () {
     if (mock) {
       hockInstance
         .delete('/provider/resources/63562')
-        .reply(200, "OK");
+        .reply(200, 'OK');
     }
 
     client.remove(context.databaseId, function (err, confirm) {

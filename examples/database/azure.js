@@ -2,15 +2,15 @@ var pkgcloud = require('../../lib/pkgcloud');
 
 var client = pkgcloud.database.createClient({
   provider: 'azure',
-  storageAccount: "storage-account-name",        // Name of your Azure storage account
-  storageAccessKey: "storage-account-access-key" // Access key for storage account
+  storageAccount: 'storage-account-name',        // Name of your Azure storage account
+  storageAccessKey: 'storage-account-access-key' // Access key for storage account
 });
 
 //
 // Create an Azure Table
 //
 client.create({
-  name: "testing123"
+  name: 'testing123'
 }, function (err, result) {
   //
   // Check the result

@@ -71,7 +71,8 @@ var options = {};
 		  .reply(200, helpers.getOpenstackAuthResponse());
 
 		hockInstance
-		  .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action', {"os-stop":null})
+		  .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
+        { 'os-stop' : null })
 		  .reply(202, '');
 	  }
 

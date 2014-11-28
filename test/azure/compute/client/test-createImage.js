@@ -9,8 +9,8 @@ var async = require('async');
 var client = helpers.createClient('azure', 'compute');
 
 var options = {
-  name: "pkgcloud1",
-  server: "pkgcloud1"
+  name: 'pkgcloud1',
+  server: 'pkgcloud1'
 };
 
 client.createImage(options, function (err, result) {
