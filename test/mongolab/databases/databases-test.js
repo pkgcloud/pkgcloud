@@ -37,7 +37,7 @@ describe('pkgcloud/mongolab/databases', function () {
             email: 'daniel@nodejitsu.com'
           }
         })
-        .reply(200, helpers.loadFixture('mongolab/user.json'))
+        .reply(200, helpers.loadFixture('mongolab/user.json'));
     }
 
     client.createAccount({
@@ -153,7 +153,7 @@ describe('pkgcloud/mongolab/databases', function () {
     if (mock) {
       hockInstance
         .get('/api/1/partners/nodejitsu/accounts')
-        .reply(200, helpers.loadFixture('mongolab/userList.json'))
+        .reply(200, helpers.loadFixture('mongolab/userList.json'));
     }
 
     client.getAccounts(function(err, accounts) {
@@ -339,7 +339,7 @@ describe('pkgcloud/mongolab/databases', function () {
       if (mock) {
         hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases/nodejitsu_daniel_testDatabase')
-          .reply(200, " null ")
+          .reply(200, " null ");
       }
 
       client.remove({
@@ -406,7 +406,7 @@ describe('pkgcloud/mongolab/databases', function () {
       if (mock) {
         hockInstance
           .delete('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel')
-          .reply(200, " null ")
+          .reply(200, " null ");
       }
 
       client.deleteAccount(context.account.username,

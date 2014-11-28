@@ -6,7 +6,7 @@
 */
 
 var should = require('should'),
-    helpers = require('../../helpers')
+    helpers = require('../../helpers'),
     providers = require('../../configs/providers.json');
 
 providers.filter(function (provider) {

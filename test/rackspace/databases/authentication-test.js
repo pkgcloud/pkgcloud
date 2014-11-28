@@ -190,6 +190,6 @@ describe('pkgcloud/rackspace/database/authentication', function() {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 });

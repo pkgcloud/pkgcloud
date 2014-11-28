@@ -280,7 +280,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });

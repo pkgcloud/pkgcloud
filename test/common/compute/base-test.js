@@ -61,7 +61,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getVersion() method with no arguments should return the version', function (done) {
@@ -212,7 +212,7 @@ providers.filter(function (provider) {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });

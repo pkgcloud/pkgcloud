@@ -108,7 +108,7 @@ helpers.selectInstance = function selectInstance(client, callback) {
   client.getInstances(function (err, instances) {
     if (err) throw new Error(err);
     if (instances.length === 0) {
-      throw new Error({ message:'No instances found.' })
+      throw new Error({ message:'No instances found.' });
     }
     callback(filterInstances(instances));
   });
@@ -194,7 +194,7 @@ helpers._getOpenstackStandardResponse = function(file, time) {
   response.access.token.expires = time.toString();
 
   return response;
-}
+};
 
 helpers.setupAuthenticationMock = function (authHockInstance, provider) {
   if (provider === 'rackspace') {
@@ -259,6 +259,6 @@ helpers.setupAuthenticationMock = function (authHockInstance, provider) {
     else {
       throw new Error('provider ['+provider+'] not supported');
     }
-}
+};
 
 helpers.pkgcloud = pkgcloud;

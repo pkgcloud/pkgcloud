@@ -105,6 +105,6 @@ rackspace.getContainer('sample-container', function (err, container) {
       return;
     }
 
-    console.log('Container ' + container.name + ' was successfully destroyed.')
+    console.log('Container ' + container.name + ' was successfully destroyed.');
   });
 });

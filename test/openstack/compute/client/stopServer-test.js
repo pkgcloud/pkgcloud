@@ -99,7 +99,7 @@ var options = {};
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });

@@ -115,7 +115,7 @@ providers.filter(function (provider) {
           function (next) {
             authServer.close(next);
           }
-        ], done)
+        ], done);
       });
     });
   });
@@ -124,18 +124,18 @@ providers.filter(function (provider) {
     if (provider === 'rackspace') {
       hockInstance
         .get('/v1.0/123456/flavors')
-        .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'))
+        .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'));
     }
     else if (provider === 'openstack') {
       hockInstance
         .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors')
-        .reply(200, helpers.loadFixture('openstack/databaseFlavors.json'))
+        .reply(200, helpers.loadFixture('openstack/databaseFlavors.json'));
 
     }
     else if (provider === 'hp') {
       hockInstance
         .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors')
-        .reply(200, helpers.loadFixture('hp/databaseFlavors.json'))
+        .reply(200, helpers.loadFixture('hp/databaseFlavors.json'));
     }
   }
 });

@@ -65,7 +65,7 @@ describe('pkgcloud openstack context Service Class', function() {
 
     (function() {
       service.getEndpointUrl({
-        region: 'ORD' })
+        region: 'ORD' });
     }).should.throw('Unable to identify endpoint url');
   });
 

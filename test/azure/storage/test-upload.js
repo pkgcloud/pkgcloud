@@ -24,7 +24,7 @@ var stream = client.upload(options, function (err, res) {
 var file = fs.createReadStream(helpers.fixturePath('fillerama.txt'));
 file.pipe(stream);
 
-options.remote = 'bigfile.raw'
+options.remote = 'bigfile.raw';
 var stream2 = client.upload(options, function (err, res) {
   if (err) {
     console.dir(err);

@@ -4,7 +4,7 @@ var helpers = require('../../helpers');
 
 var options = {
   name: 'test10'
-}
+};
 
 var client = helpers.createClient('azure', 'database');
 
