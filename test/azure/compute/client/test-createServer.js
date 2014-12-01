@@ -25,8 +25,8 @@ var options = {
   },
   ports: [
     {
-      name: "foo",
-      protocol: "tcp",
+      name: 'foo',
+      protocol: 'tcp',
       port: 12333,
       localPort: 12333
     }
@@ -40,13 +40,13 @@ function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = {
-    "the createServer() method": {
-      "with image and flavor ids": {
+  test['The pkgcloud ' + name + ' compute client'] = {
+    'the createServer() method': {
+      'with image and flavor ids': {
         topic: function () {
           client.createServer(options, this.callback);
         },
-        "should return a valid server": function (err, server) {
+        'should return a valid server': function (err, server) {
 
           testContext.server = server;
           assert.isNull(err);
@@ -67,13 +67,13 @@ function testSetWait(client) {
   var name   = 'azure',
     test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = {
-    "the setWait() method": {
-      "with setWait({ status: testContext.server.STATUS.running },": {
+  test['The pkgcloud ' + name + ' compute client'] = {
+    'the setWait() method': {
+      'with setWait({ status: testContext.server.STATUS.running },': {
         topic: function () {
           testContext.server.setWait({ status: testContext.server.STATUS.running }, 1000, this.callback);
         },
-        "should return a running server": function (err, server) {
+        'should return a running server': function (err, server) {
           testContext.server = server;
           assert.isNull(err);
           if (err === null) {
@@ -102,7 +102,7 @@ vows
   .describe('pkgcloud/azure/compute/createServer')
   .addBatch(testCreateServer(client))
   .addBatch(testSetWait(client))
-  ["export"](module);
+  ['export'](module);
 
 
 

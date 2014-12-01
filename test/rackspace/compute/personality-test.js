@@ -33,7 +33,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
         flavor: 1, // 256 server
         personality: [
           {
-            path: "/root/.ssh/authorized_keys",
+            path: '/root/.ssh/authorized_keys',
             contents: keyBuffer.toString('base64')
           }
         ]
@@ -56,7 +56,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
           '-q',
           '-o',
           'StrictHostKeyChecking no',
-          'root@' + testServer.addresses["public"][0],
+          'root@' + testServer.addresses['public'][0],
           'cat /root/.ssh/authorized_keys'
         ]);
 

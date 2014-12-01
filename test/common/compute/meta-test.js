@@ -18,7 +18,7 @@ var fs = require('fs'),
   pkgcloud = require('../../../lib/pkgcloud'),
   mock = !!process.env.MOCK;
 
-var providers=["openstack"];
+var providers=['openstack'];
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].compute;
@@ -88,7 +88,7 @@ providers.filter(function (provider) {
         });
       }
 	
-      var testMetadata = {"os_type" : "windows"};
+      var testMetadata = {os_type: 'windows'};
 	
       client.updateImageMeta(context.images[0].id, testMetadata, function (err, reply) {
         should.not.exist(err);
@@ -127,7 +127,10 @@ providers.filter(function (provider) {
 function setupMetaMock(client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66/metadata',{"metadata":{"os_type" : "windows"}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66/metadata',
+      { metadata: {
+        os_type :'windows'
+      }})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/metaResponse.json');
   }
 }

@@ -36,7 +36,7 @@ helpers.createClient = function createClient(provider, service, config) {
         config.keyId = '/' + config.account + '/keys/' + config.keyId;
         config.key   = fs.readFileSync(config.identity,'ascii');
       } else {
-        throw new Error("Can't test without username and account");
+        throw new Error('Can\'t test without username and account');
       }
     }
   }
@@ -80,16 +80,16 @@ helpers.loadFixture = function loadFixture(path, json) {
 
 helpers.personalityPost = function persPost(pubkey) {
   return JSON.stringify({
-    "server": {
-      "name": "create-personality-test",
-      "image": 49,
-      "flavor": 1,
-      "personality": [{
-        "path": "/root/.ssh/authorized_keys",
-        "contents": pubkey.toString('base64')
+    server: {
+      name: 'create-personality-test',
+      image: 49,
+      flavor: 1,
+      personality: [{
+        path: '/root/.ssh/authorized_keys',
+        contents: pubkey.toString('base64')
       }],
-      "flavorId": 1,
-      "imageId": 49
+      flavorId: 1,
+      imageId: 49
     }
   });
 };

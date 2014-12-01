@@ -174,7 +174,7 @@ providers.filter(function (provider) {
       }
 
       var network = new Network(client);
-      network.name = "model created network";
+      network.name = 'model created network';
       network.create(function (err, createdNetwork) {
         should.not.exist(err);
         should.exist(createdNetwork);
@@ -188,7 +188,7 @@ providers.filter(function (provider) {
       var m = mock ? 0.1 : 10;
 
       var network = new Network(client);
-      network.id = "d32019d3-bc6e-4319-9c1d-6722fc136a22";
+      network.id = 'd32019d3-bc6e-4319-9c1d-6722fc136a22';
 
       if (mock) {
         setupRefreshNetworkMock(client, provider, {
@@ -209,8 +209,8 @@ providers.filter(function (provider) {
 
     it('the network.destroy() method should delete a network', function (done) {
       var network = new Network(client);
-      network.name = "model deleted network";
-      network.id = "THISISANETWORKID";
+      network.name = 'model deleted network';
+      network.id = 'THISISANETWORKID';
 
       if (mock) {
         setupModelDestroyedNetworkMock(client, provider, {
@@ -265,11 +265,11 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id), {
-          "network": {
-            "admin_state_up": false,
-            "name": "private-network",
-            "shared": true,
-            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          network: {
+            admin_state_up: false,
+            name: 'private-network',
+            shared: true,
+            tenant_id: '4fd44f30292945e481c7b8a0c8908869'
           }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
@@ -277,11 +277,11 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   else if (provider === 'hp') {
     servers.server
         .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/networks', currentNetwork.id), {
-          "network": {
-            "admin_state_up": false,
-            "name": "private-network",
-            "shared": true,
-            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          network: {
+            admin_state_up: false,
+            name: 'private-network',
+            shared: true,
+            tenant_id: '4fd44f30292945e481c7b8a0c8908869'
           }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/network.json');
@@ -289,11 +289,11 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
   else if (provider === 'rackspace') {
     servers.server
         .put(urlJoin('/v2.0/networks', currentNetwork.id), {
-          "network": {
-            "admin_state_up": false,
-            "name": "private-network",
-            "shared": true,
-            "tenant_id": "4fd44f30292945e481c7b8a0c8908869"
+          network: {
+            admin_state_up: false,
+            name: 'private-network',
+            shared: true,
+            tenant_id: '4fd44f30292945e481c7b8a0c8908869'
           }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');

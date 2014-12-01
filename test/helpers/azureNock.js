@@ -47,19 +47,19 @@ exports.serverTest = function (nock, testHelpers) {
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     // createServer() create-test-ids2
     .post('/azure-account-subscription-id/services/hostedservices/create-test-ids2/deployments', helpers.loadFixture('azure/create-test-ids2.xml'))
-    .reply(202, "", {})
+    .reply(202, '', {})
     // createServer() test-reboot
     .post('/azure-account-subscription-id/services/hostedservices/test-reboot/deployments', helpers.loadFixture('azure/create-test-reboot.xml'))
-    .reply(202, "", {})
+    .reply(202, '', {})
     // destroyServer()
     .delete('/azure-account-subscription-id/services/hostedservices/create-test-ids2/deployments/create-test-ids2')
-    .reply(202, "", {})
+    .reply(202, '', {})
     // shutDown server
     .post('/azure-account-subscription-id/services/hostedservices/create-test-ids2/deployments/create-test-ids2/roleInstances/create-test-ids2/Operations', helpers.loadFixture('azure/shutdown-role.xml'))
-    .reply(201, "", {})
+    .reply(201, '', {})
     // rebootServer()
     .post('/azure-account-subscription-id/services/hostedservices/test-reboot/deployments/test-reboot/roleInstances/test-reboot/Operations', '<RestartRoleOperation xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><OperationType>RestartRoleOperation</OperationType></RestartRoleOperation>')
-    .reply(202, "", {});
+    .reply(202, '', {});
 
   // getServer() status
   nock('https://management.core.windows.net')
@@ -91,31 +91,31 @@ exports.serverTest = function (nock, testHelpers) {
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     .get('/azure-account-subscription-id/services/hostedservices')
-    .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>", {})
+    .reply(200, '<HostedServices xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>', {})
     .get('/azure-account-subscription-id/services/hostedservices')
-    .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>", {})
+    .reply(200, '<HostedServices xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>', {})
     .get('/azure-account-subscription-id/services/hostedservices/test-reboot?embed-detail=true')
     .reply(404,helpers.loadFixture('azure/hosted-service-404.xml'),{})
     .post('/azure-account-subscription-id/services/hostedservices', helpers.loadFixture('azure/create-test-reboot-hosted-service.xml'))
-    .reply(201, "", {})
+    .reply(201, '', {})
     //delete hosted service
     .delete('/azure-account-subscription-id/services/hostedservices/create-test-ids2')
-    .reply(200, "", {})
+    .reply(200, '', {})
     .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
     .reply(404,helpers.loadFixture('azure/hosted-service-404.xml'),{})
     .post('/azure-account-subscription-id/services/hostedservices', helpers.loadFixture('azure/create-test-ids2-hosted-service.xml'))
-    .reply(201, "", {});
+    .reply(201, '', {});
 
   // VM OSImage disk
   nock('https://management.core.windows.net')
     .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
     .delete('/azure-account-subscription-id/services/disks/create-test-ids2-create-test-ids2-0-20121111181413')
-    .reply(200, "", {});
+    .reply(200, '', {});
 
   // VM image blob
   nock('http://test-storage-account.' + azureApi.STORAGE_ENDPOINT)
     .delete('/vhd/create-test-ids2.vhd')
-    .reply(202, "", helpers.azureDeleteResponseHeaders());
+    .reply(202, '', helpers.azureDeleteResponseHeaders());
 
   // Certificates
   nock('https://management.core.windows.net')
@@ -123,9 +123,9 @@ exports.serverTest = function (nock, testHelpers) {
     // need to filter request body because base64 of cert is different on mac/windows
     .filteringRequestBody(/.*/, '*')
     .post('/azure-account-subscription-id/services/hostedservices/test-reboot/certificates', '*')
-    .reply(202, "", {})
+    .reply(202, '', {})
     .post('/azure-account-subscription-id/services/hostedservices/create-test-ids2/certificates', '*')
-    .reply(202, "", {});
+    .reply(202, '', {});
 
   // Get Operations status requests
   // we need a lot of these

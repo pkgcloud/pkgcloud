@@ -63,13 +63,13 @@ describe('pkgcloud/rackspace/database/authentication', function() {
           .reply(200, {
             versions: [
               {
-                "status": "CURRENT",
-                "updated": "2012-08-01T00:00:00Z",
-                "id": "v1.0",
-                "links": [
+                status: 'CURRENT',
+                updated: '2012-08-01T00:00:00Z',
+                id: 'v1.0',
+                links: [
                   {
-                    "href": "http://dfw.databases.api.rackspacecloud.com/v1.0/",
-                    "rel": "self"
+                    href: 'http://dfw.databases.api.rackspacecloud.com/v1.0/',
+                    rel: 'self'
                   }
                 ]
               }
