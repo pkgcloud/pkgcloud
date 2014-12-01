@@ -4,7 +4,7 @@
     // Enforcing
     "bitwise"       : false,     // true: Prohibit bitwise operators (&, |, ^, etc.)
     "camelcase"     : false,    // true: Identifiers must be in camelCase
-    "curly"         : false,     // true: Require {} for every new block or scope
+    "curly"         : true,     // true: Require {} for every new block or scope
     "eqeqeq"        : false,     // true: Require triple equals (===) for comparison
     "forin"         : false,     // true: Require filtering for..in loops with obj.hasOwnProperty()
     "freeze"        : false,     // true: prohibits overwriting prototypes of native objects such as Array, Date etc.
