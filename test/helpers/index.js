@@ -106,7 +106,10 @@ helpers.selectInstance = function selectInstance(client, callback) {
   }
 
   client.getInstances(function (err, instances) {
-    if (err) throw new Error(err);
+    if (err) {
+      throw new Error(err);
+    }
+    
     if (instances.length === 0) {
       throw new Error({ message:'No instances found.' });
     }
