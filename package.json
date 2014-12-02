@@ -68,19 +68,26 @@
     "xml2js": "0.1.x"
   },
   "devDependencies": {
+    "blanket": "^1.1.6",
+    "coveralls": "^2.11.2",
     "hock": "1.0.x",
+    "jshint": "2.x.x",
     "mocha": "1.21.x",
-    "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",
-    "coveralls": "2.x.x",
-    "jshint": "2.x.x"
+    "should": "4.0.x"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
     "test": "make test",
-    "test-cov": "make test-cov",
-    "test-coveralls": "make test-coveralls",
+    "cov": "make cov",
+    "travis": "make travis",
     "lint": "make lint"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "/lib/",
+      "data-cover-never": "node_modules"
+    }
   },
   "engines": {
     "node": ">=0.10.x"
