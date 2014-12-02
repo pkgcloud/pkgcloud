@@ -7,10 +7,5 @@ notifications:
     - travis@nodejitsu.com
   irc: "irc.freenode.org#pkgcloud"
 
-before_script:
-  - git clone git://github.com/visionmedia/node-jscoverage.git
-  - pushd node-jscoverage
-  - ./configure
-  - make
-  - popd
-  - npm run lint
+script:
+  - npm run travis
