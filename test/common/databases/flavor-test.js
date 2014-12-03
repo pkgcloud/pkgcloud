@@ -14,6 +14,24 @@ var should = require('should'),
     providers = require('../../configs/providers.json'),
     mock = !!process.env.MOCK;
 
+function setupGetFlavorMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/flavors/3')
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/3')
+      .reply(200, helpers.loadFixture('openstack/databaseFlavor3.json'));
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/3')
+      .reply(200, helpers.loadFixture('hp/databaseFlavor3.json'));
+  }
+}
+
 providers.filter(function (provider) {
  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {
@@ -139,22 +157,3 @@ providers.filter(function (provider) {
     }
   }
 });
-
-
-function setupGetFlavorMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/flavors/3')
-      .reply(200, helpers.loadFixture('rackspace/databaseFlavor3.json'));
-  }
-  else if (provider === 'openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/3')
-      .reply(200, helpers.loadFixture('openstack/databaseFlavor3.json'));
-  }
-  else if (provider === 'hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/3')
-      .reply(200, helpers.loadFixture('hp/databaseFlavor3.json'));
-  }
-}

@@ -28,6 +28,29 @@ var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
   PATH = require('path'),
   helpers;
 
+/**
+ * serverStatusReply()
+ * fills in the nock xml reply from the server with server name and status
+ * @param name - name of the server
+ * @param status - status to be returned in reply
+ *  status should be:
+ *      ReadyRole - server is RUNNING
+ *      VMStopped - server is still PROVISIONING
+ *      Provisioning - server is still PROVISIONING
+ *      see lib/pkgcloud/azure/compute/server.js for more status values
+ *
+ * @param helpers - test helper object
+ * @return {String} - the xml reply containing the server name and status
+ */
+var serverStatusReply = function (name, status) {
+
+  var template = helpers.loadFixture('azure/server-status-template.xml'),
+    params = {NAME: name, STATUS: status};
+
+  var result = _.template(template, params);
+  return result;
+};
+
 exports.serverTest = function (nock, testHelpers) {
 
   helpers = testHelpers;
@@ -175,28 +198,6 @@ exports.serverTest = function (nock, testHelpers) {
     .reply(200,helpers.loadFixture('azure/operation-succeeded.xml'),{});
 };
 
-/**
- * serverStatusReply()
- * fills in the nock xml reply from the server with server name and status
- * @param name - name of the server
- * @param status - status to be returned in reply
- *  status should be:
- *      ReadyRole - server is RUNNING
- *      VMStopped - server is still PROVISIONING
- *      Provisioning - server is still PROVISIONING
- *      see lib/pkgcloud/azure/compute/server.js for more status values
- *
- * @param helpers - test helper object
- * @return {String} - the xml reply containing the server name and status
- */
-var serverStatusReply = function (name, status) {
-
-  var template = helpers.loadFixture('azure/server-status-template.xml'),
-    params = {NAME: name, STATUS: status};
-
-  var result = _.template(template, params);
-  return result;
-};
 
 var filterPath = function (path) {
   var name = PATH.basename(path);
@@ -206,5 +207,3 @@ var filterPath = function (path) {
 
   return path;
 };
-
-

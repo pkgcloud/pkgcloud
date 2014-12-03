@@ -25,93 +25,6 @@ var fs = require('fs'),
   pkgcloud = require('../../../lib/pkgcloud'),
   fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
 
-providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].storage;
-}).forEach(function (provider) {
-  describe('pkgcloud/common/storage/base [' + provider + ']', function () {
-
-    var client = helpers.createClient(provider, 'storage'),
-      context = {},
-      authServer, server,
-      authHockInstance, hockInstance;
-
-    before(function (done) {
-
-      if (!mock) {
-        return done();
-      }
-
-      hockInstance = hock.createHock({ throwOnUnmatched: false });
-      authHockInstance = hock.createHock();
-
-      server = http.createServer(hockInstance.handler);
-      authServer = http.createServer(authHockInstance.handler);
-
-      // setup a filtering path for aws
-      hockInstance.filteringPathRegEx(/https:\/\/[\w\-\.]*s3-us-west-2\.amazonaws\.com([\w\-\.\_0-9\/]*)/g, '$1');
-
-      async.parallel([
-        function (next) {
-          server.listen(12345, next);
-        },
-        function (next) {
-          authServer.listen(12346, next);
-        }
-      ], done);
-    });
-
-    it('the client.upload stream should emit error', function (done) {
-
-      if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
-        setupUploadStreamError(provider, client, {
-          server: hockInstance,
-          authServer: authHockInstance
-        });
-      }
-
-      var stream = client.upload({
-        container: 'pkgcloud-test-container',
-        remote: 'test-file.txt'
-      });
-
-      stream.on('error', function (err) {
-        should.exist(err);
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-
-      stream.on('success', function (file) {
-        should.not.exist(file);
-        done();
-      });
-
-      stream.end('foo');
-    });
-
-
-    after(function (done) {
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          server.close(next);
-        },
-        function (next) {
-          authServer.close(next);
-        }
-      ], done);
-    });
-  });
-});
-
 function setupUploadStreamError(provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
@@ -207,3 +120,90 @@ function setupUploadStreamError(provider, client, servers) {
       .reply(400);
   }
 }
+
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].storage;
+}).forEach(function (provider) {
+  describe('pkgcloud/common/storage/base [' + provider + ']', function () {
+
+    var client = helpers.createClient(provider, 'storage'),
+      context = {},
+      authServer, server,
+      authHockInstance, hockInstance;
+
+    before(function (done) {
+
+      if (!mock) {
+        return done();
+      }
+
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
+      // setup a filtering path for aws
+      hockInstance.filteringPathRegEx(/https:\/\/[\w\-\.]*s3-us-west-2\.amazonaws\.com([\w\-\.\_0-9\/]*)/g, '$1');
+
+      async.parallel([
+        function (next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
+    });
+
+    it('the client.upload stream should emit error', function (done) {
+
+      if (mock) {
+        if (provider === 'joyent') {
+          // TODO figure out why joyent was disabled in vows based tests
+          return done();
+        }
+
+        setupUploadStreamError(provider, client, {
+          server: hockInstance,
+          authServer: authHockInstance
+        });
+      }
+
+      var stream = client.upload({
+        container: 'pkgcloud-test-container',
+        remote: 'test-file.txt'
+      });
+
+      stream.on('error', function (err) {
+        should.exist(err);
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+
+      stream.on('success', function (file) {
+        should.not.exist(file);
+        done();
+      });
+
+      stream.end('foo');
+    });
+
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          server.close(next);
+        },
+        function (next) {
+          authServer.close(next);
+        }
+      ], done);
+    });
+  });
+});

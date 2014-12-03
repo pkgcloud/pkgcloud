@@ -14,6 +14,288 @@ var should = require('should'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
     Instance = require('../../../lib/pkgcloud/openstack/database/instance').Instance,
     mock = !!process.env.MOCK;
+
+function assertLinks(links) {
+  links.should.be.an.Array;
+  links.forEach(function (link) {
+    should.exist(link.href);
+    should.exist(link.rel);
+  });
+}
+
+function setupCreateInstanceMock(hockInstance,  provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/flavors/1')
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
+      .post('/v1.0/123456/instances', {
+        instance: {
+          name: 'test-instance',
+          flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
+          databases: [],
+          volume: {
+            size:1
+          }
+        }
+      })
+      .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
+  }
+  else if (provider === 'openstack') {
+      hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/1')
+        .reply(200, helpers.loadFixture('openstack/databaseFlavor1.json'))
+        .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances', {
+          instance: {
+            name: 'test-instance',
+            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
+            databases: [],
+            volume: {
+              size:1
+            }
+          }
+        })
+        .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
+  }
+  else if (provider === 'hp') {
+      hockInstance
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/1')
+        .reply(200, helpers.loadFixture('hp/databaseFlavor1.json'))
+        .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances', {
+          instance: {
+            name: 'test-instance',
+            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
+            databases: [],
+            volume: {
+              size:1
+            }
+          }
+        })
+        .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
+  }
+}
+
+function setupGetInstancesMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'));
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'));
+  }
+}
+
+function setupGetDatabaseInstancesWithLimitMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances?limit=2')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'));
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances?limit=2')
+      .reply(200, helpers.loadFixture('openstack/databaseInstancesLimit2.json'));
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances?limit=2')
+      .reply(200, helpers.loadFixture('hp/databaseInstancesLimit2.json'));
+  }
+}
+
+function setupDestroyInstanceMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+      .reply(202);
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+      .reply(202);
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+      .reply(202);
+  }
+}
+
+function setGetInstanceMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+      hockInstance
+        .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+        .reply(200, helpers.loadFixture('rackspace/databaseInstance.json'));
+  }
+  else if (provider === 'openstack') {
+      hockInstance
+           .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+           .reply(200, helpers.loadFixture('openstack/databaseInstance.json'));
+  }
+  else if (provider === 'hp') {
+      hockInstance
+           .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
+           .reply(200, helpers.loadFixture('hp/databaseInstance.json'));
+  }
+}
+
+function setGetFlavorsMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+      hockInstance
+        .get('/v1.0/123456/flavors/2')
+        .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'));
+  }
+  else if (provider === 'openstack') {
+      hockInstance
+           .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/2')
+           .reply(200, helpers.loadFixture('openstack/databaseFlavor2.json'));
+  }
+  else if (provider === 'hp') {
+        hockInstance
+           .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/2')
+           .reply(200, helpers.loadFixture('hp/databaseFlavor2.json'));
+  }
+}
+
+function setupSetFlavorMock(hockInstance, provider) {
+  if (provider ==='rackspace') {
+      hockInstance
+        .get('/v1.0/123456/instances')
+        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        .get('/v1.0/123456/flavors/2')
+        .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
+        .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+          resize: {
+            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
+          }
+        })
+        .reply(202);
+  }
+  else if (provider === 'openstack') {
+      hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+        .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/2')
+        .reply(200, helpers.loadFixture('openstack/databaseFlavor2.json'))
+        .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+          resize: {
+            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
+          }
+        })
+        .reply(202);
+  }
+  else if (provider === 'hp') {
+      hockInstance
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+        .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/2')
+        .reply(200, helpers.loadFixture('hp/databaseFlavor2.json'))
+        .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+          resize: {
+            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
+          }
+        })
+        .reply(202);
+  }
+}
+
+function setupResizeMock (hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+        resize: {
+          volume :{
+            size :2
+          }
+        }
+      })
+      .reply(202);
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+        resize: {
+          volume :{
+            size :2
+          }
+        }
+      })
+      .reply(202);
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
+        resize: {
+          volume :{
+            size :2
+          }
+        }
+      })
+      .reply(202);
+  }
+}
+
+function setupGetOneFlavorMock(hockInstance, provider) {
+  if (provider === 'rackspace') {
+      hockInstance
+        .get('/v1.0/123456/flavors/1')
+        .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'));
+  }
+  else if (provider === 'openstack') {
+      hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/1')
+        .reply(200, helpers.loadFixture('openstack/databaseFlavor1.json'));
+  }
+  else if (provider === 'hp') {
+      hockInstance
+        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/1')
+        .reply(200, helpers.loadFixture('hp/databaseFlavor1.json'));
+  }
+}
+
+function setupRestartInstanceMock (hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
+      .reply(202);
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
+      .reply(202);
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
+      .reply(202);
+  }
+}
+
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {
@@ -461,283 +743,3 @@ providers.filter(function (provider) {
   });
 
 });
-function assertLinks(links) {
-  links.should.be.an.Array;
-  links.forEach(function (link) {
-    should.exist(link.href);
-    should.exist(link.rel);
-  });
-}
-
-function setupCreateInstanceMock(hockInstance,  provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/flavors/1')
-      .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'))
-      .post('/v1.0/123456/instances', {
-        instance: {
-          name: 'test-instance',
-          flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-          databases: [],
-          volume: {
-            size:1
-          }
-        }
-      })
-      .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
-  }
-  else if (provider === 'openstack') {
-      hockInstance
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/1')
-        .reply(200, helpers.loadFixture('openstack/databaseFlavor1.json'))
-        .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances', {
-          instance: {
-            name: 'test-instance',
-            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-            databases: [],
-            volume: {
-              size:1
-            }
-          }
-        })
-        .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
-  }
-  else if (provider === 'hp') {
-      hockInstance
-        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/1')
-        .reply(200, helpers.loadFixture('hp/databaseFlavor1.json'))
-        .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances', {
-          instance: {
-            name: 'test-instance',
-            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-            databases: [],
-            volume: {
-              size:1
-            }
-          }
-        })
-        .reply(200, helpers.loadFixture('rackspace/createdDatabaseInstance.json'));
-  }
-}
-
-function setupGetInstancesMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'));
-  }
-  else if (provider === 'openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'));
-  }
-  else if (provider === 'hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('hp/databaseInstances.json'));
-  }
-}
-
-function setupGetDatabaseInstancesWithLimitMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances?limit=2')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstancesLimit2.json'));
-  }
-  else if (provider === 'openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances?limit=2')
-      .reply(200, helpers.loadFixture('openstack/databaseInstancesLimit2.json'));
-  }
-  else if (provider === 'hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances?limit=2')
-      .reply(200, helpers.loadFixture('hp/databaseInstancesLimit2.json'));
-  }
-}
-
-function setupDestroyInstanceMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-      .reply(202);
-  }
-  else if (provider === 'openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-      .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-      .reply(202);
-  }
-  else if (provider === 'hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
-      .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-      .reply(202);
-  }
-}
-
-function setGetInstanceMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-      hockInstance
-        .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-        .reply(200, helpers.loadFixture('rackspace/databaseInstance.json'));
-  }
-  else if (provider === 'openstack') {
-      hockInstance
-           .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-           .reply(200, helpers.loadFixture('openstack/databaseInstance.json'));
-  }
-  else if (provider === 'hp') {
-      hockInstance
-           .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f')
-           .reply(200, helpers.loadFixture('hp/databaseInstance.json'));
-  }
-}
-
-function setGetFlavorsMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-      hockInstance
-        .get('/v1.0/123456/flavors/2')
-        .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'));
-  }
-  else if (provider === 'openstack') {
-      hockInstance
-           .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/2')
-           .reply(200, helpers.loadFixture('openstack/databaseFlavor2.json'));
-  }
-  else if (provider === 'hp') {
-        hockInstance
-           .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/2')
-           .reply(200, helpers.loadFixture('hp/databaseFlavor2.json'));
-  }
-}
-
-function setupSetFlavorMock(hockInstance, provider) {
-  if (provider ==='rackspace') {
-      hockInstance
-        .get('/v1.0/123456/instances')
-        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-        .get('/v1.0/123456/flavors/2')
-        .reply(200, helpers.loadFixture('rackspace/databaseFlavor2.json'))
-        .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
-          resize: {
-            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
-          }
-        })
-        .reply(202);
-  }
-  else if (provider === 'openstack') {
-      hockInstance
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-        .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/2')
-        .reply(200, helpers.loadFixture('openstack/databaseFlavor2.json'))
-        .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
-          resize: {
-            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
-          }
-        })
-        .reply(202);
-  }
-  else if (provider === 'hp') {
-      hockInstance
-        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-        .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
-        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/2')
-        .reply(200, helpers.loadFixture('hp/databaseFlavor2.json'))
-        .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
-          resize: {
-            flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/2'
-          }
-        })
-        .reply(202);
-  }
-}
-
-function setupResizeMock (hockInstance, provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
-        resize: {
-          volume :{
-            size :2
-          }
-        }
-      })
-      .reply(202);
-  }
-  else if (provider === 'openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
-        resize: {
-          volume :{
-            size :2
-          }
-        }
-      })
-      .reply(202);
-  }
-  else if (provider === 'hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
-      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', {
-        resize: {
-          volume :{
-            size :2
-          }
-        }
-      })
-      .reply(202);
-  }
-}
-
-function setupGetOneFlavorMock(hockInstance, provider) {
-  if (provider === 'rackspace') {
-      hockInstance
-        .get('/v1.0/123456/flavors/1')
-        .reply(200, helpers.loadFixture('rackspace/databaseFlavor1.json'));
-  }
-  else if (provider === 'openstack') {
-      hockInstance
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/1')
-        .reply(200, helpers.loadFixture('openstack/databaseFlavor1.json'));
-  }
-  else if (provider === 'hp') {
-      hockInstance
-        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/1')
-        .reply(200, helpers.loadFixture('hp/databaseFlavor1.json'));
-  }
-}
-
-function setupRestartInstanceMock (hockInstance, provider) {
-  if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
-      .reply(202);
-  }
-  else if (provider === 'openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
-      .reply(202);
-  }
-  else if (provider === 'hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
-      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
-      .reply(202);
-  }
-}

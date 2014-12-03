@@ -13,278 +13,6 @@ var should = require('should'),
   User = require('../../../lib/pkgcloud/openstack/database/user').User,
   providers = require('../../configs/providers.json'),
   mock = !!process.env.MOCK;
-providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
-}).forEach(function (provider) {
-describe('pkgcloud/['+provider+']/databases/users', function () {
-  var testContext = {},
-    client, authHockInstance, hockInstance, authServer, server;
-
-  describe('The pkgcloud '+provider+' Database client', function () {
-
-    before(function (done) {
-      client = helpers.createClient(provider, 'database');
-
-      if (!mock) {
-        return done();
-      }
-
-      hockInstance = hock.createHock({ throwOnUnmatched: false });
-      authHockInstance = hock.createHock();
-
-      server = http.createServer(hockInstance.handler);
-      authServer = http.createServer(authHockInstance.handler);
-
-      async.parallel([
-        function (next) {
-          server.listen(12345, next);
-        },
-        function (next) {
-          authServer.listen(12346, next);
-        }
-      ], done);
-    });
-
-    it('the createUser() method should respond correctly', function (done) {
-      if (mock) {
-        setupAuthenticationMock(authHockInstance, hockInstance, provider);
-        setupCreateUserMock(authHockInstance, hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.createUser({
-          username: 'joeTest',
-          password: 'joepasswd',
-          database: 'TestDatabase',
-          instance: instance
-        }, function (err, response) {
-          should.not.exist(err);
-          should.exist(response);
-          response.statusCode.should.equal(202);
-          authHockInstance && authHockInstance.done();
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-
-    });
-
-    it('the createUser() method should work with databases argument', function (done) {
-      if (mock) {
-          setupCreateUserMock(authHockInstance, hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.createUser({
-          username: 'joeTest',
-          password: 'joepasswd',
-          databases: ['TestDatabase'],
-          instance: instance
-        }, function (err, response) {
-          should.not.exist(err);
-          should.exist(response);
-          response.statusCode.should.equal(202);
-          authHockInstance && authHockInstance.done();
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-
-    });
-
-    it('create an other user for test pagination should response correctly', function (done) {
-
-      if (mock) {
-        setupCreateAnotherUserMock(hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.createUser({
-          username: 'joeTestTwo',
-          password: 'joepasswd',
-          database: 'TestDatabase',
-          instance: instance
-        }, function () {
-          client.createUser({
-            username: 'joeTestThree',
-            password: 'joepasswd',
-            database: 'TestDatabase',
-            instance: instance
-          }, function (err, response) {
-            should.not.exist(err);
-            should.exist(response);
-            response.statusCode.should.equal(202);
-            hockInstance && hockInstance.done();
-            done();
-          });
-        });
-      });
-    });
-
-    it('create multiple users in one request should response correctly', function (done) {
-
-      if (mock) {
-        setupCreateMultiplsUsersMock(hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.createUser([
-          {
-            username: 'joeTestFour',
-            password: 'joepasswd',
-            database: 'TestDatabase',
-            instance: instance
-          },
-          {
-            username: 'joeTestFive',
-            password: 'joepasswd',
-            database: 'TestDatabase',
-            instance: instance
-          }
-        ], function (err, response) {
-          should.not.exist(err);
-          should.exist(response);
-          response.statusCode.should.equal(202);
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-    });
-
-    it('create users with questionable characters should respond with error', function (done) {
-
-      if (mock) {
-        setupCreateUsersWithRestrictedCharacters(hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.createUser({
-          username: '@joeTestSix',
-          password: 'joepasswd',
-          database: 'TestDatabase',
-          instance: instance
-        }, function (err, response) {
-          should.exist(err);
-          should.not.exist(response);
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-    });
-
-    it('the getUsers() method should get the list of users', function (done) {
-
-      if (mock) {
-        setupGetUsersMock(hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.getUsers({ instance: instance }, function (err, list) {
-          should.not.exist(err);
-          should.exist(list);
-          list.should.be.an.Array;
-          list.forEach(function (user) {
-            user.should.be.instanceOf(User);
-          });
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-    });
-
-    describe('the destroyUsers() method', function() {
-      it('should respond correctly', function(done) {
-
-        if (mock) {
-          setupDestroyUsersMock(hockInstance, provider);
-        }
-
-        helpers.selectInstance(client, function (instance) {
-          client.destroyUser(instance, 'joeTest', function(err, response) {
-            should.not.exist(err);
-            should.exist(response);
-            response.statusCode.should.equal(202);
-            hockInstance && hockInstance.done();
-            done();
-          });
-        });
-      });
-
-      it('should destroy the user used for pagination', function(done) {
-
-        if (mock) {
-          setupDestroyUsersMockWithPagination(hockInstance, provider);
-        }
-
-        helpers.selectInstance(client, function (instance) {
-          client.destroyUser(instance, 'joeTestTwo', function (err, response) {
-            should.not.exist(err);
-            should.exist(response);
-            response.statusCode.should.equal(202);
-            hockInstance && hockInstance.done();
-            done();
-          });
-        });
-      });
-    });
-
-    it('the enableRoot() method should respond correctly', function(done) {
-
-      if (mock) {
-        setupEnableRootMock(hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.enableRoot(instance, function(err, user, response) {
-          should.not.exist(err);
-          should.exist(user);
-          should.exist(response);
-          response.statusCode.should.equal(200);
-          should.exist(response.body);
-          response.body.user.should.be.a.Object;
-          should.exist(response.body.user.password);
-          response.body.user.name.should.equal('root');
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-    });
-
-    it('the enableRoot() method should respond correctly', function (done) {
-
-      if (mock) {
-        setupEnableRootMockWithStatus(hockInstance, provider);
-      }
-
-      helpers.selectInstance(client, function (instance) {
-        client.rootEnabled(instance, function (err, root, response) {
-          should.not.exist(err);
-          should.exist(root);
-          should.exist(response);
-          response.statusCode.should.equal(200);
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-    });
-
-    after(function (done) {
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          server.close(next);
-        },
-        function (next) {
-          authServer.close(next);
-        }
-      ], done);
-    });
-  });
-});
-});
 
 function setupAuthenticationMock (authHockInstance, hockInstance, provider)  {
   if (provider === 'rackspace') {
@@ -755,3 +483,276 @@ function setupDestroyUsersMockWithPagination(hockInstance, provider) {
         .reply(202);
   }
 }
+
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
+}).forEach(function (provider) {
+describe('pkgcloud/['+provider+']/databases/users', function () {
+  var testContext = {},
+    client, authHockInstance, hockInstance, authServer, server;
+
+  describe('The pkgcloud '+provider+' Database client', function () {
+
+    before(function (done) {
+      client = helpers.createClient(provider, 'database');
+
+      if (!mock) {
+        return done();
+      }
+
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
+      async.parallel([
+        function (next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
+    });
+
+    it('the createUser() method should respond correctly', function (done) {
+      if (mock) {
+        setupAuthenticationMock(authHockInstance, hockInstance, provider);
+        setupCreateUserMock(authHockInstance, hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.createUser({
+          username: 'joeTest',
+          password: 'joepasswd',
+          database: 'TestDatabase',
+          instance: instance
+        }, function (err, response) {
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+
+    });
+
+    it('the createUser() method should work with databases argument', function (done) {
+      if (mock) {
+          setupCreateUserMock(authHockInstance, hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.createUser({
+          username: 'joeTest',
+          password: 'joepasswd',
+          databases: ['TestDatabase'],
+          instance: instance
+        }, function (err, response) {
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+
+    });
+
+    it('create an other user for test pagination should response correctly', function (done) {
+
+      if (mock) {
+        setupCreateAnotherUserMock(hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.createUser({
+          username: 'joeTestTwo',
+          password: 'joepasswd',
+          database: 'TestDatabase',
+          instance: instance
+        }, function () {
+          client.createUser({
+            username: 'joeTestThree',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          }, function (err, response) {
+            should.not.exist(err);
+            should.exist(response);
+            response.statusCode.should.equal(202);
+            hockInstance && hockInstance.done();
+            done();
+          });
+        });
+      });
+    });
+
+    it('create multiple users in one request should response correctly', function (done) {
+
+      if (mock) {
+        setupCreateMultiplsUsersMock(hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.createUser([
+          {
+            username: 'joeTestFour',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          },
+          {
+            username: 'joeTestFive',
+            password: 'joepasswd',
+            database: 'TestDatabase',
+            instance: instance
+          }
+        ], function (err, response) {
+          should.not.exist(err);
+          should.exist(response);
+          response.statusCode.should.equal(202);
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+    });
+
+    it('create users with questionable characters should respond with error', function (done) {
+
+      if (mock) {
+        setupCreateUsersWithRestrictedCharacters(hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.createUser({
+          username: '@joeTestSix',
+          password: 'joepasswd',
+          database: 'TestDatabase',
+          instance: instance
+        }, function (err, response) {
+          should.exist(err);
+          should.not.exist(response);
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+    });
+
+    it('the getUsers() method should get the list of users', function (done) {
+
+      if (mock) {
+        setupGetUsersMock(hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.getUsers({ instance: instance }, function (err, list) {
+          should.not.exist(err);
+          should.exist(list);
+          list.should.be.an.Array;
+          list.forEach(function (user) {
+            user.should.be.instanceOf(User);
+          });
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+    });
+
+    describe('the destroyUsers() method', function() {
+      it('should respond correctly', function(done) {
+
+        if (mock) {
+          setupDestroyUsersMock(hockInstance, provider);
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          client.destroyUser(instance, 'joeTest', function(err, response) {
+            should.not.exist(err);
+            should.exist(response);
+            response.statusCode.should.equal(202);
+            hockInstance && hockInstance.done();
+            done();
+          });
+        });
+      });
+
+      it('should destroy the user used for pagination', function(done) {
+
+        if (mock) {
+          setupDestroyUsersMockWithPagination(hockInstance, provider);
+        }
+
+        helpers.selectInstance(client, function (instance) {
+          client.destroyUser(instance, 'joeTestTwo', function (err, response) {
+            should.not.exist(err);
+            should.exist(response);
+            response.statusCode.should.equal(202);
+            hockInstance && hockInstance.done();
+            done();
+          });
+        });
+      });
+    });
+
+    it('the enableRoot() method should respond correctly', function(done) {
+
+      if (mock) {
+        setupEnableRootMock(hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.enableRoot(instance, function(err, user, response) {
+          should.not.exist(err);
+          should.exist(user);
+          should.exist(response);
+          response.statusCode.should.equal(200);
+          should.exist(response.body);
+          response.body.user.should.be.a.Object;
+          should.exist(response.body.user.password);
+          response.body.user.name.should.equal('root');
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+    });
+
+    it('the enableRoot() method should respond correctly', function (done) {
+
+      if (mock) {
+        setupEnableRootMockWithStatus(hockInstance, provider);
+      }
+
+      helpers.selectInstance(client, function (instance) {
+        client.rootEnabled(instance, function (err, root, response) {
+          should.not.exist(err);
+          should.exist(root);
+          should.exist(response);
+          response.statusCode.should.equal(200);
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          server.close(next);
+        },
+        function (next) {
+          authServer.close(next);
+        }
+      ], done);
+    });
+  });
+});
+});

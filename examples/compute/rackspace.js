@@ -8,6 +8,34 @@ var client = pkgcloud.providers.rackspace.compute.createClient({
   region: 'DFW'
 });
 
+// This function will handle our server creation,
+// as well as waiting for the server to come online after we've
+// created it.
+function handleServerResponse(err, server) {
+  if (err) {
+    console.dir(err);
+    return;
+  }
+
+  console.log('SERVER CREATED: ' + server.name + ', waiting for active status');
+
+  // Wait for status: ACTIVE on our server, and then callback
+  server.setWait({ status: server.STATUS.running }, 5000, function (err) {
+    if (err) {
+      console.dir(err);
+      return;
+    }
+
+    console.log('SERVER INFO');
+    console.log(server.name);
+    console.log(server.status);
+    console.log(server.id);
+
+    console.log('Make sure you DELETE server: ' + server.id +
+      ' in order to not accrue billing charges');
+  });
+}
+
 // first we're going to get our flavors
 client.getFlavors(function (err, flavors) {
   if (err) {
@@ -43,31 +71,3 @@ client.getFlavors(function (err, flavors) {
     }, handleServerResponse);
   });
 });
-
-// This function will handle our server creation,
-// as well as waiting for the server to come online after we've
-// created it.
-function handleServerResponse(err, server) {
-  if (err) {
-    console.dir(err);
-    return;
-  }
-
-  console.log('SERVER CREATED: ' + server.name + ', waiting for active status');
-
-  // Wait for status: ACTIVE on our server, and then callback
-  server.setWait({ status: server.STATUS.running }, 5000, function (err) {
-    if (err) {
-      console.dir(err);
-      return;
-    }
-
-    console.log('SERVER INFO');
-    console.log(server.name);
-    console.log(server.status);
-    console.log(server.id);
-
-    console.log('Make sure you DELETE server: ' + server.id +
-      ' in order to not accrue billing charges');
-  });
-}
