@@ -12,6 +12,9 @@ var helpers = require('../../helpers'),
     http    = require('http'),
     mock    = !!process.env.MOCK;
 
+// Declaring variables for helper functions defined later
+var randomPassword;
+
 describe('pkgcloud/iriscouch/databases-redis', function () {
   var context = {}, client, hockInstance, server;
 

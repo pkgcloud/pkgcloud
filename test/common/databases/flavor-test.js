@@ -14,6 +14,9 @@ var should = require('should'),
     providers = require('../../configs/providers.json'),
     mock = !!process.env.MOCK;
 
+// Declaring variables for helper functions defined later
+var setupGetFlavorMock;
+
 providers.filter(function (provider) {
  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {

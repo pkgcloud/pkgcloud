@@ -26,6 +26,9 @@ var fs = require('fs'),
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
+// Declaring variables for helper functions defined later
+var setupVersionMock, setupFlavorMock, setupImagesMock, setupServerMock, setupDestroyMock;
+
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
 providers.filter(function (provider) {

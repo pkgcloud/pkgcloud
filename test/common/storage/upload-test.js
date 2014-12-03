@@ -25,6 +25,9 @@ var fs = require('fs'),
   pkgcloud = require('../../../lib/pkgcloud'),
   fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
 
+// Declaring variables for helper functions defined later
+var setupUploadStreamError;
+
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].storage;
 }).forEach(function (provider) {

@@ -20,6 +20,11 @@ var fs = require('fs'),
     mock = !!process.env.MOCK,
     urlJoin = require('url-join');
 
+// Declaring variables for helper functions defined later
+var setupDestroyNetworkMock, setupUpdateNetworkMock, setupModelDestroyedNetworkMock,
+    setupNetworksMock, setupNetworkMock, setupRefreshNetworkMock,
+    setupNetworkModelCreateMock, setupGetNetworkMock;
+
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].network;
 }).forEach(function (provider) {
