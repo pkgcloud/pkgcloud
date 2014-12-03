@@ -18,6 +18,9 @@ var fs = require('fs'),
   pkgcloud = require('../../../lib/pkgcloud'),
   mock = !!process.env.MOCK;
 
+// Declaring variables for helper functions defined later
+var setupMetaMock, setupImagesMock;
+
 var providers=['openstack'];
 
 providers.filter(function (provider) {

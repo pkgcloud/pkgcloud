@@ -13,6 +13,8 @@ var fs = require('fs'),
   azureNock = require('../../../helpers/azureNock'),
   nock   = require('nock');
 
+var testContext = {};
+
 var options = {
   name: 'test-reboot',
   flavor: 'ExtraSmall',
@@ -104,8 +106,6 @@ function testRebootServer(client) {
 
 
 var client = helpers.createClient('azure', 'compute');
-
-var testContext = {};
 
 if (process.env.MOCK) {
   azureNock.serverTest(nock, helpers);

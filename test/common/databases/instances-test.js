@@ -14,6 +14,13 @@ var should = require('should'),
     Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
     Instance = require('../../../lib/pkgcloud/openstack/database/instance').Instance,
     mock = !!process.env.MOCK;
+
+// Declaring variables for helper functions defined later
+var assertLinks, setupCreateInstanceMock, setupGetInstancesMock,
+    setupGetDatabaseInstancesWithLimitMock, setupDestroyInstanceMock,
+    setGetInstanceMock, setGetFlavorsMock, setupSetFlavorMock, setupResizeMock,
+    setupGetOneFlavorMock, setupRestartInstanceMock;
+
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {

@@ -28,6 +28,9 @@ var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
   PATH = require('path'),
   helpers;
 
+// Declaring variables for helper functions defined later
+var serverStatusReply;
+
 exports.serverTest = function (nock, testHelpers) {
 
   helpers = testHelpers;

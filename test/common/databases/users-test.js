@@ -13,6 +13,13 @@ var should = require('should'),
   User = require('../../../lib/pkgcloud/openstack/database/user').User,
   providers = require('../../configs/providers.json'),
   mock = !!process.env.MOCK;
+
+// Declaring variables for helper functions defined later
+var setupAuthenticationMock, setupCreateUserMock, setupCreateAnotherUserMock,
+    setupCreateMultiplsUsersMock, setupCreateUsersWithRestrictedCharacters,
+    setupGetUsersMock, setupEnableRootMock, setupEnableRootMockWithStatus,
+    setupDestroyUsersMock, setupDestroyUsersMockWithPagination;
+
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {

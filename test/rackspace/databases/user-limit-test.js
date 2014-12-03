@@ -14,6 +14,9 @@ var should = require('should'),
   User = require('../../../lib/pkgcloud/openstack/database/user').User,
   mock = !!process.env.MOCK;
 
+// Declaring variables for helper functions defined later
+var setupAuthenticationMock, setupGetUsersMock;
+
   describe.skip('pkgcloud/[rackspace]/databases/users/limits', function () {
     var testContext = {},
       client, authHockInstance, hockInstance, authServer,
