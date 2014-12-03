@@ -20,6 +20,231 @@ var fs = require('fs'),
     mock = !!process.env.MOCK,
     urlJoin = require('url-join');
 
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].network;
+}).forEach(function (provider) {
+  describe('pkgcloud/common/network/subnets [' + provider + ']', function () {
+
+    var client = helpers.createClient(provider, 'network'),
+      context = {},
+      authServer, server,
+      authHockInstance, hockInstance;
+
+    before(function (done) {
+
+      if (!mock) {
+        return done();
+      }
+
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
+      async.parallel([
+        function (next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
+    });
+
+    it('the getSubnets() function should return a list of subnets', function(done) {
+
+      if (mock) {
+        setupSubnetsMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getSubnets(function (err, subnets) {
+        should.not.exist(err);
+        should.exist(subnets);
+
+        context.subnets = subnets;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    it('the getSubnet() method should get a subnet instance', function (done) {
+      if (mock) {
+        setupGetSubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        },context.subnets[0]);
+      }
+
+      client.getSubnet(context.subnets[0].id, function (err, subnet) {
+        should.not.exist(err);
+        should.exist(subnet);
+        subnet.should.be.an.instanceOf(Subnet);
+        subnet.should.have.property('id', context.subnets[0].id);
+        context.currentSubnet = subnet;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+
+      });
+    });
+
+    it('the createSubnet() method should create a subnet', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      if (mock) {
+        setupCreateSubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.createSubnet({
+        name: 'create-test-ids2'
+      }, function (err, subnet) {
+        should.not.exist(err);
+        should.exist(subnet);
+        subnet.should.be.an.instanceOf(Subnet);
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+    });
+
+    it('the destroySubnet() method should delete a subnet', function (done) {
+      if (mock) {
+        setupDestroySubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, context.currentSubnet);
+      }
+
+      client.destroySubnet(context.currentSubnet, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the destroySubnet() method should take an id, delete a subnet', function (done) {
+      if (mock) {
+        setupDestroySubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, context.currentSubnet);
+      }
+
+      client.destroySubnet(context.currentSubnet.id, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the updateSubnet() method should update a subnet', function (done) {
+
+      var subnetToUpdate = context.currentSubnet;
+      subnetToUpdate.enableDhcp = false;
+
+      if (mock) {
+        setupUpdateSubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, subnetToUpdate);
+      }
+
+      client.updateSubnet(subnetToUpdate, function(err,network){
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the subnet.create() method should create a subnet', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      if (mock) {
+        setupSubnetModelCreateMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      var subnet = new Subnet(client);
+      subnet.name= 'model created network';
+      subnet.create(function (err, createdSubnet) {
+        should.not.exist(err);
+        should.exist(createdSubnet);
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+    });
+
+    it('the subnet.refresh() method should get a network', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      var subnet = new Subnet(client);
+      subnet.id = 'd32019d3-bc6e-4319-9c1d-6722fc136a22';
+
+      if (mock) {
+        setupRefreshSubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, subnet);
+      }
+
+      subnet.refresh(function (err, refreshedSubnet) {
+        should.not.exist(err);
+        should.exist(refreshedSubnet);
+        refreshedSubnet.should.have.property('name', 'my_subnet');
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+    });
+
+    it('the subnet.destroy() method should delete a subnet', function (done) {
+      var subnet = new Subnet(client);
+      subnet.name = 'model deleted subnet';
+      subnet.id = 'THISISANETWORKID';
+
+      if (mock) {
+        setupModelDestroyedSubnetMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, subnet);
+      }
+
+      subnet.destroy(function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          server.close(next);
+        },
+        function (next) {
+          authServer.close(next);
+        }
+      ], done);
+    });
+
+  });
+});
+
 function setupDestroySubnetMock(client, provider, servers, currentSubnet){
   if (provider === 'openstack') {
     servers.server
@@ -292,228 +517,3 @@ function setupGetSubnetMock(client, provider, servers, currentSubnet) {
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
 }
-
-providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].network;
-}).forEach(function (provider) {
-  describe('pkgcloud/common/network/subnets [' + provider + ']', function () {
-
-    var client = helpers.createClient(provider, 'network'),
-      context = {},
-      authServer, server,
-      authHockInstance, hockInstance;
-
-    before(function (done) {
-
-      if (!mock) {
-        return done();
-      }
-
-      hockInstance = hock.createHock({ throwOnUnmatched: false });
-      authHockInstance = hock.createHock();
-
-      server = http.createServer(hockInstance.handler);
-      authServer = http.createServer(authHockInstance.handler);
-
-      async.parallel([
-        function (next) {
-          server.listen(12345, next);
-        },
-        function (next) {
-          authServer.listen(12346, next);
-        }
-      ], done);
-    });
-
-    it('the getSubnets() function should return a list of subnets', function(done) {
-
-      if (mock) {
-        setupSubnetsMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getSubnets(function (err, subnets) {
-        should.not.exist(err);
-        should.exist(subnets);
-
-        context.subnets = subnets;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    it('the getSubnet() method should get a subnet instance', function (done) {
-      if (mock) {
-        setupGetSubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        },context.subnets[0]);
-      }
-
-      client.getSubnet(context.subnets[0].id, function (err, subnet) {
-        should.not.exist(err);
-        should.exist(subnet);
-        subnet.should.be.an.instanceOf(Subnet);
-        subnet.should.have.property('id', context.subnets[0].id);
-        context.currentSubnet = subnet;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-
-      });
-    });
-
-    it('the createSubnet() method should create a subnet', function (done) {
-      var m = mock ? 0.1 : 10;
-
-      if (mock) {
-        setupCreateSubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.createSubnet({
-        name: 'create-test-ids2'
-      }, function (err, subnet) {
-        should.not.exist(err);
-        should.exist(subnet);
-        subnet.should.be.an.instanceOf(Subnet);
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the destroySubnet() method should delete a subnet', function (done) {
-      if (mock) {
-        setupDestroySubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, context.currentSubnet);
-      }
-
-      client.destroySubnet(context.currentSubnet, function (err) {
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    it('the destroySubnet() method should take an id, delete a subnet', function (done) {
-      if (mock) {
-        setupDestroySubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, context.currentSubnet);
-      }
-
-      client.destroySubnet(context.currentSubnet.id, function (err) {
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    it('the updateSubnet() method should update a subnet', function (done) {
-
-      var subnetToUpdate = context.currentSubnet;
-      subnetToUpdate.enableDhcp = false;
-
-      if (mock) {
-        setupUpdateSubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, subnetToUpdate);
-      }
-
-      client.updateSubnet(subnetToUpdate, function(err,network){
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    it('the subnet.create() method should create a subnet', function (done) {
-      var m = mock ? 0.1 : 10;
-
-      if (mock) {
-        setupSubnetModelCreateMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      var subnet = new Subnet(client);
-      subnet.name= 'model created network';
-      subnet.create(function (err, createdSubnet) {
-        should.not.exist(err);
-        should.exist(createdSubnet);
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the subnet.refresh() method should get a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
-      var subnet = new Subnet(client);
-      subnet.id = 'd32019d3-bc6e-4319-9c1d-6722fc136a22';
-
-      if (mock) {
-        setupRefreshSubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, subnet);
-      }
-
-      subnet.refresh(function (err, refreshedSubnet) {
-        should.not.exist(err);
-        should.exist(refreshedSubnet);
-        refreshedSubnet.should.have.property('name', 'my_subnet');
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the subnet.destroy() method should delete a subnet', function (done) {
-      var subnet = new Subnet(client);
-      subnet.name = 'model deleted subnet';
-      subnet.id = 'THISISANETWORKID';
-
-      if (mock) {
-        setupModelDestroyedSubnetMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, subnet);
-      }
-
-      subnet.destroy(function (err) {
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    after(function (done) {
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          server.close(next);
-        },
-        function (next) {
-          authServer.close(next);
-        }
-      ], done);
-    });
-
-  });
-});

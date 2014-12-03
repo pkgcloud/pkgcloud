@@ -28,6 +28,195 @@ var azureOptions = require('../../fixtures/azure/azure-options.json');
 
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function(provider) {
+  describe('pkgcloud/common/compute/base [' + provider + ']', function () {
+
+    var client = helpers.createClient(provider, 'compute'),
+        context = {},
+        authServer, server,
+        authHockInstance,
+        hockInstance;
+
+    before(function(done) {
+
+      if (!mock) {
+        return done();
+      }
+
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      // setup a filtering path for aws
+      hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
+      async.parallel([
+        function(next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
+    });
+
+    it('the getVersion() method with no arguments should return the version', function (done) {
+      if (mock) {
+        var errors = setupVersionMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      if (errors) {
+        client.getVersion(function (err) {
+          err.should.be.an.instanceof(Error);
+          done();
+        });
+      }
+      else {
+        client.getVersion(function (err, version) {
+          should.not.exist(err);
+          should.exist(version);
+          version.should.equal(versions[provider]);
+
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
+          done();
+        });
+      }
+    });
+
+    it('the getFlavors() method should return a list of flavors', function(done) {
+      if (mock) {
+        setupFlavorMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getFlavors(function (err, flavors) {
+        should.not.exist(err);
+        should.exist(flavors);
+
+        flavors.forEach(function (flavor) {
+          flavor.should.be.instanceOf(Flavor);
+        });
+
+        context.flavors = flavors;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    it('the getImages() method should return a list of images', function (done) {
+      if (mock) {
+        setupImagesMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getImages(function (err, images) {
+        should.not.exist(err);
+        should.exist(images);
+
+        images.forEach(function (image) {
+          image.should.be.instanceOf(Image);
+        });
+
+        context.images = images;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
+      var m = mock ? 0.1 : 100;
+
+      if (mock) {
+        setupServerMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.createServer(_.extend({
+        name: 'create-test-setWait',
+        image: context.images[0].id,
+        flavor: context.flavors[0].id
+      }, provider === 'azure' ? azureOptions : {}), function (err, srv1) {
+        should.not.exist(err);
+        should.exist(srv1);
+
+        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, 1000, function (err, srv2) {
+          should.not.exist(err);
+          should.exist(srv2);
+          srv2.should.be.instanceOf(Server);
+          srv2.name.should.equal('create-test-setWait');
+          srv2.status.should.equal(srv2.STATUS.running);
+          context.server = srv2;
+
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
+
+          done();
+        });
+      });
+    });
+
+    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
+      // TODO enable destroy tests for all providers
+      if (provider === 'joyent' || provider === 'amazon' || provider === 'azure') {
+        done();
+        return;
+      }
+
+      if (mock) {
+        setupDestroyMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.destroyServer(context.server, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    after(function(done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done);
+    });
+  });
+});
+
 function setupVersionMock(client, provider, servers) {
   if (provider === 'digitalocean') {
     return true;
@@ -396,192 +585,3 @@ function setupDestroyMock(client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/destroy-server.json');
   }
 }
-
-providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].compute;
-}).forEach(function(provider) {
-  describe('pkgcloud/common/compute/base [' + provider + ']', function () {
-
-    var client = helpers.createClient(provider, 'compute'),
-        context = {},
-        authServer, server,
-        authHockInstance,
-        hockInstance;
-
-    before(function(done) {
-
-      if (!mock) {
-        return done();
-      }
-
-      hockInstance = hock.createHock({ throwOnUnmatched: false });
-      authHockInstance = hock.createHock();
-
-      // setup a filtering path for aws
-      hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
-
-      server = http.createServer(hockInstance.handler);
-      authServer = http.createServer(authHockInstance.handler);
-
-      async.parallel([
-        function(next) {
-          server.listen(12345, next);
-        },
-        function (next) {
-          authServer.listen(12346, next);
-        }
-      ], done);
-    });
-
-    it('the getVersion() method with no arguments should return the version', function (done) {
-      if (mock) {
-        var errors = setupVersionMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      if (errors) {
-        client.getVersion(function (err) {
-          err.should.be.an.instanceof(Error);
-          done();
-        });
-      }
-      else {
-        client.getVersion(function (err, version) {
-          should.not.exist(err);
-          should.exist(version);
-          version.should.equal(versions[provider]);
-
-          authHockInstance && authHockInstance.done();
-          hockInstance && hockInstance.done();
-          done();
-        });
-      }
-    });
-
-    it('the getFlavors() method should return a list of flavors', function(done) {
-      if (mock) {
-        setupFlavorMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getFlavors(function (err, flavors) {
-        should.not.exist(err);
-        should.exist(flavors);
-
-        flavors.forEach(function (flavor) {
-          flavor.should.be.instanceOf(Flavor);
-        });
-
-        context.flavors = flavors;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    it('the getImages() method should return a list of images', function (done) {
-      if (mock) {
-        setupImagesMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getImages(function (err, images) {
-        should.not.exist(err);
-        should.exist(images);
-
-        images.forEach(function (image) {
-          image.should.be.instanceOf(Image);
-        });
-
-        context.images = images;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
-      var m = mock ? 0.1 : 100;
-
-      if (mock) {
-        setupServerMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.createServer(_.extend({
-        name: 'create-test-setWait',
-        image: context.images[0].id,
-        flavor: context.flavors[0].id
-      }, provider === 'azure' ? azureOptions : {}), function (err, srv1) {
-        should.not.exist(err);
-        should.exist(srv1);
-
-        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, 1000, function (err, srv2) {
-          should.not.exist(err);
-          should.exist(srv2);
-          srv2.should.be.instanceOf(Server);
-          srv2.name.should.equal('create-test-setWait');
-          srv2.status.should.equal(srv2.STATUS.running);
-          context.server = srv2;
-
-          authHockInstance && authHockInstance.done();
-          hockInstance && hockInstance.done();
-
-          done();
-        });
-      });
-    });
-
-    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
-      // TODO enable destroy tests for all providers
-      if (provider === 'joyent' || provider === 'amazon' || provider === 'azure') {
-        done();
-        return;
-      }
-
-      if (mock) {
-        setupDestroyMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.destroyServer(context.server, function (err, result) {
-        should.not.exist(err);
-        should.exist(result);
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    after(function(done) {
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          authServer.close(next);
-        },
-        function (next) {
-          server.close(next);
-        }
-      ], done);
-    });
-  });
-});

@@ -19,8 +19,6 @@ var options = {
   image: 'CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd'
 };
 
-var testContext = {};
-
 function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
@@ -106,6 +104,8 @@ function testRebootServer(client) {
 
 
 var client = helpers.createClient('azure', 'compute');
+
+var testContext = {};
 
 if (process.env.MOCK) {
   azureNock.serverTest(nock, helpers);

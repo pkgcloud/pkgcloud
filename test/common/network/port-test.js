@@ -20,6 +20,231 @@ var fs = require('fs'),
     mock = !!process.env.MOCK,
     urlJoin = require('url-join');
 
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].network;
+}).forEach(function (provider) {
+  describe('pkgcloud/common/network/ports [' + provider + ']', function () {
+
+    var client = helpers.createClient(provider, 'network'),
+      context = {},
+      authServer, server,
+      authHockInstance, hockInstance;
+
+    before(function (done) {
+
+      if (!mock) {
+        return done();
+      }
+
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
+      async.parallel([
+        function (next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
+    });
+
+    it('the getPorts() function should return a list of ports', function(done) {
+
+      if (mock) {
+        setupPortsMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getPorts(function (err, ports) {
+        should.not.exist(err);
+        should.exist(ports);
+
+        context.ports = ports;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    it('the getPort() method should get a port instance', function (done) {
+      if (mock) {
+        setupGetPortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, context.ports[0]);
+      }
+
+      client.getPort(context.ports[0].id, function (err, port) {
+        should.not.exist(err);
+        should.exist(port);
+        port.should.be.an.instanceOf(Port);
+        port.should.have.property('id', context.ports[0].id);
+        context.currentPort = port;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+
+      });
+    });
+
+    it('the createPort() method should create a port', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      if (mock) {
+        setupCreatePortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.createPort({
+        name: 'create-test-ids2'
+      }, function (err, port) {
+        should.not.exist(err);
+        should.exist(port);
+        port.should.be.an.instanceOf(Port);
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+    });
+
+    it('the destroyPort() method should delete a port', function (done) {
+      if (mock) {
+        setupDestroyPortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, context.currentPort);
+      }
+
+      client.destroyPort(context.currentPort, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the destroyPort() method should take an id, delete a port', function (done) {
+      if (mock) {
+        setupDestroyPortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, context.currentPort);
+      }
+
+      client.destroyPort(context.currentPort.id, function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the updatePort() method should update a port', function (done) {
+
+      var portToUpdate = context.currentPort;
+      portToUpdate.adminStateUp = false;
+
+      if (mock) {
+        setupUpdatePortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, portToUpdate);
+      }
+
+      client.updatePort(portToUpdate, function(err,network){
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('the port.create() method should create a port', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      if (mock) {
+        setupPortModelCreateMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      var port = new Port(client);
+      port.name= 'model created network';
+      port.create(function (err, createdPort) {
+        should.not.exist(err);
+        should.exist(createdPort);
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+    });
+
+    it('the port.refresh() method should get a network', function (done) {
+      var m = mock ? 0.1 : 10;
+
+      var port = new Port(client);
+      port.id = context.ports[0].id;
+
+      if (mock) {
+        setupRefreshPortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, port);
+      }
+
+      port.refresh(function (err, refreshedPort) {
+        should.not.exist(err);
+        should.exist(refreshedPort);
+        refreshedPort.should.have.property('name', 'my_port');
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+      });
+    });
+
+    it('the port.destroy() method should delete a port', function (done) {
+      var port = new Port(client);
+      port.name = 'model deleted port';
+      port.id = 'THISISANETWORKID';
+
+      if (mock) {
+        setupModelDestroyedPortMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        }, port);
+      }
+
+      port.destroy(function (err) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          server.close(next);
+        },
+        function (next) {
+          authServer.close(next);
+        }
+      ], done);
+    });
+
+  });
+});
+
 function setupDestroyPortMock(client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
@@ -289,228 +514,3 @@ function setupGetPortMock(client, provider, servers, currentPort) {
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
 }
-
-providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].network;
-}).forEach(function (provider) {
-  describe('pkgcloud/common/network/ports [' + provider + ']', function () {
-
-    var client = helpers.createClient(provider, 'network'),
-      context = {},
-      authServer, server,
-      authHockInstance, hockInstance;
-
-    before(function (done) {
-
-      if (!mock) {
-        return done();
-      }
-
-      hockInstance = hock.createHock({ throwOnUnmatched: false });
-      authHockInstance = hock.createHock();
-
-      server = http.createServer(hockInstance.handler);
-      authServer = http.createServer(authHockInstance.handler);
-
-      async.parallel([
-        function (next) {
-          server.listen(12345, next);
-        },
-        function (next) {
-          authServer.listen(12346, next);
-        }
-      ], done);
-    });
-
-    it('the getPorts() function should return a list of ports', function(done) {
-
-      if (mock) {
-        setupPortsMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getPorts(function (err, ports) {
-        should.not.exist(err);
-        should.exist(ports);
-
-        context.ports = ports;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    it('the getPort() method should get a port instance', function (done) {
-      if (mock) {
-        setupGetPortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, context.ports[0]);
-      }
-
-      client.getPort(context.ports[0].id, function (err, port) {
-        should.not.exist(err);
-        should.exist(port);
-        port.should.be.an.instanceOf(Port);
-        port.should.have.property('id', context.ports[0].id);
-        context.currentPort = port;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-
-      });
-    });
-
-    it('the createPort() method should create a port', function (done) {
-      var m = mock ? 0.1 : 10;
-
-      if (mock) {
-        setupCreatePortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.createPort({
-        name: 'create-test-ids2'
-      }, function (err, port) {
-        should.not.exist(err);
-        should.exist(port);
-        port.should.be.an.instanceOf(Port);
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the destroyPort() method should delete a port', function (done) {
-      if (mock) {
-        setupDestroyPortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, context.currentPort);
-      }
-
-      client.destroyPort(context.currentPort, function (err) {
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    it('the destroyPort() method should take an id, delete a port', function (done) {
-      if (mock) {
-        setupDestroyPortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, context.currentPort);
-      }
-
-      client.destroyPort(context.currentPort.id, function (err) {
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    it('the updatePort() method should update a port', function (done) {
-
-      var portToUpdate = context.currentPort;
-      portToUpdate.adminStateUp = false;
-
-      if (mock) {
-        setupUpdatePortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, portToUpdate);
-      }
-
-      client.updatePort(portToUpdate, function(err,network){
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    it('the port.create() method should create a port', function (done) {
-      var m = mock ? 0.1 : 10;
-
-      if (mock) {
-        setupPortModelCreateMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      var port = new Port(client);
-      port.name= 'model created network';
-      port.create(function (err, createdPort) {
-        should.not.exist(err);
-        should.exist(createdPort);
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the port.refresh() method should get a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
-      var port = new Port(client);
-      port.id = context.ports[0].id;
-
-      if (mock) {
-        setupRefreshPortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, port);
-      }
-
-      port.refresh(function (err, refreshedPort) {
-        should.not.exist(err);
-        should.exist(refreshedPort);
-        refreshedPort.should.have.property('name', 'my_port');
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-      });
-    });
-
-    it('the port.destroy() method should delete a port', function (done) {
-      var port = new Port(client);
-      port.name = 'model deleted port';
-      port.id = 'THISISANETWORKID';
-
-      if (mock) {
-        setupModelDestroyedPortMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        }, port);
-      }
-
-      port.destroy(function (err) {
-        should.not.exist(err);
-        done();
-      });
-    });
-
-    after(function (done) {
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          server.close(next);
-        },
-        function (next) {
-          authServer.close(next);
-        }
-      ], done);
-    });
-
-  });
-});

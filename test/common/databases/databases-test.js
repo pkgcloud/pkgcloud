@@ -13,197 +13,6 @@ var should = require('should'),
     providers = require('../../configs/providers.json'),
     mock = !!process.env.MOCK;
 
-function setupCreateDatabasesMock(hockInstance, provider) {
- if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabase' }
-        ]
-      })
-      .reply(202);
-  }
-  else if (provider ==='openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabase' }
-        ]
-      })
-      .reply(202);
-  }
-  else if (provider ==='hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabase' }
-        ]
-      })
-      .reply(202);
-  }
-}
-
-function setupCreateDatabasesForPaginationMock(hockInstance, provider) {
- if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabaseTwo' }
-        ]
-      })
-      .reply(202);
-  }
-  else if (provider ==='openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabaseTwo' }
-        ]
-      })
-      .reply(202);
-  }
-  else if (provider ==='hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabaseTwo' }
-        ]
-      })
-      .reply(202);
-  }
-}
-
-function setupModelCreateDatabasesMock(hockInstance, provider) {
- if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabaseThree' }
-        ]
-      })
-      .reply(202);
-  }
-  else if (provider ==='openstack') {
-    hockInstance
-      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
-      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabaseThree' }
-        ]
-      })
-      .reply(202);
-  }
-  else if (provider ==='hp') {
-    hockInstance
-      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
-      {
-        databases: [
-          { name: 'TestDatabaseThree' }
-        ]
-      })
-      .reply(202);
-  }
-}
-
-
-
-function setupGetDatabasesMock(hockInstance, provider) {
- if (provider === 'rackspace') {
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
-          .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
-  }
-  else if (provider ==='openstack') {
-        hockInstance
-          .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
-          .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
-  }
-  else if (provider ==='hp') {
-        hockInstance
-          .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-          .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
-          .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
-          .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
-  }
-}
-
-function setupDestroyDatabasesMock(hockInstance, provider) {
- if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
-      .reply(202);
-  }
-  else if (provider ==='openstack') {
-      hockInstance
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-        .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
-        .reply(202);
-  }
-  else if (provider ==='hp') {
-      hockInstance
-            .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
-            .reply(202);
-  }
-}
-
-function setupDestroyLastDatabasesMock(hockInstance, provider) {
- if (provider === 'rackspace') {
-    hockInstance
-      .get('/v1.0/123456/instances')
-      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
-      .reply(202);
-  }
-  else if (provider ==='openstack') {
-      hockInstance
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
-        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-        .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
-        .reply(202);
-  }
-  else if (provider ==='hp') {
-      hockInstance
-            .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
-            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-            .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
-            .reply(202);
-  }
-}
-
 providers.filter(function (provider) {
  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {
@@ -502,3 +311,194 @@ providers.filter(function (provider) {
     });
   });
 });
+
+function setupCreateDatabasesMock(hockInstance, provider) {
+ if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabase' }
+        ]
+      })
+      .reply(202);
+  }
+  else if (provider ==='openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabase' }
+        ]
+      })
+      .reply(202);
+  }
+  else if (provider ==='hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabase' }
+        ]
+      })
+      .reply(202);
+  }
+}
+
+function setupCreateDatabasesForPaginationMock(hockInstance, provider) {
+ if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabaseTwo' }
+        ]
+      })
+      .reply(202);
+  }
+  else if (provider ==='openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabaseTwo' }
+        ]
+      })
+      .reply(202);
+  }
+  else if (provider ==='hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabaseTwo' }
+        ]
+      })
+      .reply(202);
+  }
+}
+
+function setupModelCreateDatabasesMock(hockInstance, provider) {
+ if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabaseThree' }
+        ]
+      })
+      .reply(202);
+  }
+  else if (provider ==='openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+      .reply(200, helpers.loadFixture('openstack/databaseInstances.json'))
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabaseThree' }
+        ]
+      })
+      .reply(202);
+  }
+  else if (provider ==='hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases',
+      {
+        databases: [
+          { name: 'TestDatabaseThree' }
+        ]
+      })
+      .reply(202);
+  }
+}
+
+
+
+function setupGetDatabasesMock(hockInstance, provider) {
+ if (provider === 'rackspace') {
+        hockInstance
+          .get('/v1.0/123456/instances')
+          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
+          .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
+  }
+  else if (provider ==='openstack') {
+        hockInstance
+          .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+          .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
+          .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
+  }
+  else if (provider ==='hp') {
+        hockInstance
+          .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+          .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
+          .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases')
+          .reply(200, {databases: [{name: 'TestDatabase'}, {name: 'TestDatabaseTwo'}]});
+  }
+}
+
+function setupDestroyDatabasesMock(hockInstance, provider) {
+ if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
+      .reply(202);
+  }
+  else if (provider ==='openstack') {
+      hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
+        .reply(202);
+  }
+  else if (provider ==='hp') {
+      hockInstance
+            .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabase')
+            .reply(202);
+  }
+}
+
+function setupDestroyLastDatabasesMock(hockInstance, provider) {
+ if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/instances')
+      .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+      .delete('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
+      .reply(202);
+  }
+  else if (provider ==='openstack') {
+      hockInstance
+        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances')
+        .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+        .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
+        .reply(202);
+  }
+  else if (provider ==='hp') {
+      hockInstance
+            .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances')
+            .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
+            .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/databases/TestDatabaseTwo')
+            .reply(202);
+  }
+}

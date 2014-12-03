@@ -18,48 +18,6 @@ var fs = require('fs'),
   pkgcloud = require('../../../lib/pkgcloud'),
   mock = !!process.env.MOCK;
 
-function setupMetaMock(client, provider, servers) {
-  if (provider === 'openstack') {
-    servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66/metadata',
-      { metadata: {
-        os_type :'windows'
-      }})
-      .replyWithFile(202, __dirname + '/../../fixtures/openstack/metaResponse.json');
-  }
-}
-
-function setupImagesMock(client, provider, servers) {
-  if (provider === 'openstack') {
-    servers.authServer
-      .post('/v2.0/tokens', {
-        auth: {
-          passwordCredentials: {
-            username: 'MOCK-USERNAME',
-            password: 'MOCK-PASSWORD'
-          }
-        }
-      })
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken.json')
-      .get('/v2.0/tenants')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
-      .post('/v2.0/tokens', {
-        auth: {
-          passwordCredentials: {
-            username: 'MOCK-USERNAME',
-            password: 'MOCK-PASSWORD'
-          },
-          tenantId: '72e90ecb69c44d0296072ea39e537041'
-        }
-      })
-      .reply(200, helpers.getOpenstackAuthResponse());
-
-    servers.server
-      .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
-  }
-}
-
 var providers=['openstack'];
 
 providers.filter(function (provider) {
@@ -165,3 +123,45 @@ providers.filter(function (provider) {
 
   });
 });
+
+function setupMetaMock(client, provider, servers) {
+  if (provider === 'openstack') {
+    servers.server
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66/metadata',
+      { metadata: {
+        os_type :'windows'
+      }})
+      .replyWithFile(202, __dirname + '/../../fixtures/openstack/metaResponse.json');
+  }
+}
+
+function setupImagesMock(client, provider, servers) {
+  if (provider === 'openstack') {
+    servers.authServer
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/initialToken.json')
+      .get('/v2.0/tenants')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          passwordCredentials: {
+            username: 'MOCK-USERNAME',
+            password: 'MOCK-PASSWORD'
+          },
+          tenantId: '72e90ecb69c44d0296072ea39e537041'
+        }
+      })
+      .reply(200, helpers.getOpenstackAuthResponse());
+
+    servers.server
+      .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
+  }
+}

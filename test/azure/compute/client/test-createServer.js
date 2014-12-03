@@ -13,8 +13,6 @@ var fs = require('fs'),
   azureNock = require('../../../helpers/azureNock'),
   nock   = require('nock');
 
-var testContext = {};
-
 var options = {
   name: 'create-test-ids2',
   flavor: 'ExtraSmall',
@@ -93,6 +91,8 @@ function testSetWait(client) {
 }
 
 var client = helpers.createClient('azure', 'compute');
+
+var testContext = {};
 
 if (process.env.MOCK) {
   azureNock.serverTest(nock, helpers);

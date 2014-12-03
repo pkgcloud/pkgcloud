@@ -27,27 +27,209 @@ var azureOptions = require('../../fixtures/azure/azure-options.json');
 
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
-/**
- * serverStatusReply()
- * fills in the nock xml reply from the server with server name and status
- * @param name - name of the server
- * @param status - status to be returned in reply
- *  status should be:
- *      ReadyRole - server is RUNNING
- *      VMStopped - server is still PROVISIONING
- *      Provisioning - server is still PROVISIONING
- *      see lib/pkgcloud/azure/compute/server.js for more status values
- *
- * @return {String} - the xml reply containing the server name and status
- */
-var serverStatusReply = function (name, status) {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function (provider) {
+  describe('pkgcloud/common/compute/server [' + provider + ']', function () {
 
-  var template = helpers.loadFixture('azure/server-status-template.xml'),
-    params = {NAME: name, STATUS: status};
+    var client = helpers.createClient(provider, 'compute'),
+      context = {},
+      authServer, server,
+      authHockInstance,
+      hockInstance;
 
-  var result = _.template(template, params);
-  return result;
-};
+    before(function (done) {
+
+      if (!mock) {
+        return done();
+      }
+
+      hockInstance = hock.createHock({ throwOnUnmatched: false });
+      authHockInstance = hock.createHock();
+
+      // setup a filtering path for aws
+      hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
+
+      server = http.createServer(hockInstance.handler);
+      authServer = http.createServer(authHockInstance.handler);
+
+      async.parallel([
+        function (next) {
+          server.listen(12345, next);
+        },
+        function (next) {
+          authServer.listen(12346, next);
+        }
+      ], done);
+    });
+
+    it('the getImages() function should return a list of images', function(done) {
+
+      if (mock) {
+        setupImagesMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getImages(function (err, images) {
+        should.not.exist(err);
+        should.exist(images);
+
+        context.images = images;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    it('the getFlavors() function should return a list of flavors', function (done) {
+
+      if (mock) {
+        setupFlavorMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getFlavors(function (err, flavors) {
+        should.not.exist(err);
+        should.exist(flavors);
+
+        context.flavors = flavors;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+
+        done();
+      });
+    });
+
+    it('the createServer() method with image and flavor should create a server', function (done) {
+      var m = mock ? .1 : 10;
+
+      if (mock) {
+        setupServerMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.createServer(_.extend({
+        name: 'create-test-ids2',
+        image: context.images[0].id,
+        flavor: context.flavors[0].id
+      }, provider === 'azure' ? azureOptions : {}), function (err, srv1) {
+        should.not.exist(err);
+        should.exist(srv1);
+
+        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, function (err, srv2) {
+          should.not.exist(err);
+          should.exist(srv2);
+          srv2.should.be.instanceOf(Server);
+          srv2.name.should.equal('create-test-ids2');
+          srv2.imageId.should.equal(context.images[0].id);
+
+          authHockInstance && authHockInstance.done();
+          hockInstance && hockInstance.done();
+          done();
+        });
+      });
+    });
+
+    it('the getServers() method should return a list of servers', function (done) {
+      if (mock) {
+        setupGetServersMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getServers(function (err, servers) {
+        should.not.exist(err);
+        should.exist(servers);
+
+        servers.should.be.an.Array;
+
+        servers.forEach(function(srv) {
+          srv.should.be.instanceOf(Server);
+        });
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+
+      });
+    });
+
+    it.skip('the getServer() method should get a server instance', function (done) {
+      if (mock) {
+        setupGetServerMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      client.getServer(context.servers[0].id, function (err, srv) {
+        should.not.exist(err);
+        should.exist(srv);
+
+        srv.should.be.instanceOf(Server);
+
+        context.currentServer = hockInstance;
+
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        done();
+
+      });
+    });
+
+    it.skip('the server.rebootServer() method should restart a server instance', function (done) {
+      if (mock) {
+        setupRebootMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      context.currentServer.reboot(function(err) {
+        done();
+      });
+    });
+
+    it.skip('the destroyServer() method should delete a server instance', function (done) {
+      if (mock) {
+        setupRebootMock(client, provider, {
+          authServer: authHockInstance,
+          server: hockInstance
+        });
+      }
+
+      context.currentServer.reboot(function (err) {
+        done();
+      });
+    });
+
+    after(function (done) {
+      if (!mock) {
+        return done();
+      }
+
+      async.parallel([
+        function (next) {
+          authServer.close(next);
+        },
+        function (next) {
+          server.close(next);
+        }
+      ], done);
+    });
+
+  });
+});
 
 function setupImagesMock(client, provider, servers) {
   if (provider === 'rackspace') {
@@ -396,211 +578,6 @@ function setupGetServerMock(client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
 }
-
-providers.filter(function (provider) {
-  return !!helpers.pkgcloud.providers[provider].compute;
-}).forEach(function (provider) {
-  describe('pkgcloud/common/compute/server [' + provider + ']', function () {
-
-    var client = helpers.createClient(provider, 'compute'),
-      context = {},
-      authServer, server,
-      authHockInstance,
-      hockInstance;
-
-    before(function (done) {
-
-      if (!mock) {
-        return done();
-      }
-
-      hockInstance = hock.createHock({ throwOnUnmatched: false });
-      authHockInstance = hock.createHock();
-
-      // setup a filtering path for aws
-      hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
-
-      server = http.createServer(hockInstance.handler);
-      authServer = http.createServer(authHockInstance.handler);
-
-      async.parallel([
-        function (next) {
-          server.listen(12345, next);
-        },
-        function (next) {
-          authServer.listen(12346, next);
-        }
-      ], done);
-    });
-
-    it('the getImages() function should return a list of images', function(done) {
-
-      if (mock) {
-        setupImagesMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getImages(function (err, images) {
-        should.not.exist(err);
-        should.exist(images);
-
-        context.images = images;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    it('the getFlavors() function should return a list of flavors', function (done) {
-
-      if (mock) {
-        setupFlavorMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getFlavors(function (err, flavors) {
-        should.not.exist(err);
-        should.exist(flavors);
-
-        context.flavors = flavors;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-
-        done();
-      });
-    });
-
-    it('the createServer() method with image and flavor should create a server', function (done) {
-      var m = mock ? .1 : 10;
-
-      if (mock) {
-        setupServerMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.createServer(_.extend({
-        name: 'create-test-ids2',
-        image: context.images[0].id,
-        flavor: context.flavors[0].id
-      }, provider === 'azure' ? azureOptions : {}), function (err, srv1) {
-        should.not.exist(err);
-        should.exist(srv1);
-
-        srv1.setWait({ status: srv1.STATUS.running }, 100 * m, function (err, srv2) {
-          should.not.exist(err);
-          should.exist(srv2);
-          srv2.should.be.instanceOf(Server);
-          srv2.name.should.equal('create-test-ids2');
-          srv2.imageId.should.equal(context.images[0].id);
-
-          authHockInstance && authHockInstance.done();
-          hockInstance && hockInstance.done();
-          done();
-        });
-      });
-    });
-
-    it('the getServers() method should return a list of servers', function (done) {
-      if (mock) {
-        setupGetServersMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getServers(function (err, servers) {
-        should.not.exist(err);
-        should.exist(servers);
-
-        servers.should.be.an.Array;
-
-        servers.forEach(function(srv) {
-          srv.should.be.instanceOf(Server);
-        });
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-
-      });
-    });
-
-    it.skip('the getServer() method should get a server instance', function (done) {
-      if (mock) {
-        setupGetServerMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      client.getServer(context.servers[0].id, function (err, srv) {
-        should.not.exist(err);
-        should.exist(srv);
-
-        srv.should.be.instanceOf(Server);
-
-        context.currentServer = hockInstance;
-
-        authHockInstance && authHockInstance.done();
-        hockInstance && hockInstance.done();
-        done();
-
-      });
-    });
-
-    it.skip('the server.rebootServer() method should restart a server instance', function (done) {
-      if (mock) {
-        setupRebootMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      context.currentServer.reboot(function(err) {
-        done();
-      });
-    });
-
-    it.skip('the destroyServer() method should delete a server instance', function (done) {
-      if (mock) {
-        setupRebootMock(client, provider, {
-          authServer: authHockInstance,
-          server: hockInstance
-        });
-      }
-
-      context.currentServer.reboot(function (err) {
-        done();
-      });
-    });
-
-    after(function (done) {
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          authServer.close(next);
-        },
-        function (next) {
-          server.close(next);
-        }
-      ], done);
-    });
-
-  });
-});
-
 //
 //function batchThree(providerClient, providerName) {
 //  var name   = providerName   || 'rackspace',
@@ -958,6 +935,27 @@ providers.filter(function (provider) {
 //       .export(module)
 //    ;
 //  });z
+/**
+ * serverStatusReply()
+ * fills in the nock xml reply from the server with server name and status
+ * @param name - name of the server
+ * @param status - status to be returned in reply
+ *  status should be:
+ *      ReadyRole - server is RUNNING
+ *      VMStopped - server is still PROVISIONING
+ *      Provisioning - server is still PROVISIONING
+ *      see lib/pkgcloud/azure/compute/server.js for more status values
+ *
+ * @return {String} - the xml reply containing the server name and status
+ */
+var serverStatusReply = function (name, status) {
+
+  var template = helpers.loadFixture('azure/server-status-template.xml'),
+    params = {NAME: name, STATUS: status};
+
+  var result = _.template(template, params);
+  return result;
+};
 
 var filterPath = function (path) {
   var name = PATH.basename(path);

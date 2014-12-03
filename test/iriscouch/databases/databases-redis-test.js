@@ -12,16 +12,6 @@ var helpers = require('../../helpers'),
     http    = require('http'),
     mock    = !!process.env.MOCK;
 
-//
-// Just a quick and lazy random password generator
-//
-function randomPassword(length) {
-  if (length == 1) {
-    return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48);
-  }
-  return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48) + randomPassword(length - 1);
-}
-
 describe('pkgcloud/iriscouch/databases-redis', function () {
   var context = {}, client, hockInstance, server;
 
@@ -130,3 +120,13 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
   });
 
 });
+
+//
+// Just a quick and lazy random password generator
+//
+function randomPassword(length) {
+  if (length == 1) {
+    return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48);
+  }
+  return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48) + randomPassword(length - 1);
+}
