@@ -5,3 +5,5 @@ var client = pkgcloud.compute.createClient({
   accessKey: 'asdfkjas;dkj43498aj3n',
   accessKeyId: '98kja34lkj'
 });
+
+console.log(client);

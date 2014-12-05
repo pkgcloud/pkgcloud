@@ -12,6 +12,8 @@ var client = pkgcloud.compute.createClient({
   key: fs.readFileSync(path.join(process.env.HOME, '.ssh/id_rsa'), 'ascii')
 });
 
+console.log(client);
+
 //
 // Alternatively create a client with a username / password pair
 //
@@ -21,3 +23,4 @@ var otherClient = pkgcloud.compute.createClient({
   password: 'your-password'
 });
 
+console.log(otherClient);
