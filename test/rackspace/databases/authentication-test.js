@@ -15,7 +15,7 @@ var should = require('should'),
     mock = process.env.MOCK;
 
 describe('pkgcloud/rackspace/database/authentication', function() {
-  var client, testContext = {}, authHockInstance, hockInstance, authServer, server;
+  var client, authHockInstance, hockInstance, authServer, server;
 
   before(function(done) {
     client = helpers.createClient('rackspace', 'database');
@@ -92,7 +92,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
     describe('the auth() method with a valid username and api key', function() {
 
       var client = helpers.createClient('rackspace', 'database'),
-          err, res;
+          err;
 
       beforeEach(function(done) {
 
@@ -143,7 +143,7 @@ describe('pkgcloud/rackspace/database/authentication', function() {
         authUrl: 'localhost:12346'
       });
 
-      var err, res;
+      var err;
 
       beforeEach(function (done) {
 

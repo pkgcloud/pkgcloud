@@ -144,7 +144,7 @@ providers.filter(function (provider) {
 });
 
 
-function setupGetFlavorMock(hockInstance, provider) {
+setupGetFlavorMock = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
       .get('/v1.0/123456/flavors/3')
@@ -160,4 +160,4 @@ function setupGetFlavorMock(hockInstance, provider) {
       .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors/3')
       .reply(200, helpers.loadFixture('hp/databaseFlavor3.json'));
   }
-}
+};

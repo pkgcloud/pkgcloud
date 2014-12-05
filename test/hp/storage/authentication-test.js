@@ -134,6 +134,7 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
           badClient.auth(function (err, res) {
             should.exist(err);
+            should.not.exist(res);
             authHockInstance && authHockInstance.done();
             done();
           });

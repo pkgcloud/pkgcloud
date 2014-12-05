@@ -180,6 +180,7 @@ describe('pkgcloud/openstack/identity', function () {
           userClient._identity.token.tenant.id,
           function (err, body) {
             should.not.exist(err);
+            should.exist(body);
             done();
           });
       });
@@ -264,12 +265,14 @@ describe('pkgcloud/openstack/identity', function () {
           function (next) {
             adminClient.getTenantInfo(userClient._identity.token.tenant.id, function (err, success) {
               should.not.exist(err);
+              should.exist(success);
               next();
             });
           },
           function (next) {
             userClient.getTenantInfo(userClient._identity.token.tenant.id, function (err, success) {
               should.exist(err);
+              should.not.exist(success);
               next();
             });
           }

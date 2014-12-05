@@ -46,8 +46,6 @@ describe('pkgcloud/hp/compute/authentication', function () {
     });
 
     describe('the auth() method with a valid username and api key', function () {
-      var err, res;
-
       beforeEach(function (done) {
 
         client = helpers.createClient('hp', 'compute');
@@ -86,7 +84,7 @@ describe('pkgcloud/hp/compute/authentication', function () {
         region: 'custom region'
       });
 
-      var err, res;
+      var err;
 
       beforeEach(function (done) {
 

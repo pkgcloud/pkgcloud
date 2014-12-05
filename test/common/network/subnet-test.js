@@ -97,8 +97,6 @@ providers.filter(function (provider) {
     });
 
     it('the createSubnet() method should create a subnet', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupCreateSubnetMock(client, provider, {
           authServer: authHockInstance,
@@ -161,13 +159,12 @@ providers.filter(function (provider) {
 
       client.updateSubnet(subnetToUpdate, function(err,network){
         should.not.exist(err);
+        should.exist(network);
         done();
       });
     });
 
     it('the subnet.create() method should create a subnet', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupSubnetModelCreateMock(client, provider, {
           authServer: authHockInstance,
@@ -187,8 +184,6 @@ providers.filter(function (provider) {
     });
 
     it('the subnet.refresh() method should get a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
       var subnet = new Subnet(client);
       subnet.id = 'd32019d3-bc6e-4319-9c1d-6722fc136a22';
 
@@ -245,7 +240,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupDestroySubnetMock(client, provider, servers, currentSubnet){
+setupDestroySubnetMock = function (client, provider, servers, currentSubnet){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id))
@@ -261,9 +256,9 @@ function setupDestroySubnetMock(client, provider, servers, currentSubnet){
       .delete(urlJoin('/v2.0/subnets', currentSubnet.id))
       .reply(204);
   }
-}
+};
 
-function setupUpdateSubnetMock(client, provider, servers, currentSubnet){
+setupUpdateSubnetMock = function (client, provider, servers, currentSubnet){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id), {
@@ -327,9 +322,9 @@ function setupUpdateSubnetMock(client, provider, servers, currentSubnet){
         })
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
-}
+};
 
-function setupModelDestroyedSubnetMock(client, provider, servers, currentSubnet){
+setupModelDestroyedSubnetMock = function (client, provider, servers, currentSubnet){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id))
@@ -345,9 +340,9 @@ function setupModelDestroyedSubnetMock(client, provider, servers, currentSubnet)
       .delete(urlJoin('/v2.0/subnets', currentSubnet.id))
       .reply(204);
   }
-}
+};
 
-function setupSubnetsMock(client, provider, servers) {
+setupSubnetsMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -420,9 +415,9 @@ function setupSubnetsMock(client, provider, servers) {
         .get('/v2.0/subnets')
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnets.json');
   }
-}
+};
 
-function setupCreateSubnetMock(client, provider, servers) {
+setupCreateSubnetMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', {
@@ -450,9 +445,9 @@ function setupCreateSubnetMock(client, provider, servers) {
       })
       .replyWithFile(201, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
-}
+};
 
-function setupRefreshSubnetMock(client, provider, servers, subnet) {
+setupRefreshSubnetMock = function (client, provider, servers, subnet) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', subnet.id))
@@ -468,9 +463,9 @@ function setupRefreshSubnetMock(client, provider, servers, subnet) {
       .get(urlJoin('/v2.0/subnets', subnet.id))
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
-}
+};
 
-function setupSubnetModelCreateMock(client, provider, servers) {
+setupSubnetModelCreateMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', {
@@ -498,9 +493,9 @@ function setupSubnetModelCreateMock(client, provider, servers) {
       })
       .replyWithFile(202, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
-}
+};
 
-function setupGetSubnetMock(client, provider, servers, currentSubnet) {
+setupGetSubnetMock= function (client, provider, servers, currentSubnet) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/subnets', currentSubnet.id))
@@ -516,4 +511,4 @@ function setupGetSubnetMock(client, provider, servers, currentSubnet) {
       .get(urlJoin('/v2.0/subnets', currentSubnet.id))
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/subnet.json');
   }
-}
+};

@@ -16,8 +16,6 @@ var should = require('should'),
 
 var client = helpers.createClient('openstack', 'orchestration');
 
-var options = {};
-
 describe('pkgcloud/openstack/orchestration/stacks[getStacks]', function () {
 
   var authHockInstance, hockInstance, authServer, server;

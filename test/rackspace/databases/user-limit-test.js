@@ -129,15 +129,15 @@ var setupAuthenticationMock, setupGetUsersMock;
     });
   });
 
-function setupGetUsersMock(hockInstance) {
+setupGetUsersMock = function(hockInstance) {
   hockInstance
       .get('/v1.0/123456/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
       .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
       .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'));
-}
+};
 
-function setupAuthenticationMock (authHockInstance)  {
+setupAuthenticationMock = function(authHockInstance)  {
     authHockInstance
       .post('/v2.0/tokens', {
         auth: {
@@ -148,4 +148,4 @@ function setupAuthenticationMock (authHockInstance)  {
         }
       })
       .reply(200, helpers.getRackspaceAuthResponse());
-}
+};

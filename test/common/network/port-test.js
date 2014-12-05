@@ -97,8 +97,6 @@ providers.filter(function (provider) {
     });
 
     it('the createPort() method should create a port', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupCreatePortMock(client, provider, {
           authServer: authHockInstance,
@@ -161,13 +159,12 @@ providers.filter(function (provider) {
 
       client.updatePort(portToUpdate, function(err,network){
         should.not.exist(err);
+        should.exist(network);
         done();
       });
     });
 
     it('the port.create() method should create a port', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupPortModelCreateMock(client, provider, {
           authServer: authHockInstance,
@@ -187,8 +184,6 @@ providers.filter(function (provider) {
     });
 
     it('the port.refresh() method should get a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
       var port = new Port(client);
       port.id = context.ports[0].id;
 
@@ -245,7 +240,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupDestroyPortMock(client, provider, servers, currentPort){
+setupDestroyPortMock = function (client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id))
@@ -261,9 +256,9 @@ function setupDestroyPortMock(client, provider, servers, currentPort){
       .delete(urlJoin('/v2.0/ports', currentPort.id))
       .reply(204);
   }
-}
+};
 
-function setupUpdatePortMock(client, provider, servers, currentPort){
+setupUpdatePortMock = function (client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id), {
@@ -324,9 +319,9 @@ function setupUpdatePortMock(client, provider, servers, currentPort){
         })
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
-}
+};
 
-function setupModelDestroyedPortMock(client, provider, servers, currentPort){
+setupModelDestroyedPortMock = function (client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id))
@@ -342,9 +337,9 @@ function setupModelDestroyedPortMock(client, provider, servers, currentPort){
       .delete(urlJoin('/v2.0/ports', currentPort.id))
       .reply(204);
   }
-}
+};
 
-function setupPortsMock(client, provider, servers) {
+setupPortsMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -417,9 +412,9 @@ function setupPortsMock(client, provider, servers) {
         .get('/v2.0/ports')
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/ports.json');
   }
-}
+};
 
-function setupCreatePortMock(client, provider, servers) {
+setupCreatePortMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', {
@@ -447,9 +442,9 @@ function setupCreatePortMock(client, provider, servers) {
       })
       .replyWithFile(201, __dirname + '/../../fixtures/rackspace/port.json');
   }
-}
+};
 
-function setupRefreshPortMock(client, provider, servers, port) {
+setupRefreshPortMock = function (client, provider, servers, port) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', port.id))
@@ -465,9 +460,9 @@ function setupRefreshPortMock(client, provider, servers, port) {
       .get(urlJoin('/v2.0/ports', port.id))
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
-}
+};
 
-function setupPortModelCreateMock(client, provider, servers) {
+setupPortModelCreateMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', {
@@ -495,9 +490,9 @@ function setupPortModelCreateMock(client, provider, servers) {
       })
       .replyWithFile(202, __dirname + '/../../fixtures/rackspace/port.json');
   }
-}
+};
 
-function setupGetPortMock(client, provider, servers, currentPort) {
+setupGetPortMock = function (client, provider, servers, currentPort) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id))
@@ -513,4 +508,4 @@ function setupGetPortMock(client, provider, servers, currentPort) {
       .get(urlJoin('/v2.0/ports', currentPort.id))
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
   }
-}
+};

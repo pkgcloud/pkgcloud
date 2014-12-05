@@ -76,8 +76,6 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
 
 
     describe('the auth() method with a valid username and api key', function () {
-      var err, res;
-
       beforeEach(function (done) {
 
         client = helpers.createClient('rackspace', 'compute');
@@ -134,7 +132,7 @@ describe('pkgcloud/rackspace/compute/authentication', function () {
         protocol: 'http://'
       });
 
-      var err, res;
+      var err;
 
       beforeEach(function (done) {
 

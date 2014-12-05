@@ -191,7 +191,7 @@ exports.serverTest = function (nock, testHelpers) {
  * @param helpers - test helper object
  * @return {String} - the xml reply containing the server name and status
  */
-var serverStatusReply = function (name, status) {
+serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
     params = {NAME: name, STATUS: status};
@@ -199,14 +199,3 @@ var serverStatusReply = function (name, status) {
   var result = _.template(template, params);
   return result;
 };
-
-var filterPath = function (path) {
-  var name = PATH.basename(path);
-  if (path.search('embed-detail=true') !== -1) {
-    return '/getStatus?name=' + name;
-  }
-
-  return path;
-};
-
-

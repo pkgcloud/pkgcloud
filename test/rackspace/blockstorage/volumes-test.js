@@ -16,7 +16,7 @@ var should = require('should'),
 
 describe('pkgcloud/rackspace/blockstorage/volumes', function () {
   var client,
-      testContext = {}, authHockInstance, hockInstance, server, authServer;
+      authHockInstance, hockInstance, server, authServer;
 
   before(function (done) {
     client = helpers.createClient('rackspace', 'blockstorage');

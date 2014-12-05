@@ -8,7 +8,7 @@ client.destroyServer('test-reboot', function (err, result) {
   if (err) {
     console.log(err);
   } else {
-    console.log('ok');
+    console.log(result);
   }
 });
 

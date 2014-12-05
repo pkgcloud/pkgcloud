@@ -25,7 +25,6 @@ providers.filter(function (provider) {
   describe('pkgcloud/common/storage/base [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'storage'),
-      context = {},
       authServer, server,
       authHockInstance, hockInstance;
 
@@ -106,7 +105,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupUploadStreamError(provider, client, servers) {
+setupUploadStreamError = function (provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -200,4 +199,4 @@ function setupUploadStreamError(provider, client, servers) {
       .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
       .reply(400);
   }
-}
+};

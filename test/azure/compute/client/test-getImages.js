@@ -4,8 +4,6 @@ var helpers = require('../../../helpers');
 
 var client = helpers.createClient('azure', 'compute');
 
-var options = {};
-
 /*
 client.getImages(options, function (err, result) {
   if (err) {

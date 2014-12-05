@@ -45,7 +45,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
 
     it('should connect over ssh without a password prompt and validate the key', function(done) {
 
-      var data;
+      var data, errorData;
 
       testServer.setWait({ status: testServer.STATUS.running }, 5000, function () {
         var ssh = spawn('ssh', [
@@ -64,6 +64,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
 
         ssh.stderr.on('error', onError);
         ssh.stderr.on('data', function (chunk) {
+          errorData += chunk;
         });
         ssh.stdout.on('error', onError);
         ssh.stdout.on('data', function (chunk) {
