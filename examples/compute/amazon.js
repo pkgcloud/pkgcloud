@@ -6,4 +6,12 @@ var client = pkgcloud.compute.createClient({
   accessKeyId: '98kja34lkj'
 });
 
-console.log(client);
+client.getServers(function (err, servers) {
+  if (err) {
+    console.error(err);
+  }
+
+  servers.forEach(function (server) {
+    console.log(server.toJSON());
+  });
+});

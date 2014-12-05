@@ -6,4 +6,12 @@ var client = pkgcloud.storage.createClient({
   accessKeyId: '98kja34lkj'
 });
 
-console.log(client);
+amazon.getContainers(function (err, containers) {
+  if (err) {
+    console.error(err);
+  }
+
+  containers.forEach(function (container) {
+    console.log(container.toJSON());
+  });
+});
