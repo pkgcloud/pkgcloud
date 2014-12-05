@@ -426,7 +426,7 @@ describe('pkgcloud/mongolab/databases', function () {
           .reply(200, ' null ');
       }
 
-      client.deleteAccount(context.custompw.username, function (err, databases) {
+      client.deleteAccount(context.custompw.username, function (err) {
         should.not.exist(err);
 
         hockInstance && hockInstance.done();

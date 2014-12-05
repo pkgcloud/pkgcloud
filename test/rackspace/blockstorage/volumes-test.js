@@ -6,9 +6,7 @@
  * MIT LICENSE
  *
  */
-var fs = require('fs'),
-    path = require('path'),
-    should = require('should'),
+var should = require('should'),
     async = require('async'),
     hock = require('hock'),
     http = require('http'),
@@ -18,7 +16,7 @@ var fs = require('fs'),
 
 describe('pkgcloud/rackspace/blockstorage/volumes', function () {
   var client,
-      testContext = {}, authHockInstance, hockInstance, server, authServer;
+      authHockInstance, hockInstance, server, authServer;
 
   before(function (done) {
     client = helpers.createClient('rackspace', 'blockstorage');

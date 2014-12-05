@@ -5,11 +5,7 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
-    should = require('should'),
-    util = require('util'),
+var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     http = require('http'),
@@ -102,8 +98,6 @@ providers.filter(function (provider) {
     });
 
     it('the createNetwork() method should create a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupNetworkMock(client, provider, {
           authServer: authHockInstance,
@@ -164,13 +158,12 @@ providers.filter(function (provider) {
 
       client.updateNetwork(networkToUpdate, function(err,network){
         should.not.exist(err);
+        should.exist(network);
         done();
       });
     });
 
     it('the network.create() method should create a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupNetworkModelCreateMock(client, provider, {
           authServer: authHockInstance,
@@ -190,8 +183,6 @@ providers.filter(function (provider) {
     });
 
     it('the network.refresh() method should get a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
       var network = new Network(client);
       network.id = 'd32019d3-bc6e-4319-9c1d-6722fc136a22';
 
@@ -248,7 +239,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
+setupDestroyNetworkMock = function (client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
@@ -264,9 +255,9 @@ function setupDestroyNetworkMock(client, provider, servers, currentNetwork){
       .delete(urlJoin('/v2.0/networks', currentNetwork.id))
       .reply(204);
   }
-}
+};
 
-function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
+setupUpdateNetworkMock = function (client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
         .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id), {
@@ -303,9 +294,9 @@ function setupUpdateNetworkMock(client, provider, servers, currentNetwork){
         })
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
-}
+};
 
-function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwork){
+setupModelDestroyedNetworkMock = function (client, provider, servers, currentNetwork){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', currentNetwork.id))
@@ -321,9 +312,9 @@ function setupModelDestroyedNetworkMock(client, provider, servers, currentNetwor
       .delete(urlJoin('/v2.0/networks', currentNetwork.id))
       .reply(204);
   }
-}
+};
 
-function setupNetworksMock(client, provider, servers) {
+setupNetworksMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -396,9 +387,9 @@ function setupNetworksMock(client, provider, servers) {
         .get('/v2.0/networks')
         .replyWithFile(200, __dirname + '/../../fixtures/rackspace/networks.json');
   }
-}
+};
 
-function setupNetworkMock(client, provider, servers) {
+setupNetworkMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', {
@@ -426,9 +417,9 @@ function setupNetworkMock(client, provider, servers) {
       })
       .replyWithFile(201, __dirname + '/../../fixtures/rackspace/network.json');
   }
-}
+};
 
-function setupRefreshNetworkMock(client, provider, servers, network) {
+setupRefreshNetworkMock = function (client, provider, servers, network) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks',network.id))
@@ -444,9 +435,9 @@ function setupRefreshNetworkMock(client, provider, servers, network) {
       .get(urlJoin('/v2.0/networks',network.id))
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
-}
+};
 
-function setupNetworkModelCreateMock(client, provider, servers) {
+setupNetworkModelCreateMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks', {
@@ -474,9 +465,9 @@ function setupNetworkModelCreateMock(client, provider, servers) {
       })
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
-}
+};
 
-function setupGetNetworkMock(client, provider, servers) {
+setupGetNetworkMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
@@ -492,9 +483,9 @@ function setupGetNetworkMock(client, provider, servers) {
       .get('/v2.0/networks/d32019d3-bc6e-4319-9c1d-6722fc136a22')
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
-}
+};
 
-var serverStatusReply = function (name, status) {
+serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
     params = {NAME: name, STATUS: status};
@@ -503,7 +494,7 @@ var serverStatusReply = function (name, status) {
   return result;
 };
 
-var filterPath = function (path) {
+filterPath = function (path) {
   var name = PATH.basename(path);
   if (path.search('embed-detail=true') !== -1) {
     return '/getStatus?name=' + name;

@@ -7,10 +7,7 @@
 
 var fs = require('fs'),
     filed = require('filed'),
-    assert = require('../helpers/assert'),
-    should = require('should'),
-    helpers = require('../helpers'),
-    mock = !!process.env.MOCK;
+    assert = require('../helpers/assert');
 
 exports.shouldHaveCreds = function (client) {
   return function () {

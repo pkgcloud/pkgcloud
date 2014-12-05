@@ -5,9 +5,7 @@
  *
  */
 
-var fs = require('fs'),
-  path = require('path'),
-  vows = require('vows'),
+var vows = require('vows'),
   assert = require('../../../helpers/assert'),
   helpers = require('../../../helpers'),
   azureNock = require('../../../helpers/azureNock'),
@@ -52,7 +50,7 @@ function testCreateServer(client) {
   return test;
 }
 
-function testSetWait(client) {
+function testSetWait() {
   var name   = 'azure',
     test   = {};
 

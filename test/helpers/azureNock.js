@@ -25,7 +25,6 @@
 var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
   _ = require('underscore'),
   requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5',
-  PATH = require('path'),
   helpers;
 
 // Declaring variables for helper functions defined later
@@ -192,7 +191,7 @@ exports.serverTest = function (nock, testHelpers) {
  * @param helpers - test helper object
  * @return {String} - the xml reply containing the server name and status
  */
-var serverStatusReply = function (name, status) {
+serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
     params = {NAME: name, STATUS: status};
@@ -200,14 +199,3 @@ var serverStatusReply = function (name, status) {
   var result = _.template(template, params);
   return result;
 };
-
-var filterPath = function (path) {
-  var name = PATH.basename(path);
-  if (path.search('embed-detail=true') !== -1) {
-    return '/getStatus?name=' + name;
-  }
-
-  return path;
-};
-
-

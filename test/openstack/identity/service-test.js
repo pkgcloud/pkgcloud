@@ -1,17 +1,16 @@
-var context = require('../../../lib/pkgcloud/openstack/context'),
-    should = require('should');
+var context = require('../../../lib/pkgcloud/openstack/context');
 
 describe('pkgcloud openstack context Service Class', function() {
 
   it('with no options should throw an error', function() {
     (function() {
-      var x = new context.Service();
+      new context.Service();
     }).should.throw('details are a required argument');
   });
 
   it('with no details should throw an error', function () {
     (function () {
-      var x = new context.Service('ORD');
+      new context.Service('ORD');
     }).should.throw('details are a required argument');
   });
 

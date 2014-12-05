@@ -96,7 +96,7 @@ describe('pkgcloud/amazon/keys', function () {
 
     client.getKey('unittest', function (err, data) {
       should.not.exist(err);
-      // TODO
+      should.exist(data);
       hockInstance && hockInstance.done();
       done();
     });

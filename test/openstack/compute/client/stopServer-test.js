@@ -4,8 +4,6 @@
 *
 */
 
-
-var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../../helpers');
 
 var should = require('should'),
@@ -14,10 +12,7 @@ var should = require('should'),
     http = require('http'),
     mock = !!process.env.MOCK;
 
-
 var client = helpers.createClient('openstack', 'compute');
-
-var options = {};
 
   describe('pkgcloud/common/compute/server[openstack]', function () {
 

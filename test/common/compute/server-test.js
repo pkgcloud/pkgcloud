@@ -5,22 +5,16 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
+var qs = require('qs'),
     should = require('should'),
-    util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
     http = require('http'),
     hock = require('hock'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
-    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-    Image = require('../../../lib/pkgcloud/core/compute/image').Image,
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
-    pkgcloud = require('../../../lib/pkgcloud'),
     mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
@@ -200,6 +194,7 @@ providers.filter(function (provider) {
       }
 
       context.currentServer.reboot(function(err) {
+        should.not.exist(err);
         done();
       });
     });
@@ -213,6 +208,7 @@ providers.filter(function (provider) {
       }
 
       context.currentServer.reboot(function (err) {
+        should.not.exist(err);
         done();
       });
     });
@@ -235,7 +231,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupImagesMock(client, provider, servers) {
+setupImagesMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -336,9 +332,9 @@ function setupImagesMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
   }
-}
+};
 
-function setupFlavorMock(client, provider, servers) {
+setupFlavorMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/flavors/detail')
@@ -368,9 +364,9 @@ function setupFlavorMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
   }
-}
+};
 
-function setupServerMock(client, provider, servers) {
+setupServerMock = function (client, provider, servers) {
   if (provider === 'digitalocean') {
     var account = require(__dirname + '/../../configs/mock/digitalocean');
 
@@ -490,9 +486,9 @@ function setupServerMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
-}
+};
 
-function setupGetServersMock(client, provider, servers) {
+setupGetServersMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/servers/detail')
@@ -541,9 +537,9 @@ function setupGetServersMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/serverList.json');
   }
-}
+};
 
-function setupGetServerMock(client, provider, servers) {
+setupGetServerMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v1.0/537645/servers/20578901')
@@ -581,7 +577,8 @@ function setupGetServerMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
-}
+};
+
 //
 //function batchThree(providerClient, providerName) {
 //  var name   = providerName   || 'rackspace',
@@ -952,20 +949,11 @@ function setupGetServerMock(client, provider, servers) {
  *
  * @return {String} - the xml reply containing the server name and status
  */
-var serverStatusReply = function (name, status) {
+serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
     params = {NAME: name, STATUS: status};
 
   var result = _.template(template, params);
   return result;
-};
-
-var filterPath = function (path) {
-  var name = PATH.basename(path);
-  if (path.search('embed-detail=true') !== -1) {
-    return '/getStatus?name=' + name;
-  }
-
-  return path;
 };

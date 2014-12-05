@@ -6,7 +6,6 @@
  * MIT LICENSE
  */
 
-var Client = new require('../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../helpers');
 
 var should = require('should'),
@@ -17,8 +16,6 @@ var should = require('should'),
   mock = !!process.env.MOCK;
 
 var client = helpers.createClient('openstack', 'orchestration');
-
-var options = {};
 
 describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
 

@@ -7,9 +7,7 @@
 
 var should = require('should'),
     providers = require('../../configs/providers.json'),
-    pkgcloud = require('../../../lib/pkgcloud'),
-    helpers = require('../../helpers'),
-    _ = require('underscore');
+    helpers = require('../../helpers');
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].compute;

@@ -88,6 +88,7 @@ rackspace.getContainer('container-name', function (err, container) {
       return;
     }
     console.log('Successfully set bucket as CDN bucket');
+    console.log(cont);
   });  
 });
 
@@ -106,5 +107,6 @@ rackspace.getContainer('sample-container', function (err, container) {
     }
 
     console.log('Container ' + container.name + ' was successfully destroyed.');
+    console.log(result);
   });
 });

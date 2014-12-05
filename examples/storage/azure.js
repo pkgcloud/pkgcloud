@@ -5,3 +5,13 @@ var azure = pkgcloud.storage.createClient({
   storageAccount: 'test-storage-account',     // Name of your storage account
   storageAccessKey: 'test-storage-access-key' // Access key for storage account
 });
+
+azure.getContainers(function (err, containers) {
+  if (err) {
+    console.error(err);
+  }
+
+  containers.forEach(function (container) {
+    console.log(container.toJSON());
+  });
+});

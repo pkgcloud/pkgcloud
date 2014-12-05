@@ -6,7 +6,6 @@
 */
 
 var fs = require('fs'),
-    path = require('path'),
     Buffer = require('buffer').Buffer,
     assert = require('../../helpers/assert'),
     helpers = require('../../helpers'),
@@ -16,11 +15,9 @@ var fs = require('fs'),
     hock = require('hock'),
     http = require('http'),
     urlJoin = require('url-join'),
-    _ = require('underscore'),
     request = require('request'),
     through = require('through2'),
     providers = require('../../configs/providers.json'),
-    versions = require('../../fixtures/versions.json'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
     File = require('../../../lib/pkgcloud/core/storage/file').File,
     mock = !!process.env.MOCK,
@@ -418,7 +415,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupCreateContainerMock(provider, client, servers) {
+setupCreateContainerMock = function (provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -547,9 +544,9 @@ function setupCreateContainerMock(provider, client, servers) {
       .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(201);
   }
-}
+};
 
-function setupGetContainersMock(provider, client, servers) {
+setupGetContainersMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
@@ -575,9 +572,9 @@ function setupGetContainersMock(provider, client, servers) {
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('hp/postContainers.json'));
   }
-}
+};
 
-function setupUploadStreamMock(provider, client, servers) {
+setupUploadStreamMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', fillerama)
@@ -611,9 +608,9 @@ function setupUploadStreamMock(provider, client, servers) {
       .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
-}
+};
 
-function setupDownloadStreamMock(provider, client, servers) {
+setupDownloadStreamMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
@@ -641,9 +638,9 @@ function setupDownloadStreamMock(provider, client, servers) {
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, { 'content-length': fillerama.length + 2});
   }
-}
+};
 
-function setupGetFileMock(provider, client, servers) {
+setupGetFileMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
@@ -669,9 +666,9 @@ function setupGetFileMock(provider, client, servers) {
       .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
-}
+};
 
-function setupGetFilesMock(provider, client, servers) {
+setupGetFilesMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
@@ -705,9 +702,9 @@ function setupGetFilesMock(provider, client, servers) {
         content_type: 'text/plain'
       }]);
   }
-}
+};
 
-function setupRemoveFileMock(provider, client, servers) {
+setupRemoveFileMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
@@ -733,9 +730,9 @@ function setupRemoveFileMock(provider, client, servers) {
       .delete('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '');
   }
-}
+};
 
-function setupDestroyContainerMock(provider, client, servers) {
+setupDestroyContainerMock = function (provider, client, servers) {
   if (provider === 'openstack') {
     servers.server
       .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
@@ -824,9 +821,9 @@ function setupDestroyContainerMock(provider, client, servers) {
       .delete('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(204);
   }
-}
+};
 
-function setupGetContainers2Mock(provider, client, servers) {
+setupGetContainers2Mock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
@@ -852,4 +849,4 @@ function setupGetContainers2Mock(provider, client, servers) {
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('hp/preContainers.json'));
   }
-}
+};

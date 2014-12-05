@@ -24,8 +24,7 @@ providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
 }).forEach(function (provider) {
 describe('pkgcloud/['+provider+']/databases/users', function () {
-  var testContext = {},
-    client, authHockInstance, hockInstance, authServer, server;
+  var client, authHockInstance, hockInstance, authServer, server;
 
   describe('The pkgcloud '+provider+' Database client', function () {
 
@@ -293,7 +292,7 @@ describe('pkgcloud/['+provider+']/databases/users', function () {
 });
 });
 
-function setupAuthenticationMock (authHockInstance, hockInstance, provider)  {
+setupAuthenticationMock = function (authHockInstance, hockInstance, provider)  {
   if (provider === 'rackspace') {
         authHockInstance
           .post('/v2.0/tokens', {
@@ -379,9 +378,9 @@ function setupAuthenticationMock (authHockInstance, hockInstance, provider)  {
     else {
       throw new Error('not supported');
     }
-}
+};
 
-function setupCreateUserMock(authHockInstance, hockInstance, provider) {
+setupCreateUserMock = function (authHockInstance, hockInstance, provider) {
   if (provider === 'rackspace') {
         hockInstance
           .get('/v1.0/123456/instances')
@@ -430,9 +429,9 @@ function setupCreateUserMock(authHockInstance, hockInstance, provider) {
   else {
     throw new Error('not supported');
   }
-}
+};
 
-function setupCreateAnotherUserMock(hockInstance, provider) {
+setupCreateAnotherUserMock = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
       .get('/v1.0/123456/instances')
@@ -523,9 +522,9 @@ function setupCreateAnotherUserMock(hockInstance, provider) {
     else {
       throw new Error('not supported');
     }
-}
+};
 
-function setupCreateMultiplsUsersMock(hockInstance, provider) {
+setupCreateMultiplsUsersMock = function (hockInstance, provider) {
   if (provider === 'rackspace') {
         hockInstance
             .get('/v1.0/123456/instances')
@@ -601,9 +600,9 @@ function setupCreateMultiplsUsersMock(hockInstance, provider) {
   else {
     throw new Error('not supported');
   }
-}
+};
 
-function setupCreateUsersWithRestrictedCharacters(hockInstance, provider) {
+setupCreateUsersWithRestrictedCharacters = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
       .get('/v1.0/123456/instances')
@@ -622,9 +621,9 @@ function setupCreateUsersWithRestrictedCharacters(hockInstance, provider) {
   else {
     throw new Error('not supported');
   }
-}
+};
 
-function setupGetUsersMock(hockInstance, provider) {
+setupGetUsersMock = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
         .get('/v1.0/123456/instances')
@@ -650,9 +649,9 @@ function setupGetUsersMock(hockInstance, provider) {
     throw new Error('not supported');
   }
 
-}
+};
 
-function setupEnableRootMock(hockInstance, provider) {
+setupEnableRootMock = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
       .get('/v1.0/123456/instances')
@@ -689,9 +688,9 @@ function setupEnableRootMock(hockInstance, provider) {
         }
       });
   }
-}
+};
 
-function setupEnableRootMockWithStatus(hockInstance, provider) {
+setupEnableRootMockWithStatus = function (hockInstance, provider) {
   if (provider === 'rackspace') {
   hockInstance
     .get('/v1.0/123456/instances')
@@ -713,9 +712,9 @@ function setupEnableRootMockWithStatus(hockInstance, provider) {
       .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
       .reply(200, { rootEnabled: true });
   }
-}
+};
 
-function setupDestroyUsersMock(hockInstance, provider) {
+setupDestroyUsersMock = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
       .get('/v1.0/123456/instances')
@@ -737,9 +736,9 @@ function setupDestroyUsersMock(hockInstance, provider) {
       .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTest')
       .reply(202);
   }
-}
+};
 
-function setupDestroyUsersMockWithPagination(hockInstance, provider) {
+setupDestroyUsersMockWithPagination = function (hockInstance, provider) {
   if (provider === 'rackspace') {
     hockInstance
         .get('/v1.0/123456/instances')
@@ -761,4 +760,4 @@ function setupDestroyUsersMockWithPagination(hockInstance, provider) {
         .delete('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users/joeTestTwo')
         .reply(202);
   }
-}
+};

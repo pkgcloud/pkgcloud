@@ -5,9 +5,7 @@
  *
  */
 
-var fs = require('fs'),
-  path = require('path'),
-  should = require('should'),
+var should = require('should'),
   qs = require('qs'),
   util = require('util'),
   async = require('async'),
@@ -220,7 +218,7 @@ providers.filter(function (provider) {
   });
 });
 
-function setupVersionMock(client, provider, servers) {
+setupVersionMock = function (client, provider, servers) {
   if (provider === 'digitalocean') {
     return true;
   }
@@ -302,9 +300,9 @@ function setupVersionMock(client, provider, servers) {
         {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .reply(200, '', { 'x-api-version': '6.5.0' });
   }
-}
+};
 
-function setupFlavorMock(client, provider, servers) {
+setupFlavorMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/flavors/detail', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
@@ -337,9 +335,9 @@ function setupFlavorMock(client, provider, servers) {
         {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
   }
-}
+};
 
-function setupImagesMock(client, provider, servers) {
+setupImagesMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/images/detail',
@@ -386,9 +384,9 @@ function setupImagesMock(client, provider, servers) {
         {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
   }
-}
+};
 
-function setupServerMock(client, provider, servers) {
+setupServerMock = function (client, provider, servers) {
   if (provider === 'digitalocean') {
     var account = require(__dirname + '/../../configs/mock/digitalocean');
 
@@ -557,9 +555,9 @@ function setupServerMock(client, provider, servers) {
         {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
       .replyWithFile(200, __dirname + '/../../fixtures/hp/serverCreated.json');
   }
-}
+};
 
-function setupDestroyMock(client, provider, servers) {
+setupDestroyMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .delete('/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf',
@@ -587,4 +585,4 @@ function setupDestroyMock(client, provider, servers) {
       }))
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/destroy-server.json');
   }
-}
+};

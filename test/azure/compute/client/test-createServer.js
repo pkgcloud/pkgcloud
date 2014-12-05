@@ -65,7 +65,7 @@ function testCreateServer(client) {
   return test;
 }
 
-function testSetWait(client) {
+function testSetWait() {
   var name   = 'azure',
     test   = {};
 

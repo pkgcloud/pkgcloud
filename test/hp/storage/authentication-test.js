@@ -8,7 +8,6 @@
 var should = require('should'),
     macros = require('../macros'),
     helpers = require('../../helpers'),
-    async = require('async'),
     hock = require('hock'),
     http = require('http'),
     mock = !!process.env.MOCK;
@@ -135,6 +134,7 @@ describe('pkgcloud/hp/storage/authentication', function () {
 
           badClient.auth(function (err, res) {
             should.exist(err);
+            should.not.exist(res);
             authHockInstance && authHockInstance.done();
             done();
           });
