@@ -31,7 +31,7 @@ var otherClient = pkgcloud.compute.createClient({
   password: 'your-password'
 });
 
-client.otherClient(function (err, servers) {
+otherClient.getServers(function (err, servers) {
   if (err) {
     console.error(err);
   }
