@@ -1,0 +1,12 @@
+{
+    "access": {
+        "token": {
+            "id": "4bc7c5dabf3e4a49918683437d386b8a",
+            "expires": "2010-11-01T03:32:15-05:00",
+            "tenant": {
+                "id": "72e90ecb69c44d0296072ea39e537041",
+                "name": "My Project"
+            }
+        }
+    }
+}
