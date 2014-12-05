@@ -154,7 +154,7 @@ describe('pkgcloud/openstack/identity', function () {
           })
           .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'))
           .get('/v2.0/tokens/4bc7c5dabf3e4a49918683437d386b8a?belongsTo=72e90ecb69c44d0296072ea39e537041')
-          .reply(200);
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/validateToken-admin.json');
       }
 
       var userClient = identity.createClient({
@@ -234,7 +234,7 @@ describe('pkgcloud/openstack/identity', function () {
           })
           .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/realToken-admin.json'))
           .get('/v2.0/tenants/72e90ecb69c44d0296072ea39e537041', { 'X-Auth-Token': '4bc7c5dabf3e4a49918683437d386b8b' })
-          .reply(200)
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantInfo-admin.json')
           .get('/v2.0/tenants/72e90ecb69c44d0296072ea39e537123', { 'X-Auth-Token': '4bc7c5dabf3e4a49918683437d386b8a' })
           .reply(403);
 
