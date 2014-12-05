@@ -5,16 +5,11 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
-    should = require('should'),
-    util = require('util'),
+var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
     http = require('http'),
-    _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Port = require('../../../lib/pkgcloud/core/network/port').Port,
     mock = !!process.env.MOCK,

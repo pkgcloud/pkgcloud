@@ -6,10 +6,7 @@
 *
 */
 
-var path = require('path'),
-    fs = require('fs'),
-    should = require('should'),
-    pkgcloud = require('../../../lib/pkgcloud'),
+var should = require('should'),
     helpers = require('../../helpers'),
     async = require('async'),
     hock = require('hock'),

@@ -5,16 +5,11 @@
 *
 */
 
-var should = require('should'),
-    async = require('async'),
-    hock = require('hock'),
-    pkgcloud = require('../../../lib/pkgcloud'),
-    mock = !!process.env.MOCK;
+var pkgcloud = require('../../../lib/pkgcloud');
 
 describe('pkgcloud/hp/client', function () {
 
   describe('Region validation', function () {
-    var eastUSRegion = 'region-b.geo-1', westUSRegion='region-a.geo-1';
     it('User should specify region: compute client', function() {
       (function () {
           pkgcloud.compute.createClient({

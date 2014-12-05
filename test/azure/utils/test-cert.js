@@ -1,5 +1,4 @@
 //TODO: Make this a vows test
-var fs = require('fs');
 var azureCert = require('../../../lib/pkgcloud/azure/utils/cert.js');
 
 

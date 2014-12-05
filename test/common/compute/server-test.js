@@ -5,22 +5,16 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
+var qs = require('qs'),
     should = require('should'),
-    util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
     http = require('http'),
     hock = require('hock'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
-    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-    Image = require('../../../lib/pkgcloud/core/compute/image').Image,
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
-    pkgcloud = require('../../../lib/pkgcloud'),
     mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');

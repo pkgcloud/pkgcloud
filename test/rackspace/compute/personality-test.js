@@ -8,10 +8,8 @@
 */
 
 var fs = require('fs'),
-    path = require('path'),
     spawn = require('child_process').spawn,
     should = require('should'),
-    pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers'),
     mock = !!process.env.MOCK;
 

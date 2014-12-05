@@ -5,17 +5,12 @@
 *
 */
 
-var fs = require('fs'),
-  path = require('path'),
-  qs = require('qs'),
-  should = require('should'),
+var should = require('should'),
   helpers = require('../../helpers'),
   http = require('http'),
   hock = require('hock'),
   async = require('async'),
-  _ = require('underscore'),
   Image = require('../../../lib/pkgcloud/core/compute/image').Image,
-  pkgcloud = require('../../../lib/pkgcloud'),
   mock = !!process.env.MOCK;
 
 // Declaring variables for helper functions defined later

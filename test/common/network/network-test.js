@@ -5,11 +5,7 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
-    should = require('should'),
-    util = require('util'),
+var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     http = require('http'),

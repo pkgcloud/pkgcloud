@@ -4,8 +4,6 @@
 *
 */
 
-
-var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../../helpers');
 
 var should = require('should'),

@@ -1,5 +1,4 @@
-var context = require('../../../lib/pkgcloud/openstack/context'),
-    should = require('should');
+var context = require('../../../lib/pkgcloud/openstack/context');
 
 describe('pkgcloud openstack context Service Class', function() {
 

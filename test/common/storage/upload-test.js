@@ -5,25 +5,16 @@
  *
  */
 
-var fs = require('fs'),
-  path = require('path'),
-  Buffer = require('buffer').Buffer,
-  assert = require('../../helpers/assert'),
-  helpers = require('../../helpers'),
+var helpers = require('../../helpers'),
   should = require('should'),
   util = require('util'),
   async = require('async'),
   hock = require('hock'),
   http = require('http'),
   urlJoin = require('url-join'),
-  _ = require('underscore'),
   providers = require('../../configs/providers.json'),
-  versions = require('../../fixtures/versions.json'),
-  Container = require('../../../lib/pkgcloud/core/storage/container').Container,
-  File = require('../../../lib/pkgcloud/core/storage/file').File,
   mock = !!process.env.MOCK,
-  pkgcloud = require('../../../lib/pkgcloud'),
-  fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
+  pkgcloud = require('../../../lib/pkgcloud');
 
 // Declaring variables for helper functions defined later
 var setupUploadStreamError;

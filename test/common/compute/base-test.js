@@ -5,9 +5,7 @@
  *
  */
 
-var fs = require('fs'),
-  path = require('path'),
-  should = require('should'),
+var should = require('should'),
   qs = require('qs'),
   util = require('util'),
   async = require('async'),

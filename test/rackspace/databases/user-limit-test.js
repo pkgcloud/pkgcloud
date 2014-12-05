@@ -11,7 +11,6 @@ var should = require('should'),
   hock = require('hock'),
   http = require('http'),
   helpers = require('../../helpers'),
-  User = require('../../../lib/pkgcloud/openstack/database/user').User,
   mock = !!process.env.MOCK;
 
 // Declaring variables for helper functions defined later

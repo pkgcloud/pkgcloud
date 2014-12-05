@@ -8,7 +8,6 @@
 var should = require('should'),
     macros = require('../macros'),
     helpers = require('../../helpers'),
-    async = require('async'),
     http = require('http'),
     hock = require('hock'),
     mock = !!process.env.MOCK;
