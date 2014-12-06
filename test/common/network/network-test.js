@@ -484,21 +484,3 @@ setupGetNetworkMock = function (client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/network.json');
   }
 };
-
-serverStatusReply = function (name, status) {
-
-  var template = helpers.loadFixture('azure/server-status-template.xml'),
-    params = {NAME: name, STATUS: status};
-
-  var result = _.template(template, params);
-  return result;
-};
-
-filterPath = function (path) {
-  var name = PATH.basename(path);
-  if (path.search('embed-detail=true') !== -1) {
-    return '/getStatus?name=' + name;
-  }
-
-  return path;
-};
