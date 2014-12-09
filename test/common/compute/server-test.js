@@ -21,7 +21,7 @@ var azureOptions = require('../../fixtures/azure/azure-options.json');
 
 // Declaring variables for helper functions defined later
 var setupImagesMock, setupFlavorMock, setupServerMock, setupGetServersMock,
-    setupGetServerMock, serverStatusReply;
+    setupGetServerMock, setupRebootMock, serverStatusReply;
 
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
@@ -577,6 +577,10 @@ setupGetServerMock = function (client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
+};
+
+setupRebootMock = function() {
+  // TODO
 };
 
 //

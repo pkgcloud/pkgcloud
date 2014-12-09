@@ -1,4 +1,6 @@
-var pkgcloud = require('../../lib/pkgcloud');
+var fs = require('fs'),
+    path = require('path'),
+    pkgcloud = require('../../lib/pkgcloud');
 
 //
 // Joyent requires a username / password or key / keyId combo.
