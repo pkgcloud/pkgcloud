@@ -70,7 +70,7 @@
   "devDependencies": {
     "blanket": "^1.1.6",
     "coveralls": "^2.11.2",
-    "hock": "1.0.x",
+    "hock": "1.1.x",
     "jshint": "2.x.x",
     "mocha": "1.21.x",
     "mocha-lcov-reporter": "0.0.1",

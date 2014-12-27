@@ -176,12 +176,10 @@ describe('pkgcloud/openstack/cdn/services', function() {
     });
   });
 
-  // TODO: Re-enable once https://github.com/mmalecki/hock/pull/20 is merged
-  //       and published to npm
-  it.skip('the client.updateService() method should update a service', function(done) {
+  it('the client.updateService() method should update a service', function(done) {
 
     var serviceToUpdate = context.currentService;
-    serviceToUpdate.origins[0].origin = 'updated-origin.pkgcloud.net';
+    serviceToUpdate.origins[0].origin = 'updated-origin.pkgcloud.com';
 
     if (mock) {
       setupUpdateServiceMock(client,  {
@@ -191,6 +189,7 @@ describe('pkgcloud/openstack/cdn/services', function() {
     }
 
     client.updateService(serviceToUpdate, function (err, service) {
+      console.log(err);
       should.not.exist(err);
       should.exist(service);
 
@@ -339,18 +338,22 @@ setupGetServiceMock = function (client, servers) {
 setupUpdateServiceMock = function (client, servers) {
   servers.server
     .patch('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site', {
-      name: 'pkgcloud-site',
       domains: [
         {
-          domain: 'pkgcloud.com'
+          domain: 'pkgcloud.com',
+          protocol: 'http'
         },
         {
-          domain: 'www.pkgcloud.com'
+          domain: 'www.pkgcloud.com',
+          protocol: 'http'
         }
       ],
       origins: [
         {
-          origin: 'origin-updated.pkgcloud.com'
+          origin: 'updated-origin.pkgcloud.com',
+          port: 80,
+          ssl: false,
+          rules: []
         }
       ],
       flavor_id: 'cdn'
