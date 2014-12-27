@@ -17,7 +17,8 @@ var providers = require('../../configs/providers.json'),
 
 // Declaring variables for helper functions defined later
 var setupCreateServiceMock, setupGetServicesMock, setupGetServiceMock,
-  setupUpdateServiceMock, setupDeleteServiceMock;
+  setupUpdateServiceMock, setupDeleteServiceMock,
+  setupDeleteServiceAllCachedAssetsMock, setupDeleteServiceCachedAssetMock;
 
 // Run all unit tests for all providers that support the CDN service
 providers.filter(function(provider) {
