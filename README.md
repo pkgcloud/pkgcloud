@@ -135,6 +135,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/network.md)
 * **[CDN](#cdn----beta)**
   * [Openstack](docs/providers/openstack/cdn.md)
+  * [Rackspace](docs/providers/rackspace/cdn.md)
 
 ## Compute
 
@@ -534,7 +535,7 @@ Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchest
 
 ## CDN -- Beta
 
-##### Note: CDN is considered Beta until there are multiple providers; presently only Openstack is supported.
+##### Note: CDN is considered Beta until there are multiple providers; presently only Openstack and Rackspace are supported.
 
 The `pkgcloud.cdn` service is designed to allow you to access Openstack Poppy via node.js. You can manage services and flavors from within any node.js application.
 
@@ -556,6 +557,7 @@ To get started with a `pkgcloud.cdn` client just create one:
 #### Providers
 
 * [Openstack](docs/providers/openstack/cdn.md)
+* [Rackspace](docs/providers/rackspace/cdn.md)
 
 Each instance of `pkgcloud.cdn.Client` returned from `pkgcloud.cdn.createClient` has a set of uniform APIs:
 
