@@ -574,7 +574,6 @@ Each instance of `pkgcloud.cdn.Client` returned from `pkgcloud.cdn.createClient`
 ### Flavors
 * `client.getFlavor(flavor, function (err, flavor) { })`
 * `client.getFlavors(options, function (err, flavors) { })`
-* `client.deleteFlavor(flavor, function (err) { })`
 
 ## Installation
 

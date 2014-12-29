@@ -15,8 +15,7 @@ var helpers = require('../../helpers'),
     Flavor = require('../../../lib/pkgcloud/openstack/cdn/flavor').Flavor;
 
 // Declaring variables for helper functions defined later
-var setupCreateFlavorMock, setupGetFlavorsMock, setupGetFlavorMock,
-  setupDeleteFlavorMock;
+var setupGetFlavorsMock, setupGetFlavorMock;
 
 describe('pkgcloud/openstack/cdn/flavors', function() {
 
@@ -68,39 +67,6 @@ describe('pkgcloud/openstack/cdn/flavors', function() {
   });
 
   // Unit tests follow...
-
-  it('the client.createFlavor() method should create a flavor', function(done) {
-
-    if (mock) {
-      setupCreateFlavorMock(client,  {
-        authServer: authHockInstance,
-        server: hockInstance
-      });
-    }
-
-    client.createFlavor({
-      id: 'cdn',
-      providers: [
-        {
-          provider: 'akamai',
-          links: [
-            {
-              'rel': 'provider_url',
-              'href': 'http://www.akamai.com'
-            }
-          ]
-        }
-      ]
-    }, function (err, flavor) {
-      should.not.exist(err);
-      should.exist(flavor);
-
-      authHockInstance && authHockInstance.done();
-      hockInstance && hockInstance.done();
-
-      done();
-    });
-  });
 
   it('the client.getFlavors() method should return a list of flavors', function(done) {
 
@@ -171,46 +137,10 @@ describe('pkgcloud/openstack/cdn/flavors', function() {
       done();
     });
   });
-  
-  it('the client.deleteFlavor() method should delete a flavor', function(done) {
-    if (mock) {
-      setupDeleteFlavorMock(client,  {
-        authServer: authHockInstance,
-        server: hockInstance
-      });
-    }
 
-    client.deleteFlavor(context.currentFlavor, function (err) {
-      should.not.exist(err);
-
-      authHockInstance && authHockInstance.done();
-      hockInstance && hockInstance.done();
-
-      done();
-    });
-  });
-
-  it('the client.deleteFlavor() method should take a id, delete a flavor', function(done) {
-    if (mock) {
-      setupDeleteFlavorMock(client,  {
-        authServer: authHockInstance,
-        server: hockInstance
-      });
-    }
-
-    client.deleteFlavor(context.currentFlavor.id, function (err) {
-      should.not.exist(err);
-
-      authHockInstance && authHockInstance.done();
-      hockInstance && hockInstance.done();
-
-      done();
-    });
-  });
-  
 });
 
-setupCreateFlavorMock = function (client, servers) {
+setupGetFlavorsMock = function (client, servers) {
   servers.authServer
     .post('/v2.0/tokens', {
       auth: {
@@ -235,27 +165,6 @@ setupCreateFlavorMock = function (client, servers) {
     .reply(200, helpers.getOpenstackAuthResponse());
 
   servers.server
-    .post('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors', {
-      id: 'cdn',
-      providers: [
-        {
-          provider: 'akamai',
-          links: [
-            {
-              'rel': 'provider_url',
-              'href': 'http://www.akamai.com'
-            }
-          ]
-        }
-      ]
-    })
-    .reply(201, null, { Location: 'http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/cdn' })
-    .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/cdn')
-    .replyWithFile(200, __dirname + '/../../fixtures/openstack/cdnFlavor.json');
-};
-
-setupGetFlavorsMock = function (client, servers) {
-  servers.server
     .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors')
     .replyWithFile(200, __dirname + '/../../fixtures/openstack/cdnFlavors.json');
 };
@@ -264,10 +173,4 @@ setupGetFlavorMock = function (client, servers) {
   servers.server
     .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/cdn')
     .replyWithFile(200, __dirname + '/../../fixtures/openstack/cdnFlavor.json');
-};
-
-setupDeleteFlavorMock = function (client, servers) {
-  servers.server
-    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/cdn')
-    .reply(204);
 };

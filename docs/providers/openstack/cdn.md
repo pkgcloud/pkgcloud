@@ -81,7 +81,3 @@ Lists all available CDN flavors. Callback is `f(err, flavors)` where
 
 Retrieve the CDN flavor for a provided flavor or flavorId. Callback is `f(err,
 flavor)`.
-
-#### client.deleteFlavor(flavor, callback)
-
-Delete a flavor. Callback is `f(err)`.
