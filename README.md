@@ -561,6 +561,10 @@ To get started with a `pkgcloud.cdn` client just create one:
 
 Each instance of `pkgcloud.cdn.Client` returned from `pkgcloud.cdn.createClient` has a set of uniform APIs:
 
+### Base
+* `client.getHomeDocument(function (err, homeDocument) { })`
+* `client.getPing(function (err) { })`
+
 ### Service
 * `client.getService(service, function (err, service) { })`
 * `client.getServices(options, function (err, services) { })`

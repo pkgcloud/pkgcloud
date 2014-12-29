@@ -15,6 +15,15 @@ Creating a client is straight-forward:
 
 ### API Methods
 
+## Base
+
+#### `client.getHomeDocument(function (err, homeDocument) { })`
+Retrieves the home document, which allows you to navigate the remainder of the
+API. Callback is `f(err, homeDocument)` where `homeDocument` is an `Object`.
+
+#### `client.getPing(function (err) { })`
+Pings the server for any errors. Callback is `f(err)`.
+
 ## Services
 
 #### client.createService(options, callback)
