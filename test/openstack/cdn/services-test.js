@@ -189,7 +189,6 @@ describe('pkgcloud/openstack/cdn/services', function() {
     }
 
     client.updateService(serviceToUpdate, function (err, service) {
-      console.log(err);
       should.not.exist(err);
       should.exist(service);
 
@@ -245,7 +244,6 @@ describe('pkgcloud/openstack/cdn/services', function() {
     }
 
     client.deleteServiceCachedAssets(context.currentService, function (err) {
-      console.log(err);
       should.not.exist(err);
 
       authHockInstance && authHockInstance.done();
@@ -264,7 +262,6 @@ describe('pkgcloud/openstack/cdn/services', function() {
     }
 
     client.deleteServiceCachedAssets(context.currentService, '/images/logo.png', function (err) {
-      console.log(err);
       should.not.exist(err);
 
       authHockInstance && authHockInstance.done();
