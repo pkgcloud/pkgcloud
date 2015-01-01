@@ -152,7 +152,7 @@ describe('pkgcloud/openstack/cdn/services', function() {
     });
   });
 
-  it('the client.getService() method should take a name, return a service instance', function(done) {
+  it('the client.getService() method should take an id, return a service instance', function(done) {
 
     if (mock) {
       setupGetServiceMock(client,  {
@@ -161,7 +161,7 @@ describe('pkgcloud/openstack/cdn/services', function() {
       });
     }
 
-    client.getService(context.services[0].name, function (err, service) {
+    client.getService(context.services[0].id, function (err, service) {
       should.not.exist(err);
       should.exist(service);
       service.should.be.an.instanceOf(Service);
@@ -218,7 +218,7 @@ describe('pkgcloud/openstack/cdn/services', function() {
     });
   });
 
-  it('the client.deleteService() method should take a name, delete a service', function(done) {
+  it('the client.deleteService() method should take an id, delete a service', function(done) {
     if (mock) {
       setupDeleteServiceMock(client,  {
         authServer: authHockInstance,
@@ -226,7 +226,7 @@ describe('pkgcloud/openstack/cdn/services', function() {
       });
     }
 
-    client.deleteService(context.currentService.name, function (err) {
+    client.deleteService(context.currentService.id, function (err) {
       should.not.exist(err);
 
       authHockInstance && authHockInstance.done();
@@ -318,8 +318,8 @@ setupCreateServiceMock = function (client, servers) {
       ],
       flavor_id: 'cdn'
     })
-    .reply(202, null, { Location: 'http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site' })
-    .get('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site')
+    .reply(202, null, { Location: 'http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66' })
+    .get('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66')
     .replyWithFile(200, __dirname + '/../../fixtures/openstack/cdnService.json');
 };
 
@@ -331,13 +331,13 @@ setupGetServicesMock = function (client, servers) {
 
 setupGetServiceMock = function (client, servers) {
   servers.server
-    .get('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site')
+    .get('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66')
     .replyWithFile(200, __dirname + '/../../fixtures/openstack/cdnService.json');
 };
 
 setupUpdateServiceMock = function (client, servers) {
   servers.server
-    .patch('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site', {
+    .patch('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66', {
       domains: [
         {
           domain: 'pkgcloud.com',
@@ -358,23 +358,23 @@ setupUpdateServiceMock = function (client, servers) {
       ],
       flavor_id: 'cdn'
     })
-    .reply(202, null, { Location: 'http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site' });
+    .reply(202, null, { Location: 'http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66' });
 };
 
 setupDeleteServiceMock = function (client, servers) {
   servers.server
-    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site')
+    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66')
     .reply(202);
 };
 
 setupDeleteServiceAllCachedAssetsMock = function (client, servers) {
   servers.server
-    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site/assets?all=true')
+    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66/assets?all=true')
     .reply(202);
 };
 
 setupDeleteServiceCachedAssetMock = function (client, servers) {
   servers.server
-    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site/assets?url=%2Fimages%2Flogo.png')
+    .delete('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66/assets?url=%2Fimages%2Flogo.png')
     .reply(202);
 };
