@@ -1,5 +1,4 @@
-var fs = require('fs'),
-    pkgcloud = require('../../lib/pkgcloud');
+var pkgcloud = require('../../lib/pkgcloud');
 
 var rackspace = pkgcloud.cdn.createClient({
   provider: 'rackspace',
@@ -37,6 +36,7 @@ rackspace.createService({
     {
       origin: '12.34.56.78'
     }
+  ],
   flavorId: 'cdn'
 }, function (err, service) {
   if (err) {
