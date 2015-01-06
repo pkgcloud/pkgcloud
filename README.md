@@ -16,6 +16,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [Load Balancers](#load-balancers----beta) *(beta)*
 * [Orchestration](#orchestration----beta) *(beta)*
 * [Network](#network----beta) *(beta)*
+* [CDN](#cdn----beta) *(beta)*
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
@@ -33,7 +34,7 @@ You can install `pkgcloud` via `npm` or add to it to [dependencies](https://npmj
 npm install pkgcloud
 ```
 
-Currently there are six service types which are handled by pkgcloud:
+Currently there are nine service types which are handled by pkgcloud:
 
 * [Compute](#compute)
 * [Storage](#storage)
@@ -43,6 +44,7 @@ Currently there are six service types which are handled by pkgcloud:
 * [Load Balancers](#load-balancers----beta) *(beta)*
 * [Network](#network----beta) *(beta)*
 * [Orchestration](#orchestration----beta) *(beta)*
+* [CDN](#cdn----beta) *(beta)*
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
@@ -131,6 +133,9 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [HP](docs/providers/hp/network.md)
   * [Openstack](docs/providers/openstack/network.md)
   * [Rackspace](docs/providers/rackspace/network.md)
+* **[CDN](#cdn----beta)**
+  * [Openstack](docs/providers/openstack/cdn.md)
+  * [Rackspace](docs/providers/rackspace/cdn.md)
 
 ## Compute
 
@@ -527,6 +532,52 @@ Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchest
 
 ### Templates
 * `client.validateTemplate(template, function (err, template) { })`
+
+## CDN -- Beta
+
+##### Note: CDN is considered Beta until there are multiple providers; presently only Openstack and Rackspace are supported.
+
+The `pkgcloud.cdn` service is designed to allow you to access Openstack Poppy via node.js. You can manage services and flavors from within any node.js application.
+
+To get started with a `pkgcloud.cdn` client just create one:
+
+``` js
+  var client = require('pkgcloud').cdn.createClient({
+    //
+    // The name of the provider (e.g. "openstack")
+    //
+    provider: 'provider-name',
+
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Openstack](docs/providers/openstack/cdn.md)
+* [Rackspace](docs/providers/rackspace/cdn.md)
+
+Each instance of `pkgcloud.cdn.Client` returned from `pkgcloud.cdn.createClient` has a set of uniform APIs:
+
+### Base
+* `client.getHomeDocument(function (err, homeDocument) { })`
+* `client.getPing(function (err) { })`
+
+### Service
+* `client.getService(service, function (err, service) { })`
+* `client.getServices(options, function (err, services) { })`
+* `client.createService(details, function (err, service) { })`
+* `client.updateService(service, function (err, service) { })`
+* `client.deleteService(service, function (err) { })`
+
+### Service Assets
+* `client.deleteServiceCachedAssets(service, assetUrl, function(err) { })`
+
+### Flavors
+* `client.getFlavor(flavor, function (err, flavor) { })`
+* `client.getFlavors(options, function (err, flavors) { })`
 
 ## Installation
 

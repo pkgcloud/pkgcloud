@@ -65,12 +65,13 @@
     "through2": "0.6.x",
     "underscore": "1.6.x",
     "url-join": "0.0.x",
-    "xml2js": "0.1.x"
+    "xml2js": "0.1.x",
+    "fast-json-patch": "0.5.x"
   },
   "devDependencies": {
     "blanket": "^1.1.6",
     "coveralls": "^2.11.2",
-    "hock": "1.0.x",
+    "hock": "1.1.x",
     "jshint": "2.x.x",
     "mocha": "1.21.x",
     "mocha-lcov-reporter": "0.0.1",

@@ -1,0 +1,59 @@
+{
+  "services":[
+    {
+      "id": "d49cd860-911f-11e4-b4a9-0800200c9a66",
+      "name":"pkgcloud-site",
+      "domains":[
+        {
+          "domain":"pkgcloud.com",
+          "protocol":"http"
+        },
+        {
+          "domain":"www.pkgcloud.com",
+          "protocol":"http"
+        }
+      ],
+      "origins":[
+        {
+          "origin":"origin.pkgcloud.com",
+          "port":80,
+          "ssl":false,
+          "rules":[
+
+          ]
+        }
+      ],
+      "restrictions":[
+
+      ],
+      "caching":[
+
+      ],
+      "status":"deployed",
+      "flavor_id":"cdn",
+      "errors":[
+
+      ],
+      "links":[
+        {
+          "href":"http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services/pkgcloud-site",
+          "rel":"self"
+        },
+        {
+          "href":"http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/cdn",
+          "rel":"flavor"
+        },
+        {
+          "href":"http://www.pkgcloud.com.cdn92.altcdn.com",
+          "rel":"access_url"
+        }
+      ]
+    }
+  ],
+  "links":[
+    {
+      "href":"http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services?marker=d49cd860-911f-11e4-b4a9-0800200c9a66&limit=10",
+      "rel":"next"
+    }
+  ]
+}
