@@ -55,6 +55,7 @@
     "aws-sdk": "~2.0.17",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
+    "fast-json-patch": "0.5.x",
     "filed": "0.1.x",
     "gcloud": "^0.10.0",
     "ip": "0.3.x",
@@ -65,8 +66,7 @@
     "through2": "0.6.x",
     "underscore": "1.6.x",
     "url-join": "0.0.x",
-    "xml2js": "0.1.x",
-    "fast-json-patch": "0.5.x"
+    "xml2js": "0.1.x"
   },
   "devDependencies": {
     "blanket": "^1.1.6",
