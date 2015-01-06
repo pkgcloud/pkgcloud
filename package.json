@@ -65,7 +65,8 @@
     "through2": "0.6.x",
     "underscore": "1.6.x",
     "url-join": "0.0.x",
-    "xml2js": "0.1.x"
+    "xml2js": "0.1.x",
+    "fast-json-patch": "0.5.x"
   },
   "devDependencies": {
     "blanket": "^1.1.6",

@@ -334,28 +334,16 @@ setupGetServiceMock = function (client, servers) {
 
 setupUpdateServiceMock = function (client, servers) {
   servers.server
-    .patch('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66', {
-      domains: [
-        {
-          domain: 'pkgcloud.com',
-          protocol: 'http'
-        },
-        {
-          domain: 'www.pkgcloud.com',
-          protocol: 'http'
-        }
-      ],
-      origins: [
-        {
-          origin: 'updated-origin.pkgcloud.com',
-          port: 80,
-          ssl: false,
-          rules: []
-        }
-      ],
-      flavor_id: 'cdn'
-    })
-    .reply(202, null, { Location: 'http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66' });
+    .get('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66')
+    .replyWithFile(200, __dirname + '/../../fixtures/openstack/cdnService.json')    
+    .patch('/v1.0/72e90ecb69c44d0296072ea39e537041/services/d49cd860-911f-11e4-b4a9-0800200c9a66', [
+      {
+        op: 'replace',
+        path: '/origins/0/origin',
+        value: 'updated-origin.pkgcloud.com'
+      }
+    ])
+    .reply(202);
 };
 
 setupDeleteServiceMock = function (client, servers) {
