@@ -133,7 +133,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [HP](docs/providers/hp/network.md)
   * [Openstack](docs/providers/openstack/network.md)
   * [Rackspace](docs/providers/rackspace/network.md)
-* **[CDN](#cdn----beta)**
+* **[CDN](#cdn----beta)** *(beta)*
   * [Openstack](docs/providers/openstack/cdn.md)
   * [Rackspace](docs/providers/rackspace/cdn.md)
 
