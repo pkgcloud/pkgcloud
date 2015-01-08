@@ -33,6 +33,8 @@ A Container for Openstack has following properties:
   bytes: 12345, // size of the container in bytes
   metadata: { // key value pairs for the container
     // ...
+  },
+  headers: { // response headers when request a container
   }
 }
 ```
@@ -59,6 +61,8 @@ A File for Openstack has the following properties:
 * [`client.getContainer(container, function(err, container) { })`](#clientgetcontainercontainer-functionerr-container--)
 * [`client.createContainer(container, function(err, container) { })`](#clientcreatecontainercontainer-functionerr-container--)
 * [`client.destroyContainer(container, function(err, result) { })`](#clientdestroycontainercontainer-functionerr-result--)
+* [`client.updateContainerHeaders(container, function(err, container) { })`](#clientupdatecontainerheaderscontainer-functionerr-container--)
+* [`client.removeContainerHeaders(container, headersToRemove, function(err, container) { })`](#clientremovecontainerheaderscontainer-headerstadatatoremove-functionerr-container--)
 * [`client.updateContainerMetadata(container, function(err, container) { })`](#clientupdatecontainermetadatacontainer-functionerr-container--)
 * [`client.removeContainerMetadata(container, metadataToRemove, function(err, container) { })`](#clientremovecontainermetadatacontainer-metadatatoremove-functionerr-container--)
 
@@ -105,6 +109,29 @@ client.createContainer({
 #### client.destroyContainer(container, function(err, result) { })
 
 Removes the [`container`](#container-model) from the storage account. If there are any files within the `container`, they will be deleted before removing the `container` on the client. `result` will be `true` on success.
+
+#### client.updateContainerHeaders(container, function(err, container) { })
+
+Updates the custom headers on the provided [`container`](#container-model). This method is useful only when you're going to like to change the read/write acl or other actions for which a custom header is required.
+
+Notice: all headers you set will not be filtered. Keep a cool head to what you set.
+
+```javascript
+container.headers['x-container-read'] = '.r:*';
+client.updateContainerHeaders(container, function(err, container) {
+  // ...
+})
+```
+
+#### client.removeContainerHeaders(container, headersToRemove, function(err, container) { })
+
+Removes the keys in the `headersToRemove` object from the stored [`container`](#container-model) headers.
+
+```Javascript
+client.removeContainerHeaders(container, { 'x-container-read': '.r:*' }, function(err, c) {
+  // ...
+});
+```
 
 #### client.updateContainerMetadata(container, function(err, container) { })
 
