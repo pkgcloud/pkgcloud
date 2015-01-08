@@ -97,6 +97,9 @@ Creates a new [`container`](#container-model) with the name from argument `conta
 ```javascript
 client.createContainer({
  name: 'my-container',
+ headers: {
+  'x-container-read': '.r:*'
+ },
  metadata: {
   brand: 'bmw',
   model: '335i'
