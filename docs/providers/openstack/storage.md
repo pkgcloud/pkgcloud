@@ -34,7 +34,7 @@ A Container for Openstack has following properties:
   metadata: { // key value pairs for the container
     // ...
   },
-  headers: { // response headers when request a container
+  headers: { // additional request headers when request a container
   }
 }
 ```
