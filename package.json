@@ -66,7 +66,7 @@
     "s3-upload-stream": "~1.0.0"
   },
   "devDependencies": {
-    "hock": "1.0.x",
+    "hock": "1.2.0",
     "mocha": "1.21.x",
     "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",
