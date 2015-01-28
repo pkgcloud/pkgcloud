@@ -1,13 +1,8 @@
-var fs = require('fs'),
-	should = require('should'),
-	helpers = require('../../helpers'),
+var helpers = require('../../helpers'),
 	async = require('async'),
 	http = require('http'),
 	hock = require('hock'),
-	File = require('../../../lib/pkgcloud/core/storage/file').File,
-	mock = !!process.env.MOCK,
-	Buffer = require('buffer').Buffer,
-	_ = require("underscore");
+	_ = require('underscore');
 
 var authenticate = function(hockInstance) {
 	hockInstance
@@ -131,8 +126,9 @@ describe('pkgcloud/openstack/storage/', function () {
 					_.bind(client.getContainer, client, 'pkgcloud-test-container-1'),
 					function(container, next) {
 						client.getFile(container, 'pkgcloud-test-file-1', function (err, file) {
-							if (err) done(err);
-							else {
+							if (err) {
+								done(err);
+							} else {
 								file.copy({
 									sourceContainer: container,
 									sourceFile: 'pkgcloud-test-file-1',
@@ -182,8 +178,9 @@ describe('pkgcloud/openstack/storage/', function () {
 					.reply(200);
 
 				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
-					if (err) done(err);
-					else {
+					if (err) {
+						done(err);
+					} else {
 						file.copy({
 							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
@@ -226,7 +223,7 @@ describe('pkgcloud/openstack/storage/', function () {
 						name += srcContainer.object ? 'object src container ' : 'string src container ';
 						name += 'to ';
 						name += dstContainer.object ? 'object dst container ' : 'string dst container ';
-						name += 'with '
+						name += 'with ';
 						name += srcFile.object ? 'object src file' : 'string src file';
 
 						it (name, function(done) {
