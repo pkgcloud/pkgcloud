@@ -35,7 +35,7 @@ describe('pkgcloud/redistogo/databases', function () {
 
         if (mock) {
           hockInstance
-            .post('/instances.json', "instance%5Bplan%5D=nano")
+            .post('/instances.json', 'instance%5Bplan%5D=nano')
             .replyWithFile(201, __dirname + '/../../fixtures/redistogo/database.json');
         }
 
@@ -126,6 +126,6 @@ describe('pkgcloud/redistogo/databases', function () {
     else {
       done();
     }
-  })
+  });
 });
 

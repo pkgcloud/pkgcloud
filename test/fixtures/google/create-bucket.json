@@ -1,0 +1,9 @@
+{
+  "kind": "storage#bucket",
+  "id": "test-bucket",
+  "selfLink": "https://www.googleapis.com/storage/v1/b/pkgcloud-test-container",
+  "name": "test-bucket",
+  "location": "US",
+  "storageClass": "STANDARD",
+  "etag": "CAE="
+}

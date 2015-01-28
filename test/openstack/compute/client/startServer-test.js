@@ -4,8 +4,6 @@
 *
 */
 
-
-var Client = new require('../../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../../helpers');
 
 var should = require('should'),
@@ -14,10 +12,7 @@ var should = require('should'),
     http = require('http'),
     mock = !!process.env.MOCK;
 
-
 var client = helpers.createClient('openstack', 'compute');
-
-var options = {};
 
   describe('pkgcloud/common/compute/server[openstack]', function () {
 
@@ -71,7 +66,8 @@ var options = {};
 		  .reply(200, helpers.getOpenstackAuthResponse());
 
 		hockInstance
-		  .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action', {"os-start":null})
+		  .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
+        { 'os-start': null })
 		  .reply(202, '');
 	  }
 
@@ -99,7 +95,7 @@ var options = {};
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });

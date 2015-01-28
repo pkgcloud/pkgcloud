@@ -12,6 +12,9 @@ var helpers = require('../../helpers'),
     http    = require('http'),
     mock    = !!process.env.MOCK;
 
+// Declaring variables for helper functions defined later
+var randomPassword;
+
 describe('pkgcloud/iriscouch/databases-redis', function () {
   var context = {}, client, hockInstance, server;
 
@@ -29,7 +32,7 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
 
   it('the create() method with correct options should respond correctly', function(done) {
     var subdomain = (mock ? 'nodejitsudb43639' : 'nodejitsudb' + Math.floor(Math.random() * 100000));
-    context.tempPassword = (mock ? 'sTTi:lh9vCF[' : randomPassword(12).replace("\\", ""));
+    context.tempPassword = (mock ? 'sTTi:lh9vCF[' : randomPassword(12).replace('\\', ''));
     
     if (mock) {
       hockInstance
@@ -42,10 +45,10 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
     
     client.create({
       subdomain: subdomain,
-      first_name: "Marak",
-      last_name: "Squires",
-      email: "marak.squires@gmail.com",
-      type: "redis", // For redis instead of couch just put type to redis
+      first_name: 'Marak',
+      last_name: 'Squires',
+      email: 'marak.squires@gmail.com',
+      type: 'redis', // For redis instead of couch just put type to redis
       password: context.tempPassword
     }, function(err, database) {
       should.not.exist(err);
@@ -124,9 +127,9 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
 //
 // Just a quick and lazy random password generator
 //
-function randomPassword(length) {
+randomPassword = function(length) {
   if (length == 1) {
     return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48);
   }
   return String.fromCharCode(Math.floor(Math.random() * (122 - 48 + 1)) + 48) + randomPassword(length - 1);
-}
+};

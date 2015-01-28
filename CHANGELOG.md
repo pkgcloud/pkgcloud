@@ -1,3 +1,10 @@
+## v1.1.0
+* Added support for Google Cloud Storage
+* Added support for Rackspace Cloud Networks
+
+## v1.0.3
+* Adding support for Openstack Trove, and adding HP, rackspace providers
+
 ## v1.0.2
 * Adding support for OpenStack Cinder
 

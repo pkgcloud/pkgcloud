@@ -31,7 +31,7 @@
             "internalURL": "http://10.225.0.8:9292/v1",
             "publicURL": "http://image.myownendpoint.org:9292/v1"
           }
-        ], 
+        ],
         "endpoints_links": [],
         "type": "image",
         "name": "glance"
@@ -43,8 +43,8 @@
             "internalURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
             "publicURL": "http://localhost:12345/v2/72e90ecb69c44d0296072ea39e537041"
           }
-        ], 
-        "endpoints_links": [], 
+        ],
+        "endpoints_links": [],
         "type": "compute",
         "name": "nova"
       }, {
@@ -55,10 +55,22 @@
             "internalURL": "http://10.225.0.8:8774/v2/72e90ecb69c44d0296072ea39e537041",
             "publicURL": "http://localhost:12345/v2/72e90ecb69c44d0296072ea39e537041"
           }
-        ], 
-        "endpoints_links": [], 
+        ],
+        "endpoints_links": [],
         "type": "network",
         "name": "neutron"
+      },{
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.8:8774/v1.0/72e90ecb69c44d0296072ea39e537041",
+            "region": "Calxeda-AUS1",
+            "internalURL": "http://10.225.0.8:8774/v1.0/72e90ecb69c44d0296072ea39e537041",
+            "publicURL": "http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "database",
+        "name": "database"
       },
       {
         "endpoints": [

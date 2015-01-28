@@ -1,0 +1,8 @@
+{
+    "tenant": {
+        "id": "72e90ecb69c44d0296072ea39e537041",
+        "name": "ACME corp",
+        "description": "A description ...",
+        "enabled": true
+    }
+}

@@ -5,21 +5,22 @@
 *
 */
 
-var fs = require('fs'),
-  path = require('path'),
-  qs = require('qs'),
-  should = require('should'),
+var should = require('should'),
   helpers = require('../../helpers'),
   http = require('http'),
   hock = require('hock'),
   async = require('async'),
-  _ = require('underscore'),
   Image = require('../../../lib/pkgcloud/core/compute/image').Image,
   mock = !!process.env.MOCK;
 
-var providers=["openstack"];
+// Declaring variables for helper functions defined later
+var setupMetaMock, setupImagesMock;
 
-providers.forEach(function (provider) {
+var providers=['openstack'];
+
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function (provider) {
   describe('pkgcloud/common/compute/server [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'compute'),
@@ -47,7 +48,7 @@ providers.forEach(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getImages() function should return a list of images', function(done) {
@@ -85,7 +86,7 @@ providers.forEach(function (provider) {
         });
       }
 	
-      var testMetadata = {"os_type" : "windows"};
+      var testMetadata = {os_type: 'windows'};
 	
       client.updateImageMeta(context.images[0].id, testMetadata, function (err, reply) {
         should.not.exist(err);
@@ -115,21 +116,24 @@ providers.forEach(function (provider) {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });
 });
 
-function setupMetaMock(client, provider, servers) {
+setupMetaMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66/metadata',{"metadata":{"os_type" : "windows"}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/images/506d077e-66bf-44ff-907a-588c5c79fa66/metadata',
+      { metadata: {
+        os_type :'windows'
+      }})
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/metaResponse.json');
   }
-}
+};
 
-function setupImagesMock(client, provider, servers) {
+setupImagesMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -156,6 +160,6 @@ function setupImagesMock(client, provider, servers) {
 
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
-      .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json')
+      .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
   }
-}
+};

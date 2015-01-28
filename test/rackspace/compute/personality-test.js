@@ -8,10 +8,8 @@
 */
 
 var fs = require('fs'),
-    path = require('path'),
     spawn = require('child_process').spawn,
     should = require('should'),
-    pkgcloud = require('../../../lib/pkgcloud'),
     helpers = require('../../helpers'),
     mock = !!process.env.MOCK;
 
@@ -33,7 +31,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
         flavor: 1, // 256 server
         personality: [
           {
-            path: "/root/.ssh/authorized_keys",
+            path: '/root/.ssh/authorized_keys',
             contents: keyBuffer.toString('base64')
           }
         ]
@@ -47,7 +45,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
 
     it('should connect over ssh without a password prompt and validate the key', function(done) {
 
-      var data;
+      var data, errorData;
 
       testServer.setWait({ status: testServer.STATUS.running }, 5000, function () {
         var ssh = spawn('ssh', [
@@ -56,7 +54,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
           '-q',
           '-o',
           'StrictHostKeyChecking no',
-          'root@' + testServer.addresses["public"][0],
+          'root@' + testServer.addresses['public'][0],
           'cat /root/.ssh/authorized_keys'
         ]);
 
@@ -66,6 +64,7 @@ describe('pkgcloud/rackspace/compute/personality', function () {
 
         ssh.stderr.on('error', onError);
         ssh.stderr.on('data', function (chunk) {
+          errorData += chunk;
         });
         ssh.stdout.on('error', onError);
         ssh.stdout.on('data', function (chunk) {

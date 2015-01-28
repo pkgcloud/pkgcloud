@@ -59,6 +59,18 @@
         "endpoints_links": [],
         "type": "network",
         "name": "neutron"
+      },{
+        "endpoints": [
+          {
+            "adminURL": "http://10.225.0.8:8774/v1.0/5ACED3DC3AA740ABAA41711243CC6949",
+            "region": "region-a.geo-1",
+            "internalURL": "http://10.225.0.8:8774/v1.0/5ACED3DC3AA740ABAA41711243CC6949",
+            "publicURL": "http://localhost:12345/v1.0/5ACED3DC3AA740ABAA41711243CC6949"
+          }
+        ],
+        "endpoints_links": [],
+        "type": "database",
+        "name": "database"
       },
       {
         "endpoints": [

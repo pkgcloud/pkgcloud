@@ -97,7 +97,7 @@ describe('pkgcloud/amazon/groups', function () {
 
     client.getGroup('unit test', function (err, data) {
       should.not.exist(err);
-      // TODO
+      should.exist(data);
       hockInstance && hockInstance.done();
       done();
     });

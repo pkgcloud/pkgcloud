@@ -5,28 +5,29 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
+var qs = require('qs'),
     should = require('should'),
-    util = require('util'),
     async = require('async'),
     helpers = require('../../helpers'),
     http = require('http'),
     hock = require('hock'),
     _ = require('underscore'),
     providers = require('../../configs/providers.json'),
-    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor,
-    Image = require('../../../lib/pkgcloud/core/compute/image').Image,
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
     mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
 
+// Declaring variables for helper functions defined later
+var setupImagesMock, setupFlavorMock, setupServerMock, setupGetServersMock,
+    setupGetServerMock, setupRebootMock, serverStatusReply;
+
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
-providers.forEach(function (provider) {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function (provider) {
   describe('pkgcloud/common/compute/server [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'compute'),
@@ -57,7 +58,7 @@ providers.forEach(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getImages() function should return a list of images', function(done) {
@@ -193,6 +194,7 @@ providers.forEach(function (provider) {
       }
 
       context.currentServer.reboot(function(err) {
+        should.not.exist(err);
         done();
       });
     });
@@ -206,6 +208,7 @@ providers.forEach(function (provider) {
       }
 
       context.currentServer.reboot(function (err) {
+        should.not.exist(err);
         done();
       });
     });
@@ -222,13 +225,13 @@ providers.forEach(function (provider) {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
 
   });
 });
 
-function setupImagesMock(client, provider, servers) {
+setupImagesMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -329,9 +332,9 @@ function setupImagesMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
   }
-}
+};
 
-function setupFlavorMock(client, provider, servers) {
+setupFlavorMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/flavors/detail')
@@ -361,9 +364,9 @@ function setupFlavorMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
   }
-}
+};
 
-function setupServerMock(client, provider, servers) {
+setupServerMock = function (client, provider, servers) {
   if (provider === 'digitalocean') {
     var account = require(__dirname + '/../../configs/mock/digitalocean');
 
@@ -473,7 +476,7 @@ function setupServerMock(client, provider, servers) {
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'hp') {
     servers.server
@@ -483,9 +486,9 @@ function setupServerMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
-}
+};
 
-function setupGetServersMock(client, provider, servers) {
+setupGetServersMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/servers/detail')
@@ -507,7 +510,7 @@ function setupGetServersMock(client, provider, servers) {
       .post('/', {
         Action: 'DescribeInstances'
       }, { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml')
+      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
   }
   else if (provider === 'azure') {
 
@@ -516,9 +519,9 @@ function setupGetServersMock(client, provider, servers) {
     servers.server
       .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
       .get('/azure-account-subscription-id/services/hostedservices')
-      .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>")
+      .reply(200, '<HostedServices xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>')
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'digitalocean') {
     var account = require(__dirname + '/../../configs/mock/digitalocean');
@@ -534,9 +537,9 @@ function setupGetServersMock(client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/serverList.json');
   }
-}
+};
 
-function setupGetServerMock(client, provider, servers) {
+setupGetServerMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v1.0/537645/servers/20578901')
@@ -556,7 +559,7 @@ function setupGetServerMock(client, provider, servers) {
     servers.server
       .filteringRequestBody(helpers.authFilter)
       .post('/?Action=DescribeInstances', {})
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml')
+      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
   }
   else if (provider === 'azure') {
 
@@ -565,16 +568,21 @@ function setupGetServerMock(client, provider, servers) {
     servers.server
       .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
       .get('/azure-account-subscription-id/services/hostedservices')
-      .reply(200, "<HostedServices xmlns=\"http://schemas.microsoft.com/windowsazure\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>")
+      .reply(200, '<HostedServices xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>')
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
-      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'))
+      .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'hp') {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
-}
+};
+
+setupRebootMock = function() {
+  // TODO
+};
+
 //
 //function batchThree(providerClient, providerName) {
 //  var name   = providerName   || 'rackspace',
@@ -945,20 +953,11 @@ function setupGetServerMock(client, provider, servers) {
  *
  * @return {String} - the xml reply containing the server name and status
  */
-var serverStatusReply = function (name, status) {
+serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
     params = {NAME: name, STATUS: status};
 
   var result = _.template(template, params);
   return result;
-};
-
-var filterPath = function (path) {
-  var name = PATH.basename(path);
-  if (path.search('embed-detail=true') !== -1) {
-    return '/getStatus?name=' + name;
-  }
-
-  return path;
 };

@@ -7,10 +7,11 @@
 
 var should = require('should'),
     providers = require('../../configs/providers.json'),
-    helpers = require('../../helpers'),
-    _ = require('underscore');
+    helpers = require('../../helpers');
 
-providers.forEach(function (provider) {
+providers.filter(function (provider) {
+  return !!helpers.pkgcloud.providers[provider].compute;
+}).forEach(function (provider) {
 
   describe('pkgcloud/common/compute/signatures [' + provider + ']', function () {
 

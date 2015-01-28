@@ -17,6 +17,7 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 In this example, we're going to create a Openstack compute client, create two servers, and then output their details to the command line.
 
 *Note: We're going to use [underscore.js](http://underscorejs.org) for some convenience functions.*
+*Note: For DevStack, change AuthUrl to http://<devstackIP>:5000*
 
 ```Javascript
 var pkgcloud = require('pkgcloud'),
@@ -27,6 +28,7 @@ var client = pkgcloud.compute.createClient({
   provider: 'openstack',
   username: 'your-user-name',
   password: 'your-password',
+  region: 'RegionOne' //default for DevStack, might be different on other OpenStack distributions
   authUrl: 'https://your-identity-service'
 });
 
@@ -45,10 +47,10 @@ client.getFlavors(function (err, flavors) {
         }
 
         // Pick a 512MB instance flavor
-        var flavor = _.findWhere(flavors, { name: '512MB Standard Instance' });
+        var flavor = _.findWhere(flavors, { name: 'm1.tiny' });
 
         // Pick an image based on Ubuntu 12.04
-        var image = _.findWhere(images, { name: 'Ubuntu 12.04 LTS (Precise Pangolin)' });
+        var image = _.findWhere(images, { name: 'cirros-0.3.2-x86_64-uec' }); // Check if this version is correct
 
         // Create our first server
         client.createServer({
@@ -77,8 +79,8 @@ function handleServerResponse(err, server) {
 
     console.log('SERVER CREATED: ' + server.name + ', waiting for active status');
 
-    // Wait for status: ACTIVE on our server, and then callback
-    server.setWait({ status: 'ACTIVE' }, 5000, function (err) {
+    // Wait for status: RUNNING on our server, and then callback
+    server.setWait({ status: server.STATUS.running }, 5000, function (err) {
         if (err) {
             console.dir(err);
             return;

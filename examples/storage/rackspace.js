@@ -2,7 +2,7 @@ var fs = require('fs'),
     pkgcloud = require('../../lib/pkgcloud'),
     _ = require('underscore');
 
-var rackspace = pkgcloud.storage.createClient({
+var client = pkgcloud.storage.createClient({
   provider: 'rackspace',
   username: 'rackspace_id',
   apiKey: '1234567890poiiuytrrewq',
@@ -14,7 +14,7 @@ var rackspace = pkgcloud.storage.createClient({
 // and illustration purposes.
 
 // 1 -- to create a container
-rackspace.createContainer({
+client.createContainer({
   name: 'sample-container-test',
   metadata: {
     callme: 'maybe'
@@ -31,7 +31,7 @@ rackspace.createContainer({
 });
 
 // 2 -- to list our containers
-rackspace.getContainers(function (err, containers) {
+client.getContainers(function (err, containers) {
   if (err) {
     console.dir(err);
     return;
@@ -44,7 +44,7 @@ rackspace.getContainers(function (err, containers) {
 });
 
 // 3 -- to create a container and upload a file to it
-rackspace.createContainer({
+client.createContainer({
   name: 'sample-container',
   metadata: {
     callme: 'maybe'
@@ -57,7 +57,7 @@ rackspace.createContainer({
 
   var myPicture = fs.createReadStream('/path/to/some/file/picture.jpg');
 
-  var upload = rackspace.upload({
+  var upload = client.upload({
     container: container.name,
     remote: 'profile-picture.jpg'
   });
@@ -74,7 +74,7 @@ rackspace.createContainer({
 });
 
 // 4 -- setup container as CDN
-rackspace.getContainer('container-name', function (err, container) {
+client.getContainer('container-name', function (err, container) {
   if(err){
     console.log('There was an error retrieving container:\n');
     console.dir(err);
@@ -88,23 +88,25 @@ rackspace.getContainer('container-name', function (err, container) {
       return;
     }
     console.log('Successfully set bucket as CDN bucket');
+    console.log(cont);
   });  
 });
 
 // 5 -- to get a container, empty it, then finally destroying it
-rackspace.getContainer('sample-container', function (err, container) {
+client.getContainer('sample-container', function (err, container) {
   if (err) {
     console.dir(err);
     return;
   }
 
   // destroying a container automatically calls the remove file API to empty before delete
-  rackspace.destroyContainer(container, function (err, result) {
+  client.destroyContainer(container, function (err, result) {
     if (err) {
       console.dir(err);
       return;
     }
 
-    console.log('Container ' + container.name + ' was successfully destroyed.')
+    console.log('Container ' + container.name + ' was successfully destroyed.');
+    console.log(result);
   });
 });

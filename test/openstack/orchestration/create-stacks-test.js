@@ -6,7 +6,6 @@
  * MIT LICENSE
  */
 
-var Client = new require('../../../lib/pkgcloud/core/base/client').Client;
 var helpers = require('../../helpers');
 
 var should = require('should'),
@@ -17,8 +16,6 @@ var should = require('should'),
   mock = !!process.env.MOCK;
 
 var client = helpers.createClient('openstack', 'orchestration');
-
-var options = {};
 
 describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
 
@@ -74,10 +71,9 @@ describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
       hockInstance
         .post('/v1/72e90ecb69c44d0296072ea39e537041/stacks', {
           'stack_name': 'stack-test',
-          environment: '{}',
+          environment: JSON.stringify({ parameters: { terms: true } }),
           'timeout_mins': 30,
-          template_url: 'https://raw.githubusercontent.com/rackspace-orchestration-templates/minecraft/master/minecraft-server.yaml',
-          environment: JSON.stringify({ parameters: { terms: true } })
+          template_url: 'https://raw.githubusercontent.com/rackspace-orchestration-templates/minecraft/master/minecraft-server.yaml'
         })
         .reply(201, { stack:
         { id: 'b39ecc51-8ac0-4396-a178-17fdc63f5d40',
@@ -121,7 +117,7 @@ describe('pkgcloud/openstack/orchestration/stacks[createStacks]', function () {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 
 });

@@ -1,0 +1,24 @@
+{
+  "networks":[
+    {
+      "name": "private-network",
+      "id": "d32019d3-bc6e-4319-9c1d-6722fc136a22",
+      "admin_state_up": true,
+      "status": "ACTIVE",
+      "shared": false,
+      "tenant_id": "123456",
+      "subnets": [
+        "96c1b28c-7be1-4035-b41f-247a8d81a61d"
+      ]
+    },
+    {
+      "name": "private",
+      "id": "db193ab3-96e3-4cb3-8fc5-05f4296d0324",
+      "admin_state_up": true,
+      "status": "ACTIVE",
+      "shared": false,
+      "tenant_id": "123456",
+      "subnets": []
+    }
+  ]
+}

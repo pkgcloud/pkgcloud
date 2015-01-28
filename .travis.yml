@@ -1,15 +1,11 @@
 language: node_js
 node_js:
-  - "0.10"
-
+- '0.10'
 notifications:
   email:
-    - travis@nodejitsu.com
-  irc: "irc.freenode.org#pkgcloud"
-
-before_script:
-  - git clone git://github.com/visionmedia/node-jscoverage.git
-  - pushd node-jscoverage
-  - ./configure
-  - make
-  - popd
+  - ken.perkins@rackspace.com
+  irc: irc.freenode.org#pkgcloud
+  slack:
+    secure: RjlcoxHiKzep+CdLSC4UcL6Wsrv/4F3mzCwnDhIFsoH53XZ4t5oexLyaQxZFVq6KYes7nv2D/w2jUX7z7LBCZ6N0p8Sf/ao2s5O71ETDYDajtQjdEC1/w8PflC61b1EsVfE1tDbDtkFJtVXWKCBUAfbvrMYZwP0f8Ffhf3Bvg2I=
+script:
+- npm run travis

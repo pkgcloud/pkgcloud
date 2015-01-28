@@ -1,0 +1,145 @@
+{
+  "instances": [
+    {
+      "status": "ACTIVE",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f"
+    }, {  
+      "status": "ACTIVE",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/55041e91-98ab-4cd5-8148-f3b3978b3262",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/55041e91-98ab-4cd5-8148-f3b3978b3262",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "55041e91-98ab-4cd5-8148-f3b3978b3262"
+    }, {
+      "status": "ACTIVE",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/8e31b45f-7bc7-4f3c-ad2d-3ae86e51a904",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/8e31b45f-7bc7-4f3c-ad2d-3ae86e51a904",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "8e31b45f-7bc7-4f3c-ad2d-3ae86e51a904"
+    }, {
+      "status": "BUILD",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/91c21563-74d2-4b8a-9f8f-871e61714446",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/91c21563-74d2-4b8a-9f8f-871e61714446",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "1",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "91c21563-74d2-4b8a-9f8f-871e61714446"
+    }, {
+      "status": "ACTIVE",
+      "name": "test-instance",
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/instances/c98bf7db-bfa2-4d88-9469-c0a458a99e86",
+          "rel": "self"
+        }, {
+          "href": "https://ord.databases.api.rackspacecloud.com/instances/c98bf7db-bfa2-4d88-9469-c0a458a99e86",
+          "rel": "bookmark"
+        }
+      ],
+      "volume": {
+        "size": 1
+      },
+      "flavor": {
+        "id": "2",
+        "links": [
+          {
+            "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2",
+            "rel": "self"
+          }, {
+            "href": "https://ord.databases.api.rackspacecloud.com/flavors/2",
+            "rel": "bookmark"
+          }
+        ]
+      },
+      "id": "c98bf7db-bfa2-4d88-9469-c0a458a99e86"
+    }
+  ]
+}

@@ -5,6 +5,7 @@
 The HP  Helion Cloud provider in pkgcloud supports the following services:
 
 * [**Compute**](compute.md) (cloud compute)
+* [**Databases**](databases.md) (databases)
 * [**Network**](network.md) (network)
 * [**Storage**](storage.md) (object storage)
 

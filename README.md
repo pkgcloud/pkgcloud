@@ -107,6 +107,7 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **[Storage](#storage)**
   * [Amazon](docs/providers/amazon.md#using-storage)
   * [Azure](docs/providers/azure.md#using-storage)
+  * [Google](docs/providers/google.md)
   * [HP](docs/providers/hp/storage.md)
   * [Openstack](docs/providers/openstack/storage.md)
   * [Rackspace](docs/providers/rackspace/storage.md)
@@ -129,6 +130,7 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **[Network](#network----beta)** *(beta)*
   * [HP](docs/providers/hp/network.md)
   * [Openstack](docs/providers/openstack/network.md)
+  * [Rackspace](docs/providers/rackspace/network.md)
 
 ## Compute
 
@@ -199,6 +201,7 @@ Each storage provider takes different credentials to authenticate; these details
 
 * [Amazon](docs/providers/amazon.md#using-storage)
 * [Azure](docs/providers/azure.md#using-storage)
+* [Google](docs/providers/google.md#using-storage)
 * [HP](docs/providers/hp/storage.md)
 * [Openstack](docs/providers/openstack/storage.md)
 * [Rackspace](docs/providers/rackspace/storage.md)
@@ -445,6 +448,7 @@ To get started with a `pkgcloud.network` client just create one:
 
 * [HP](docs/providers/hp/network.md)
 * [Openstack](docs/providers/openstack/network.md)
+* [Rackspace](docs/providers/rackspace/network.md)
 
 
 Each instance of `pkgcloud.network.Client` returned from `pkgcloud.network.createClient` has a set of uniform APIs:

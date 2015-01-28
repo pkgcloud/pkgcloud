@@ -5,20 +5,20 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    qs = require('qs'),
-    should = require('should'),
-    util = require('util'),
+var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     hock = require('hock'),
     http = require('http'),
-    _ = require('underscore'),
     providers = require('../../configs/providers.json'),
     Port = require('../../../lib/pkgcloud/core/network/port').Port,
     mock = !!process.env.MOCK,
     urlJoin = require('url-join');
+
+// Declaring variables for helper functions defined later
+var setupDestroyPortMock, setupUpdatePortMock, setupModelDestroyedPortMock,
+    setupPortsMock, setupCreatePortMock, setupRefreshPortMock,
+    setupPortModelCreateMock, setupGetPortMock;
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].network;
@@ -49,7 +49,7 @@ providers.filter(function (provider) {
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done)
+      ], done);
     });
 
     it('the getPorts() function should return a list of ports', function(done) {
@@ -97,8 +97,6 @@ providers.filter(function (provider) {
     });
 
     it('the createPort() method should create a port', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupCreatePortMock(client, provider, {
           authServer: authHockInstance,
@@ -161,13 +159,12 @@ providers.filter(function (provider) {
 
       client.updatePort(portToUpdate, function(err,network){
         should.not.exist(err);
+        should.exist(network);
         done();
       });
     });
 
     it('the port.create() method should create a port', function (done) {
-      var m = mock ? 0.1 : 10;
-
       if (mock) {
         setupPortModelCreateMock(client, provider, {
           authServer: authHockInstance,
@@ -176,7 +173,7 @@ providers.filter(function (provider) {
       }
 
       var port = new Port(client);
-      port.name= "model created network";
+      port.name= 'model created network';
       port.create(function (err, createdPort) {
         should.not.exist(err);
         should.exist(createdPort);
@@ -187,8 +184,6 @@ providers.filter(function (provider) {
     });
 
     it('the port.refresh() method should get a network', function (done) {
-      var m = mock ? 0.1 : 10;
-
       var port = new Port(client);
       port.id = context.ports[0].id;
 
@@ -211,8 +206,8 @@ providers.filter(function (provider) {
 
     it('the port.destroy() method should delete a port', function (done) {
       var port = new Port(client);
-      port.name = "model deleted port";
-      port.id = "THISISANETWORKID";
+      port.name = 'model deleted port';
+      port.id = 'THISISANETWORKID';
 
       if (mock) {
         setupModelDestroyedPortMock(client, provider, {
@@ -245,54 +240,106 @@ providers.filter(function (provider) {
   });
 });
 
-function setupDestroyPortMock(client, provider, servers, currentPort){
+setupDestroyPortMock = function (client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/ports', currentPort.id))
+      .reply(204);
+  }
+};
 
-function setupUpdatePortMock(client, provider, servers, currentPort){
+setupUpdatePortMock = function (client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
-        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id),
-        {"port":{"status":"ACTIVE","name":"my_port","admin_state_up":false,"mac_address":"fa:16:3e:58:42:ed",
-            "fixed_ips":[{"subnet_id":"008ba151-0b8c-4a67-98b5-0d2b87666062","ip_address":"172.24.4.2"}],
-            "security_groups":[],"network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"}
+        .put(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id), {
+          port: {
+            status: 'ACTIVE',
+            name: 'my_port',
+            admin_state_up: false,
+            mac_address: 'fa:16:3e:58:42:ed',
+            fixed_ips: [
+              {
+                subnet_id: '008ba151-0b8c-4a67-98b5-0d2b87666062',
+                ip_address: '172.24.4.2'
+              }
+            ],
+            security_groups:[],
+            network_id: '70c1db1f-b701-45bd-96e0-a313ee3430b3'
+          }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'hp') {
     servers.server
-        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id),
-        {"port":{"status":"ACTIVE","name":"my_port","admin_state_up":false,"mac_address":"fa:16:3e:58:42:ed",
-            "fixed_ips":[{"subnet_id":"008ba151-0b8c-4a67-98b5-0d2b87666062","ip_address":"172.24.4.2"}],
-            "security_groups":[],"network_id":"70c1db1f-b701-45bd-96e0-a313ee3430b3"}
+        .put(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id), {
+          port: {
+            status: 'ACTIVE',
+            name: 'my_port',
+            admin_state_up: false,
+            mac_address: 'fa:16:3e:58:42:ed',
+            fixed_ips: [
+              {
+                subnet_id: '008ba151-0b8c-4a67-98b5-0d2b87666062',
+                ip_address: '172.24.4.2'
+              }
+            ],
+            security_groups:[],
+            network_id: '70c1db1f-b701-45bd-96e0-a313ee3430b3'
+          }
         })
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+        .put(urlJoin('/v2.0/ports', currentPort.id), {
+          port: {
+            status: 'ACTIVE',
+            name: 'my_port',
+            admin_state_up: false,
+            mac_address: 'fa:16:3e:58:42:ed',
+            fixed_ips: [
+              {
+                subnet_id: '008ba151-0b8c-4a67-98b5-0d2b87666062',
+                ip_address: '172.24.4.2'
+              }
+            ],
+            security_groups:[],
+            network_id: '70c1db1f-b701-45bd-96e0-a313ee3430b3'
+          }
+        })
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
+  }
+};
 
-function setupModelDestroyedPortMock(client, provider, servers, currentPort){
+setupModelDestroyedPortMock = function (client, provider, servers, currentPort){
   if (provider === 'openstack') {
     servers.server
       .delete(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
       .delete(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id))
-      .reply(204, helpers.getOpenstackAuthResponse());
+      .reply(204);
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+      .delete(urlJoin('/v2.0/ports', currentPort.id))
+      .reply(204);
+  }
+};
 
-function setupPortsMock(client, provider, servers) {
+setupPortsMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -349,24 +396,55 @@ function setupPortsMock(client, provider, servers) {
         .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports')
         .replyWithFile(200, __dirname + '/../../fixtures/openstack/ports.json');
   }
-}
+  else if (provider === 'rackspace') {
+      servers.authServer
+        .post('/v2.0/tokens', {
+          auth: {
+            'RAX-KSKEY:apiKeyCredentials': {
+              username: 'MOCK-USERNAME',
+              apiKey: 'MOCK-API-KEY'
+            }
+          }
+        })
+        .reply(200, helpers.getRackspaceAuthResponse());
 
-function setupCreatePortMock(client, provider, servers) {
+      servers.server
+        .get('/v2.0/ports')
+        .replyWithFile(200, __dirname + '/../../fixtures/rackspace/ports.json');
+  }
+};
+
+setupCreatePortMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports',
-      {port: {name: 'create-test-ids2'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', {
+        port: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports',
-      {port: {name: 'create-test-ids2'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', {
+        port: {
+          name: 'create-test-ids2'
+        }
+      })
       .replyWithFile(201, __dirname + '/../../fixtures/openstack/port.json');
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/ports', {
+        port: {
+          name: 'create-test-ids2'
+        }
+      })
+      .replyWithFile(201, __dirname + '/../../fixtures/rackspace/port.json');
+  }
+};
 
-function setupRefreshPortMock(client, provider, servers, port) {
+setupRefreshPortMock = function (client, provider, servers, port) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', port.id))
@@ -377,24 +455,44 @@ function setupRefreshPortMock(client, provider, servers, port) {
       .get(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', port.id))
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+      .get(urlJoin('/v2.0/ports', port.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
+  }
+};
 
-function setupPortModelCreateMock(client, provider, servers) {
+setupPortModelCreateMock = function (client, provider, servers) {
   if (provider === 'openstack') {
     servers.server
-      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports',
-      {port: {name: 'model created network'}})
+      .post('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', {
+        port: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/port.json');
   }
   else if (provider === 'hp') {
     servers.server
-      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports',
-      {port: {name: 'model created network'}})
+      .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', {
+        port: {
+          name: 'model created network'
+        }
+      })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/port.json');
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+      .post('/v2.0/ports', {
+        port: {
+          name: 'model created network'
+        }
+      })
+      .replyWithFile(202, __dirname + '/../../fixtures/rackspace/port.json');
+  }
+};
 
-function setupGetPortMock(client, provider, servers, currentPort) {
+setupGetPortMock = function (client, provider, servers, currentPort) {
   if (provider === 'openstack') {
     servers.server
       .get(urlJoin('/v2/72e90ecb69c44d0296072ea39e537041/v2.0/ports', currentPort.id))
@@ -405,4 +503,9 @@ function setupGetPortMock(client, provider, servers, currentPort) {
       .get(urlJoin('/v2/5ACED3DC3AA740ABAA41711243CC6949/v2.0/ports', currentPort.id))
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/port.json');
   }
-}
+  else if (provider === 'rackspace') {
+    servers.server
+      .get(urlJoin('/v2.0/ports', currentPort.id))
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/port.json');
+  }
+};

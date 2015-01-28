@@ -5,25 +5,19 @@
  *
  */
 
-var fs = require('fs'),
-  path = require('path'),
-  Buffer = require('buffer').Buffer,
-  assert = require('../../helpers/assert'),
-  helpers = require('../../helpers'),
+var helpers = require('../../helpers'),
   should = require('should'),
   util = require('util'),
   async = require('async'),
   hock = require('hock'),
   http = require('http'),
   urlJoin = require('url-join'),
-  _ = require('underscore'),
   providers = require('../../configs/providers.json'),
-  versions = require('../../fixtures/versions.json'),
-  Container = require('../../../lib/pkgcloud/core/storage/container').Container,
-  File = require('../../../lib/pkgcloud/core/storage/file').File,
   mock = !!process.env.MOCK,
-  pkgcloud = require('../../../lib/pkgcloud'),
-  fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
+  pkgcloud = require('../../../lib/pkgcloud');
+
+// Declaring variables for helper functions defined later
+var setupUploadStreamError;
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].storage;
@@ -31,7 +25,6 @@ providers.filter(function (provider) {
   describe('pkgcloud/common/storage/base [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'storage'),
-      context = {},
       authServer, server,
       authHockInstance, hockInstance;
 
@@ -107,12 +100,12 @@ providers.filter(function (provider) {
         function (next) {
           authServer.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });
 
-function setupUploadStreamError(provider, client, servers) {
+setupUploadStreamError = function (provider, client, servers) {
   if (provider === 'rackspace') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -127,7 +120,7 @@ function setupUploadStreamError(provider, client, servers) {
 
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
-      .reply(400)
+      .reply(400);
   }
   else if (provider === 'openstack') {
     servers.authServer
@@ -155,12 +148,12 @@ function setupUploadStreamError(provider, client, servers) {
 
     servers.server
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
-      .reply(400)
+      .reply(400);
   }
   else if (provider === 'amazon') {
     servers.server
       .post('/test-file.txt?uploads')
-      .reply(400)
+      .reply(400);
   }
   else if (provider === 'azure') {
 
@@ -206,4 +199,4 @@ function setupUploadStreamError(provider, client, servers) {
       .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
       .reply(400);
   }
-}
+};

@@ -5,13 +5,13 @@
  *
  */
 
-var fs = require('fs'),
-  path = require('path'),
-  vows = require('vows'),
+var vows = require('vows'),
   assert = require('../../../helpers/assert'),
   helpers = require('../../../helpers'),
   azureNock = require('../../../helpers/azureNock'),
   nock   = require('nock');
+
+var testContext = {};
 
 var options = {
   name: 'test-reboot',
@@ -23,9 +23,9 @@ function testCreateServer(client) {
   var name   = 'azure',
     test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = {
-    "the createServer() method": {
-      "with image and flavor ids": {
+  test['The pkgcloud ' + name + ' compute client'] = {
+    'the createServer() method': {
+      'with image and flavor ids': {
         topic: function () {
           client.createServer({
             name: options.name,
@@ -33,7 +33,7 @@ function testCreateServer(client) {
             flavor: options.flavor
           }, this.callback);
         },
-        "should return a valid server": function (err, server) {
+        'should return a valid server': function (err, server) {
 
           testContext.server = server;
           assert.isNull(err);
@@ -50,17 +50,17 @@ function testCreateServer(client) {
   return test;
 }
 
-function testSetWait(client) {
+function testSetWait() {
   var name   = 'azure',
     test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = {
-    "the setWait() method": {
-      "with setWait({ status: testContext.server.STATUS.running },": {
+  test['The pkgcloud ' + name + ' compute client'] = {
+    'the setWait() method': {
+      'with setWait({ status: testContext.server.STATUS.running },': {
         topic: function () {
           testContext.server.setWait({ status: testContext.server.STATUS.running }, 1000, this.callback);
         },
-        "should return a running server": function (err, server) {
+        'should return a running server': function (err, server) {
           testContext.server = server;
           assert.isNull(err);
           if (err === null) {
@@ -81,13 +81,13 @@ function testRebootServer(client) {
   var name   = 'azure',
     test   = {};
 
-  test["The pkgcloud " + name + " compute client"] = {
-    "the rebootServer() method": {
-      "rebooting server": {
+  test['The pkgcloud ' + name + ' compute client'] = {
+    'the rebootServer() method': {
+      'rebooting server': {
         topic: function () {
           client.rebootServer(testContext.server, this.callback);
         },
-        "should return a valid server": function (err, res) {
+        'should return a valid server': function (err, res) {
 
           assert.isNull(err);
           if (err === null) {
@@ -105,8 +105,6 @@ function testRebootServer(client) {
 
 var client = helpers.createClient('azure', 'compute');
 
-var testContext = {};
-
 if (process.env.MOCK) {
   azureNock.serverTest(nock, helpers);
 }
@@ -117,6 +115,6 @@ vows
     .addBatch(testSetWait(client))
     .addBatch(testRebootServer(client))
     .addBatch(testSetWait(client))
-  ["export"](module);
+  ['export'](module);
 
 

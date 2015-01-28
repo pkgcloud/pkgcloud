@@ -1,0 +1,64 @@
+{
+  "flavors": [
+    {
+      "id": 1,
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/1",
+          "rel": "self"
+        },
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/flavors/1",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.tiny",
+      "ram": 512
+     },
+     {
+      "id": 2,
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/2",
+          "rel": "self"
+        },
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/flavors/2",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.small",
+      "ram": 1024
+    },
+    {
+      "id": 3,
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/3",
+          "rel": "self"
+        },
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/flavors/3",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.medium",
+      "ram": 2048
+    },
+    {
+      "id": 4,
+      "links": [
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/v1.0/537645/flavors/4",
+          "rel": "self"
+        },
+        {
+          "href": "https://ord.databases.api.rackspacecloud.com/flavors/4",
+          "rel": "bookmark"
+        }
+      ],
+      "name": "m1.large",
+      "ram": 4096
+    }
+  ]
+}

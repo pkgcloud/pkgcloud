@@ -36,7 +36,7 @@ helpers.createClient = function createClient(provider, service, config) {
         config.keyId = '/' + config.account + '/keys/' + config.keyId;
         config.key   = fs.readFileSync(config.identity,'ascii');
       } else {
-        throw new Error("Can't test without username and account");
+        throw new Error('Can\'t test without username and account');
       }
     }
   }
@@ -80,16 +80,16 @@ helpers.loadFixture = function loadFixture(path, json) {
 
 helpers.personalityPost = function persPost(pubkey) {
   return JSON.stringify({
-    "server": {
-      "name": "create-personality-test",
-      "image": 49,
-      "flavor": 1,
-      "personality": [{
-        "path": "/root/.ssh/authorized_keys",
-        "contents": pubkey.toString('base64')
+    server: {
+      name: 'create-personality-test',
+      image: 49,
+      flavor: 1,
+      personality: [{
+        path: '/root/.ssh/authorized_keys',
+        contents: pubkey.toString('base64')
       }],
-      "flavorId": 1,
-      "imageId": 49
+      flavorId: 1,
+      imageId: 49
     }
   });
 };
@@ -106,9 +106,12 @@ helpers.selectInstance = function selectInstance(client, callback) {
   }
 
   client.getInstances(function (err, instances) {
-    if (err) throw new Error(err);
+    if (err) {
+      throw new Error(err);
+    }
+    
     if (instances.length === 0) {
-      throw new Error({ message:'No instances found.' })
+      throw new Error({ message:'No instances found.' });
     }
     callback(filterInstances(instances));
   });
@@ -194,6 +197,71 @@ helpers._getOpenstackStandardResponse = function(file, time) {
   response.access.token.expires = time.toString();
 
   return response;
-}
+};
+
+helpers.setupAuthenticationMock = function (authHockInstance, provider) {
+  if (provider === 'rackspace') {
+        authHockInstance
+          .post('/v2.0/tokens', {
+            auth: {
+              'RAX-KSKEY:apiKeyCredentials': {
+                username: 'MOCK-USERNAME',
+                apiKey: 'MOCK-API-KEY'
+              }
+            }
+          })
+          .reply(200, helpers.getRackspaceAuthResponse());
+    }
+    else if (provider === 'openstack')   {
+      authHockInstance
+        .post('/v2.0/tokens', {
+          auth: {
+            passwordCredentials: {
+              username: 'MOCK-USERNAME',
+              password: 'MOCK-PASSWORD'
+            }
+          }
+        })
+        .replyWithFile(200, __dirname + '/../fixtures/openstack/initialToken.json')
+        .get('/v2.0/tenants')
+        .replyWithFile(200, __dirname + '/../fixtures/openstack/tenantId.json')
+        .post('/v2.0/tokens', {
+          auth: {
+            passwordCredentials: {
+              username: 'MOCK-USERNAME',
+              password: 'MOCK-PASSWORD'
+            },
+            tenantId: '72e90ecb69c44d0296072ea39e537041'
+          }
+        })
+        .reply(200, helpers.getOpenstackAuthResponse());
+    }
+    else if (provider === 'hp') {
+      authHockInstance.post('/v2.0/tokens', {
+        auth: {
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
+          }
+        }
+      })
+      .replyWithFile(200, __dirname + '/../fixtures/hp/initialToken.json')
+      .get('/v2.0/tenants')
+      .replyWithFile(200, __dirname + '/../fixtures/hp/tenantId.json')
+      .post('/v2.0/tokens', {
+        auth: {
+          apiAccessKeyCredentials: {
+            accessKey: 'MOCK-USERNAME',
+            secretKey: 'MOCK-API-KEY'
+          },
+          tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
+        }
+      })
+      .reply(200, helpers.gethpAuthResponse());
+    }
+    else {
+      throw new Error('provider ['+provider+'] not supported');
+    }
+};
 
 helpers.pkgcloud = pkgcloud;

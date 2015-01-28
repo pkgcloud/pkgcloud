@@ -1,34 +1,30 @@
-MOCHA_OPTS=-t 4000 test/*/*/*-test.js test/*/*/*/*-test.js
-REPORTER = spec
+MOCHA_CMD = MOCK=on ./node_modules/.bin/mocha
+MOCHA_OPTS = --require blanket -t 4000 test/*/*/*-test.js test/*/*/*/*-test.js
+DEFAULT_REPORT_OPTS = --reporter spec
+HTML_REPORT_OPTS = --reporter html-cov > coverage.html
+COVERALLS_REPORT_OPTS = --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 
 check: test
 
 test: test-unit
 
+cov: test-cov-html
+
+travis: lint test-unit test-cov-coveralls
+
 test-unit:
-	@NODE_ENV=test MOCK=on ./node_modules/.bin/mocha \
-	    --reporter $(REPORTER) \
-		$(MOCHA_OPTS)
+	@echo "$(MOCHA_CMD) $(MOCHA_OPTS) $(REPORT_OPTS)"
+	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_OPTS) $(REPORT_OPTS)
 
-lib-cov:
-	jscoverage --encoding=UTF-8 lib lib-cov
+test-cov-html:
+	@echo "$(MOCHA_CMD) $(MOCHA_OPTS) $(HTML_REPORT_OPTS)"
+	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_OPTS) $(HTML_REPORT_OPTS)
 
-test-cov:	lib-cov
-	mv lib lib-bak
-	mv lib-cov lib
-	$(MAKE) test REPORTER=html-cov > coverage.html
-	rm -rf lib
-	mv lib-bak lib
+test-cov-coveralls:
+	@echo "$(MOCHA_CMD) $(MOCHA_OPTS) $(COVERALLS_REPORT_OPTS)"
+	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_OPTS) $(COVERALLS_REPORT_OPTS)
 
-test-coveralls:	lib-cov
-	echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
-	mv lib lib-bak
-	mv lib-cov lib
-	$(MAKE) test REPORTER=mocha-lcov-reporter > pkgcloud.lcov.raw
-	rm -rf lib
-	mv lib-bak lib
-	sed "s#SF:#SF:$(PWD)/lib/#g" pkgcloud.lcov.raw > pkgcloud.lcov
-	./node_modules/coveralls/bin/coveralls.js < pkgcloud.lcov
-	rm pkgcloud.lcov pkgcloud.lcov.raw
+lint:
+	./node_modules/.bin/jshint --exclude-path .gitignore .
 
 .PHONY: test

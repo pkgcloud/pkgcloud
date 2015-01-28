@@ -1,7 +1,7 @@
 {
   "name": "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": "Nodejitsu Inc <info@nodejitsu.com>",
   "contributors": [
     {
@@ -34,6 +34,7 @@
     "aws",
     "amazon",
     "azure",
+    "google",
     "iaas",
     "servers",
     "compute",
@@ -51,32 +52,42 @@
   ],
   "dependencies": {
     "async": "0.9.x",
+    "aws-sdk": "~2.0.17",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
     "filed": "0.1.x",
+    "gcloud": "^0.10.0",
     "ip": "0.3.x",
-    "xml2js": "0.1.x",
     "mime": "1.2.x",
-    "through2": "0.6.x",
     "qs": "1.2.x",
     "request": "2.40.x",
+    "s3-upload-stream": "~1.0.0",
+    "through2": "0.6.x",
     "underscore": "1.6.x",
     "url-join": "0.0.x",
-    "aws-sdk": "~2.0.17",
-    "s3-upload-stream": "~1.0.0"
+    "xml2js": "0.1.x"
   },
   "devDependencies": {
+    "blanket": "^1.1.6",
+    "coveralls": "^2.11.2",
     "hock": "1.2.0",
+    "jshint": "2.x.x",
     "mocha": "1.21.x",
-    "should": "4.0.x",
     "mocha-lcov-reporter": "0.0.1",
-    "coveralls": "2.x.x"
+    "should": "4.0.x"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
     "test": "make test",
-    "test-cov": "make test-cov",
-    "test-coveralls": "make test-coveralls"
+    "cov": "make cov",
+    "travis": "make travis",
+    "lint": "make lint"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "/lib/",
+      "data-cover-never": "node_modules"
+    }
   },
   "engines": {
     "node": ">=0.10.x"

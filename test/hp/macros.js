@@ -7,10 +7,7 @@
 
 var fs = require('fs'),
     filed = require('filed'),
-    assert = require('../helpers/assert'),
-    should = require('should'),
-    helpers = require('../helpers'),
-    mock = !!process.env.MOCK;
+    assert = require('../helpers/assert');
 
 exports.shouldHaveCreds = function (client) {
   return function () {
@@ -19,38 +16,38 @@ exports.shouldHaveCreds = function (client) {
     assert.include(client.config, 'apiKey');
 
     assert.isFunction(client.auth);
-  }
+  };
 };
 
 exports.shouldCreateContainer = function (client, name, message) {
-  message = message || "when creating a container";
+  message = message || 'when creating a container';
 
   var context = {};
   context[message] = {
     topic: function () {
       client.createContainer(name, this.callback);
     },
-    "should return a valid container": function (err, container) {
+    'should return a valid container': function (err, container) {
       assert.isNull(err);
       assert.assertContainer(container);
     }
   };
 
   return {
-    "The pkgcloud Rackspace storage client": {
-      "the createContainer() method": context
+    'The pkgcloud Rackspace storage client': {
+      'the createContainer() method': context
     }
   };
 };
 
 exports.shouldDestroyContainer = function (client, name) {
   return {
-    "The pkgcloud Rackspace storage client": {
-      "the destroyContainer() method": {
+    'The pkgcloud Rackspace storage client': {
+      'the destroyContainer() method': {
         topic: function () {
-          client.destroyContainer(name, this.callback)
+          client.destroyContainer(name, this.callback);
         },
-        "should return true": function (err, success) {
+        'should return true': function (err, success) {
           assert.isTrue(success);
         }
       }
@@ -66,10 +63,10 @@ exports.upload.fullpath = function (client, options) {
       client.upload(options, function () { })
         .on('end', this.callback);
     },
-    "should raise the `end` event": function () {
+    'should raise the `end` event': function () {
       assert.isTrue(true);
     }
-  }
+  };
 };
 
 exports.upload.stream = function (client, container, local, remote) {
@@ -84,10 +81,10 @@ exports.upload.stream = function (client, container, local, remote) {
         }
       }, function () { }).on('end', this.callback);
     },
-    "should raise the `end` event": function () {
+    'should raise the `end` event': function () {
       assert.isTrue(true);
     }
-  }
+  };
 };
 
 exports.upload.piped = function (client, container, local, remote) {
@@ -99,10 +96,10 @@ exports.upload.piped = function (client, container, local, remote) {
       }, function () { });
 
       filed(local).pipe(ustream);
-      ustream.on('end', this.callback)
+      ustream.on('end', this.callback);
     },
-    "should raise the `end` event": function () {
+    'should raise the `end` event': function () {
       assert.isTrue(true);
     }
-  }
+  };
 };

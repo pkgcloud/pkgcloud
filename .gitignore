@@ -12,3 +12,4 @@ azure_error
 coverage.html
 .coveralls.yml
 pkgcloud.lcov*
+node-jscoverage

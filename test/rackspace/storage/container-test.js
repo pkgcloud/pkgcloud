@@ -6,10 +6,7 @@
 *
 */
 
-var path = require('path'),
-    fs = require('fs'),
-    should = require('should'),
-    pkgcloud = require('../../../lib/pkgcloud'),
+var should = require('should'),
     helpers = require('../../helpers'),
     async = require('async'),
     hock = require('hock'),
@@ -156,7 +153,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
             'content-length': '0',
             'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
             date: 'Wed, 12 Jun 2013 19:04:25 GMT',
-            connection: 'keep-alive' })
+            connection: 'keep-alive' });
 
       }
 
@@ -349,7 +346,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
             'content-length': '0',
             'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
             date: 'Wed, 12 Jun 2013 19:04:25 GMT',
-            connection: 'keep-alive' })
+            connection: 'keep-alive' });
       }
 
       client.getContainer('0.1.3-85', function (err, container) {
@@ -411,7 +408,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
             'x-cdn-streaming-uri': 'http://e5addf7be8783adf8c6d-edfcb31ae70ea7c07367728d50539bc7.r63.stream.cf1.rackcdn.com',
             'content-length': '0',
             'x-trans-id': 'tx8a8acb8f3f7142c8bd36f27a18415996',
-            date: 'Wed, 12 Jun 2013 19:04:25'})
+            date: 'Wed, 12 Jun 2013 19:04:25'});
       }
 
       client.getContainer('0.1.3-85', function (err, container) {
@@ -575,7 +572,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
 
     it('updateContainerMetadata should throw if passed non container', function() {
       (function() {
-        client.updateContainerMetadata({ name: 'foo' })
+        client.updateContainerMetadata({ name: 'foo' });
       }).should.throw();
     });
 
@@ -591,7 +588,7 @@ describe('pkgcloud/rackspace/storage/containers', function () {
         function (next) {
           server.close(next);
         }
-      ], done)
+      ], done);
     });
   });
 });

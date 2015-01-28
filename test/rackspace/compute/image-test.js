@@ -6,9 +6,7 @@
 *
 */
 
-var fs = require('fs'),
-    path = require('path'),
-    should = require('should'),
+var should = require('should'),
     async = require('async'),
     hock = require('hock'),
     http = require('http'),
@@ -125,6 +123,6 @@ describe('pkgcloud/rackspace/compute/images', function () {
       function (next) {
         authServer.close(next);
       }
-    ], done)
+    ], done);
   });
 });
