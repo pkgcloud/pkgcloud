@@ -54,7 +54,7 @@ var authenticate = function(hockInstance) {
 				}
 			}
 		});
-}
+};
 
 describe('pkgcloud/openstack/storage/', function () {
 
@@ -102,8 +102,9 @@ describe('pkgcloud/openstack/storage/', function () {
 					.reply(200);
 
 				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
-					if (err) done(err);
-					else {
+					if (err) {
+						done(err);
+					} else {
 						file.copy({
 							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
@@ -139,7 +140,7 @@ describe('pkgcloud/openstack/storage/', function () {
 									destinationFile: 'pkgcloud-test-file-2'
 								}, next);
 							}
-						})
+						});
 					}
 				], done);
 			});
@@ -156,8 +157,9 @@ describe('pkgcloud/openstack/storage/', function () {
 					.reply(200);
 
 				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
-					if (err) done(err);
-					else {
+					if (err) {
+						done(err);
+					} else {
 						file.copy({
 							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
@@ -203,8 +205,9 @@ describe('pkgcloud/openstack/storage/', function () {
 					.reply(200);
 
 				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
-					if (err) done(err);
-					else {
+					if (err) {
+						done(err);
+					} else {
 						file.copy({
 							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
@@ -254,8 +257,9 @@ describe('pkgcloud/openstack/storage/', function () {
 									}
 								}
 							}, function(err, res) {
-								if (err) done(err);
-								else {
+								if (err) {
+									done(err);
+								} else {
 									hockInstance
 										.head('/v1/HPCloudFS_00aa00aa/' + srcContainer.name + '/' + srcFile.name + '?format=json')
 										.replyWithFile(200, __dirname + '/../../fixtures/hp/getFile.json')
@@ -265,8 +269,9 @@ describe('pkgcloud/openstack/storage/', function () {
 										.reply(200);
 
 									client.getFile(srcContainer.name, srcFile.name, function (err, file) {
-										if (err) done(err);
-										else {
+										if (err) {
+											done(err);
+										} else {
 											file.copy({
 												sourceContainer: res.sourceContainer,
 												sourceFile: srcFile.object ? file : srcFile.name,
