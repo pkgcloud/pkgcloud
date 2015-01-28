@@ -13,44 +13,44 @@ var authenticate = function(hockInstance) {
 	hockInstance
 		.post('/v2.0/tokens', {
 			auth: {
-				'apiAccessKeyCredentials': {
+				apiAccessKeyCredentials: {
 					accessKey: 'MOCK-USERNAME',
 					secretKey: 'MOCK-API-KEY'
 				}
 			}
 		})
 		.reply(200, {
-			"access": {
-				"token": {
-					"expires": "2016-12-26T18:25:46Z",
-					"id": "4bc7c5dabf3e4a49918683437d386b8a",
-					"tenant": {
-						"enabled": true,
-						"id": "5ACED3DC3AA740ABAA41711243CC6949",
-						"name": "MOCK-USERNAME",
-						"description": "MOCK-USERNAME"
+			access: {
+				token: {
+					expires: '2016-12-26T18:25:46Z',
+					id: '4bc7c5dabf3e4a49918683437d386b8a',
+					tenant: {
+						enabled: true,
+						id: '5ACED3DC3AA740ABAA41711243CC6949',
+						name: 'MOCK-USERNAME',
+						description: 'MOCK-USERNAME'
 					}
 				},
-				"serviceCatalog": [
+				serviceCatalog: [
 					{
-						"endpoints": [
+						endpoints: [
 							{
-								"region": "region-a.geo-1",
-								"tenantId": "HPCloudFS_00aa00aa",
-								"publicURL": "http://localhost:12345/v1/HPCloudFS_00aa00aa",
-								"internalURL": "https://snet-storage101.ord1.clouddrive.com/v1/HPCloudFS_00aa00aa"
+								region: 'region-a.geo-1',
+								tenantId: 'HPCloudFS_00aa00aa',
+								publicURL: 'http://localhost:12345/v1/HPCloudFS_00aa00aa',
+								internalURL: 'https://snet-storage101.ord1.clouddrive.com/v1/HPCloudFS_00aa00aa'
 							}
 						],
-						"name": "swift",
-						"type": "object-store"
+						name: 'swift',
+						type: 'object-store'
 					}
 				],
-				"user": {
-					"username": "MOCK-USERNAME",
-					"roles_links": [],
-					"id": "bf3b85477d06430c8044d5b2e5e6dc5f",
-					"roles": [],
-					"name": "MOCK-USERNAME"
+				user: {
+					username: 'MOCK-USERNAME',
+					roles_links: [],
+					id: 'bf3b85477d06430c8044d5b2e5e6dc5f',
+					roles: [],
+					name: 'MOCK-USERNAME'
 				}
 			}
 		});
@@ -101,13 +101,13 @@ describe('pkgcloud/openstack/storage/', function () {
 					})
 					.reply(200);
 
-				client.getFile("pkgcloud-test-container-1", 'pkgcloud-test-file-1', function (err, file) {
+				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
 					if (err) done(err);
 					else {
 						file.copy({
-							sourceContainer: "pkgcloud-test-container-1",
+							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
-							destinationContainer: "pkgcloud-test-container-1",
+							destinationContainer: 'pkgcloud-test-container-1',
 							destinationFile: 'pkgcloud-test-file-2'
 						}, done);
 					}
@@ -127,7 +127,7 @@ describe('pkgcloud/openstack/storage/', function () {
 					.reply(200);
 
 				async.waterfall([
-					_.bind(client.getContainer, client, "pkgcloud-test-container-1"),
+					_.bind(client.getContainer, client, 'pkgcloud-test-container-1'),
 					function(container, next) {
 						client.getFile(container, 'pkgcloud-test-file-1', function (err, file) {
 							if (err) done(err);
@@ -151,17 +151,17 @@ describe('pkgcloud/openstack/storage/', function () {
 					.replyWithFile(200, __dirname + '/../../fixtures/hp/getFile.json')
 					.copy('/v1/HPCloudFS_00aa00aa/pkgcloud-test-container-1/pkgcloud-test-file-1', {}, {
 						destination: '/pkgcloud-test-container-1/pkgcloud-test-file-2',
-						'x-delete-after': "1209600"
+						'x-delete-after': '1209600'
 					})
 					.reply(200);
 
-				client.getFile("pkgcloud-test-container-1", 'pkgcloud-test-file-1', function (err, file) {
+				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
 					if (err) done(err);
 					else {
 						file.copy({
-							sourceContainer: "pkgcloud-test-container-1",
+							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
-							destinationContainer: "pkgcloud-test-container-1",
+							destinationContainer: 'pkgcloud-test-container-1',
 							destinationFile: 'pkgcloud-test-file-2',
 							headers: { 'x-delete-after': 1209600 }
 						}, done);
@@ -179,13 +179,13 @@ describe('pkgcloud/openstack/storage/', function () {
 					})
 					.reply(200);
 
-				client.getFile("pkgcloud-test-container-1", 'pkgcloud-test-file-1', function (err, file) {
+				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
 					if (err) done(err);
 					else {
 						file.copy({
-							sourceContainer: "pkgcloud-test-container-1",
+							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
-							destinationContainer: "pkgcloud-test-container-2",
+							destinationContainer: 'pkgcloud-test-container-2',
 							destinationFile: 'pkgcloud-test-file-2'
 						}, done);
 					}
@@ -202,22 +202,22 @@ describe('pkgcloud/openstack/storage/', function () {
 					})
 					.reply(200);
 
-				client.getFile("pkgcloud-test-container-1", 'pkgcloud-test-file-1', function (err, file) {
+				client.getFile('pkgcloud-test-container-1', 'pkgcloud-test-file-1', function (err, file) {
 					if (err) done(err);
 					else {
 						file.copy({
-							sourceContainer: "pkgcloud-test-container-1",
+							sourceContainer: 'pkgcloud-test-container-1',
 							sourceFile: 'pkgcloud-test-file-1',
-							destinationContainer: "pkgcloud-test-container-2"
+							destinationContainer: 'pkgcloud-test-container-2'
 						}, done);
 					}
 				});
 			});
 
 			//testing all permutations of containers and source files as objects and strings
-			_.each([{ name: "container-1", object: true }, { name: "container-1", object: false }], function(srcContainer) {
-				_.each([{ name: "container-2", object: true }, { name: "container-2", object: false }], function(dstContainer) {
-					_.each([ { name: "file-1", object: true }, { name: "file-1", object: false }], function(srcFile) {
+			_.each([{ name: 'container-1', object: true }, { name: 'container-1', object: false }], function(srcContainer) {
+				_.each([{ name: 'container-2', object: true }, { name: 'container-2', object: false }], function(dstContainer) {
+					_.each([ { name: 'file-1', object: true }, { name: 'file-1', object: false }], function(srcFile) {
 
 						var name = 'should copy from ';
 						name += srcContainer.object ? 'object src container ' : 'string src container ';
