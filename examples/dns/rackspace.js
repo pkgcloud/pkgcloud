@@ -1,5 +1,4 @@
-var pkgcloud = require('../../lib/pkgcloud'),
-    _		 = require('underscore');
+var pkgcloud = require('../../lib/pkgcloud');
 
 var client = pkgcloud.dns.createClient({
     provider: 'rackspace',
@@ -18,7 +17,7 @@ client.getZones(function (err, zones) {
     return;
   }
 
-  _.each(zones, function (zone) {
+  zones.forEach(function (zone) {
     console.log(zone.id + ' ' + zone.name);
   });
 
@@ -60,7 +59,7 @@ client.getZones({ name: 'example.org' }, function (err, zones) {
         return;
       }
 
-      _.each(records, function (record){
+      records.forEach(function (record){
         console.log(record.toJSON());
       });
     });
