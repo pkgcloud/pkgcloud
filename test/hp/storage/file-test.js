@@ -1,8 +1,8 @@
 var helpers = require('../../helpers'),
-  async = require('async'),
-  http = require('http'),
-  hock = require('hock'),
-  _ = require('underscore');
+    async = require('async'),
+    http = require('http'),
+    hock = require('hock'),
+    _ = require('underscore');
 
 var authenticate = function (hockInstance) {
   hockInstance
