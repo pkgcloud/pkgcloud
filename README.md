@@ -46,6 +46,21 @@ Currently there are six service types which are handled by pkgcloud:
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
 
+### User Agent
+
+By default, all pkgcloud HTTP requests will have a user agent with the library and version: `nodejs-pkgcloud/x.y.z` where `x.y.z` is the current version.
+
+You can get this from a client at any time by calling `client.getUserAgent();`. Some providers may have an additional suffix as a function of the underlying HTTP stacks.
+
+You can also set a custom User Agent prefix:
+
+```javascript
+client.setCustomUserAgent('my-app/1.2.3');
+
+// returns "my-app/1.2.3 nodejs-pkgcloud/1.1.0"
+client.getUserAgent();
+```
+
 <a name="basic-apis"></a>
 ### Basic APIs for pkgcloud
 
