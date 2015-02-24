@@ -5,9 +5,10 @@
  *
  */
 
-var should = require('should'),
-  pkgcloud = require('../../../lib/pkgcloud'),
+var pkgcloud = require('../../../lib/pkgcloud'),
   Client = new require('../../../lib/pkgcloud/core/base/client').Client;
+
+require('should');
 
 describe('pkgcloud/core/base/client/useragent', function () {
   describe('getUserAgent tests', function () {
