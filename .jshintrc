@@ -1,4 +1,5 @@
 {
+  "predef"        : ["-context"],
   "maxerr"        : 50,       // {int} Maximum error before stopping
 
   // Enforcing
