@@ -1,7 +1,7 @@
 /*
 * image-test.js: Tests for pkgcloud Rackspace compute image requests
 *
-* (C) 2010-2012 Nodejitsu Inc.
+* (C) 2010-2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 * MIT LICENSE
 *
 */
@@ -94,7 +94,7 @@ describe('pkgcloud/rackspace/compute/images', function () {
         done();
       });
     });
-    
+
     after(function(done) {
 
       if (mock) {

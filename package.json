@@ -2,15 +2,15 @@
   "name": "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
   "version": "1.1.0",
-  "author": "Nodejitsu Inc <info@nodejitsu.com>",
+  "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
-    {
-      "name": "Charlie Robbins",
-      "email": "charlie@nodejitsu.com"
-    },
     {
       "name": "Nuno Job",
       "email": "nuno@nodejitsu.com"
+    },
+    {
+      "name": "Maciej Malecki",
+      "email": "me@mmalecki.com"
     },
     {
       "name": "Daniel Aristizabal",
@@ -19,6 +19,10 @@
     {
       "name": "Ken Perkins",
       "email": "ken.perkins@rackspace.com"
+    },
+    {
+      "name": "Ross Kukulinski",
+      "email": "ross@getyodlr.com"
     }
   ],
   "repository": {
