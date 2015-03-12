@@ -63,7 +63,7 @@ describe('pkgcloud/openstack/compute/server[openstack]', function() {
       
       done();
     });
-	 });
+  });
 
   it('the server.rebuildServer() method with image object should rebuild a server instance', function (done) {
     if (mock) {
@@ -82,7 +82,7 @@ describe('pkgcloud/openstack/compute/server[openstack]', function() {
       
       done();
     });
-	 });
+  });
 
   it('the server.rebuildServer() method with options should rebuild a server instance', function (done) {
     if (mock) {
@@ -104,7 +104,7 @@ describe('pkgcloud/openstack/compute/server[openstack]', function() {
       
       done();
     });
-	 });
+  });
 
   after(function (done) {
     if (!mock) {
@@ -123,45 +123,45 @@ describe('pkgcloud/openstack/compute/server[openstack]', function() {
 });
 
 setupRebuildServerWithImageIdMock = function(servers) {
-		servers.authServer
-		  .post('/v2.0/tokens', {
-			   auth: {
-			     passwordCredentials: {
-				      username: 'MOCK-USERNAME',
-				      password: 'MOCK-PASSWORD'
-			     }
-			   }
-		  })
-		  .replyWithFile(200, __dirname + '/../../../fixtures/openstack/initialToken.json')
-		  .get('/v2.0/tenants')
-		  .replyWithFile(200, __dirname + '/../../../fixtures/openstack/tenantId.json')
-		  .post('/v2.0/tokens', {
-			   auth: {
-			     passwordCredentials: {
-				      username: 'MOCK-USERNAME',
-				      password: 'MOCK-PASSWORD'
-			     },
-			     tenantId: '72e90ecb69c44d0296072ea39e537041'
-			   }
-		  })
-		  .reply(200, helpers.getOpenstackAuthResponse());
+  servers.authServer
+    .post('/v2.0/tokens', {
+      auth: {
+        passwordCredentials: {
+          username: 'MOCK-USERNAME',
+          password: 'MOCK-PASSWORD'
+        }
+      }
+    })
+    .replyWithFile(200, __dirname + '/../../../fixtures/openstack/initialToken.json')
+    .get('/v2.0/tenants')
+    .replyWithFile(200, __dirname + '/../../../fixtures/openstack/tenantId.json')
+    .post('/v2.0/tokens', {
+      auth: {
+        passwordCredentials: {
+          username: 'MOCK-USERNAME',
+          password: 'MOCK-PASSWORD'
+        },
+        tenantId: '72e90ecb69c44d0296072ea39e537041'
+      }
+    })
+    .reply(200, helpers.getOpenstackAuthResponse());
   
-		servers.server
-		  .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
+  servers.server
+    .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
           { 'rebuild': { 'imageRef': 'd42f821e-c2d1-4796-9f07-af5ed7912d0e' } })
-		  .reply(202, '');
+    .reply(202, '');
 };
 
 setupRebuildServerWithImageObjMock = function(servers) {
   servers.server
     .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
           { 'rebuild': { 'imageRef': 'd42f821e-c2d1-4796-9f07-af5ed7912d0e' } })
-		  .reply(202, '');
+    .reply(202, '');
 };
 
 setupRebuildServerWithOptionsMock = function(servers) {
   servers.server
     .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
           { 'rebuild': { 'adminPass': 'foobar', 'imageRef': 'd42f821e-c2d1-4796-9f07-af5ed7912d0e' } })
-		  .reply(202, '');
+    .reply(202, '');
 };
