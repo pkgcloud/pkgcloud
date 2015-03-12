@@ -1,7 +1,7 @@
 /*
 * databases-redis-test.js: Tests for IrisCouch Redis database service
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 * MIT LICENSE
 *
 */
@@ -33,7 +33,7 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
   it('the create() method with correct options should respond correctly', function(done) {
     var subdomain = (mock ? 'nodejitsudb43639' : 'nodejitsudb' + Math.floor(Math.random() * 100000));
     context.tempPassword = (mock ? 'sTTi:lh9vCF[' : randomPassword(12).replace('\\', ''));
-    
+
     if (mock) {
       hockInstance
         .post('/hosting_public', helpers.loadFixture('iriscouch/database-redis.json'))
@@ -42,7 +42,7 @@ describe('pkgcloud/iriscouch/databases-redis', function () {
           rev: '1-63cf360ebc115cdc8a709a910fdef6d7'
         });
     }
-    
+
     client.create({
       subdomain: subdomain,
       first_name: 'Marak',

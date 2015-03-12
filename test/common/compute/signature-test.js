@@ -1,7 +1,7 @@
 /*
  * signature-test.js: Test that shared methods meet some expectations for arguments.
  *
- * (C) 2013 Nodejitsu Inc.
+ * (C) 2013 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
  *
  */
 
