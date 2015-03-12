@@ -94,7 +94,6 @@ describe('pkgcloud/openstack/compute/server[openstack]', function() {
 
     var options = {
       image: 'd42f821e-c2d1-4796-9f07-af5ed7912d0e',
-      flavor: '2',
       adminPass: 'foobar'
     };
     client.rebuildServer('a2e90ecb69c44d0296072ea39e53704a', options, function (err) {
@@ -163,6 +162,6 @@ setupRebuildServerWithImageObjMock = function(servers) {
 setupRebuildServerWithOptionsMock = function(servers) {
   servers.server
     .post('/v2/72e90ecb69c44d0296072ea39e537041/servers/a2e90ecb69c44d0296072ea39e53704a/action',
-          { 'rebuild': { 'adminPass': 'foobar', 'imageRef': 'd42f821e-c2d1-4796-9f07-af5ed7912d0e', 'flavorRef': '2' } })
+          { 'rebuild': { 'adminPass': 'foobar', 'imageRef': 'd42f821e-c2d1-4796-9f07-af5ed7912d0e' } })
 		  .reply(202, '');
 };

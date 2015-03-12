@@ -72,7 +72,6 @@ Options include:
 ```js
 {
   image: '45a01744-2bcf-4a23-ae88-63317f768a2f', // required; image ID or instance of pkgcloud.core.compute.Image
-  flavor: '2', // optional; flavor ID or instance of pkgcloud.core.compute.Flavor
   accessIPv4: '123.45.67.89' // optional; IPv4 address of server
   accessIPv6: 'f0::09', // optional; IPv6 address of server
   adminPass: 'foobar', // optional; administrator password for the server
