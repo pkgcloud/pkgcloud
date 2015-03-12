@@ -45,6 +45,27 @@ Returns the stack in the callback `f(err, stack)`
 #### client.getStack(stack, callback)
 Retrieves the provided stack or stackId from the service. Callback has the signature `f(err, stack)`.
 
+Result stack-object includes following fields
+```js
+{
+  id: ,
+  name: ,
+  status: ,
+  description: ,
+  templateDescription: ,
+  statusReason: ,
+  owner: ,
+  disableRollback: ,
+  parameters: ,
+  capabilities: ,
+  notificationTopics: ,
+  timeout: ,
+  createdAt: ,
+  updatedAt: ,
+  outputs:  // Outputs field has value only if outputs are defined in template and the stack has been instantiated.  
+}
+```
+
 #### client.previewStack(details, callback)
 Identical to the `client.createStack()` call, except it only previews the creation, instead of actually provisioning
 the stack.
