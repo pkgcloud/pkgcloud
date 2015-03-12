@@ -95,8 +95,15 @@ Get the template for a provided stack. Will callback with `f(err, template)`.
 Get the resource for a provided stack and resource or resourceName in the callback `f(err,
 resource)`
 
-#### client.getResources(stack, callback)
+#### client.getResources(stack, [options], callback)
 Get the resources for a provided stack. Callback is `f(err, resources)`.
+
+Options are as follows:
+```js
+{
+  nestedDepth: 3 // include resources from nested stacks up to nestedDepth levels of recursion
+}
+```
 
 #### client.getResourceTypes(callback)
 Get a list of valid resource types. Callback is `f(err, resourceTypes)`.
