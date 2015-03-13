@@ -62,6 +62,27 @@ Options include:
 ```
 Returns callback with a confirmation
 
+#### client.rebuildServer(server, options, callback)
+Rebuilds the specifed server with options
+
+Options include:
+
+```js
+{
+  image: '45a01744-2bcf-4a23-ae88-63317f768a2f', // required; image ID or instance of pkgcloud.core.compute.Image
+  accessIPv4: '123.45.67.89' // optional; IPv4 address of server
+  accessIPv6: 'f0::09', // optional; IPv6 address of server
+  adminPass: 'foobar', // optional; administrator password for the server
+  metadata: { group: 'webservers' }, // optional; metadata key/value pairs
+  personality: [ { path: '/etc/banner.txt', contents: 'ICAgICAgDQo' } ], // optional; personality files - path and contents
+  'OS-DCF:diskConfig': 'AUTO' // optional; disk configuration value ("AUTO" | "MANUAL")  
+}
+```
+Returns callback with a confirmation
+
+**Note about backwards compatiblity:**
+For backwards compatibility, it is also possible to pass an image ID or instance of `pkgcloud.core.compute.Image` as the value of the `options` argument.
+
 #### client.getVersion(callback)
 
 Get the current version of the api returned in a callback `f(err, version)`
