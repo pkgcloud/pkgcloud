@@ -1,7 +1,7 @@
 /*
 * databases-test.js: Tests for MongoLab databases service
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 * MIT LICENSE
 *
 */
@@ -117,7 +117,7 @@ describe('pkgcloud/mongolab/databases', function () {
     });
 
     it('with numbers should respond with success', function(done) {
-      
+
       if (mock) {
         hockInstance
           .post('/api/1/partners/nodejitsu/accounts', {
@@ -129,7 +129,7 @@ describe('pkgcloud/mongolab/databases', function () {
           })
           .reply(200, helpers.loadFixture('mongolab/customUser.json'));
       }
-      
+
       client.createAccount({
         name: 'custompassword',
         email: 'custom@password.com',
@@ -149,7 +149,7 @@ describe('pkgcloud/mongolab/databases', function () {
   });
 
   it('the getAccounts() method should respond with all accounts', function(done) {
-    
+
     if (mock) {
       hockInstance
         .get('/api/1/partners/nodejitsu/accounts')
@@ -170,7 +170,7 @@ describe('pkgcloud/mongolab/databases', function () {
       done();
     });
   });
-  
+
   it('the getAccount() method should return the matching account', function(done) {
 
     if (mock) {
@@ -194,7 +194,7 @@ describe('pkgcloud/mongolab/databases', function () {
       hockInstance && hockInstance.done();
       done();
     });
-    
+
   });
 
   it('the create() method with correct options should respond correctly', function (done) {
@@ -266,7 +266,7 @@ describe('pkgcloud/mongolab/databases', function () {
         databases[0].should.be.a.Object;
         databases[0].name.should.equal(context.account.username + '_testDatabase');
         context.databaseName = databases[0].name;
-        
+
         hockInstance && hockInstance.done();
         done();
       });
