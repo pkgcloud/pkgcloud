@@ -56,7 +56,7 @@
   ],
   "dependencies": {
     "async": "0.9.x",
-    "aws-sdk": "~2.0.17",
+    "aws-sdk": "^2.1.17",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
     "filed": "0.1.x",
