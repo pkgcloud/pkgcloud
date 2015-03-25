@@ -3,7 +3,7 @@
 Creating a client is straight-forward:
 
 ``` js
-  var rackspace = pkgcloud.compute.createClient({
+  var rackspace = pkgcloud.network.createClient({
     provider: 'rackspace', // required
     username: 'your-user-name', // required
     apiKey: 'your-api-key', // required
