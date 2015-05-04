@@ -68,7 +68,8 @@ providers.filter(function (provider) {
 
             client.createInstance({
               name: 'test-instance',
-              flavor: flavor
+              flavor: flavor,
+              databases: ['db1']
             }, function(e, i) {
               err = e;
               instance = i;
@@ -487,7 +488,11 @@ setupCreateInstanceMock = function (hockInstance,  provider) {
         instance: {
           name: 'test-instance',
           flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-          databases: [],
+          databases: [{
+            name: 'db1',
+            character_set: 'utf8',
+            collate: 'utf8_general_ci'
+          }],
           volume: {
             size:1
           }
@@ -503,7 +508,11 @@ setupCreateInstanceMock = function (hockInstance,  provider) {
           instance: {
             name: 'test-instance',
             flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-            databases: [],
+            databases: [{
+              name: 'db1',
+              character_set: 'utf8',
+              collate: 'utf8_general_ci'
+            }],
             volume: {
               size:1
             }
@@ -519,7 +528,11 @@ setupCreateInstanceMock = function (hockInstance,  provider) {
           instance: {
             name: 'test-instance',
             flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-            databases: [],
+            databases: [{
+              name: 'db1',
+              character_set: 'utf8',
+              collate: 'utf8_general_ci'
+            }],
             volume: {
               size:1
             }
