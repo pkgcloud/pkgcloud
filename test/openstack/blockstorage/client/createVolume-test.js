@@ -42,8 +42,6 @@ describe('pkgcloud/openstack/blockstorage', function () {
   });
 
   it('the createVolume() method should allow an availability zone parameter', function (done) {
-    var m = mock ? .1 : 10;
-
     if (mock) {
       authHockInstance
         .post('/v2.0/tokens', {
