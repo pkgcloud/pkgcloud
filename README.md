@@ -550,7 +550,12 @@ Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchest
 ```
 
 ## Tests
-For run the tests you will need `mocha@1.9.x` or higher, please install it and then run:
+To run the tests you will need `mocha@1.9.x` or higher.  You may install all
+the requirements with:
+``` bash
+ $ npm install
+```
+Then run the tests:
 
 ``` bash
  $ npm test
