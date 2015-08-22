@@ -23,7 +23,7 @@
  */
 
 var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
-  _ = require('underscore'),
+  _ = require('lodash'),
   requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5',
   helpers;
 

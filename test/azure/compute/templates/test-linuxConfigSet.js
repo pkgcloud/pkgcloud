@@ -1,7 +1,7 @@
 //TODO: Make this a vows test
 
 var templates = require('../../../../lib/pkgcloud/azure/compute/templates/templates');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var params = {
   HOSTNAME: 'pkgcloud1',
