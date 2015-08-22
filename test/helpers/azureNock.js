@@ -194,8 +194,8 @@ exports.serverTest = function (nock, testHelpers) {
 serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
-    params = {NAME: name, STATUS: status};
+    params = {NAME: name, STATUS: status},
+    compiled = _.template(template);
 
-  var result = _.template(template, params);
-  return result;
+  return compiled(params);
 };

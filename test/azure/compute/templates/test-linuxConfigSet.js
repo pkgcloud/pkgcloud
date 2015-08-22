@@ -15,6 +15,7 @@ templates.load('linuxConfigSet.xml', function (err, template) {
     console.dir(err);
   } else {
 
-    console.log(_.template(template, params));
+    var compiled = _.template(template);
+    console.log(compiled(params));
   }
 });
