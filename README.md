@@ -567,14 +567,14 @@ To get started with a `pkgcloud.metering` client just create one:
 * [Openstack](docs/providers/openstack/metering.md)
 
 ### Meters
-* `client.getMeters(options, function (err, meters) { });
-* `client.getMeter(options, function (err, meter) { });
-* `client.createMeter(options, function (err, sample) { });
-* `client.getMeterStats(options, function (err, stats) { });
+* `client.getMeters(options, function (err, meters) { });`
+* `client.getMeter(options, function (err, meter) { });`
+* `client.createMeter(options, function (err, sample) { });`
+* `client.getMeterStats(options, function (err, stats) { });`
 
 ### samples
-* `client.getSamples(options, function (err, samples) { });
-* `ceilometerClient.getSample(sampleId, function (err, sample) { });
+* `client.getSamples(options, function (err, samples) { });`
+* `client.getSample(sampleId, function (err, sample) { });`
 
 
 ## Installation

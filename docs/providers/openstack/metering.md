@@ -20,6 +20,9 @@ Creating a client is straight-forward:
 
 ## Ceilometer (metering)
 
+**Note** *A lot of extra info on how to make queries etc. can be found on the ceilometer api help pages!
+http://docs.openstack.org/developer/ceilometer/webapi/v2.html
+
 ### Meters
 
 If you access the ceilometer API, one's always talking about the oldSample object used by the meter methods. This way if thinking has continued in this implementation to keep everything transparent.
