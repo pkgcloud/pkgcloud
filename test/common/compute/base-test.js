@@ -6,7 +6,6 @@
  */
 
 var should = require('should'),
-  qs = require('qs'),
   util = require('util'),
   async = require('async'),
   http = require('http'),
@@ -321,12 +320,8 @@ setupFlavorMock = function (client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
   }
   else if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
     servers.server
-      .get('/sizes?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/sizes')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/flavors.json');
   }
   else if (provider === 'hp') {
@@ -370,12 +365,8 @@ setupImagesMock = function (client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/azure/images.xml');
   }
   else if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
     servers.server
-      .get('/images?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/images?per_page=200&page=1')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/images.json');
   }
   else if (provider === 'hp') {
@@ -388,27 +379,18 @@ setupImagesMock = function (client, provider, servers) {
 
 setupServerMock = function (client, provider, servers) {
   if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
 
     servers.server
-      .get('/droplets/new?' + qs.stringify({
+      .post('/v2/droplets', {
         name: 'create-test-setWait',
-        region_id: 1,
-        size_id: 66,
-        image_id: 1601,
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+        region: 'nyc3',
+        size: '512mb',
+        image: 119192817
+      })
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server.json')
-      .get('/droplets/354526?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/droplets/3164494')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/not-active.json')
-      .get('/droplets/354526?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/droplets/3164494')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
   }
   else if (provider === 'rackspace') {
@@ -575,14 +557,8 @@ setupDestroyMock = function (client, provider, servers) {
       .reply(204);
   }
   else if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
-
     servers.server
-      .get('/droplets/354526/destroy?' + qs.stringify({
-        scrub_data: '1',
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
-      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/destroy-server.json');
+      .delete('/v2/droplets/3164494')
+      .replyWithFile(204);
   }
 };

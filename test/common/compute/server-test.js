@@ -5,8 +5,7 @@
 *
 */
 
-var qs = require('qs'),
-    should = require('should'),
+var should = require('should'),
     async = require('async'),
     helpers = require('../../helpers'),
     http = require('http'),
@@ -296,12 +295,8 @@ setupImagesMock = function (client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/azure/images.xml');
   }
   else if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
     servers.server
-      .get('/images?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/images?per_page=200&page=1')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/images.json');
   }
   else if (provider === 'hp') {
@@ -351,12 +346,8 @@ setupFlavorMock = function (client, provider, servers) {
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
   }
   else if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
     servers.server
-      .get('/sizes?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/sizes')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/flavors.json');
   }
   else if (provider === 'hp') {
@@ -368,22 +359,16 @@ setupFlavorMock = function (client, provider, servers) {
 
 setupServerMock = function (client, provider, servers) {
   if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
 
     servers.server
-      .get('/droplets/new?' + qs.stringify({
+      .post('/v2/droplets', {
         name: 'create-test-ids2',
-        region_id: 1,
-        size_id: 66,
-        image_id: 1601,
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+        region: 'nyc3',
+        size: '512mb',
+        image: 119192817
+      })
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server2.json')
-      .get('/droplets/354526?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/droplets/354526')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active2.json');
   }
   else if (provider === 'rackspace') {
@@ -524,12 +509,8 @@ setupGetServersMock = function (client, provider, servers) {
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'digitalocean') {
-    var account = require(__dirname + '/../../configs/mock/digitalocean');
     servers.server
-      .get('/droplets?' + qs.stringify({
-        client_id: account.clientId,
-        api_key: account.apiKey
-      }))
+      .get('/v2/droplets?per_page=200&page=1')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/list-servers.json');
   }
   else if (provider === 'hp') {
@@ -571,6 +552,11 @@ setupGetServerMock = function (client, provider, servers) {
       .reply(200, '<HostedServices xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>')
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
+  }
+  else if (provider === 'digitalocean') {
+    servers.server
+      .get('/v2/droplets/3164494')
+      .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
   }
   else if (provider === 'hp') {
     servers.server

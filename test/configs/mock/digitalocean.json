@@ -1,6 +1,5 @@
 {
-  "clientId":  "MOCK-ACCOUNT",
-  "apiKey":    "mock-api-key",
+  "token":    "mock-api-key",
   "protocol"   : "http://",
   "serversUrl" : "localhost:12345"
 }
