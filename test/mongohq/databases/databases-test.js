@@ -1,7 +1,7 @@
 /*
 * databases-test.js: Tests for MongoHQ databases service
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 * MIT LICENSE
 *
 */

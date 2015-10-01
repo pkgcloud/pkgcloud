@@ -2,15 +2,15 @@
   "name": "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
   "version": "1.2.0-alpha.0",
-  "author": "Nodejitsu Inc <info@nodejitsu.com>",
+  "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
-    {
-      "name": "Charlie Robbins",
-      "email": "charlie@nodejitsu.com"
-    },
     {
       "name": "Nuno Job",
       "email": "nuno@nodejitsu.com"
+    },
+    {
+      "name": "Maciej Malecki",
+      "email": "me@mmalecki.com"
     },
     {
       "name": "Daniel Aristizabal",
@@ -19,6 +19,10 @@
     {
       "name": "Ken Perkins",
       "email": "ken.perkins@rackspace.com"
+    },
+    {
+      "name": "Ross Kukulinski",
+      "email": "ross@getyodlr.com"
     }
   ],
   "repository": {
@@ -52,7 +56,7 @@
   ],
   "dependencies": {
     "async": "0.9.x",
-    "aws-sdk": "~2.0.17",
+    "aws-sdk": "^2.1.17",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
     "fast-json-patch": "0.5.x",
@@ -71,8 +75,8 @@
   "devDependencies": {
     "blanket": "^1.1.6",
     "coveralls": "^2.11.2",
-    "hock": "1.1.x",
-    "jshint": "2.x.x",
+    "hock": "~1.2.0",
+    "jshint": "~2.7.0",
     "mocha": "1.21.x",
     "mocha-lcov-reporter": "0.0.1",
     "should": "4.0.x"

@@ -1,7 +1,7 @@
 /*
  * base-test.js: Test that should be common to all providers.
  *
- * (C) 2013 Nodejitsu Inc.
+ * (C) 2013 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
  *
  */
 

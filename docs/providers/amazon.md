@@ -12,8 +12,8 @@ For all of the Amazon services, you create a client with the same options:
 ```Javascript
 var client = require('pkgcloud').compute.createClient({
    provider: 'amazon',
+   keyId: 'your-access-key-id', // access key id
    key: 'your-secret-key-id', // secret key
-   keyId: 'your-access-key-id' // access key id
    region: 'us-west-2' // region
 });
 ```
@@ -21,8 +21,8 @@ var client = require('pkgcloud').compute.createClient({
 ```Javascript
 var client = require('pkgcloud').storage.createClient({
    provider: 'amazon',
+   keyId: 'your-access-key-id', // access key id
    key: 'your-secret-key-id', // secret key
-   keyId: 'your-access-key-id' // access key id
    region: 'us-west-2' // region
 });
 ```

@@ -1,7 +1,7 @@
 /*
 * authentication-test.js: Tests for pkgcloud Rackspace storage authentication
 *
-* (C) 2010 Nodejitsu Inc.
+* (C) 2010 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 *
 */
 

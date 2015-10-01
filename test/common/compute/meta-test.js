@@ -1,7 +1,7 @@
 /*
 * meta-test.js: Openstack updateImageMeta() function test .
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 *
 */
 
@@ -85,9 +85,9 @@ providers.filter(function (provider) {
           server: hockInstance
         });
       }
-	
+
       var testMetadata = {os_type: 'windows'};
-	
+
       client.updateImageMeta(context.images[0].id, testMetadata, function (err, reply) {
         should.not.exist(err);
         should.exist(reply);

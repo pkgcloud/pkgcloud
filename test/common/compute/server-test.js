@@ -1,7 +1,7 @@
 /*
 * server-test.js: Test that should be common to all providers.
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 *
 */
 

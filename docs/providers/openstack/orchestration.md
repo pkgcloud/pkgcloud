@@ -45,6 +45,27 @@ Returns the stack in the callback `f(err, stack)`
 #### client.getStack(stack, callback)
 Retrieves the provided stack or stackId from the service. Callback has the signature `f(err, stack)`.
 
+Result stack-object includes following fields
+```js
+{
+  id: ,
+  name: ,
+  status: ,
+  description: ,
+  templateDescription: ,
+  statusReason: ,
+  owner: ,
+  disableRollback: ,
+  parameters: ,
+  capabilities: ,
+  notificationTopics: ,
+  timeout: ,
+  createdAt: ,
+  updatedAt: ,
+  outputs:  // Outputs field has value only if outputs are defined in template and the stack has been instantiated.  
+}
+```
+
 #### client.previewStack(details, callback)
 Identical to the `client.createStack()` call, except it only previews the creation, instead of actually provisioning
 the stack.
@@ -95,8 +116,15 @@ Get the template for a provided stack. Will callback with `f(err, template)`.
 Get the resource for a provided stack and resource or resourceName in the callback `f(err,
 resource)`
 
-#### client.getResources(stack, callback)
+#### client.getResources(stack, [options], callback)
 Get the resources for a provided stack. Callback is `f(err, resources)`.
+
+Options are as follows:
+```js
+{
+  nestedDepth: 3 // include resources from nested stacks up to nestedDepth levels of recursion
+}
+```
 
 #### client.getResourceTypes(callback)
 Get a list of valid resource types. Callback is `f(err, resourceTypes)`.

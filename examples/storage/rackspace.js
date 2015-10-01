@@ -1,6 +1,5 @@
 var fs = require('fs'),
-    pkgcloud = require('../../lib/pkgcloud'),
-    _ = require('underscore');
+    pkgcloud = require('../../lib/pkgcloud');
 
 var client = pkgcloud.storage.createClient({
   provider: 'rackspace',
@@ -37,7 +36,7 @@ client.getContainers(function (err, containers) {
     return;
   }
 
-  _.each(containers, function(container) {
+  containers.forEach(function(container) {
     console.log(container.name);
   });
 

@@ -19,7 +19,7 @@ var should = require('should'),
 var assertLinks, setupCreateInstanceMock, setupGetInstancesMock,
     setupGetDatabaseInstancesWithLimitMock, setupDestroyInstanceMock,
     setGetInstanceMock, setGetFlavorsMock, setupSetFlavorMock, setupResizeMock,
-    setupGetOneFlavorMock, setupRestartInstanceMock;
+    setupGetOneFlavorMock, setupRestartInstanceMock, setupEnableRootMock;
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
@@ -68,7 +68,8 @@ providers.filter(function (provider) {
 
             client.createInstance({
               name: 'test-instance',
-              flavor: flavor
+              flavor: flavor,
+              databases: ['db1']
             }, function(e, i) {
               err = e;
               instance = i;
@@ -428,6 +429,38 @@ providers.filter(function (provider) {
         });
       });
 
+      if (provider === 'rackspace' || provider === 'openstack') {
+        describe('the enableRootUser() method', function() {
+          it('with no instance should return error', function (done) {
+            if (mock) {
+              setupEnableRootMock(hockInstance, provider);
+            }
+            client.enableRootUser(testContext.Instance.id, function (err, body) {
+              if (err) {
+                return done(err);
+              }
+
+              should.exist(body);
+              body.should.have.property('user');
+              done();
+            });
+          });
+
+          it('with valid instance should work', function (done) {
+            client.listRootStatus(testContext.Instance.id, function (err, body) {
+              if (err) {
+                return done(err);
+              }
+
+              should.exist(body);
+              body.should.have.property('rootEnabled');
+              hockInstance && hockInstance.done();
+              done();
+            });
+          });
+        });
+      }
+
       describe('the restartInstance() method', function () {
         it('with no instance should return error', function (done) {
           client.restartInstance(function (err) {
@@ -487,7 +520,11 @@ setupCreateInstanceMock = function (hockInstance,  provider) {
         instance: {
           name: 'test-instance',
           flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-          databases: [],
+          databases: [{
+            name: 'db1',
+            character_set: 'utf8',
+            collate: 'utf8_general_ci'
+          }],
           volume: {
             size:1
           }
@@ -503,7 +540,11 @@ setupCreateInstanceMock = function (hockInstance,  provider) {
           instance: {
             name: 'test-instance',
             flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-            databases: [],
+            databases: [{
+              name: 'db1',
+              character_set: 'utf8',
+              collate: 'utf8_general_ci'
+            }],
             volume: {
               size:1
             }
@@ -519,7 +560,11 @@ setupCreateInstanceMock = function (hockInstance,  provider) {
           instance: {
             name: 'test-instance',
             flavorRef: 'https://ord.databases.api.rackspacecloud.com/v1.0/123456/flavors/1',
-            databases: [],
+            databases: [{
+              name: 'db1',
+              character_set: 'utf8',
+              collate: 'utf8_general_ci'
+            }],
             volume: {
               size:1
             }
@@ -748,5 +793,35 @@ setupRestartInstanceMock = function (hockInstance, provider) {
       .reply(200, helpers.loadFixture('hp/databaseInstances.json'))
       .post('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/action', { restart :{}})
       .reply(202);
+  }
+};
+
+setupEnableRootMock = function (hockInstance, provider) {
+  if (provider === 'rackspace') {
+    hockInstance
+      .post('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        user: {
+          name: 'root',
+          password: '12345'
+        }
+      })
+      .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        rootEnabled: true
+      });
+  } else if (provider === 'openstack') {
+    hockInstance
+      .post('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        user: {
+          name: 'root',
+          password: '12345'
+        }
+      })
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/root')
+      .reply(200, {
+        rootEnabled: true
+      });
   }
 };

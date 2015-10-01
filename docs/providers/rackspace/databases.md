@@ -91,3 +91,31 @@ A user object is defined as follows:
 
 **note**: If creating multiple users, the instance provided must be the same for
 both.
+
+#### client.listRootStatus(instance, callback)
+
+Checks if the root user is enabled for the passed instance.
+
+```js
+client.listRootStatus(instance, function (err, result) {
+  // handle err
+  console.log(result); // => { rootEnabled: true }
+});
+```
+
+#### client.enableRootUser(instance, callback)
+
+Enables the root user for the passed instance.
+
+```js
+client.enableRootUser(instance, function (err, result) {
+  // handle err
+  console.log(result);
+  // => {
+  // =>   user: {
+  // =>     name: 'root',
+  // =>     password: '<the generated password>'
+  // =>   }
+  // => }
+});
+```
