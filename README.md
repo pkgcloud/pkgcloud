@@ -18,6 +18,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [Load Balancers](#load-balancers----beta) *(beta)*
 * [Orchestration](#orchestration----beta) *(beta)*
 * [Network](#network----beta) *(beta)*
+* [Metering] (#metering----beta) *(beta)*
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
@@ -544,6 +545,39 @@ Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchest
 
 ### Templates
 * `client.validateTemplate(template, function (err, template) { })`
+
+
+## Metering -- Beta
+
+To get started with a `pkgcloud.metering` client just create one:
+
+``` js
+  var client = require('pkgcloud').metering.createClient({
+    //
+    // The name of the provider (e.g. "openstack")
+    //
+    provider: 'provider-name',
+
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Openstack](docs/providers/openstack/metering.md)
+
+### Meters
+* `client.getMeters(options, function (err, meters) { });`
+* `client.getMeter(options, function (err, meter) { });`
+* `client.createMeter(options, function (err, sample) { });`
+* `client.getMeterStats(options, function (err, stats) { });`
+
+### samples
+* `client.getSamples(options, function (err, samples) { });`
+* `client.getSample(sampleId, function (err, sample) { });`
+
 
 ## Installation
 
