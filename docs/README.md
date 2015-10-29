@@ -49,3 +49,5 @@ If a service does not have at least two providers, it is considered a *beta* int
 * **Networking** *(beta)*
   * [Openstack](providers/openstack/network.md)
   * [HP](providers/openstack/hp.md)
+* **Metering** *(beta)*
+  * [Openstack](providers/openstack/metering.md)
