@@ -56,7 +56,7 @@
   ],
   "dependencies": {
     "async": "0.9.x",
-    "aws-sdk": "^2.1.17",
+    "aws-sdk": "2.2.17",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
     "filed": "0.1.x",
@@ -72,7 +72,7 @@
     "xml2js": "0.1.x"
   },
   "devDependencies": {
-    "blanket": "^1.1.6",
+    "blanket": "1.1.9",
     "coveralls": "^2.11.2",
     "hock": "1.2.0",
     "jshint": "2.7.0",
