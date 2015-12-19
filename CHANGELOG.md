@@ -1,3 +1,6 @@
+## v1.2.0
+* Added Support for Openstack CDN (Poppy)
+
 ## v1.1.0
 * Added support for Google Cloud Storage
 * Added support for Rackspace Cloud Networks
