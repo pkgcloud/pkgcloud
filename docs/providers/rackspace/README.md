@@ -10,6 +10,7 @@ The Rackspace provider in pkgcloud supports the following services:
 * [**Orchestration**](orchestration.md) (Cloud Orchestration) *(beta)*
 * [**Load Balancers**](loadbalancer.md) (Cloud Load Balancers) *(beta)*
 * [**Network**](network.md) (Cloud Networks) *(beta)*
+* [**CDN**](cdn.md) (Rackspace CDN) *(beta)*
 
 ### Getting Started with Compute
 

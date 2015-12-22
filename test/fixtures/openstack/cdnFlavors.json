@@ -1,0 +1,24 @@
+{
+  "flavors": [
+    {
+      "id": "cdn",
+      "providers": [
+        {
+          "provider": "akamai",
+          "links": [
+            {
+              "href": "http://www.akamai.com",
+              "rel": "provider_url"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "href": "http://localhost:12345/v1.0/72e90ecb69c44d0296072ea39e537041/flavors/cdn",
+          "rel": "self"
+        }
+      ]
+    }
+  ]
+}

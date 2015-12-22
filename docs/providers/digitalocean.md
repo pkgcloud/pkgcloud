@@ -5,13 +5,12 @@
 <a name="using-compute"></a>
 ## Using Compute
 
-DigitalOcean requires a client ID and API key.
+DigitalOcean requires an API token.
 
 ```js
 var pkgcloud = require('pkgcloud');
 var digitalocean = pkgcloud.compute.createClient({
   provider: 'digitalocean',
-  clientId: '<client-id>',
-  apiKey: '<api-key>'
+  token: '<digitalocean-api-token>'
 });
 ```
