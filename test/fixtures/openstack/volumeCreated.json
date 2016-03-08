@@ -1,0 +1,29 @@
+{
+    "volume": {
+        "status": "available",
+        "attachments": [],
+        "links": [
+            {
+                "href": "http://localhost:8776/v2/72e90ecb69c44d0296072ea39e537041/volumes/93c2e2aa-7744-4fd6-a31a-80c4726b08d7",
+                "rel": "self"
+            },
+            {
+                "href": "http://localhost:8776/72e90ecb69c44d0296072ea39e537041/volumes/93c2e2aa-7744-4fd6-a31a-80c4726b08d7",
+                "rel": "bookmark"
+            }
+        ],
+        "availability_zone": "az1",
+        "bootable": "false",
+        "os-vol-host-attr:host": "ip-10-168-107-25",
+        "source_volid": null,
+        "snapshot_id": null,
+        "id": "93c2e2aa-7744-4fd6-a31a-80c4726b08d7",
+        "description": "description",
+        "name": "create-test-availability-zone",
+        "created_at": "2014-02-21T19:52:04.949734",
+        "volume_type": "None",
+        "os-vol-tenant-attr:tenant_id": "72e90ecb69c44d0296072ea39e537041",
+        "size": 1,
+        "metadata": {}
+    }
+}

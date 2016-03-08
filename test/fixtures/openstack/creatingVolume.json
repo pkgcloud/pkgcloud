@@ -1,0 +1,17 @@
+{
+    "volume": {
+        "status": "creating",
+        "name": "create-test-availability-zone",
+        "attachments": [],
+        "availability_zone": "az1",
+        "bootable": "false",
+        "created_at": "2014-02-21T19:52:04.949734",
+        "description": "description",
+        "volume_type": "None",
+        "snapshot_id": null,
+        "source_volid": null,
+        "metadata": {},
+        "id": "93c2e2aa-7744-4fd6-a31a-80c4726b08d7",
+        "size": 30
+    }
+}
