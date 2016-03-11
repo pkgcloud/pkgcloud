@@ -73,7 +73,7 @@
     "xml2js": "0.1.x"
   },
   "devDependencies": {
-    "blanket": "^1.1.6",
+    "blanket": "1.1.9",
     "coveralls": "^2.11.2",
     "hock": "~1.2.0",
     "jshint": "~2.7.0",
