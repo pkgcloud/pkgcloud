@@ -599,7 +599,7 @@ setupUploadStreamMock = function (provider, client, servers) {
       .put('/pkgcloud-test-container/test-file.txt?comp=blocklist', '<?xml version="1.0" encoding="utf-8"?><BlockList><Latest>block000000000000000</Latest></BlockList>')
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
       .get('/pkgcloud-test-container/test-file.txt')
-      .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
+      .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
   }
   else if (provider === 'hp') {
     servers.server
@@ -654,7 +654,7 @@ setupGetFileMock = function (provider, client, servers) {
   else if (provider === 'azure') {
     servers.server
       .get('/pkgcloud-test-container/test-file.txt')
-      .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
+      .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
   }
   else if (provider === 'google') {
     servers.server
