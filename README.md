@@ -387,7 +387,7 @@ To get started with a `pkgcloud.blockstorage` client just create one:
 #### Providers
 
 * [Rackspace](docs/providers/rackspace/blockstorage.md)
-* [Rackspace](docs/providers/openstack/blockstorage.md)
+* [Openstack](docs/providers/openstack/blockstorage.md)
 
 Each instance of `pkgcloud.blockstorage.Client` returned from `pkgcloud.blockstorage.createClient` has a set of uniform APIs:
 
