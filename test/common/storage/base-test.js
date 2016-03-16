@@ -303,7 +303,7 @@ providers.filter(function (provider) {
 
         context.file = {
           name: 'bigfile.raw',
-          size: bigFileSize
+          size: bigfileSize
         };
 
         done();
