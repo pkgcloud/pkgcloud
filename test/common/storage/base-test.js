@@ -316,11 +316,6 @@ providers.filter(function (provider) {
     it('the download() method with large file should succeed', function (done) {
 
       if (mock) {
-        if ((provider === 'amazon') || ((provider === 'google'))) {
-          // TODO Amazon and Google both fail for different reasons, removing for now
-          return done();
-        }
-
         setupRawDownloadStreamMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -330,34 +325,47 @@ providers.filter(function (provider) {
       var stream = client.download({
         container: context.container,
         remote: context.file.name
-      }, function (err, file) {
-
+      }, function (err) {
         should.not.exist(err);
-        should.exist(file);
-        file.should.be.instanceOf(File);
-
-        file.name.should.equal(context.file.name);
-        file.size.should.equal(context.fileContentsSize);
-
-        context.fileContents = Buffer.concat(context.fileContents,
-          file.size);
-
-        // Compare byte by byte
-        var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
-        for (var i = 0; i < file.size; i++) {
-          assert.equal(context.fileContents[i], original[i]);
-        }
-
-        done();
       });
 
       context.fileContents = [];
       context.fileContentsSize = 0;
+
       stream.on('data', function (data) {
         context.fileContents.push(data);
         context.fileContentsSize += data.length;
       });
-      stream.end();
+
+      stream.on('end', function () {
+        context.fileContentsSize.should.equal(bigfileSize);
+        context.fileContents = Buffer.concat(context.fileContents, context.fileContentsSize);
+
+        // Compare byte by byte
+        var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
+        for (var i = 0; i < original.length; i++) {
+          assert.equal(context.fileContents[i], original[i]);
+        }
+
+        hockInstance && hockInstance.done();
+        done();
+      });
+
+      stream.on('error', function (err) {
+        should.not.exist(err);
+      });
+
+      if (provider === 'amazon') {
+        var devnull = new require('stream').Writable({
+          write: function(chunk, encoding, next) {
+            next();
+          }
+        });
+        stream.pipe(devnull);
+      }
+      else {
+        stream.end();
+      }
     });
 
     it('the destroyContainer() method with container should succeed', function (done) {
