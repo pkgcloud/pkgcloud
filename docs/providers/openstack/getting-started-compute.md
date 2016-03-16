@@ -28,7 +28,7 @@ var client = pkgcloud.compute.createClient({
   provider: 'openstack',
   username: 'your-user-name',
   password: 'your-password',
-  region: 'RegionOne' //default for DevStack, might be different on other OpenStack distributions
+  region: 'RegionOne', //default for DevStack, might be different on other OpenStack distributions
   authUrl: 'https://your-identity-service'
 });
 
