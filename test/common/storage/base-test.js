@@ -356,10 +356,10 @@ providers.filter(function (provider) {
       });
 
       if (provider === 'amazon') {
-        var devnull = new require('stream').Writable()
+        var devnull = new require('stream').Writable();
         devnull._write = function(chunk, encoding, next) {
           next();
-        }
+        };
 
         stream.pipe(devnull);
       }
