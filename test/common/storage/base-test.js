@@ -23,10 +23,11 @@ var fs = require('fs'),
     mock = !!process.env.MOCK,
     pkgcloud = require('../../../lib/pkgcloud'),
     fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
+    bigfileSize = fs.readFileSync(helpers.fixturePath('bigfile.raw')).length;
 
 // Declaring variables for helper functions defined later
 var setupCreateContainerMock, setupGetContainersMock, setupUploadStreamMock,
-    setupDownloadStreamMock, setupGetFileMock, setupGetFilesMock,
+    setupDownloadStreamMock, setupRawDownloadStreamMock, setupGetFileMock, setupGetFilesMock,
     setupRemoveFileMock, setupDestroyContainerMock, setupGetContainers2Mock;
 
 providers.filter(function (provider) {
@@ -302,7 +303,7 @@ providers.filter(function (provider) {
 
         context.file = {
           name: 'bigfile.raw',
-          size: fs.readFileSync(helpers.fixturePath('bigfile.raw')).length
+          size: bigFileSize
         };
 
         done();
@@ -315,8 +316,15 @@ providers.filter(function (provider) {
     it('the download() method with large file should succeed', function (done) {
 
       if (mock) {
-        return done();
-        // TODO mock these out
+        if ((provider === 'amazon') || ((provider === 'google'))) {
+          // TODO Amazon and Google both fail for different reasons, removing for now
+          return done();
+        }
+
+        setupRawDownloadStreamMock(provider, client, {
+          server: hockInstance,
+          authServer: authHockInstance
+        });
       }
 
       var stream = client.download({
@@ -637,6 +645,36 @@ setupDownloadStreamMock = function (provider, client, servers) {
     servers.server
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, { 'content-length': fillerama.length + 2});
+  }
+};
+
+setupRawDownloadStreamMock = function (provider, client, servers) {
+  if (provider === 'rackspace' || provider === 'openstack') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/bigfile.raw', {'content-length': bigfileSize} );
+  }
+  else if (provider === 'amazon') {
+    servers.server
+      .get('/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/bigfile.raw', {'content-type': 'binary/octet-stream', 'content-length': bigfileSize} );
+  }
+  else if (provider === 'azure') {
+    servers.server
+      .get('/pkgcloud-test-container/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/bigfile.raw', helpers.azureGetFileResponseHeaders({'content-length': bigfileSize}));
+  }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
+      .reply(200, { mediaLink: 'http://localhost:12345/mediaLink' })
+      .get('/mediaLink')
+      .replyWithFile(200, __dirname + '/../../fixtures/bigfile.raw', {'content-length': bigfileSize} );
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/bigfile.raw', {'content-length': bigfileSize} );
   }
 };
 
