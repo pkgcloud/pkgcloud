@@ -25,10 +25,23 @@ var fs = require('fs'),
     fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8'),
     bigfileSize = fs.readFileSync(helpers.fixturePath('bigfile.raw')).length;
 
+// GitHub gets crabby with files over 100Mb, for good reason.  So we'll just generate
+// the really big (300Mb) test file.  The reason we need the file is that hock explodes
+// if you try to respond with a buffer that big, so we need to let hock respond with
+// a file. 
+var reallybigfileSize = 300000000;
+var fd =  fs.openSync(helpers.fixturePath('reallybigfile.raw'), 'a+');
+var buff = new Buffer(reallybigfileSize);
+for (var i = 0; i < buff.length; i++) {
+  buff[i] = i % 256;
+}
+fs.write(fd, buff, 0, buff.length, 0);
+
 // Declaring variables for helper functions defined later
 var setupCreateContainerMock, setupGetContainersMock, setupUploadStreamMock,
-    setupDownloadStreamMock, setupRawDownloadStreamMock, setupGetFileMock, setupGetFilesMock,
-    setupRemoveFileMock, setupDestroyContainerMock, setupGetContainers2Mock;
+    setupDownloadStreamMock, setupRawDownloadStreamMock, setupLargeRawDownloadStreamMock,
+    setupGetFileMock, setupGetFilesMock, setupRemoveFileMock, setupDestroyContainerMock, 
+    setupGetContainers2Mock;
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].storage;
@@ -343,6 +356,61 @@ providers.filter(function (provider) {
 
         // Compare byte by byte
         var original = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
+        for (var i = 0; i < original.length; i++) {
+          assert.equal(context.fileContents[i], original[i]);
+        }
+
+        hockInstance && hockInstance.done();
+        done();
+      });
+
+      stream.on('error', function (err) {
+        should.not.exist(err);
+      });
+
+      if (provider === 'amazon') {
+        var devnull = new require('stream').Writable();
+        devnull._write = function(chunk, encoding, next) {
+          next();
+        };
+
+        stream.pipe(devnull);
+      }
+      else {
+        stream.end();
+      }
+    });
+
+    it('the download() method with really large file should succeed', function (done) {
+
+      if (mock) {
+        setupLargeRawDownloadStreamMock(provider, client, {
+          server: hockInstance,
+          authServer: authHockInstance
+        });
+      }
+
+      var stream = client.download({
+        container: context.container,
+        remote: context.file.name
+      }, function (err) {
+        should.not.exist(err);
+      });
+
+      context.fileContents = [];
+      context.fileContentsSize = 0;
+
+      stream.on('data', function (data) {
+        context.fileContents.push(data);
+        context.fileContentsSize += data.length;
+      });
+
+      stream.on('end', function () {
+        context.fileContentsSize.should.equal(reallybigfileSize);
+        context.fileContents = Buffer.concat(context.fileContents, context.fileContentsSize);
+
+        // Compare byte by byte
+        var original = fs.readFileSync(helpers.fixturePath('reallybigfile.raw'));
         for (var i = 0; i < original.length; i++) {
           assert.equal(context.fileContents[i], original[i]);
         }
@@ -683,6 +751,36 @@ setupRawDownloadStreamMock = function (provider, client, servers) {
     servers.server
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .replyWithFile(200, __dirname + '/../../fixtures/bigfile.raw', {'content-length': bigfileSize} );
+  }
+};
+
+setupLargeRawDownloadStreamMock = function (provider, client, servers) {
+  if (provider === 'rackspace' || provider === 'openstack') {
+    servers.server
+      .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/reallybigfile.raw', {'content-length': reallybigfileSize} );
+  }
+  else if (provider === 'amazon') {
+    servers.server
+      .get('/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/reallybigfile.raw', {'content-type': 'binary/octet-stream', 'content-length': reallybigfileSize} );
+  }
+  else if (provider === 'azure') {
+    servers.server
+      .get('/pkgcloud-test-container/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/reallybigfile.raw', helpers.azureGetFileResponseHeaders({'content-length': reallybigfileSize}));
+  }
+  else if (provider === 'google') {
+    servers.server
+      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
+      .reply(200, { mediaLink: 'http://localhost:12345/mediaLink' })
+      .get('/mediaLink')
+      .replyWithFile(200, __dirname + '/../../fixtures/reallybigfile.raw', {'content-length': reallybigfileSize} );
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
+      .replyWithFile(200, __dirname + '/../../fixtures/reallybigfile.raw', {'content-length': reallybigfileSize} );
   }
 };
 
