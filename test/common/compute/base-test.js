@@ -559,6 +559,6 @@ setupDestroyMock = function (client, provider, servers) {
   else if (provider === 'digitalocean') {
     servers.server
       .delete('/v2/droplets/3164494')
-      .replyWithFile(204);
+      .reply(204);
   }
 };
