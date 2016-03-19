@@ -1,3 +1,28 @@
+## v1.3.0
+* OpenStack identity v3 (keystone) support, Issue [#367](//github.com/pkgcloud/pkgcloud/issues/367), [#477](//github.com/pkgcloud/pkgcloud/issues/477), PR [#461](//github.com/pkgcloud/pkgcloud/pull/461)
+* OpenStack cancel client download, Issue [#379](//github.com/pkgcloud/pkgcloud/issues/379), PR [#416](//github.com/pkgcloud/pkgcloud/pull/416)
+* OpenStack improved directory support for getFiles, PR [#390](//github.com/pkgcloud/pkgcloud/pull/390)
+* Add support for prepending a custom user agent, Issue [#394](//github.com/pkgcloud/pkgcloud/issues/394), PR [#395](//github.com/pkgcloud/pkgcloud/pull/395)
+* OpenStack fixed storage copy function, Issue [#396](//github.com/pkgcloud/pkgcloud/issues/396) , PR [#350](//github.com/pkgcloud/pkgcloud/pull/350)
+* OpenStack allow non-strict SSL, PR [#397](//github.com/pkgcloud/pkgcloud/pull/397)
+* Adding a refresh method on the stack model, Issue [#398](//github.com/pkgcloud/pkgcloud/issues/398), PR [#402](//github.com/pkgcloud/pkgcloud/pull/402)
+* Google storage return metadata in success handler, Issue [#400](//github.com/pkgcloud/pkgcloud/issues/400), PR [#401](//github.com/pkgcloud/pkgcloud/pull/401)
+* OpenStack added template outputs field to stack, PR [#403](//github.com/pkgcloud/pkgcloud/pull/403)
+* Amazon fixes to AWS config, Issue [#406](//github.com/pkgcloud/pkgcloud/issues/406), PR [#407](//github.com/pkgcloud/pkgcloud/pull/xxx), [#409](//github.com/pkgcloud/pkgcloud/pull/407)
+* Added support for nestedDepth option to stack getResources method, Issue [#410](//github.com/pkgcloud/pkgcloud/issues/410), PR [#411](//github.com/pkgcloud/pkgcloud/pull/411)
+* Added support for networking security groups, security group rules, PR [#412](//github.com/pkgcloud/pkgcloud/pull/412)
+* Allow passing options to rebuildServer, Issue [#414](//github.com/pkgcloud/pkgcloud/issues/414), PR [#415](//github.com/pkgcloud/pkgcloud/pull/415)
+* Allow deleteStack to accept stack object or stack name, Issue [#418](//github.com/pkgcloud/pkgcloud/issues/418), PR [#420](//github.com/pkgcloud/pkgcloud/pull/420)
+* Amazon createServer: use pluralized keys for SecurityGroups/SecurityGroupIds, Issue [#432](//github.com/pkgcloud/pkgcloud/issues/432), PR [#433](//github.com/pkgcloud/pkgcloud/pull/433)
+* RackSpace, OpenStack add enableRootUser and listRootStatus, PR [#438](//github.com/pkgcloud/pkgcloud/pull/438)
+* Amazon storage added cache control support to s3 buckets, PR [#447](//github.com/pkgcloud/pkgcloud/pull/447)
+* OpenStack compute added deleteRule, PR [#456](//github.com/pkgcloud/pkgcloud/pull/456)
+* DigitalOcean ported provider to APIv2, PR [#470](//github.com/pkgcloud/pkgcloud/pull/470)
+* OpenStack handle request errors in client.upload flow, Issue [#481](//github.com/pkgcloud/pkgcloud/issues/481), PR [#484](//github.com/pkgcloud/pkgcloud/pull/484)
+* OpenStack added adminPass attribute to createServer, PR [#486](//github.com/pkgcloud/pkgcloud/pull/486)
+* Amazon added AWS specific options for cache control and file encryption, PR [#496](//github.com/pkgcloud/pkgcloud/pull/496)
+* Misc doc fixes, PR [#417](//github.com/pkgcloud/pkgcloud/pull/417), [#426](//github.com/pkgcloud/pkgcloud/pull/426), [#429](//github.com/pkgcloud/pkgcloud/pull/429), [#442](//github.com/pkgcloud/pkgcloud/pull/442), [#444](//github.com/pkgcloud/pkgcloud/pull/444), [#449](//github.com/pkgcloud/pkgcloud/pull/449), [#498](//github.com/pkgcloud/pkgcloud/pull/498)
+
 ## v1.2.0
 * Added Support for Openstack CDN (Poppy)
 
