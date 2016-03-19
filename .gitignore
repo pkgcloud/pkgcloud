@@ -13,4 +13,3 @@ coverage.html
 .coveralls.yml
 pkgcloud.lcov*
 node-jscoverage
-reallybigfile.raw
