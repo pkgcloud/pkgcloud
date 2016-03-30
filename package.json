@@ -1,7 +1,7 @@
 {
   "name": "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version": "1.2.0-alpha.0",
+  "version": "1.3.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     {
@@ -56,7 +56,7 @@
   ],
   "dependencies": {
     "async": "0.9.x",
-    "aws-sdk": "^2.1.17",
+    "aws-sdk": "^2.2.43",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
     "fast-json-patch": "0.5.x",
@@ -66,14 +66,14 @@
     "mime": "1.2.x",
     "qs": "1.2.x",
     "request": "2.40.x",
-    "s3-upload-stream": "~1.0.0",
+    "s3-upload-stream": "~1.0.7",
     "through2": "0.6.x",
     "underscore": "1.6.x",
     "url-join": "0.0.x",
     "xml2js": "0.1.x"
   },
   "devDependencies": {
-    "blanket": "^1.1.6",
+    "blanket": "1.1.9",
     "coveralls": "^2.11.2",
     "hock": "~1.2.0",
     "jshint": "~2.7.0",

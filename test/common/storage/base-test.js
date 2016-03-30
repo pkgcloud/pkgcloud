@@ -588,7 +588,7 @@ setupUploadStreamMock = function (provider, client, servers) {
       .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n<InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><UploadId>U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--</UploadId></InitiateMultipartUploadResult>', {})
       .put('/test-file.txt?partNumber=1&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', fillerama)
       .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/test-file.txt</Location><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
-      .post('/test-file.txt?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag><PartNumber>1</PartNumber></Part></CompleteMultipartUpload>')
+      .post('/test-file.txt?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>"b2286fe4aac65809a1b7a053d07fc99f-1"</ETag><PartNumber>1</PartNumber></Part></CompleteMultipartUpload>')
       .reply(200);
 
   }
@@ -599,7 +599,7 @@ setupUploadStreamMock = function (provider, client, servers) {
       .put('/pkgcloud-test-container/test-file.txt?comp=blocklist', '<?xml version="1.0" encoding="utf-8"?><BlockList><Latest>block000000000000000</Latest></BlockList>')
       .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
       .get('/pkgcloud-test-container/test-file.txt')
-      .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
+      .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
   }
   else if (provider === 'hp') {
     servers.server
@@ -654,7 +654,7 @@ setupGetFileMock = function (provider, client, servers) {
   else if (provider === 'azure') {
     servers.server
       .get('/pkgcloud-test-container/test-file.txt')
-      .reply(200, '', helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
+      .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
   }
   else if (provider === 'google') {
     servers.server
