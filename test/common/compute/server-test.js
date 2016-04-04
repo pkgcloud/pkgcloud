@@ -10,7 +10,7 @@ var should = require('should'),
     helpers = require('../../helpers'),
     http = require('http'),
     hock = require('hock'),
-    _ = require('underscore'),
+    _ = require('lodash'),
     providers = require('../../configs/providers.json'),
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
@@ -942,8 +942,8 @@ setupRebootMock = function() {
 serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
-    params = {NAME: name, STATUS: status};
+    params = {NAME: name, STATUS: status},
+    compiled = _.template(template);
 
-  var result = _.template(template, params);
-  return result;
+  return compiled(params);
 };
