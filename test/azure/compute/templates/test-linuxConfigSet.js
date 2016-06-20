@@ -1,7 +1,7 @@
 //TODO: Make this a vows test
 
 var templates = require('../../../../lib/pkgcloud/azure/compute/templates/templates');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var params = {
   HOSTNAME: 'pkgcloud1',
@@ -15,6 +15,7 @@ templates.load('linuxConfigSet.xml', function (err, template) {
     console.dir(err);
   } else {
 
-    console.log(_.template(template, params));
+    var compiled = _.template(template);
+    console.log(compiled(params));
   }
 });

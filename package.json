@@ -63,12 +63,12 @@
     "filed": "0.1.x",
     "gcloud": "^0.10.0",
     "ip": "0.3.x",
+    "lodash": "^3.10.1",
     "mime": "1.2.x",
     "qs": "1.2.x",
     "request": "2.40.x",
     "s3-upload-stream": "~1.0.7",
     "through2": "0.6.x",
-    "underscore": "1.6.x",
     "url-join": "0.0.x",
     "xml2js": "0.1.x"
   },

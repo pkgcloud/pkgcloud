@@ -16,11 +16,11 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 
 In this example, we're going to create a Rackspace compute client, create two servers, and then output their details to the command line.
 
-*Note: We're going to use [underscore.js](http://underscorejs.org) for some convenience functions.*
+*Note: We're going to use [lodash.js](https://lodash.com) for some convenience functions.*
 
 ```Javascript
 var pkgcloud = require('pkgcloud'),
-    _ = require('underscore');
+    _ = require('lodash');
 
 // create our client with your rackspace credentials
 var client = pkgcloud.providers.rackspace.compute.createClient({

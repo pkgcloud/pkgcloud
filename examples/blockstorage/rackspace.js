@@ -1,5 +1,5 @@
 var pkgcloud = require('pkgcloud'),
-  _ = require('underscore');
+  _ = require('lodash');
 
 (function() {
 

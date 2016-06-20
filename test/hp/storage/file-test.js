@@ -2,7 +2,7 @@ var helpers = require('../../helpers'),
     async = require('async'),
     http = require('http'),
     hock = require('hock'),
-    _ = require('underscore');
+    _ = require('lodash');
 
 var authenticate = function (hockInstance) {
   hockInstance
