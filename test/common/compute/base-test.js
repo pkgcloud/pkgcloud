@@ -446,7 +446,13 @@ setupServerMock = function (client, provider, servers) {
         'InstanceType': 'm1.small',
         'MaxCount': '1',
         'MinCount': '1',
-        'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3Qtc2V0V2FpdCJ9'
+      }, { 'User-Agent': client.userAgent })
+      .replyWithFile(200, __dirname + '/../../fixtures/amazon/run-instances.xml')
+      .post('/', {
+        'Action':'CreateTags',
+        'Resources.1': 'i-1d48637b',
+        'Tags.1.Key': 'Name',
+        'Tags.1.Value': 'create-test-setWait',
       }, { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/run-instances.xml')
       .post('/', {
