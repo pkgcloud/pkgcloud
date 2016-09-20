@@ -29,6 +29,18 @@ For all of the Openstack services, you create a client with the same options:
 
 **Note:** *Due to variances between OpenStack deployments, you may or may not need a `region` option.*
 
+Keystone v2 (default) and v3 authentication endpoints are supported. To use a v3 endpoint with optional
+parameters that may be required for your provider, additional object properties may be set
+(see [source](https://github.com/pkgcloud/pkgcloud/blob/bigfile-test/lib/pkgcloud/openstack/context/identity.js) for all):
+
+```javascript
+  var openstack = pkgcloud.storage.createClient({
+    // ... Options as above ...
+    keystoneAuthVersion: 'v3',
+    tenantId: "tenant-id",
+    domainId: "domain-id", // could also set domainName
+  });
+```
 
 ### Authentication Endpoints and Regions
 
