@@ -79,7 +79,7 @@
     "jshint": "~2.7.0",
     "mocha": "1.21.x",
     "mocha-lcov-reporter": "0.0.1",
-    "should": "4.0.x"
+    "should": "^11.1.1"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
