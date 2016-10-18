@@ -68,7 +68,7 @@
     "qs": "1.2.x",
     "request": "2.40.x",
     "s3-upload-stream": "~1.0.7",
-    "through2": "0.6.x",
+    "through2": "^2.0.1",
     "url-join": "0.0.x",
     "xml2js": "0.1.x"
   },
