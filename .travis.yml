@@ -1,6 +1,9 @@
 language: node_js
 node_js:
 - '0.10'
+- '4'
+- '5'
+- '6'
 notifications:
   email:
   - ken.perkins@rackspace.com
