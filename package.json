@@ -83,6 +83,7 @@
   },
   "main": "./lib/pkgcloud",
   "scripts": {
+    "test-openstack": "make test-openstack",
     "test": "make test",
     "cov": "make cov",
     "travis": "make travis",
