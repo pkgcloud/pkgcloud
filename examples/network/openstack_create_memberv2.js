@@ -13,17 +13,16 @@ getToken.getToken(function (id){
 
 
   var options = {
-    'name': 'loadbalancer_unit_test',
-    'description': 'simple loadbalancer',
-    'project_id': KH_admin_tenantID,
-    'tenant_id': KH_admin_tenantID,
-    'vip_subnet_id': "33058db7-91bc-4a1b-857a-7f3447c3568c",
-    'admin_state_up': false,
+    "subnet_id": "33058db7-91bc-4a1b-857a-7f3447c3568c",
+    "address": "196.168.99.123",
+    "protocol_port": "443",
+    "pool_id": "c0d19bc6-d7c9-408a-825e-f1c9ef143b12",
+    "weight": "1"
   };
-  client.createLoadbalancer(options, function(err, lbs) {
+  client.createMemberV2(options, function(err, item) {
     if (err) {
       console.log(err);
     }
-    console.log(lbs);
+    console.log(item);
   });
-}
+});

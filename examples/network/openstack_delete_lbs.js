@@ -8,7 +8,7 @@ var client = pkgcloud.network.createClient({
   authUrl: 'http://controller:5000/',
   strictSSL: false
 });
-var options = '50d3f823-cccb-471d-a82d-d7c03a4208a6';
+var options = '12ac7bc9-7937-4796-bb9d-683b75b89916';
 client.destroyLoadbalancer(options, function (err, lbs) {
   if (err) {
     console.error(err);
