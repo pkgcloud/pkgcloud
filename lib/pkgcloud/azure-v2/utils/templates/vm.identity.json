@@ -1,0 +1,6 @@
+{
+  "resourceName": "<%= NAME %>",
+  "resourceProviderNamespace": "Microsoft.Compute",
+  "resourceType": "virtualMachines",
+  "resourceProviderApiVersion": "<%= API_VERSION %>"
+}

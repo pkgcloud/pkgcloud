@@ -57,6 +57,7 @@
   "dependencies": {
     "async": "0.9.x",
     "aws-sdk": "^2.2.43",
+    "azure-arm-resource": "^1.6.1-preview",
     "errs": "0.3.x",
     "eventemitter2": "0.4.x",
     "fast-json-patch": "0.5.x",
@@ -65,6 +66,7 @@
     "ip": "0.3.x",
     "lodash": "^3.10.1",
     "mime": "1.2.x",
+    "ms-rest-azure": "^1.15.2",
     "qs": "1.2.x",
     "request": "2.40.x",
     "s3-upload-stream": "~1.0.7",
