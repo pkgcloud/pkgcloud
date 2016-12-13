@@ -12,10 +12,10 @@ options = {
   storageAccount: '{storeName}',
   storageAccessKey: '{storeKey}',
   subscriptionId: '{subscriptionId}',
-  spClientId: "{spClientId}",
-  spSecret: "{spSecret}",
-  spDomain: "{spDomain}",
-  spSubscriptionId: "{spSubscriptionId}"
+  spClientId: '{spClientId}',
+  spSecret: '{spSecret}',
+  spDomain: '{spDomain}',
+  spSubscriptionId: '{spSubscriptionId}'
 };
 client = pkgcloud.compute.createClient(options);
 
@@ -25,12 +25,12 @@ client = pkgcloud.compute.createClient(options);
 //
 options = {
   // pkgcloud compute properties
-  name:  'ms-pkgc-test2',   // name of the server
+  name:  'ms-pkgc-vm-test',   // name of the server
   flavor: 'Standard_D1',     // azure vm size
   //image: '5112500ae3b842c8b9c604889f8753c3__OpenLogic-CentOS63DEC20121220', // OS Image to use
   image: {
-    uri: 'https://{storename}.blob.core.windows.net/osdiks/ms-pkgc-test-os2.vhd', 
-    OS: 'linux' 
+    uri: 'https://{storename}.blob.core.windows.net/osdiks/ms-pkgc-test-os2.vhd',
+    OS: 'linux'
   },
   nic: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/networkInterfaces/{nicName}',
 
@@ -58,6 +58,3 @@ client.createServer(options, function (err, server) {
     });
   }
 });
-
-
-
