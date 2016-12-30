@@ -19,11 +19,19 @@
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
     },
-     {
+    {
       "type": "node",
       "request": "launch",
       "name": "Launch Azure V2 Create",
       "program": "${workspaceRoot}//examples//compute//azure-v2.js",
+      "cwd": "${workspaceRoot}",
+      "stopOnEntry": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Azure V2 Storage",
+      "program": "${workspaceRoot}//examples//storage//azure-v2.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
     },
