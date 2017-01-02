@@ -15,7 +15,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Azure V2 Destroy",
-      "program": "${workspaceRoot}//examples//compute//azure-v2-destroy.js",
+      "program": "${workspaceRoot}//examples//compute//azure-v2-destroy.private.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
     },
@@ -23,7 +23,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Azure V2 Create",
-      "program": "${workspaceRoot}//examples//compute//azure-v2.js",
+      "program": "${workspaceRoot}//examples//compute//azure-v2.private.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
     },
@@ -31,7 +31,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Azure V2 Storage",
-      "program": "${workspaceRoot}//examples//storage//azure-v2.js",
+      "program": "${workspaceRoot}//examples//storage//azure-v2.private.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
     },
