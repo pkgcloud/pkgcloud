@@ -1,5 +1,5 @@
-var pkgcloud = require('../../lib/pkgcloud'),
-var client,
+var pkgcloud = require('../../lib/pkgcloud');
+var client;
 var options;
 
 //
