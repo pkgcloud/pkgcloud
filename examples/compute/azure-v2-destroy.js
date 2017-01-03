@@ -1,5 +1,4 @@
 var pkgcloud = require('../../lib/pkgcloud'),
-  fs = require('fs'),
   client,
   options;
 
@@ -33,6 +32,6 @@ client.destroyServer(options, function (err, server) {
   if (err) {
     console.log(err);
   } else {
-    console.log('Started DELETE of VM');
+    console.log('Started DELETE of VM: ', server);
   }
 });

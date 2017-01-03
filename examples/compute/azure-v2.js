@@ -1,7 +1,6 @@
 var pkgcloud = require('../../lib/pkgcloud'),
-  fs = require('fs'),
-  client,
-  options;
+var client,
+var options;
 
 //
 // Create a pkgcloud compute instance
