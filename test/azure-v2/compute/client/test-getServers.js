@@ -5,23 +5,7 @@ var helpers = require('../../../helpers');
 var should = require('should');
 var mock = !!process.env.MOCK;
 
-// client.getServer('azure-vm-server', function (err, result) {
-//   if (err) {
-//     console.error(err);
-//   } else {
-//     console.dir(result);
-//   }
-// });
-
-// client.getServers(function (err, result) {
-//   if (err) {
-//     console.error(err);
-//   } else {
-//     console.dir(result);
-//   }
-// });
-
-describe('pkgcloud/amazon/groups', function () {
+describe('pkgcloud/azure-v2/servers', function () {
 
   var client;
 
@@ -36,7 +20,7 @@ describe('pkgcloud/amazon/groups', function () {
     mockRequests.prepare();
   });
 
-  it('add SecurityGroup should succeed', function(done) {
+  it('Get a single server with RUNNING state', function(done) {
 
     debugger;
     client.getServer('azure-vm-server', (err, server) => {
