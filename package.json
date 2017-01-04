@@ -84,6 +84,7 @@
     "jshint": "~2.7.0",
     "mocha": "1.21.x",
     "mocha-lcov-reporter": "0.0.1",
+    "nock": "^9.0.2",
     "should": "4.0.x"
   },
   "main": "./lib/pkgcloud",

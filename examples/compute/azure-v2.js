@@ -6,15 +6,15 @@ var options;
 // Create a pkgcloud compute instance
 //
 options = {
-  resourceGroup: '{resourceGroup}',
   provider: 'azure-v2',
-  storageAccount: '{storeName}',
-  storageAccessKey: '{storeKey}',
-  subscriptionId: '{subscriptionId}',
-  spClientId: '{spClientId}',
-  spSecret: '{spSecret}',
-  spDomain: '{spDomain}',
-  spSubscriptionId: '{spSubscriptionId}'
+  subscriptionId: "{subscriptionId}",  
+  resourceGroup: "{resourceGroup}",
+
+  servicePrincipal: {
+    clientId: "{spClientId}",
+    secret: "{spSecret}",
+    domain: "{spDomain}"
+  }
 };
 client = pkgcloud.compute.createClient(options);
 
