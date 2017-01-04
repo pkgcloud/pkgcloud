@@ -6,11 +6,10 @@ var should = require('should');
 var mock = !!process.env.MOCK;
 
 describe('pkgcloud/azure-v2/servers', function () {
-
+  this.timeout(200000);
   var client;
 
   before(function (done) {
-    debugger;
     client = helpers.createClient('azure-v2', 'compute');
 
     if (!mock) {
@@ -18,6 +17,7 @@ describe('pkgcloud/azure-v2/servers', function () {
     }
 
     mockRequests.prepare();
+    done();
   });
 
   it('Get a single server with RUNNING state', function(done) {
@@ -27,6 +27,19 @@ describe('pkgcloud/azure-v2/servers', function () {
       should.not.exist(err);
       should.exist(server)
       server.status.should.equal('RUNNING');
+      done();
+    });
+
+  });
+
+  it('Get a single server with RUNNING state 2', function(done) {
+
+    debugger;
+    client.getServer('azure-vm-server', (err, server) => {
+      should.not.exist(err);
+      should.exist(server)
+      server.status.should.equal('RUNNING');
+      done();
     });
 
   });
