@@ -1,0 +1,37 @@
+{
+  "name": "nickName",
+  "id": "/subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nickName",
+  "etag": "W/\"00000000-0000-0000-0000-000000000000\"",
+  "location": "westeurope",
+  "properties": {
+    "provisioningState": "Succeeded",
+    "resourceGuid": "00000000-0000-0000-0000-000000000000",
+    "ipConfigurations": [
+      {
+        "name": "ipconfig1",
+        "id": "subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nickName/ipConfigurations/ipconfig1",
+        "etag": "W/\"00000000-0000-0000-0000-000000000000\"",
+        "properties": {
+          "provisioningState": "Succeeded",
+          "privateIPAddress": "10.0.0.4",
+          "privateIPAllocationMethod": "Dynamic",
+          "publicIPAddress": {
+            "id": "subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Network/publicIPAddresses/publicIPName"
+          },
+          "subnet": {
+            "id": "subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Network/virtualNetworks/vnetName/subnets/Subnet"
+          },
+          "primary": true,
+          "privateIPAddressVersion": "IPv4"
+        }
+      }
+    ],
+    "dnsSettings": {
+      "dnsServers": [],
+      "appliedDnsServers": []
+    },
+    "macAddress": "00-00-00-00-00-00",
+    "enableIPForwarding": false
+  },
+  "type": "Microsoft.Network/networkInterfaces"
+}

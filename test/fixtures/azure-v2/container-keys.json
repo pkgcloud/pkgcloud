@@ -1,0 +1,14 @@
+{
+  "keys": [
+    { 
+      "keyName": "key1",
+      "permissions":"Full",
+      "value":"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=="
+    },
+    {
+      "keyName": "key2",
+      "permissions":"Full",
+      "value":"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=="
+    }
+  ]
+}

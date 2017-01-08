@@ -1,5 +1,5 @@
 {
-  "id": "/subscriptions/subscriptionId/resourceGroups/resource-group/providers/Microsoft.Compute/virtualMachines/vmName",
+  "id": "/subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Compute/virtualMachines/vmName",
   "name":"vmName",
   "type":"Microsoft.Compute/virtualMachines",
   "location":"somelocation",
@@ -41,7 +41,7 @@
     "networkProfile": {
       "networkInterfaces":[
         {
-          "id":"/subscriptions/subscriptionId/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nicName" 
+          "id":"subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nicName" 
         }
       ]
     },

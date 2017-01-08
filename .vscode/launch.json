@@ -14,7 +14,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Azure V2 Destroy",
+      "name": "Azure V2 Compute - Destroy",
       "program": "${workspaceRoot}//examples//compute//azure-v2-destroy.private.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
@@ -22,7 +22,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Azure V2 Create",
+      "name": "Azure V2 Compute",
       "program": "${workspaceRoot}//examples//compute//azure-v2.private.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
@@ -30,21 +30,10 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Azure V2 Storage",
+      "name": "Azure V2 Storage",
       "program": "${workspaceRoot}//examples//storage//azure-v2.private.js",
       "cwd": "${workspaceRoot}",
       "stopOnEntry": true
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Test Azure V2 Server",
-      "program": "${workspaceRoot}//test//azure-v2//compute//client//test-getServers.js",
-      "cwd": "${workspaceRoot}",
-      "stopOnEntry": true,
-      "env": {
-        "MOCK": "on"
-      }
     },
 		{
 			// Name of configuration; appears in the launch configuration drop down menu.
@@ -56,7 +45,10 @@
 			// Automatically stop program after launch.
 			"stopOnEntry": false,
 			// Command line arguments passed to the program.
-			"args": ["${workspaceRoot}//test//azure-v2//compute//client//test-getServers.js"],
+			"args": [
+        "${workspaceRoot}//test//azure-v2//compute//client//test-servers.js",
+        "${workspaceRoot}//test//azure-v2//storage//client//test-storage.js"
+      ],
 			// Workspace relative or absolute path to the working directory of the program being debugged. Default is the current workspace.
 			"cwd": "${workspaceRoot}",
 			// Workspace relative or absolute path to the runtime executable to be used. Default is the runtime executable on the PATH.
