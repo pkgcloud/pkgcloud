@@ -3,7 +3,6 @@
 var mockRequests = require('../../mock-requests');
 var helpers = require('../../../helpers');
 var should = require('should');
-var mock = !!process.env.MOCK;
 
 var client = helpers.createClient('azure-v2', 'storage');
 

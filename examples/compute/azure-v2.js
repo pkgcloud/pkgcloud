@@ -7,13 +7,13 @@ var options;
 //
 options = {
   provider: 'azure-v2',
-  subscriptionId: "{subscriptionId}",  
-  resourceGroup: "{resourceGroup}",
+  subscriptionId: '{subscriptionId}',  
+  resourceGroup: '{resourceGroup}',
 
   servicePrincipal: {
-    clientId: "{spClientId}",
-    secret: "{spSecret}",
-    domain: "{spDomain}"
+    clientId: '{spClientId}',
+    secret: '{spSecret}',
+    domain: '{spDomain}'
   }
 };
 client = pkgcloud.compute.createClient(options);

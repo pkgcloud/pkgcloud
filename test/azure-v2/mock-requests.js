@@ -4,7 +4,6 @@ var helpers = require('../helpers');
 
 const azureAuthUri = 'https://login.microsoftonline.com';
 const azureManagementUri = 'https://management.azure.com';
-const requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5';
 const apiVersion = '2016-03-30';
 
 function loadFixture(name) {
@@ -70,7 +69,7 @@ function prepare() {
   // Deployments
   nock(`${azureManagementUri}/subscriptions/${config.subscriptionId}/resourcegroups/${config.resourceGroup}/providers/microsoft.resources/deployments`)
     .filteringPath((path) => { 
-      path = path.toLowerCase()
+      path = path.toLowerCase();
       return path.substr(0, path.indexOf('/deployments/pkgc-')) + '/deployments/pkgc-test'; 
     })
     .put('/pkgc-test')
