@@ -22,37 +22,32 @@ client = pkgcloud.compute.createClient(options);
 // Create a server.
 // This may take several minutes.
 //
-options = {
-  // pkgcloud compute properties
-  name:  'ms-pkgc-vm-test',   // name of the server
-  flavor: 'Standard_D1',     // azure vm size
-  //image: '5112500ae3b842c8b9c604889f8753c3__OpenLogic-CentOS63DEC20121220', // OS Image to use
-  image: {
-    uri: 'https://{storename}.blob.core.windows.net/osdiks/ms-pkgc-test-os2.vhd',
-    OS: 'linux'
-  },
-  nic: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/networkInterfaces/{nicName}',
+var createVMOfferOptions = {
+  name:  'ms-pkgc-vm-test',
+  flavor: 'Standard_D1',
+  username:  'pkgcloud',
+  password:  'Pkgcloud!!',
 
-  // Azure vm properties
-  location:  'West Europe',       // Azure location for server
-  username:  'pkgcloud',      // Username for server
-  password:  'Pkgcloud!!'    // Password for server
+  storageOSDiskName: "osdisk",
+  storageDataDisk1VhdName: "datadisk1",
+
+  imagePublisher: "Canonical",
+  imageOffer: "UbuntuServer",
+  imageSku: "16.04.0-LTS",
+  imageVersion: "latest"
 };
 
 console.log('creating server...');
 
-client.createServer(options, function (err, server) {
+client.createServer(createVMOfferOptions, function (err, server) {
   if (err) {
     console.log(err);
   } else {
-    // Wait for the server to reach the RUNNING state.
-    // This may take several minutes.
-    console.log('waiting for server RUNNING state...');
-    server.setWait({ status: server.STATUS.running }, 10000, function (err, server) {
+    client.destroyServer(createVMFlavorOptions, { destroyDependencies: true, destroyStorage: true }, (err, serverId) => {
       if (err) {
         console.log(err);
       } else {
-        console.dir(server);
+        console.log('deleted successfully');
       }
     });
   }
