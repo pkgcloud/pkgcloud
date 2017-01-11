@@ -1,5 +1,3 @@
-//TODO: Make this a vows test
-
 var mockRequests = require('../../mock-requests');
 var helpers = require('../../../helpers');
 var should = require('should');
@@ -57,7 +55,12 @@ describe('pkgcloud/azure-v2/servers', function () {
 
   it('Deleting a VM with dependencies', function (done) {
     mockRequests.prepare();
-    client.destroyServer(createParams, { destroyDependencies: true, destroyStorage: true }, (err) => {
+    client.destroyServer(createParams, {
+      destroyNics: true,
+      destroyPublicIP: true,
+      destroyVnet: true, 
+      destroyStorage: true 
+    }, (err) => {
       should.not.exist(err);
       done();
     });

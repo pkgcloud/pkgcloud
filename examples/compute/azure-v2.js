@@ -43,7 +43,12 @@ client.createServer(createVMOfferOptions, function (err, server) {
   if (err) {
     console.log(err);
   } else {
-    client.destroyServer(createVMFlavorOptions, { destroyDependencies: true, destroyStorage: true }, (err, serverId) => {
+    client.destroyServer(createVMFlavorOptions, { 
+      destroyNics: true,
+      destroyPublicIP: true,
+      destroyVnet: true, 
+      destroyStorage: true 
+    }, (err, serverId) => {
       if (err) {
         console.log(err);
       } else {
