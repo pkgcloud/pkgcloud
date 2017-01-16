@@ -57,7 +57,9 @@ providers.filter(function (provider) {
       hockInstance = hock.createHock({ throwOnUnmatched: false });
       authHockInstance = hock.createHock();
 
-      server = http.createServer(hockInstance.handler);
+      server = http.createServer(function(req, res) {
+          hockInstance.handler.apply(this, arguments);
+      });
       authServer = http.createServer(authHockInstance.handler);
 
       // setup a filtering path for aws
@@ -584,11 +586,7 @@ setupUploadStreamMock = function (provider, client, servers) {
   }
   else if (provider === 'amazon') {
     servers.server
-      .post('/test-file.txt?uploads')
-      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n<InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><UploadId>U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--</UploadId></InitiateMultipartUploadResult>', {})
-      .put('/test-file.txt?partNumber=1&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', fillerama)
-      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/test-file.txt</Location><Bucket>pkgcloud-test-container</Bucket><Key>test-file.txt</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
-      .post('/test-file.txt?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>"b2286fe4aac65809a1b7a053d07fc99f-1"</ETag><PartNumber>1</PartNumber></Part></CompleteMultipartUpload>')
+      .put('/test-file.txt', fillerama)
       .reply(200);
 
   }
