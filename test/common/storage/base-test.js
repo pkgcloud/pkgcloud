@@ -23,11 +23,13 @@ var fs = require('fs'),
     mock = !!process.env.MOCK,
     pkgcloud = require('../../../lib/pkgcloud'),
     fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
+    bigFillerama = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
 
 // Declaring variables for helper functions defined later
 var setupCreateContainerMock, setupGetContainersMock, setupUploadStreamMock,
-    setupDownloadStreamMock, setupGetFileMock, setupGetFilesMock,
-    setupRemoveFileMock, setupDestroyContainerMock, setupGetContainers2Mock;
+    setupBigDataUploadStreamMock, setupDownloadStreamMock, setupGetFileMock,
+    setupGetFilesMock, setupRemoveFileMock, setupDestroyContainerMock,
+    setupGetContainers2Mock;
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].storage;
@@ -291,24 +293,45 @@ providers.filter(function (provider) {
     it('the upload() method with large file should succeed', function (done) {
 
       if (mock) {
-        return done();
-        // TODO mock these out
+        //TODO make it work for rackspace
+        if (provider != 'amazon') {
+          return done();
+        }
+        setupBigDataUploadStreamMock(provider, client, {
+          server: hockInstance,
+          authServer: authHockInstance
+        });
       }
 
       var stream = client.upload({
         container: context.container,
-        remote: 'bigfile.raw'
-      }, function (err, ok) {
-        should.not.exist(err);
-        should.exist(ok);
+        remote: 'bigfile.raw',
+        headers: {'x-amz-acl': 'public-read'}
+      });
 
-        context.file = {
-          name: 'bigfile.raw',
-          size: fs.readFileSync(helpers.fixturePath('bigfile.raw')).length
-        };
+      stream.on('error', function(err, response) {
+        console.log('==================+ERROR==================');
+        console.log(err);
+        should.not.exist(err);
+        should.not.exist(response);
+        done();
+      });
+
+      stream.on('success', function(file) {
+        console.log('==================+SUCCESS==================');
+        authHockInstance && authHockInstance.done();
+        hockInstance && hockInstance.done();
+        file.should.be.an.instanceof(File);
+
+        //context.file = {
+          //name: 'bigfile.raw',
+          //size: Buffer.byteLength(bigFillerama)
+        //};
 
         done();
       });
+      //console.log('*********************BUFFEFER*****************');
+      //console.log(bigFillerama.slice(0, 5*1024*1024).byteLength);
 
       var file = fs.createReadStream(helpers.fixturePath('bigfile.raw'));
       file.pipe(stream);
@@ -605,6 +628,43 @@ setupUploadStreamMock = function (provider, client, servers) {
       .reply(200)
       .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 });
+  }
+};
+
+setupBigDataUploadStreamMock = function (provider, client, servers) {
+  if (provider === 'rackspace' || provider === 'openstack') {
+    servers.server
+      .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw', bigFillerama)
+      .reply(200)
+      .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw?format=json')
+      .reply(200, '', { 'content-length': bigFillerama.length + 2 });
+  }
+  else if (provider === 'amazon') {
+    servers.server
+      .post('/bigfile.raw?uploads')
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n<InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Bucket>pkgcloud-test-container</Bucket><Key>bigfile.raw</Key><UploadId>U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--</UploadId></InitiateMultipartUploadResult>', {})
+      .put('/bigfile.raw?partNumber=1&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', bigFillerama.slice(0, 5*1024*1024))
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/bigfile.raw</Location><Bucket>pkgcloud-test-container</Bucket><Key>bigfile.raw</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
+      .put('/bigfile.raw?partNumber=2&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', bigFillerama.slice(5*1024*1024, 10*1024*1024))
+      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/bigfile.raw</Location><Bucket>pkgcloud-test-container</Bucket><Key>bigfile.raw</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
+      .post('/bigfile.raw?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>"b2286fe4aac65809a1b7a053d07fc99f-1"</ETag><PartNumber>1</PartNumber></Part><Part><ETag>"b2286fe4aac65809a1b7a053d07fc99f-1"</ETag><PartNumber>2</PartNumber></Part></CompleteMultipartUpload>')
+      .reply(200);
+  }
+  else if (provider === 'azure') {
+    servers.server
+      .put('/pkgcloud-test-container/bigfile.raw?comp=block&blockid=block000000000000000', bigFillerama)
+      .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'mw0KEVFFwT8SgYGK3Cu8vg=='}))
+      .put('/pkgcloud-test-container/bigfile.raw?comp=blocklist', '<?xml version="1.0" encoding="utf-8"?><BlockList><Latest>block000000000000000</Latest></BlockList>')
+      .reply(201, '', helpers.azureResponseHeaders({'content-md5': 'VuFw1xub9CF3KoozbZ3kZw=='}))
+      .get('/pkgcloud-test-container/bigfile.raw')
+      .reply(200, bigFillerama, helpers.azureGetFileResponseHeaders({'content-length': bigFillerama.length + 2, 'content-type': 'text/plain'}));
+  }
+  else if (provider === 'hp') {
+    servers.server
+      .put('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw', bigFillerama)
+      .reply(200)
+      .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw?format=json')
+      .reply(200, '', { 'content-length': bigFillerama.length + 2 });
   }
 };
 
