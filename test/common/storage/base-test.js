@@ -34,11 +34,7 @@ var setupCreateContainerMock, setupGetContainersMock, setupUploadStreamMock,
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].storage;
 }).forEach(function (provider) {
-  var desc = describe;
-  //if (provider == 'amazon') {
-    //desc = describe.only.bind(describe);
-  //}
-  desc('pkgcloud/common/storage/base [' + provider + ']', function () {
+  describe('pkgcloud/common/storage/base [' + provider + ']', function () {
 
     var config = null;
 
