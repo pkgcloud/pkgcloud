@@ -320,7 +320,7 @@ providers.filter(function (provider) {
 
         context.bigFile = {
           name: 'bigfile.raw',
-          size: Buffer.byteLength(bigFillerama)
+          size: bigFillerama.length
         };
 
         done();
@@ -352,7 +352,7 @@ providers.filter(function (provider) {
       context.fileContentsSize = 0;
       stream.on('data', function (data) {
         context.fileContents.push(data);
-        context.fileContentsSize += data.byteLength;
+        context.fileContentsSize += data.length;
       });
 
       stream.on('error', function(err) {
@@ -360,7 +360,6 @@ providers.filter(function (provider) {
       });
 
       stream.on('end', function() {
-        //expect(Buffer.from(context.fileContents).equals(bigFillerama)).to.be.true;
         hockInstance && hockInstance.done();
 
         context.fileContents = Buffer.concat(context.fileContents,
@@ -368,7 +367,7 @@ providers.filter(function (provider) {
 
         //Compare byte by byte
         var original = bigFillerama.toString('ascii');
-        for (var i = 0; i < context.bigFile.size; i++) {
+        for (var i = 0; i < original.length; i++) {
           assert.equal(context.fileContents[i], original[i]);
         }
 
