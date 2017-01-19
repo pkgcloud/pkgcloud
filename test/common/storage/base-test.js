@@ -59,9 +59,7 @@ providers.filter(function (provider) {
       hockInstance = hock.createHock({ throwOnUnmatched: false });
       authHockInstance = hock.createHock();
 
-      server = http.createServer(function(req, res) {
-          hockInstance.handler.apply(this, arguments);
-      });
+      server = http.createServer(hockInstance.handler);
       authServer = http.createServer(authHockInstance.handler);
 
       // setup a filtering path for aws
