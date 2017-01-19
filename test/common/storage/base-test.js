@@ -310,7 +310,7 @@ providers.filter(function (provider) {
       stream.on('error', function(err, response) {
         should.not.exist(err);
         should.not.exist(response);
-        done();
+        done(err);
       });
 
       stream.on('success', function(file) {
