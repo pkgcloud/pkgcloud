@@ -22,12 +22,12 @@ var fs = require('fs'),
     File = require('../../../lib/pkgcloud/core/storage/file').File,
     mock = !!process.env.MOCK,
     pkgcloud = require('../../../lib/pkgcloud'),
-    fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8');
+    fillerama = fs.readFileSync(helpers.fixturePath('fillerama.txt'), 'utf8'),
     bigFillerama = fs.readFileSync(helpers.fixturePath('bigfile.raw'));
 
 // Declaring variables for helper functions defined later
 var setupCreateContainerMock, setupGetContainersMock, setupUploadStreamMock,
-    setupBigDataUploadStreamMock, setupDownloadStreamMock, setupGetFileMock,
+    setupBigDataUploadStreamMock, setupDownloadStreamMock, setupBigDataDownloadStreamMock, setupGetFileMock,
     setupGetFilesMock, setupRemoveFileMock, setupDestroyContainerMock,
     setupGetContainers2Mock;
 
