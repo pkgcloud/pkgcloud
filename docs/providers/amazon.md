@@ -26,3 +26,29 @@ var client = require('pkgcloud').storage.createClient({
    region: 'us-west-2' // region
 });
 ```
+### File upload
+
+Whether s3 `multipart-upload` or `putObject` API  is used depends on the `partSize` option value and the size of file being uploaded.
+Single `putObject` request is made if an object being uploaded is not large enough. if the object size exceeds defined `partSize`, it uses `multipart-upload` API
+
+
+```Javascript
+var readableStream = fs.createReadStream('./path/to/file');
+
+var writableStream = client.upload({
+    queueSize: 1, // == default value
+    partSize: 5 * 1024 * 1024, // == default value of 5MB
+    container: 'web-static',
+    remote: 'image.jpg'
+});
+
+//writableStream.managedUpload === https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html
+// managedUpload object allows you to abort ongoing upload or track file upload progress.
+
+readableStream.pipe(writableStream)
+.on('success', function(file) {
+    console.log(file);
+}).on('error', function(err) {
+    console.log(err);
+});
+```
