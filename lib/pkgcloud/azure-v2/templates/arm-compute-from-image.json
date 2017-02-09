@@ -178,6 +178,14 @@
     "sshCommand": {
       "type": "string",
       "value": "[concat('ssh ', parameters('username'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
+    },
+    "location": {
+      "type": "string",
+      "value": "[resourceGroup().location]"
+    },
+    "vmID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
     }
   }
 }
