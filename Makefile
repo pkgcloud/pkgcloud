@@ -1,5 +1,6 @@
 MOCHA_CMD = MOCK=on ./node_modules/.bin/mocha
 MOCHA_OPTS = --require blanket -t 4000 test/*/*/*-test.js test/*/*/*/*-test.js
+MOCHA_OPENSTACK_OPTS = --require blanket -t 4000 test/openstack/*/*-test.js test/openstack/*/*/*-test.js
 DEFAULT_REPORT_OPTS = --reporter spec
 HTML_REPORT_OPTS = --reporter html-cov > coverage.html
 COVERALLS_REPORT_OPTS = --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
@@ -11,6 +12,10 @@ test: test-unit
 cov: test-cov-html
 
 travis: lint test-unit test-cov-coveralls
+
+test-openstack:
+	@echo "$(MOCHA_CMD) $(MOCHA_OPENSTACK_OPTS) $(REPORT_OPTS)"
+	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_OPENSTACK_OPTS) $(REPORT_OPTS)
 
 test-unit:
 	@echo "$(MOCHA_CMD) $(MOCHA_OPTS) $(REPORT_OPTS)"

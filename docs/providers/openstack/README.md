@@ -8,6 +8,7 @@ The OpenStack provider in pkgcloud supports the following services:
 * [**Storage**](storage.md) (Swift)
 * [**Network**](network.md) (Neutron)
 * [**Orchestration**](orchestration.md) (Heat)
+* [**Metering**](metering.md) (Ceilometer)
 * [**CDN**](cdn.md) (Poppy)
 
 ### Getting Started with Compute
