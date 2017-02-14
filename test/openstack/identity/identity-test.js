@@ -185,7 +185,32 @@ describe('pkgcloud/openstack/identity', function () {
           });
       });
     });
+it('user token should validate with only admin token', function(done) {
+      if (mock) {
+          var headers = {
+              'X-Auth-Token' :  'e93be67f91724754aeb9409c9c69d305'
+          };
+        adminHockInstance
+          .get('/v2.0/tokens/4bc7c5dabf3e4a49918683437d386b8a',headers)
+          .replyWithFile(200, __dirname + '/../../fixtures/openstack/validateToken-admin.json');
+      }
 
+
+      var adminClient = identity.createClient({
+        authUrl: 'http://localhost:12347',
+        authToken: 'e93be67f91724754aeb9409c9c69d305',
+        useServiceCatalog: false,
+        region: 'Calxeda-AUS1'
+      });
+
+
+      adminClient.validateToken('4bc7c5dabf3e4a49918683437d386b8a',
+          function (err, body) {
+            should.not.exist(err);
+            should.exist(body);
+            done();
+      });
+    });
     it('get the tenant info with admin token', function(done) {
       if (mock) {
         hockInstance
