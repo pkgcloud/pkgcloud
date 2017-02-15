@@ -40,19 +40,24 @@ var createVMOfferOptions = {
 console.log('creating server...');
 
 client.createServer(createVMOfferOptions, function (err, server) {
+
+  console.log('servre created successfully:');
+  console.dir(server);
+
   if (err) {
     console.log(err);
   } else {
-    client.destroyServer(createVMFlavorOptions, { 
+    client.destroyServer(createVMOfferOptions, { 
       destroyNics: true,
       destroyPublicIP: true,
       destroyVnet: true, 
       destroyStorage: true 
-    }, (err, serverId) => {
+    }, (err, server) => {
       if (err) {
         console.log(err);
       } else {
         console.log('deleted successfully');
+        console.dir(server);
       }
     });
   }
