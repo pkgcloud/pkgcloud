@@ -11,7 +11,7 @@ describe('pkgcloud/azure-v2/storage', function () {
   it('Create container', function(done) {
 
     mockRequests.prepare();
-    client.createContainer('azurestorage', (err, container) => {
+    client.createContainer('azurestorage', function (err, container) {
       should.not.exist(err);
       should.exist(container);
       should(container.name).be.exactly('azurestorage');
@@ -22,7 +22,7 @@ describe('pkgcloud/azure-v2/storage', function () {
   it('Get container', function(done) {
 
     mockRequests.prepare();
-    client.getContainer('azurestorage', (err, container) => {
+    client.getContainer('azurestorage', function (err, container) {
       should.not.exist(err);
       should.exist(container);
       should(container.name).be.exactly('azurestorage');
@@ -35,7 +35,7 @@ describe('pkgcloud/azure-v2/storage', function () {
   // it('Get files in container', function(done) {
 
   //   mockRequests.prepare();
-  //   client.getFiles('azurestorage', { container: 'container' }, (err, files) => {
+  //   client.getFiles('azurestorage', { container: 'container' }, function (err, files) {
   //     should.not.exist(err);
   //     should.exist(container);
   //     should(container.name).be.exactly('azurestorage');

@@ -56,7 +56,7 @@ function prepare() {
   // Storage
   // https://management.azure.com/subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Storage/storageAccounts/test-storage?api-version=2016-05-01
   nock(`${azureManagementUri}/subscriptions/${config.subscriptionId}/resourcegroups/${config.resourceGroup}/providers/microsoft.storage`)
-    .filteringPath((path) => { return path.toLowerCase(); })
+    .filteringPath(function (path) { return path.toLowerCase(); })
     .get(`/storageaccounts/azurestorage?api-version=2016-05-01`)
     .reply(200, loadFixture('container.json'))
     .post(`/storageaccounts/azurestorage/listkeys?api-version=2016-05-01`)
@@ -68,7 +68,7 @@ function prepare() {
 
   // Deployments
   nock(`${azureManagementUri}/subscriptions/${config.subscriptionId}/resourcegroups/${config.resourceGroup}/providers/microsoft.resources/deployments`)
-    .filteringPath((path) => { 
+    .filteringPath(function (path) { 
       path = path.toLowerCase();
       return path.substr(0, path.indexOf('/deployments/pkgc-')) + '/deployments/pkgc-test'; 
     })

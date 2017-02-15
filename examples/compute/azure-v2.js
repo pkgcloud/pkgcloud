@@ -52,7 +52,7 @@ client.createServer(createVMOfferOptions, function (err, server) {
       destroyPublicIP: true,
       destroyVnet: true, 
       destroyStorage: true 
-    }, (err, server) => {
+    }, function (err, server) {
       if (err) {
         console.log(err);
       } else {

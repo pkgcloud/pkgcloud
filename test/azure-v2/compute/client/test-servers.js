@@ -20,7 +20,7 @@ describe('pkgcloud/azure-v2/servers', function () {
   it('Get multiple servers', function(done) {
 
     mockRequests.prepare();
-    client.getServers((err, servers) => {
+    client.getServers(function (err, servers) {
       should.not.exist(err);
       should(servers).be.instanceOf(Array).and.have.lengthOf(1);
       done();
@@ -31,7 +31,7 @@ describe('pkgcloud/azure-v2/servers', function () {
   it('Get a single server with RUNNING state', function(done) {
 
     mockRequests.prepare();
-    client.getServer('azure-vm-server', (err, server) => {
+    client.getServer('azure-vm-server', function (err, server) {
       should.not.exist(err);
       should.exist(server);
       server.status.should.equal('RUNNING');
@@ -44,7 +44,7 @@ describe('pkgcloud/azure-v2/servers', function () {
   it('Creating a new server', function(done) {
 
     mockRequests.prepare();
-    client.createServer(createParams, (err, server) => {
+    client.createServer(createParams, function (err, server) {
       should.not.exist(err);
       should.exist(server);
       server.status.should.equal('RUNNING');
@@ -60,7 +60,7 @@ describe('pkgcloud/azure-v2/servers', function () {
       destroyPublicIP: true,
       destroyVnet: true, 
       destroyStorage: true 
-    }, (err) => {
+    }, function (err) {
       should.not.exist(err);
       done();
     });
