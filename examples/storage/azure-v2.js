@@ -21,7 +21,11 @@ var client = pkgcloud.storage.createClient({
 //   })
 // });
 
-client.getFiles('storageacountname', { container: 'container-name' }, function (err, files) (function (err) {
+client.getFiles('storageacountname', { container: 'container-name' }, function (err, files) {
+
+  if (err) {
+    return console.error(err);
+  }
   
   var file = files[0];
   console.dir(file);
