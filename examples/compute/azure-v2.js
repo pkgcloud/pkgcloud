@@ -29,7 +29,7 @@ var createVMOfferOptions = {
   password:  'Pkgcloud!!',
 
   storageOSDiskName: "osdisk",
-  storageDataDisk1VhdName: "datadisk1",
+  storageDataDiskNames: [ "datadisk1" ],
 
   imagePublisher: "Canonical",
   imageOffer: "UbuntuServer",
