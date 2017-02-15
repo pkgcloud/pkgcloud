@@ -28,13 +28,13 @@ var createVMOfferOptions = {
   username:  'pkgcloud',
   password:  'Pkgcloud!!',
 
-  storageOSDiskName: "osdisk",
-  storageDataDiskNames: [ "datadisk1" ],
+  storageOSDiskName: 'osdisk',
+  storageDataDiskNames: [ 'datadisk1' ],
 
-  imagePublisher: "Canonical",
-  imageOffer: "UbuntuServer",
-  imageSku: "16.04.0-LTS",
-  imageVersion: "latest"
+  imagePublisher: 'Canonical',
+  imageOffer: 'UbuntuServer',
+  imageSku: '16.04.0-LTS',
+  imageVersion: 'latest'
 };
 
 console.log('creating server...');

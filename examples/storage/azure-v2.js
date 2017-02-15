@@ -1,4 +1,3 @@
-var fs = require('fs');
 var path = require('path');
 var pkgcloud = require('../../lib/pkgcloud');
 
@@ -25,6 +24,8 @@ var client = pkgcloud.storage.createClient({
 client.getFiles('storageacountname', { container: 'container-name' }, (err, files) => {
   
   var file = files[0];
+  console.dir(file);
+
   var download = client.download({
     container: 'storageacountname',
     storage: { container: 'container-name' },
@@ -39,7 +40,8 @@ client.getFiles('storageacountname', { container: 'container-name' }, (err, file
   });
 
   download.on('end', function(file) {
-    console.log('file write has ended');
+    console.log('file write has ended:');
+    console.dir(file);
   });
 
   download.on('data', function(data) {
