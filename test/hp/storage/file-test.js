@@ -17,7 +17,7 @@ var authenticate = function (hockInstance) {
     .reply(200, {
       access: {
         token: {
-          expires: '2016-12-26T18:25:46Z',
+          expires: '2017-12-26T18:25:46Z',
           id: '4bc7c5dabf3e4a49918683437d386b8a',
           tenant: {
             enabled: true,
