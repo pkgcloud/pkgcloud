@@ -25,6 +25,14 @@ function prepare() {
   nock(azureManagementUri)
     .get('/subscriptions?api-version=2015-11-01')
     .reply(200, loadFixture('subscriptions.json'));
+  nock(azureManagementUri)
+    .get('/subscriptions?api-version=2016-06-01')
+    .reply(200, loadFixture('subscriptions.json'));
+
+  // Resource group
+  nock(azureManagementUri + '/subscriptions/' + config.subscriptionId + '/resourcegroups')
+    .get('/' + config.resourceGroup + '?api-version=2016-09-01')
+    .reply(200, loadFixture('resourceGroup.json'));
 
   // Servers
   nock(azureManagementUri + '/subscriptions/' + config.subscriptionId + '/resourceGroups/' + config.resourceGroup + '/providers/Microsoft.Compute')
@@ -35,9 +43,16 @@ function prepare() {
     .delete('/virtualMachines/azure-vm-server?api-version=' + apiVersion)
     .reply(204, '');
 
+  // Images
+  nock(azureManagementUri + '/subscriptions/' + config.subscriptionId + '/providers/Microsoft.Compute/locations/location')
+    .get('/publishers/MicrosoftWindowsServer/artifacttypes/vmimage/offers/WindowsServer/skus/2012-R2-Datacenter/versions?api-version=2016-03-30')
+    .reply(200, loadFixture('servers.json'))
+    .get('/vmSizes?api-version=2016-03-30')
+    .reply(200, loadFixture('servers.json'));
+
   // Nicks
   //https://management.azure.com//subscriptions/subscriptionId/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nicName?api-version=2016-03-30
-  nock(azureManagementUri + '/subscriptions/${config.subscriptionId}/resourceGroups/${config.resourceGroup}/providers/Microsoft.Network')
+  nock(azureManagementUri + '/subscriptions/' + config.subscriptionId + '/resourceGroups/' + config.resourceGroup + '/providers/Microsoft.Network')
     .get('/networkInterfaces/nicName?api-version=' + apiVersion)
     .reply(200, loadFixture('nic.json'))
     .delete('/networkInterfaces/nicName?api-version=' + apiVersion)
