@@ -26,7 +26,6 @@ var setupImagesMock, setupFlavorMock, setupServerMock, setupGetServersMock,
 azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
 providers.filter(function (provider) {
-  return provider == "azure-v2";
   return !!helpers.pkgcloud.providers[provider].compute;
 }).forEach(function (provider) {
   describe('pkgcloud/common/compute/server [' + provider + ']', function () {
