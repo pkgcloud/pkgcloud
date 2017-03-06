@@ -1,5 +1,8 @@
 ## Using the Openstack Storage provider
 
+* Account
+  * [Model](#account-model)
+  * [APIs](#account-apis)
 * Container
   * [Model](#container-model)
   * [APIs](#container-apis)
