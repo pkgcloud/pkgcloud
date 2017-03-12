@@ -28,31 +28,36 @@ var createVMOfferOptions = {
   username:  'pkgcloud',
   password:  'Pkgcloud!!',
 
-  storageOSDiskName: "osdisk",
-  storageDataDisk1VhdName: "datadisk1",
+  storageOSDiskName: 'osdisk',
+  storageDataDiskNames: [ 'datadisk1' ],
 
-  imagePublisher: "Canonical",
-  imageOffer: "UbuntuServer",
-  imageSku: "16.04.0-LTS",
-  imageVersion: "latest"
+  imagePublisher: 'Canonical',
+  imageOffer: 'UbuntuServer',
+  imageSku: '16.04.0-LTS',
+  imageVersion: 'latest'
 };
 
 console.log('creating server...');
 
 client.createServer(createVMOfferOptions, function (err, server) {
+
+  console.log('servre created successfully:');
+  console.dir(server);
+
   if (err) {
     console.log(err);
   } else {
-    client.destroyServer(createVMFlavorOptions, { 
+    client.destroyServer(createVMOfferOptions, { 
       destroyNics: true,
       destroyPublicIP: true,
       destroyVnet: true, 
       destroyStorage: true 
-    }, (err, serverId) => {
+    }, function (err, server) {
       if (err) {
         console.log(err);
       } else {
         console.log('deleted successfully');
+        console.dir(server);
       }
     });
   }

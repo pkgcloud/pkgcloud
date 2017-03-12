@@ -1,4 +1,3 @@
-var fs = require('fs');
 var path = require('path');
 var pkgcloud = require('../../lib/pkgcloud');
 
@@ -14,23 +13,29 @@ var client = pkgcloud.storage.createClient({
   }
 });
 
-// client.getFiles('storageacountname', null, (err, files) => {
+// client.getFiles('storageacountname', null, function (err, files) (function (err) {
   
 //   var file = files[0];
-//   client.getFile('storageacountname', file, null, (err, file) => {
+//   client.getFile('storageacountname', file, null, function (err, file) (function (err) {
 //     console.dir(file);
 //   })
 // });
 
-client.getFiles('storageacountname', { container: 'container-name' }, (err, files) => {
+client.getFiles('storageacountname', { container: 'container-name' }, function (err, files) {
+
+  if (err) {
+    return console.error(err);
+  }
   
   var file = files[0];
+  console.dir(file);
+
   var download = client.download({
     container: 'storageacountname',
     storage: { container: 'container-name' },
     remote: 'file.name.to.download.ext',
     local: path.join(__dirname, 'file.name.to.download.ext')
-  }, err => {
+  }, function (err) {
     return err ? console.dir(err) : null;
   });
 
@@ -39,7 +44,8 @@ client.getFiles('storageacountname', { container: 'container-name' }, (err, file
   });
 
   download.on('end', function(file) {
-    console.log('file write has ended');
+    console.log('file write has ended:');
+    console.dir(file);
   });
 
   download.on('data', function(data) {
@@ -47,20 +53,20 @@ client.getFiles('storageacountname', { container: 'container-name' }, (err, file
   });
 });
 
-// client.createContainer('storageacountname', (err, container) => {
+// client.createContainer('storageacountname', function (err, container) {
 //   console.log('created: ', container.toJSON());
 
-//   client.getContainer('storageacountname', (err, container) => {
+//   client.getContainer('storageacountname', function (err, container) {
 //     console.log('found: ', container.toJSON());
 //   });
 // });
 
-// client.getContainers((err, containers) => {
+// client.getContainers(function (err, containers) {
 //   if (err) {
 //     console.error(err);
 //   }
 
-//   client.getContainer(containers[0], (err, container) => {
+//   client.getContainer(containers[0], function (err, container) {
 //     console.log('found: ', container.toJSON());
 //   });
 
