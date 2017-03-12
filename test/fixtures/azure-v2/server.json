@@ -1,0 +1,104 @@
+{
+  "id": "/subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Compute/virtualMachines/vmName",
+  "name":"vmName",
+  "type":"Microsoft.Compute/virtualMachines",
+  "location":"somelocation",
+  "properties" : {
+    "hardwareProfile": {
+      "vmSize":"Standard_SIZE"
+    },
+    "storageProfile": {
+      "imageReference": {
+        "publisher":"PUBLISHER",
+        "offer":"OFFER",
+        "sku":"SKU",
+        "version":"VERSION"
+      },
+      "osDisk": {
+        "osType":"SOME_OS",
+        "name":"osdisk",
+        "vhd": { "uri":"https://azurestorage.blob.core.windows.net/vhds/osdisk.vhd" },
+        "caching":"ReadWrite",
+        "createOption":"FromImage"
+      },
+      "dataDisks": [
+        {
+          "lun":0,
+          "name":"datadisk1",
+          "vhd": { "uri":"https://azurestorage.blob.core.windows.net/vhds/datadisk1.vhd" },
+          "caching":"None",
+          "createOption":"Empty",
+          "diskSizeGB":100
+        }
+      ]
+    },
+    "osProfile": {
+      "computerName":"vmName",
+      "adminUsername":"pkgcloud",
+      "linuxConfiguration": { "disablePasswordAuthentication":false },
+      "secrets":[]
+    },
+    "networkProfile": {
+      "networkInterfaces":[
+        {
+          "id":"subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nicName" 
+        }
+      ]
+    },
+    "diagnosticsProfile": {
+      "bootDiagnostics": {
+        "enabled":true,
+        "storageUri":"https://azurestorage.blob.core.windows.net/"
+      }
+    },
+    "provisioningState": "Succeeded",
+    "instanceView": {
+      "vmAgent": {
+        "vmAgentVersion": "2.1.3",
+        "extensionHandlers": [],
+        "statuses": [{
+          "code": "ProvisioningState/succeeded",
+          "level": "Info",
+          "displayStatus": "Ready",
+          "message": "Guest Agent is running",
+          "time": "2017-01-03T15:14:40.000Z"
+        }]
+      },
+      "disks": [{
+        "name": "osdisk",
+        "statuses": [{
+          "code": "ProvisioningState/succeeded",
+          "level": "Info",
+          "displayStatus": "Provisioning succeeded",
+          "time": "2017-01-02T14:57:17.094Z"
+        }]
+      },
+      {
+        "name": "datadisk1",
+        "statuses": [{
+          "code": "ProvisioningState/succeeded",
+          "level": "Info",
+          "displayStatus": "Provisioning succeeded",
+          "time": "2017-01-02T14:57:17.094Z"
+        }]
+      }],
+      "bootDiagnostics": {
+        "consoleScreenshotBlobUri": "https://azurestorage.blob.core.windows.net/bootdiagnostics/vmName.screenshot.bmp",
+        "serialConsoleLogBlobUri": "https://azurestorage.blob.core.windows.net/bootdiagnostics/vmName.serialconsole.log"
+      },
+      "statuses": [{
+        "code": "ProvisioningState/succeeded",
+        "level": "Info",
+        "displayStatus": "Provisioning succeeded",
+        "time": "2017-01-02T14:57:55.844Z"
+      },
+      {
+        "code": "PowerState/running",
+        "level": "Info",
+        "displayStatus": "VM running"
+      }]
+    },
+    "vmId":"VM_ID_GUID"
+  }
+}
+

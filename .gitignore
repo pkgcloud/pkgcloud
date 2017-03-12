@@ -13,3 +13,5 @@ coverage.html
 .coveralls.yml
 pkgcloud.lcov*
 node-jscoverage
+*.private.*
+*.vscode/launch.json

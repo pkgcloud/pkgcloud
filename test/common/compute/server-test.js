@@ -14,6 +14,7 @@ var should = require('should'),
     providers = require('../../configs/providers.json'),
     Server = require('../../../lib/pkgcloud/core/compute/server').Server,
     azureApi = require('../../../lib/pkgcloud/azure/utils/azureApi'),
+    azureV2Mocks = require('../../azure-v2/mock-requests'),
     mock = !!process.env.MOCK;
 
 var azureOptions = require('../../fixtures/azure/azure-options.json');
@@ -46,7 +47,7 @@ providers.filter(function (provider) {
 
       // setup a filtering path for aws
       hockInstance.filteringPathRegEx(/https:\/\/ec2\.us-west-2\.amazonaws\.com([?\w\-\.\_0-9\/]*)/g, '$1');
-
+      
       server = http.createServer(hockInstance.handler);
       authServer = http.createServer(authHockInstance.handler);
 
@@ -294,6 +295,10 @@ setupImagesMock = function (client, provider, servers) {
       .get('/azure-account-subscription-id/services/images')
       .replyWithFile(200, __dirname + '/../../fixtures/azure/images.xml');
   }
+  else if (provider === 'azure-v2') {
+
+    azureV2Mocks.prepare();
+  }
   else if (provider === 'digitalocean') {
     servers.server
       .get('/v2/images?per_page=200&page=1')
@@ -354,6 +359,9 @@ setupFlavorMock = function (client, provider, servers) {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
+  }
+  else if (provider === 'azure-v2') {
+    azureV2Mocks.prepare();
   }
 };
 
@@ -470,6 +478,9 @@ setupServerMock = function (client, provider, servers) {
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/creatingServer.json')
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
+  }
+  else if (provider === 'azure-v2') {
+    azureV2Mocks.prepare();
   }
 };
 

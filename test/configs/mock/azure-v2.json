@@ -1,0 +1,9 @@
+{
+    "subscriptionId": "azure-account-subscription-id",
+    "resourceGroup": "resource-group",
+    "servicePrincipal": {
+        "clientId": "sp-client-id",
+        "secret": "sp-secret",
+        "domain": "sp-domain"
+    }
+}
