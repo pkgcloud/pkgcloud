@@ -1,7 +1,7 @@
 /*
  * macros.js: Tests macros for Rackspace
  *
- * (C) 2011 Nodejitsu Inc.
+ * (C) 2011 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
  *
  */
 

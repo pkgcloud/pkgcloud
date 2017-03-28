@@ -1,5 +1,7 @@
 # pkgcloud [![Build Status](https://secure.travis-ci.org/pkgcloud/pkgcloud.png?branch=master)](http://travis-ci.org/pkgcloud/pkgcloud) [![NPM version](https://badge.fury.io/js/pkgcloud.png)](http://badge.fury.io/js/pkgcloud)
 
+[![Join the chat at https://gitter.im/pkgcloud/pkgcloud](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pkgcloud/pkgcloud?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 pkgcloud is a standard library for node.js that abstracts away differences among multiple cloud providers.
 
 * [Getting started](#getting-started)
@@ -16,6 +18,7 @@ pkgcloud is a standard library for node.js that abstracts away differences among
 * [Load Balancers](#load-balancers----beta) *(beta)*
 * [Orchestration](#orchestration----beta) *(beta)*
 * [Network](#network----beta) *(beta)*
+* [CDN](#cdn----beta) *(beta)*
 * _Fine Print_
   * [Installation](#installation)
   * [Tests](#tests)
@@ -33,7 +36,7 @@ You can install `pkgcloud` via `npm` or add to it to [dependencies](https://npmj
 npm install pkgcloud
 ```
 
-Currently there are six service types which are handled by pkgcloud:
+Currently there are nine service types which are handled by pkgcloud:
 
 * [Compute](#compute)
 * [Storage](#storage)
@@ -43,8 +46,24 @@ Currently there are six service types which are handled by pkgcloud:
 * [Load Balancers](#load-balancers----beta) *(beta)*
 * [Network](#network----beta) *(beta)*
 * [Orchestration](#orchestration----beta) *(beta)*
+* [CDN](#cdn----beta) *(beta)*
 
 In our [Roadmap](#roadmap), we plan to add support for more services, such as Queueing, Monitoring, and more. Additionally, we plan to implement more providers for the *beta* services, thus moving them out of *beta*.
+
+### User Agent
+
+By default, all pkgcloud HTTP requests will have a user agent with the library and version: `nodejs-pkgcloud/x.y.z` where `x.y.z` is the current version.
+
+You can get this from a client at any time by calling `client.getUserAgent();`. Some providers may have an additional suffix as a function of the underlying HTTP stacks.
+
+You can also set a custom User Agent prefix:
+
+```javascript
+client.setCustomUserAgent('my-app/1.2.3');
+
+// returns "my-app/1.2.3 nodejs-pkgcloud/1.1.0"
+client.getUserAgent();
+```
 
 <a name="basic-apis"></a>
 ### Basic APIs for pkgcloud
@@ -131,6 +150,9 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [HP](docs/providers/hp/network.md)
   * [Openstack](docs/providers/openstack/network.md)
   * [Rackspace](docs/providers/rackspace/network.md)
+* **[CDN](#cdn----beta)** *(beta)*
+  * [Openstack](docs/providers/openstack/cdn.md)
+  * [Rackspace](docs/providers/rackspace/cdn.md)
 
 ## Compute
 
@@ -365,7 +387,7 @@ To get started with a `pkgcloud.blockstorage` client just create one:
 #### Providers
 
 * [Rackspace](docs/providers/rackspace/blockstorage.md)
-* [Rackspace](docs/providers/openstack/blockstorage.md)
+* [Openstack](docs/providers/openstack/blockstorage.md)
 
 Each instance of `pkgcloud.blockstorage.Client` returned from `pkgcloud.blockstorage.createClient` has a set of uniform APIs:
 
@@ -528,6 +550,52 @@ Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchest
 ### Templates
 * `client.validateTemplate(template, function (err, template) { })`
 
+## CDN -- Beta
+
+##### Note: CDN is considered Beta until there are multiple providers; presently only Openstack and Rackspace are supported.
+
+The `pkgcloud.cdn` service is designed to allow you to access Openstack Poppy via node.js. You can manage services and flavors from within any node.js application.
+
+To get started with a `pkgcloud.cdn` client just create one:
+
+``` js
+  var client = require('pkgcloud').cdn.createClient({
+    //
+    // The name of the provider (e.g. "openstack")
+    //
+    provider: 'provider-name',
+
+    //
+    // ... Provider specific credentials
+    //
+  });
+```
+
+#### Providers
+
+* [Openstack](docs/providers/openstack/cdn.md)
+* [Rackspace](docs/providers/rackspace/cdn.md)
+
+Each instance of `pkgcloud.cdn.Client` returned from `pkgcloud.cdn.createClient` has a set of uniform APIs:
+
+### Base
+* `client.getHomeDocument(function (err, homeDocument) { })`
+* `client.getPing(function (err) { })`
+
+### Service
+* `client.getService(service, function (err, service) { })`
+* `client.getServices(options, function (err, services) { })`
+* `client.createService(details, function (err, service) { })`
+* `client.updateService(service, function (err, service) { })`
+* `client.deleteService(service, function (err) { })`
+
+### Service Assets
+* `client.deleteServiceCachedAssets(service, assetUrl, function(err) { })`
+
+### Flavors
+* `client.getFlavor(flavor, function (err, flavor) { })`
+* `client.getFlavors(options, function (err, flavors) { })`
+
 ## Installation
 
 ``` bash
@@ -535,7 +603,12 @@ Each instance of `pkgcloud.orchestration.Client` returned from `pkgcloud.orchest
 ```
 
 ## Tests
-For run the tests you will need `mocha@1.9.x` or higher, please install it and then run:
+To run the tests you will need `mocha@1.9.x` or higher.  You may install all
+the requirements with:
+``` bash
+ $ npm install
+```
+Then run the tests:
 
 ``` bash
  $ npm test
@@ -606,7 +679,7 @@ var client = pkgcloud.compute.createClient(options);
 
 client.on('log::*', function(message, object) {
   if (object) {
-   console.log(this.event.split('::')[1] + ' ' + message)
+   console.log(this.event.split('::')[1] + ' ' + message);
    console.dir(object);
   }
   else {

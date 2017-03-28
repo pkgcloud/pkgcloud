@@ -1,7 +1,7 @@
 /*
  * container-test.js: Tests for Rackspace Cloudfiles containers
  *
- * (C) 2010 Nodejitsu Inc.
+ * (C) 2010 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
  * MIT LICENSE
  *
  */

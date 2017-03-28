@@ -1,7 +1,7 @@
 /*
  * storage-object-test.js: Tests for Rackspace Cloudfiles containers
  *
- * (C) 2010 Nodejitsu Inc.
+ * (C) 2010 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
  * MIT LICENSE
  *
  */
@@ -249,11 +249,11 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
     });
 
     it('extract should ask server to extract the uploaded tar file', function(done) {
-      
+
       var data = 'H4sIABub81EAA+3TzUrEMBAH8CiIeNKTXvMC1nxuVzx58CiC9uBNam1kQZt1N4X1XXwDX9IJXVi6UDxo6sH/D4akadJOmY7z/owlJkhubTdOulEo040dJpXMTS6tjuuSriTjNnViUbsM5YJztvCPs+atHdxH25wbI6FxOap/9hDqZcjCKqR5RyzwxJjB+iurN/WXiuqvpdGMizTp9P3z+rO94322y9h1WfGbO37P1+IaO6BQFO8U8fqzd/Jo6JGXRXG7nsYTHxSHW1t2NusnlX/Nyvn8pc6KehWumso/zZpnutkGdzq9kNrQv3E+Nb/yudAX+z9t93/f/0LIrf5XNEP/j0H+dQIAAAAAAAAAAAAAAAAAAADwY194ELb5ACgAAA==';
       var tmp = './foo.tar.gz';
       fs.writeFileSync(tmp, new Buffer(data, 'base64'));
-      
+
       if (mock) {
         authHockInstance
           .post('/v2.0/tokens', {
@@ -270,27 +270,27 @@ describe('pkgcloud/rackspace/storage/storage-object', function () {
           .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?extract-archive=tar.gz', new Buffer(data, 'base64').toString())
           .replyWithFile(200, __dirname + '/../../fixtures/rackspace/extract.json');
       }
-      
-      
-      
+
+
+
       client.extract({
         local: tmp
       }, function(e, ok, resp) {
         should.not.exist(e);
         should.exist(resp);
         hockInstance && hockInstance.done();
-        
+
         fs.unlinkSync(tmp);
         done();
       });
-      
+
     });
 
     after(function (done) {
       if (!mock) {
         return done();
       }
-      
+
 
       async.parallel([
         function (next) {

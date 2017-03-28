@@ -1,7 +1,7 @@
 ///*
 // * storage-object-test.js: Tests for uploading files to Rackspace Cloudfiles when not authenticated.
 // *
-// * (C) 2010 Nodejitsu Inc.
+// * (C) 2010 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 // * MIT LICENSE
 // *
 // */

@@ -23,7 +23,7 @@
  */
 
 var azureApi = require('../../lib/pkgcloud/azure/utils/azureApi'),
-  _ = require('underscore'),
+  _ = require('lodash'),
   requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5',
   helpers;
 
@@ -194,8 +194,8 @@ exports.serverTest = function (nock, testHelpers) {
 serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
-    params = {NAME: name, STATUS: status};
+    params = {NAME: name, STATUS: status},
+    compiled = _.template(template);
 
-  var result = _.template(template, params);
-  return result;
+  return compiled(params);
 };

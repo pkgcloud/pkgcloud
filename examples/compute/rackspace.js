@@ -1,5 +1,5 @@
 var pkgcloud = require('pkgcloud'),
-  _ = require('underscore');
+  _ = require('lodash');
 
 // create our client with your rackspace credentials
 var client = pkgcloud.providers.rackspace.compute.createClient({

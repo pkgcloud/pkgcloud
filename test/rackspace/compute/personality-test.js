@@ -2,7 +2,7 @@
 * personality-test.js: tests cloudserver's ability to add files
 *                      to a server's filesystem during creationg
 *
-* (C) 2010 Nodejitsu Inc.
+* (C) 2010 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 * MIT LICENSE
 *
 */

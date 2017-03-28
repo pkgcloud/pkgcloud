@@ -16,19 +16,19 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 
 In this example, we're going to create a Openstack compute client, create two servers, and then output their details to the command line.
 
-*Note: We're going to use [underscore.js](http://underscorejs.org) for some convenience functions.*
+*Note: We're going to use [lodash.js](https://lodash.com) for some convenience functions.*
 *Note: For DevStack, change AuthUrl to http://<devstackIP>:5000*
 
 ```Javascript
 var pkgcloud = require('pkgcloud'),
-    _ = require('underscore');
+    _ = require('lodash');
 
 // create our client with your openstack credentials
 var client = pkgcloud.compute.createClient({
   provider: 'openstack',
   username: 'your-user-name',
   password: 'your-password',
-  region: 'RegionOne' //default for DevStack, might be different on other OpenStack distributions
+  region: 'RegionOne', //default for DevStack, might be different on other OpenStack distributions
   authUrl: 'https://your-identity-service'
 });
 

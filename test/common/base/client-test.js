@@ -1,11 +1,12 @@
 /*
 * client-test.js: Tests for pkgcloud base client
 *
-* (C) 2012 Nodejitsu Inc.
+* (C) 2012 Charlie Robbins, Ken Perkins, Ross Kukulinski & the Contributors.
 *
 */
 
 var should = require('should'),
+    pkgcloud = require('../../../lib/pkgcloud'),
     Client = new require('../../../lib/pkgcloud/core/base/client').Client;
 
 describe('pkgcloud/core/base/client', function () {
@@ -57,6 +58,12 @@ describe('pkgcloud/core/base/client', function () {
         should.exist(err);
         done();
       });
+    });
+
+    it('custom user agents should work', function () {
+      var cli = new Client();
+      cli.setCustomUserAgent('my-app/1.2.3');
+      cli.getUserAgent().should.equal('my-app/1.2.3 nodejs-pkgcloud/' + pkgcloud.version);
     });
 
     it('the before filters throwing an error without a callback should return the error on the EE', function(done) {
