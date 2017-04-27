@@ -1,0 +1,15 @@
+{
+  "value": [
+    { 
+      "id":"/subscriptions/azure-account-subscription-id",
+      "subscriptionId":"azure-account-subscription-id",
+      "displayName":"Subscription Name",
+      "state":"Enabled",
+      "subscriptionPolicies": {
+        "locationPlacementId":"Internal_2014-09-01",
+        "quotaId":"Internal_2014-09-01",
+        "spendingLimit":"Off"
+      }
+    }
+  ]
+}

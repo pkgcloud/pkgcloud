@@ -67,8 +67,8 @@ helpers.loadConfig = function loadConfig(provider) {
   return JSON.parse(content);
 };
 
-helpers.fixturePath = function fixturePath(path) {
-  return __dirname + '/../fixtures/' + path;
+helpers.fixturePath = function fixturePath(fpath) {
+  return path.join(__dirname, '..', 'fixtures', fpath);
 };
 
 helpers.loadFixture = function loadFixture(path, json) {

@@ -1,0 +1,60 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/subscriptionId/resourceGroups/resource-group/providers/Microsoft.Compute/virtualMachines/vmName",
+      "name":"vmName",
+      "type":"Microsoft.Compute/virtualMachines",
+      "location":"somelocation",
+      "hardwareProfile": {
+        "vmSize":"Standard_SIZE"
+      },
+      "storageProfile": {
+        "imageReference": {
+          "publisher":"PUBLISHER",
+          "offer":"OFFER",
+          "sku":"SKU",
+          "version":"VERSION"
+        },
+        "osDisk": {
+          "osType":"SOME_OS",
+          "name":"osdisk",
+          "vhd": { "uri":"https://azurestorage.blob.core.windows.net/vhds/osdisk.vhd" },
+          "caching":"ReadWrite",
+          "createOption":"FromImage"
+        },
+        "dataDisks": [
+          {
+            "lun":0,
+            "name":"datadisk1",
+            "vhd": { "uri":"https://azurestorage.blob.core.windows.net/vhds/datadisk1.vhd" },
+            "caching":"None",
+            "createOption":"Empty",
+            "diskSizeGB":100
+          }
+        ]
+      },
+      "osProfile": {
+        "computerName":"vmName",
+        "adminUsername":"pkgcloud",
+        "linuxConfiguration": { "disablePasswordAuthentication":false },
+        "secrets":[]
+      },
+      "networkProfile": {
+        "networkInterfaces":[
+          {
+            "id":"/subscriptions/subscriptionId/resourceGroups/resource-group/providers/Microsoft.Network/networkInterfaces/nicName" 
+          }
+        ]
+      },
+      "diagnosticsProfile": {
+        "bootDiagnostics": {
+          "enabled":true,
+          "storageUri":"https://azurestorage.blob.core.windows.net/"
+        }
+      },
+      "provisioningState": "Succeeded",
+      "vmId":"VM_ID_GUID"
+    }
+  ]
+}
+

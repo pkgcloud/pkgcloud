@@ -1,0 +1,8 @@
+{
+  "id": "/subscriptions/azure-account-subscription-id/resourcegroups/resource-group",
+  "name": "resource-group",
+  "location": "location",
+  "properties": {
+    "provisioningState": "Succeeded"
+  }
+}

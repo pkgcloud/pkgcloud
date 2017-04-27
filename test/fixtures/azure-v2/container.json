@@ -1,0 +1,25 @@
+{
+	"id": "/subscriptions/azure-account-subscription-id/resourceGroups/resource-group/providers/Microsoft.Storage/storageAccounts/azurestorage",
+	"kind": "Storage",
+	"location": "westeurope",
+	"name": "azurestorage",
+	"properties": {
+		"creationTime": "2017-01-08T16:29:06.2738884Z",
+		"primaryEndpoints": {
+			"blob": "https://azurestorage.blob.core.windows.net/",
+			"file": "https://azurestorage.file.core.windows.net/",
+			"queue": "https://azurestorage.queue.core.windows.net/",
+			"table": "https://azurestorage.table.core.windows.net/"
+		},
+		"primaryLocation": "westeurope",
+		"provisioningState": "Succeeded",
+		"statusOfPrimary": "available"
+	},
+	"sku": {
+		"name": "Standard_LRS",
+		"tier": "Standard"
+	},
+	"tags": {
+	},
+	"type": "Microsoft.Storage/storageAccounts"
+}

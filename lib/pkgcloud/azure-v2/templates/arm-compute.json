@@ -1,0 +1,185 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": { "type": "string" },
+    "flavor": { "type": "string", "defaultValue": "Standard_A1" },
+    "username": { "type": "string" },
+    "password": { "type": "securestring" },
+
+    "storageAccountName": { "type": "string", "defaultValue": "_NONE_" },
+    "storageAccountType": { "type": "string", "defaultValue": "Standard_LRS" },
+    "storageContainerName": { "type": "string", "defaultValue": "vhds" },
+    "storageOSDiskName": { "type": "string", "defaultValue": "osdisk" },
+
+    "publicIPAddressName": { "type": "string", "defaultValue": "_NONE_" },
+    "publicIPAddressType": { "type": "string", "defaultValue": "Dynamic" },
+    "dnsLabelPrefix": { "type": "string", "defaultValue": "_NONE_"},
+
+    "vnetName": { "type": "string", "defaultValue": "_NONE_" },
+    "vnetAddressPrefix": { "type": "string", "defaultValue": "10.0.0.0/16" },
+    "vnetSubnetName": { "type": "string", "defaultValue": "Subnet" },
+    "vnetSubnetPrefix": { "type": "string", "defaultValue": "10.0.0.0/24" },
+
+    "nicName": { "type": "string", "defaultValue": "_NONE_" },
+
+    "imagePublisher": { "type": "string", "defaultValue": "Canonical" },
+    "imageOffer": { "type": "string", "defaultValue": "UbuntuServer" },
+    "imageSku": { "type": "string", "defaultValue": "16.04.0-LTS" },
+    "imageVersion": { "type": "string", "defaultValue": "latest" }
+  },
+  "variables": {
+    "vmName": "[parameters('name')]",
+    "vmSize": "[parameters('flavor')]",
+
+    "storageAccountName": "[replace(parameters('storageAccountName'), '_NONE_', concat(replace(variables('vmName'), '-', ''), 'store'))]",
+    "publicIPAddressName": "[replace(parameters('publicIPAddressName'), '_NONE_', concat(variables('vmName'), '-public-ip'))]",
+    "dnsLabelPrefix": "[replace(parameters('dnsLabelPrefix'), '_NONE_', concat(variables('vmName'), '-vmdns'))]",
+    "vnetName": "[replace(parameters('vnetName'), '_NONE_', concat(variables('vmName'), '-vnet'))]",
+    "nicName": "[replace(parameters('nicName'), '_NONE_', concat(variables('vmName'), '-nic'))]",
+    
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('vnetSubnetName'))]",
+    "hostDNSNameScriptArgument": "[concat('*.',resourceGroup().location,'.cloudapp.azure.com')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "2016-01-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('storageAccountType')]"
+      },
+      "kind": "Storage",
+      "properties": {}
+    },
+    {
+      "apiVersion": "2016-09-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "[parameters('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('dnsLabelPrefix')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2016-09-01",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[variables('vnetName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('vnetSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('vnetSubnetPrefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2016-09-01",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnetName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2016-03-30",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('vmName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[parameters('username')]",
+          "adminPassword": "[parameters('password')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSku')]",
+            "version": "[parameters('imageVersion')]"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob, parameters('storageContainerName'),'/',parameters('storageOSDiskName'),'.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "hostname": {
+      "type": "string",
+      "value": "[reference(variables('publicIPAddressName')).dnsSettings.fqdn]"
+    },
+    "sshCommand": {
+      "type": "string",
+      "value": "[concat('ssh ', parameters('username'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
+    },
+    "location": {
+      "type": "string",
+      "value": "[resourceGroup().location]"
+    },
+    "vmID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+    }
+  }
+}

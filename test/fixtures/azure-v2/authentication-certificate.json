@@ -1,0 +1,9 @@
+{
+  "token_type":"Bearer",
+  "expires_in":"3600",
+  "ext_expires_in":"10800",
+  "expires_on":"1483452282",
+  "not_before":"1483448382",
+  "resource":"https://management.core.windows.net/",
+  "access_token":"XXXXXXXX"
+}
