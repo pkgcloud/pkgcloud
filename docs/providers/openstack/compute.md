@@ -31,10 +31,12 @@ Options are as follows:
 
 ```js
 {
-  name: 'serverName', // required
-  flavor: 'flavor1',  // required
-  image: 'image1',    // required
-  personality: []     // optional
+  name: 'serverName',   // required
+  flavor: 'flavor1',    // required
+  image: 'image1',      // required
+  personality: []       // optional
+  metadata: '',         // optional
+  availability_zone: '' // optional
 }
 ```
 Returns the server in the callback `f(err, server)`
