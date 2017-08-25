@@ -1,0 +1,31 @@
+{
+  "id": "842F09CAF954298C6A4BCD25E1CA3689",
+  "name": "My Image 2",
+  "datacenter": {
+    "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+    "location": "USA",
+    "country_code": "US"
+  },
+  "os_family": "Linux",
+  "os": "Centos",
+  "os_version": "Centos6",
+  "architecture": 64,
+  "os_image_type": "Personal",
+  "type": "MY_IMAGE",
+  "min_hdd_size": 40,
+  "licenses": [],
+  "cloudpanel_id": "ap8962D_248",
+  "state": "ACTIVE",
+  "description": null,
+  "hdds": [
+    {
+      "id": "35AAD7EB668D7ECF58AF9413DB127BD3",
+      "size": 40,
+      "is_main": true
+    }
+  ],
+  "server_id": "CB8A023E99CE2026981A110018A00764",
+  "frequency": "ONCE",
+  "num_images": 1,
+  "creation_date": "2015-04-14T07:18:20+00:00"
+}
