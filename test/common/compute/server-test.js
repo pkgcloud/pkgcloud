@@ -327,6 +327,11 @@ setupImagesMock = function (client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
   }
+  else if (provider === 'oneandone') {
+    servers.server
+    .get('/server_appliances')
+    .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listImages.json');
+  }
 };
 
 setupFlavorMock = function (client, provider, servers) {
@@ -354,6 +359,11 @@ setupFlavorMock = function (client, provider, servers) {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
+  }
+  else if (provider === 'oneandone') {
+    servers.server
+      .get('/servers/fixed_instance_sizes')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listFlavors.json');
   }
 };
 
@@ -471,6 +481,17 @@ setupServerMock = function (client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
+  else if (provider === 'oneandone') {
+    servers.server
+      .post('/servers', {
+        name: 'create-test-ids2',
+        hardware: {fixed_instance_size_id: '8C626C1A7005D0D1F527143C413D461E'}
+        , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E'
+      })
+      .replyWithFile(202, __dirname + '/../../fixtures/oneandone/getServer.json')
+      .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/getServer.json');
+    }
 };
 
 setupGetServersMock = function (client, provider, servers) {
@@ -518,6 +539,11 @@ setupGetServersMock = function (client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/hp/serverList.json');
   }
+  else if (provider === 'oneandone') {
+    servers.server
+      .get('/servers')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listServers.json');
+  }
 };
 
 setupGetServerMock = function (client, provider, servers) {
@@ -563,382 +589,30 @@ setupGetServerMock = function (client, provider, servers) {
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
+  else if (provider === 'oneandone') {
+    servers.server
+      .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/getServer.json');
+  }
 };
 
 setupRebootMock = function() {
   // TODO
 };
 
-//
-//function batchThree(providerClient, providerName) {
-//  var name   = providerName   || 'rackspace',
-//      client = providerClient || clients['rackspace'],
-//      test   = {};
-//
-//  test["The pkgcloud " + name + " compute client"] = {
-//    "the getServers() method": {
-//      topic: function () {
-//        client.getServers(this.callback);
-//      },
-//      "should return the list of servers": function (err, servers) {
-//        assert.isNull(err);
-//        testContext.servers = servers;
-//        servers.forEach(function (server) {
-//          assert.assertServer(server);
-//        });
-//      }
-//    },
-//    "the getServer() method": {
-//      topic: function () {
-//        client.getServer(testContext.servers[0], this.callback);
-//      },
-//      "should return a valid server": function (err, server) {
-//        client.destroyServer(server);
-//        assert.isNull(err);
-//        assert.assertServerDetails(server);
-//        assert.ok(Array.isArray(server.addresses["public"]));
-//        assert.ok(Array.isArray(server.addresses["private"]));
-//        if (name === 'openstack') {
-//          assert.ok(typeof server.addresses["private"][0] === 'object');
-//          assert.ok(typeof server.addresses["public"][0] === 'object');
-//        }
-//        else {
-//          assert.ok(typeof server.addresses["private"][0] === 'string');
-//          assert.ok(typeof server.addresses["public"][0] === 'string');
-//        }
-//      }
-//    }
-//  };
-//
-//  return test;
-//}
-//
-//function batchReboot(providerClient, providerName, nock) {
-//  var name    = providerName   || 'rackspace',
-//      client  = providerClient || clients['rackspace'],
-//      timeout = process.env.MOCK ? 1 : 10000,
-//      test    = {};
-//
-//  test["The pkgcloud " + name + " compute client"] = {
-//    "the rebootServer() method": {
-//      topic: function () {
-//        var self = this;
-//        client.createServer(_.extend({
-//            name  : "test-reboot",
-//            image : testContext.images[0].id,
-//            flavor: testContext.flavors[0].id
-//          }, name === 'azure' ? azureOptions : {}),
-//          function (err, server, response) {
-//            if (err) { return self.callback(err); }
-//
-//            function waitForReboot(server) {
-//              // should have used setWait
-//              // dont do this in your code
-//              return setTimeout(function () {
-//                server.refresh(function (err, srv) {
-//                  if (err) { return self.callback(err); }
-//                  if (srv.status === "RUNNING") {
-//                    return self.callback(null, srv);
-//                  }
-//                  waitForReboot(srv);
-//                });
-//              }, timeout);
-//            }
-//
-//          function keepTrying() {
-//            // should have used setWait
-//            // dont do this in your code
-//            return setTimeout(function () {
-//              if (server.status==='RUNNING') {
-//                server.reboot(function (err, ok) {
-//                  if (err) { return self.callback(err); }
-//                  waitForReboot(server);
-//                });
-//              } else {
-//                server.refresh(function (err, srv) {
-//                  if (err) { return self.callback(err); }
-//                  server = srv;
-//                  keepTrying();
-//                });
-//              }
-//            }, timeout);
-//          }
-//          keepTrying();
-//        });
-//      },
-//      "should return a server after reboot": function (err, server) {
-//        assert.isNull(err);
-//        assert.assertServer(server);
-//      }
-//    }
-//  };
-//
-//  return test;
-//}
-//
-//function batchDestroy(providerClient, providerName) {
-//  var name   = providerName   || 'rackspace',
-//      client = providerClient || clients['rackspace'],
-//      test   = {};
-//
-//  test["The pkgcloud " + name + " compute client"] = {
-//    "the destroyServer() method": {
-//      topic: function () {
-//        client.destroyServer(testContext.servers[0].id, this.callback);
-//      },
-//      "should respond correctly": function (err, response) {
-//        assert.isNull(err);
-//        assert.ok(response.ok);
-//        assert.equal(response.ok, testContext.servers[0].id);
-//      }
-//    }
-//  };
-//
-//  return test;
-//}
-//
-//JSON.parse(fs.readFileSync(__dirname + '/../../configs/providers.json'))
-//  .forEach(function (provider) {
-//    clients[provider] = helpers.createClient(provider, 'compute');
-//
-//    var client = clients[provider],
-//        nock   = require('nock');
-//
-//    testData    = {};
-//    testContext = {};
-//
-//    if (process.env.MOCK) {
-//      if (provider === 'joyent') {
-//        nock('https://' + client.serversUrl)
-//          .get('/' + client.account + '/machines')
-//            .reply(200, "[]", {})
-//          .get('/' + client.account + '/datasets')
-//            .reply(200, __dirname + '/../../fixturejoyent/images.json'), {})
-//          .get('/' + client.account + '/packages')
-//            .reply(200, __dirname + '/../../fixturejoyent/flavors.json'), {})
-//
-//
-//        ["delete"]('/' + client.account +
-//         '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-//          .reply(204, "", {})
-//        .get('/' + client.account + '/machines')
-//          .reply(200, __dirname + '/../../fixturejoyent/servers.json'), {})
-//        .post('/' + client.account + '/machines',
-//            __dirname + '/../../fixturejoyent/rebootServerRequest1.json'))
-//          .reply(201,
-//            __dirname + '/../../fixturejoyent/rebootServerResponse1.json'), {})
-//        .get('/' + client.account +
-//            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
-//          .reply(200,
-//            __dirname + '/../../fixturejoyent/fe4d8e28.json'), {})
-//        .post('/' + client.account +
-//            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5?action=reboot')
-//          .reply(202, "", {})
-//        .get('/' + client.account +
-//            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
-//          .reply(200,
-//            __dirname + '/../../fixturejoyent/fe4d8e28.json'), {})
-//
-//        .get('/' + client.account +
-//            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-//          .reply(200,
-//          __dirname + '/../../fixturejoyent/14186c17.json'), {})
-//          .get('/' + client.account +
-//            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-//          .reply(200,
-//          __dirname + '/../../fixturejoyent/14186c17.json'), {})
-//          ["delete"]('/' + client.account +
-//            '/machines/fe4d8e28-6154-4281-8f0e-dead21585ed5')
-//          .reply(204, "", {})
-//          .post('/' + client.account +
-//          '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9', { action: 'stop' })
-//          .reply(202, "", {})
-//          .get('/' + client.account +
-//            '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-//          .reply(200,
-//          __dirname + '/../../fixturejoyent/14186c17.json'), {})
-//        ;
-//      }
-//      else if (provider === 'rackspace') {
-//        nock('https://' + client.authUrl)
-//          .get('/v1.0')
-//          .reply(204, "",
-//            JSON.parse(__dirname + '/../../fixturerackspace/auth.json')));
-//        nock('https://' + client.serversUrl)
-//          .get('/v1.0/537645/flavors/detail.json')
-//            .reply(200, __dirname + '/../../fixturerackspace/serverFlavors.json'), {})
-//          .get('/v1.0/537645/images/detail.json')
-//            .reply(200, __dirname + '/../../fixturerackspace/images.json'), {})
-//          .get('/v1.0/537645/images/detail.json')
-//            .reply(200, __dirname + '/../../fixturerackspace/images.json'), {})
-//
-//
-//          .post('/v1.0/537645/servers',
-//              __dirname + '/../../fixturerackspace/createServer.json'))
-//            .reply(202,  __dirname + '/../../fixturerackspace/createdServer.json'),
-//              {})
-//          .get('/v1.0/537645/servers/detail.json')
-//            .reply(204, __dirname + '/../../fixturerackspace/servers.json'), {})
-//          ["delete"]('/v1.0/537645/servers/20592449')
-//            .reply(200, '{"ok": 20592449}', {})
-//          .get('/v1.0/537645/servers/20592449')
-//              .reply(200, __dirname + '/../../fixturerackspace/20592449.json'), {})
-//          .post('/v1.0/537645/servers',
-//              __dirname + '/../../fixturerackspace/createReboot.json'))
-//            .reply(202,
-//              __dirname + '/../../fixturerackspace/buildingReboot.json'), {})
-//          .get('/v1.0/537645/servers/20596929')
-//            .reply(200,
-//              __dirname + '/../../fixturerackspace/activeReboot.json'), {})
-//          .post('/v1.0/537645/servers/20596929/action',
-//              '{"reboot":{"type":"SOFT"}}')
-//            .reply(202, "", {})
-//          .get('/v1.0/537645/servers/20596929')
-//            .reply(200,
-//              __dirname + '/../../fixturerackspace/activeReboot.json'), {})
-//          ;
-//      } else if (provider === 'amazon') {
-//        nock('https://' + client.serversUrl)
-//          .filteringRequestBody(helpers.authFilter)
-//
-//
-//          .post('/?Action=TerminateInstances', {
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200, 'doesn\'t matter', {})
-//          .post('/?Action=RunInstances', {
-//            'ImageId': 'ami-85db1cec',
-//            'InstanceType': 'm1.small',
-//            'MaxCount': '1',
-//            'MinCount': '1',
-//            'UserData': 'eyJuYW1lIjoidGVzdC1yZWJvb3QifQ=='
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/run-instances.xml'), {})
-//          .post('/?Action=DescribeInstances', {
-//            'Filter.1.Name': 'instance-state-code',
-//            'Filter.1.Value.1': '0',
-//            'Filter.1.Value.2': '16',
-//            'Filter.1.Value.3': '32',
-//            'Filter.1.Value.4': '64',
-//            'Filter.1.Value.5': '80',
-//            'InstanceId.1': 'i-1d48637b'
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/pending-server.xml'), {})
-//          .post('/?Action=DescribeInstanceAttribute', {
-//            'Attribute': 'userData',
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200,
-//            __dirname + '/../../fixtureamazon/running-server-attr.xml', {}))
-//          .post('/?Action=DescribeInstances', {
-//            'Filter.1.Name': 'instance-state-code',
-//            'Filter.1.Value.1': '0',
-//            'Filter.1.Value.2': '16',
-//            'Filter.1.Value.3': '32',
-//            'Filter.1.Value.4': '64',
-//            'Filter.1.Value.5': '80',
-//            'InstanceId.1': 'i-1d48637b'
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/running-server.xml'), {})
-//          .post('/?Action=DescribeInstanceAttribute', {
-//            'Attribute': 'userData',
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200,
-//            __dirname + '/../../fixtureamazon/running-server-attr.xml', {}))
-//          .post('/?Action=RebootInstances', {
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/reboot-server.xml', {}))
-//          .post('/?Action=DescribeInstances', {
-//            'Filter.1.Name': 'instance-state-code',
-//            'Filter.1.Value.1': '0',
-//            'Filter.1.Value.2': '16',
-//            'Filter.1.Value.3': '32',
-//            'Filter.1.Value.4': '64',
-//            'Filter.1.Value.5': '80',
-//            'InstanceId.1': 'i-1d48637b'
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/pending-server.xml'), {})
-//          .post('/?Action=DescribeInstanceAttribute', {
-//            'Attribute': 'userData',
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200,
-//            __dirname + '/../../fixtureamazon/running-server-attr.xml', {}))
-//          .post('/?Action=DescribeInstances', {
-//            'Filter.1.Name': 'instance-state-code',
-//            'Filter.1.Value.1': '0',
-//            'Filter.1.Value.2': '16',
-//            'Filter.1.Value.3': '32',
-//            'Filter.1.Value.4': '64',
-//            'Filter.1.Value.5': '80',
-//            'InstanceId.1': 'i-1d48637b'
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/running-server.xml'), {})
-//          .post('/?Action=DescribeInstanceAttribute', {
-//            'Attribute': 'userData',
-//            'InstanceId': 'i-1d48637b'
-//          })
-//          .reply(200, __dirname + '/../../fixtureamazon/running-server-attr.xml'), {})
-//      } else if (provider === 'azure') {
-//        azureNock.serverTest(nock, helpers);
-//      } else if (provider === 'openstack') {
-//        nock(client.authUrl)
-//
-//
-//        nock('http://compute.myownendpoint.org:8774')
-//
-//
-//          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
-//            .reply(200, __dirname + '/../../fixtureopenstack/serverList.json'))
-//          .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
-//            .reply(200, __dirname + '/../../fixtureopenstack/serverCreated2.json'))
-//          ["delete"]('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
-//            .reply(204, "");
-//      }
-//    }
-//
-//    var suite = vows.describe('pkgcloud/common/compute/server [' + provider + ']')
-//      .addBatch(batchOne(client, provider))
-//      .addBatch(batchTwo(client, provider))
-//    ;
-//
-//    // Delete the server created on step two
-//    if (provider === 'openstack') {
-//      suite
-//        .addBatch(batchDestroy(client, provider))
-//      ;
-//    }
-//
-//    suite
-//      .addBatch(batchThree(client, provider))
-//    ;
-//
-//    // Disable reboot test for openstack :(
-//    if (provider !== 'openstack') {
-//      suite
-//        .addBatch(batchReboot(client, provider, nock))
-//      ;
-//    }
-//
-//    suite
-//       .export(module)
-//    ;
-//  });z
 /**
- * serverStatusReply()
- * fills in the nock xml reply from the server with server name and status
- * @param name - name of the server
- * @param status - status to be returned in reply
- *  status should be:
- *      ReadyRole - server is RUNNING
- *      VMStopped - server is still PROVISIONING
- *      Provisioning - server is still PROVISIONING
- *      see lib/pkgcloud/azure/compute/server.js for more status values
- *
- * @return {String} - the xml reply containing the server name and status
- */
+ - * serverStatusReply()
+ - * fills in the nock xml reply from the server with server name and status
+ - * @param name - name of the server
+ - * @param status - status to be returned in reply
+ - *  status should be:
+ - *      ReadyRole - server is RUNNING
+ - *      VMStopped - server is still PROVISIONING
+ - *      Provisioning - server is still PROVISIONING
+ - *      see lib/pkgcloud/azure/compute/server.js for more status values
+ - *
+ - * @return {String} - the xml reply containing the server name and status
+ - */
 serverStatusReply = function (name, status) {
 
   var template = helpers.loadFixture('azure/server-status-template.xml'),
