@@ -15,9 +15,9 @@ var should = require('should'),
 
 var srvr_options = {
     name: 'create-test-oao2',
-    flavor: 'S',
+    flavor: '81504C620D98BCEBAA5202D145203B4B',
     image: '6631A1589A2CC87FEA9B99AB07399281',
-    location: 'Germany',
+    location: '4EFAD5836CE43ACA502FD5B99BEE44EF',
 };
 var image_options = {
     name: 'pkgcloud image2',
