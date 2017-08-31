@@ -10,7 +10,6 @@ var should = require('should'),
   hock = require('hock'),
   http = require('http'),
   mock = !!process.env.MOCK,
-  Server = require('../../../lib/pkgcloud/core/compute/server').Server,
   Snapshot = require('../../../lib/pkgcloud/oneandone/blockstorage/snapshot').Snapshot;
 
 var srvr_options = {
