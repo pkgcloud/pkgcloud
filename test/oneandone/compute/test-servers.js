@@ -9,9 +9,9 @@ var should = require('should'),
 var client;
 var options = {
     name: 'create-test-oao2',
-    flavor: 'S',
+    flavor: '81504C620D98BCEBAA5202D145203B4B',
     image: '6631A1589A2CC87FEA9B99AB07399281',
-    location: 'Germany',
+    location: '4EFAD5836CE43ACA502FD5B99BEE44EF',
     token: process.env.OAO_TOKEN
 };
 
@@ -30,11 +30,12 @@ describe('Server tests', function () {
                 srv1.image.id.should.equal(options.image);
                 done();
             });
+        }else{
+            hockInstance = hock.createHock({throwOnUnmatched: false});
+            hockInstance.filteringRequestBody(helpers.authFilter);
+            mockServer = http.createServer(hockInstance.handler);
+            mockServer.listen(12345, done);
         }
-        hockInstance = hock.createHock({throwOnUnmatched: false});
-        hockInstance.filteringRequestBody(helpers.authFilter);
-        mockServer = http.createServer(hockInstance.handler);
-        mockServer.listen(12345, done);
     });
 
     after(function (done) {
