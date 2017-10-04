@@ -31,12 +31,8 @@ describe('pkgcloud/mongolab/databases', function () {
 
     if (mock) {
       hockInstance
-        .post('/api/1/partners/nodejitsu/accounts', {
-          name: 'nodejitsu_daniel',
-          adminUser: {
-            email: 'daniel@nodejitsu.com'
-          }
-        })
+        .post('/api/1/partners/nodejitsu/accounts', 
+          '\"{\\\"name\\\":\\\"nodejitsu_daniel\\\",\\\"adminUser\\\":{\\\"email\\\":\\\"daniel@nodejitsu.com\\\"}}\"')
         .reply(200, helpers.loadFixture('mongolab/user.json'));
     }
 
@@ -120,13 +116,8 @@ describe('pkgcloud/mongolab/databases', function () {
 
       if (mock) {
         hockInstance
-          .post('/api/1/partners/nodejitsu/accounts', {
-            name: 'nodejitsu_custompassword',
-            adminUser: {
-              email: 'custom@password.com',
-              password: 'my1custom2password'
-            }
-          })
+          .post('/api/1/partners/nodejitsu/accounts',
+            '\"{\\\"name\\\":\\\"nodejitsu_custompassword\\\",\\\"adminUser\\\":{\\\"email\\\":\\\"custom@password.com\\\",\\\"password\\\":\\\"my1custom2password\\\"}}\"')
           .reply(200, helpers.loadFixture('mongolab/customUser.json'));
       }
 
@@ -201,7 +192,7 @@ describe('pkgcloud/mongolab/databases', function () {
 
     if (mock) {
       hockInstance
-        .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', helpers.loadFixture('mongolab/reqDatabase.json'))
+        .post('/api/1/partners/nodejitsu/accounts/nodejitsu_daniel/databases', '\"' + helpers.loadFixture('mongolab/reqDatabase.json').replace(/"/g, '\\\"') + '\"')
         .reply(200, helpers.loadFixture('mongolab/database.json'));
     }
 
