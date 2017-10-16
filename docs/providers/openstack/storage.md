@@ -1,5 +1,8 @@
 ## Using the Openstack Storage provider
 
+* Account
+  * [Model](#account-model)
+  * [APIs](#account-apis)
 * Container
   * [Model](#container-model)
   * [APIs](#container-apis)
@@ -21,6 +24,21 @@ Creating a client is straight-forward:
 **Note:** *Due to variances between OpenStack deployments, you may or may not need a `region` option.*
 
 Learn about [more options for creating clients](README.md) in the Openstack `storage` provider.
+
+### Account Model
+
+An Account for Openstack has following properties:
+
+```Javascript
+{
+  name: 'my-account',
+  count: 1, // number of containers in your account
+  bytes: 12345, // size of the account in bytes
+  metadata: { // key value pairs for the account
+    // ...
+  }
+}
+```
 
 ### Container Model
 
@@ -51,6 +69,53 @@ A File for Openstack has the following properties:
   etag: '1234567890abcdef', // MD5 sum of the file
   metadata: {} // optional object metadata
 }
+```
+
+### Account APIs
+
+* [`client.getAccount(account, function(err, account) { })`](#clientgetaccountaccount-functionerr-account--)
+* [`client.updateAccountMetadata(account, function(err, account) { })`](#clientupdateaccountmetadataaccount-functionerr-account--)
+* [`client.removeAccountMetadata(account, metadataToRemove, function(err, account) { })`](#clientremoveaccountmetadataaccount-metadatatoremove-functionerr-account--)
+
+### Account API Details
+
+For all of the account methods, you can pass either an instance of [`account`](#account) or the account name as `account`. For example:
+
+```Javascript
+client.getAccount('my-account', function(err, account) { ... });
+```
+
+This call is functionally equivalent to:
+
+```Javascript
+var myAccount = new Account({ name: 'my-account' });
+
+client.getAccount(myAccount, function(err, account) { ... });
+```
+
+#### client.getAccount(account, function(err, account) { })
+
+Retrieves the specified [`account`](#account-model) from the current client instance.
+
+#### client.updateAccountMetadata(account, function(err, account) { })
+
+Updates the metadata on the provided [`account`](#account-model) . Currently, the `updateAccount` method only adds new metadata fields. If you need to remove specific metadata properties, you should call `client.removeAccountMetadata(...)`.
+
+```javascript
+account.metadata.color = 'red';
+client.updateAccountMetadata(account, function(err, account) {
+  // ...
+})
+```
+
+#### client.removeAccountMetadata(account, metadataToRemove, function(err, account) { })
+
+Removes the keys in the `metadataToRemove` object from the stored [`account`](#account-model) metadata.
+
+```Javascript
+client.removeAccountMetadata(account, { year: false }, function(err, c) {
+  // ...
+});
 ```
 
 ### Container APIs
