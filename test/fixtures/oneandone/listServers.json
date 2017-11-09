@@ -1,0 +1,88 @@
+[
+  {
+    "id": "39AA65F5D5B02FA02D58173094EBAF95",
+    "cloudpanel_id": "958FA92",
+    "name": "create-test-ids2",
+    "description": "",
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "location": "USA",
+      "country_code": "US"
+    },
+    "creation_date": "2015-05-04T06:32:15+00:00",
+    "first_password": "Fg52K21nz8",
+    "status": {
+      "state": "POWERED_ON",
+      "percent": null
+    },
+    "hardware": {
+      "fixed_instance_size_id": 0,
+      "vcore": 1,
+      "cores_per_processor": 1,
+      "ram": 2,
+      "hdds": [
+        {
+          "id": "8C626C1A7005D0D1F527143C413D461E",
+          "size": 40,
+          "is_main": true
+        }
+      ]
+    },
+    "image": {
+      "id": "3C3B80327CBBD7F0023F793F666C24D0",
+      "name": "w2008r2datacenter64std"
+    },
+    "dvd": null,
+    "snapshot": null,
+    "ips": [
+      {
+        "id": "8D135204687B9CF9E79E7A93C096E336",
+        "ip": "10.4.140.213",
+        "type": "IPV4",
+        "reverse_dns": null,
+        "firewall_policy": null,
+        "load_balancers": []
+      }
+    ],
+    "alerts": [],
+    "monitoring_policy": null,
+    "private_networks": null
+  },
+  {
+    "id": "D6F1239315503A1C44607BB04B3BD9C9",
+    "name": "My Server 2",
+    "status": {
+      "state": "POWERED_ON",
+      "percent": null
+    },
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "location": "USA",
+      "country_code": "US"
+    },
+    "image": {
+      "id": "3C3F2FA3DB91318E8DCCB9F405339F76",
+      "name": "centos7-64std"
+    },
+    "hardware": {
+      "fixed_instance_size_id": 0,
+      "vcore": 1,
+      "cores_per_processor": 1,
+      "ram": 2,
+      "hdds": [
+        {
+          "id": "14B3CD8FE65C69F0AF28BE42431182E1",
+          "size": 40,
+          "is_main": true
+        }
+      ]
+    },
+    "ips": [
+      {
+        "id": "F116AFAAF937A5661601D31463B3A776",
+        "ip": "10.4.141.154"
+      }
+    ],
+    "alerts": null
+  }
+]
