@@ -1,0 +1,17 @@
+{
+  "name": "M",
+  "id": "8C626C1A7005D0D1F527143C413D461E",
+  "hardware": {
+    "vcore": 1,
+    "cores_per_processor": 1,
+    "ram": 1,
+    "unit": "GB",
+    "hdds": [
+      {
+        "size": 40,
+        "unit": "GB",
+        "is_main": true
+      }
+    ]
+  }
+}

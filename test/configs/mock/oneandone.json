@@ -1,0 +1,7 @@
+{
+  "token": "MOCK",
+  "serversUrl": "localhost:12345",
+  "authUrl": "http://localhost:12346",
+  "databaseUrl": "localhost:12345",
+  "protocol": "http://"
+}
