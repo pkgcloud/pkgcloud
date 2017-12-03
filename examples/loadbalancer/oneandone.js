@@ -59,7 +59,7 @@ var pkgcloud = require('pkgcloud'),
             healthCheckInterval: 40,
             Persistence: true,
             persistenceTime: 1200,
-            method: "ROUND_ROBIN",
+            method: 'ROUND_ROBIN',
             rules: [
               {
                 protocol: 'TCP',
@@ -76,6 +76,7 @@ var pkgcloud = require('pkgcloud'),
               console.error(err);
               return;
             }
+            console.log(loadbalancer);
           });
         });
       });

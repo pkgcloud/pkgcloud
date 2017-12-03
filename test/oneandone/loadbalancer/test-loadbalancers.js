@@ -137,9 +137,9 @@ describe('LoadBalancer tests', function () {
         .reply(202, helpers.loadFixture('oneandone/createLoadBalancer.json'));
     }
     var updateops = {};
-    updateops.name = "update oao";
+    updateops.name = 'update oao';
     updateops.healthCheckInterval = 100;
-    updateops.healthCheckPath = "path";
+    updateops.healthCheckPath = 'path';
     updateops.healthCheckParser = 100;
     updateops.Persistence = true;
     updateops.persistenceTime = 1000;

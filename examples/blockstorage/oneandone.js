@@ -58,6 +58,7 @@ var pkgcloud = require('pkgcloud'),
               console.error(err);
               return;
             }
+            console.log(snapshot);
           });
         });
       });
