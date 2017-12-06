@@ -135,6 +135,9 @@ client.removeContainerMetadata(container, { year: false }, function(err, c) {
 * [`client.getFiles(container, function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
 * [`client.removeFile(container, file, function(err, result) { })`](#clientremovefilecontainer-file-functionerr-result--)
 * [`client.updateFileMetadata(container, file, function(err, file) { })`](#clientupdatefilemetadatacontainer-file-functionerr-file--)
+* [`client.bulkDelete(container, files, function(err, file) { })`](#clientbulkdeletecontainer-files-functionerr-file--)
+* [`client.bulkArchive(container, file, function(err, file) { })`](#clientbulkarchivecontainer-file-functionerr-file--)
+
 
 ### File API Details
 
@@ -263,6 +266,29 @@ file.metadata = {
 
 client.updateFileMetadata(file.container, file, function(err, file) {
   // ...
+});
+```
+
+#### client.bulkDelete(container, files, function(err, file) { })
+
+Remove a list of files from a container 
+
+```javascript
+
+client.bulkDelete(containerName, files, function(err, results) {
+  // ...
+});
+```
+
+#### client.bulkArchive(container, file, function(err, file) { })
+
+Upload and extract an archive file
+
+```javascript
+
+var readStream = fs.createReadStream(archivePath);
+client.bulkArchive(containerName, readStream, function(err, results) {
+ // ...
 });
 ```
 
