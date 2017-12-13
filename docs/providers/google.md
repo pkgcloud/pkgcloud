@@ -22,3 +22,38 @@ var client = require('pkgcloud').storage.createClient({
    projectId: 'eco-channel-658' // project id
 });
 ```
+
+### Upload a File with meta
+Availible meta properties:
+* contentType
+* contentEncoding
+* contentDisposition
+* contentLanguage
+* cacheControl
+* metadata
+```Javascript
+var pkgcloud = require('pkgcloud'),
+   fs = require('fs');
+
+var client = pkgcloud.storage.createClient({ /* google storage settings */ });
+
+var readStream = fs.createReadStream( 'a-file.txt'); // local path to uploaded file
+var writeStream = client.upload({
+   container : 'a-container', // container name
+   meta : { 
+      metadata : { 'param_a' : 'a', 'param_b' : 'b' }, // metadata parametrs
+      contentType : 'text/html' // 'binary/octet-stream', etc
+   },
+   remote : 'remote-file-name.txt' // name of file in storage
+});
+
+writeStream.on('error', function(err) {
+    // handle your error case
+});
+
+writeStream.on('success', function(file) {
+    // success, file will be a File model
+});
+
+readStream.pipe(writeStream);
+```
