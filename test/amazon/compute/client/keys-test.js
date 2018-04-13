@@ -4,7 +4,7 @@ var helpers = require('../../../helpers'),
     hock = require('hock'),
     mock = !!process.env.MOCK;
 
-describe('pkgcloud/amazon/keys', function () {
+describe.skip('pkgcloud/amazon/keys', function () {
 
   var client, server, hockInstance;
 

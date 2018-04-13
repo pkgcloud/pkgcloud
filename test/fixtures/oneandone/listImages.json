@@ -1,0 +1,63 @@
+[
+  {
+    "id": "A0FAA4587A7CB6BBAA1EA877C844977E",
+    "name": "New image name",
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "location": "USA",
+      "country_code": "US"
+    },
+    "os_family": "Linux",
+    "os": "Centos",
+    "os_version": "Centos7",
+    "architecture": 64,
+    "os_image_type": "Personal",
+    "type": "MY_IMAGE",
+    "min_hdd_size": 40,
+    "licenses": [],
+    "cloudpanel_id": "ap99AA4_1",
+    "state": "DEPLOYING",
+    "description": "New image description",
+    "hdds": [
+      {
+        "id": "200FC47388A30470A376913E73B9C32C",
+        "size": 40,
+        "is_main": true
+      }
+    ],
+    "server_id": "E83777750130E1111AA89623B9557CAF",
+    "frequency": "DAILY",
+    "num_images": 5,
+    "creation_date": "2015-04-29T07:46:40+00:00"
+  },
+  {
+    "id": "A0FAA4587A7CB6BBAA1EA877C844977F",
+    "name": "New image name 2",
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "name": "United States"
+    },
+    "os_family": "Linux",
+    "os": "Centos",
+    "os_version": "Centos7",
+    "architecture": 64,
+    "os_image_type": "Personal",
+    "type": "MY_IMAGE",
+    "min_hdd_size": 40,
+    "licenses": [],
+    "cloudpanel_id": "ap99AA4_1",
+    "state": "DEPLOYING",
+    "description": "New image description",
+    "hdds": [
+      {
+        "id": "200FC47388A30470A376913E73B9C32D",
+        "size": 40,
+        "is_main": true
+      }
+    ],
+    "server_id": "E83777750130E1111AA89623B9557CAF",
+    "frequency": "DAILY",
+    "num_images": 5,
+    "creation_date": "2015-04-29T07:46:40+00:00"
+  }
+]
