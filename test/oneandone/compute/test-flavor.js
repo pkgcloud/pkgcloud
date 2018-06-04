@@ -6,7 +6,7 @@ var should = require('should'),
   helpers = require('../../helpers'),
   hock = require('hock'),
   http = require('http'),
-  mock = true,
+  mock = !!process.env.MOCK,
   Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor;
 
 var flavors = [],
