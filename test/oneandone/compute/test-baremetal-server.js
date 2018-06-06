@@ -94,9 +94,9 @@ describe('Server tests', function () {
         .get('/servers/39AA65F5D5B02FA02D58173094EBAF95/status/action')
         .reply(200, helpers.loadFixture('oneandone/getServer.json'));
     }
-    client.checkServerReady(server.id, function () {
+    server.setWait({ status: server.STATUS.running }, 10000, function (err) {
       client.rebootServer(server, function (err, srv1) {
-        client.checkServerReady(server.id, function () {
+        server.setWait({ status: server.STATUS.running }, 10000, function (err) {
           should.not.exist(err);
           srv1.should.be.instanceOf(Server);
           hockInstance && hockInstance.done();

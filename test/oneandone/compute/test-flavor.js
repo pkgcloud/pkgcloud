@@ -2,15 +2,15 @@
  * Created by Ali Bazlamit on 8/21/2017.
  */
 var should = require('should'),
-  async = require('async'),
-  helpers = require('../../helpers'),
-  hock = require('hock'),
-  http = require('http'),
-  mock = !!process.env.MOCK,
-  Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor;
+    async = require('async'),
+    helpers = require('../../helpers'),
+    hock = require('hock'),
+    http = require('http'),
+    mock = !!process.env.MOCK,
+    Flavor = require('../../../lib/pkgcloud/core/compute/flavor').Flavor;
 
 var flavors = [],
-  client;
+    client;
 var options = {
   token: process.env.OAO_TOKEN
 };
@@ -56,8 +56,11 @@ describe('Flavor tests', function () {
   it('the getFlavors() method should return the list of flavors', function (done) {
     if (mock) {
       hockInstance
-        .get('/servers/fixed_instance_sizes')
-        .reply(200, helpers.loadFixture('oneandone/listFlavors.json'));
+          .get('/servers/fixed_instance_sizes')
+          .reply(200, helpers.loadFixture('oneandone/listFlavors.json'));
+      hockInstance
+          .get('/servers/baremetal_models?')
+          .reply(200, helpers.loadFixture('oneandone/baremetalModels.json'));
     }
     client.getFlavors(function (err, _flavors) {
       should.exist(_flavors);
@@ -74,8 +77,8 @@ describe('Flavor tests', function () {
   it('the getFlavor() method should return a valid flavor', function (done) {
     if (mock) {
       hockInstance
-        .get('/servers/fixed_instance_sizes/8C626C1A7005D0D1F527143C413D461E')
-        .reply(200, helpers.loadFixture('oneandone/getFlavor.json'));
+          .get('/servers/fixed_instance_sizes/8C626C1A7005D0D1F527143C413D461E')
+          .reply(200, helpers.loadFixture('oneandone/getFlavor.json'));
     }
     client.getFlavor(flavors[0], function (err, flavor) {
       should.not.exist(err);

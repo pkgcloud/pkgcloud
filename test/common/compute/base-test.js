@@ -177,7 +177,7 @@ providers.filter(function (provider) {
 
     it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
       // TODO enable destroy tests for all providers
-      if (provider === 'joyent' || provider === 'amazon' || provider === 'azure') {
+      if (provider === 'joyent' || provider === 'amazon' || provider === 'azure' || provider === 'oneandone') {
         done();
         return;
       }
@@ -333,6 +333,9 @@ setupFlavorMock = function (client, provider, servers) {
   else if (provider === 'oneandone') {
     servers.server
       .get('/servers/fixed_instance_sizes')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listFlavors.json');
+    servers.server
+      .get('/servers/baremetal_models?')
       .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listFlavors.json');
   }
 };
@@ -554,7 +557,9 @@ setupServerMock = function (client, provider, servers) {
       .post('/servers', {
         name: 'create-test-setWait',
         hardware: { fixed_instance_size_id: '8C626C1A7005D0D1F527143C413D461E' }
-        , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E'
+        , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E',
+        datacenter_id: '4EFAD5836CE43ACA502FD5B99BEE44EF',
+        server_type: 'cloud'
       })
       .replyWithFile(202, __dirname + '/../../fixtures/oneandone/getWaitServer.json')
       .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')

@@ -364,6 +364,9 @@ setupFlavorMock = function (client, provider, servers) {
     servers.server
       .get('/servers/fixed_instance_sizes')
       .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listFlavors.json');
+    servers.server
+      .get('/servers/baremetal_models?')
+      .reply(200, helpers.loadFixture('oneandone/baremetalModels.json'));
   }
 };
 
