@@ -558,7 +558,6 @@ setupServerMock = function (client, provider, servers) {
         name: 'create-test-setWait',
         hardware: { fixed_instance_size_id: '8C626C1A7005D0D1F527143C413D461E' }
         , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E',
-        datacenter_id: '4EFAD5836CE43ACA502FD5B99BEE44EF',
         server_type: 'cloud'
       })
       .replyWithFile(202, __dirname + '/../../fixtures/oneandone/getWaitServer.json')

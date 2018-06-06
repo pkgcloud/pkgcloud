@@ -489,7 +489,7 @@ setupServerMock = function (client, provider, servers) {
       .post('/servers', {
         name: 'create-test-ids2',
         hardware: {fixed_instance_size_id: '8C626C1A7005D0D1F527143C413D461E'}
-        , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E'
+        , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E',server_type:'cloud'
       })
       .replyWithFile(202, __dirname + '/../../fixtures/oneandone/getServer.json')
       .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')

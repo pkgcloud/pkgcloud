@@ -10,13 +10,12 @@
   },
   "creation_date": "2015-05-04T06:32:15+00:00",
   "first_password": "Fg52K21nz8",
-  "server-type":"cloud",
   "status": {
     "state": "POWERED_ON",
     "percent": null
   },
   "hardware": {
-    "fixed_instance_size_id": "81504C620D98BCEBAA5202D145203B4B",
+    "fixed_instance_size_id": 0,
     "vcore": 1,
     "cores_per_processor": 1,
     "ram": 2,

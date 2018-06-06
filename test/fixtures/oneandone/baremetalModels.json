@@ -1,0 +1,34 @@
+[
+  {
+    "name": "BMC_L",
+    "id": "81504C620D98BCEBAA5202D145203B4B",
+    "hardware": {
+      "core": 1,
+      "cores_per_processor": 4,
+      "ram": 32,
+      "unit": "GB",
+      "hdds":
+      {
+        "size": 800,
+        "unit": "GB",
+        "is_main": true
+      }
+    }
+  },
+  {
+    "name": "BMC_XL",
+    "id": "81504C620D98BCEBAA5202D145203B4B",
+    "hardware": {
+      "core": 1,
+      "cores_per_processor": 4,
+      "ram": 64,
+      "unit": "GB",
+      "hdds":
+      {
+        "size": 800,
+        "unit": "GB",
+        "is_main": true
+      }
+    }
+  }
+]
