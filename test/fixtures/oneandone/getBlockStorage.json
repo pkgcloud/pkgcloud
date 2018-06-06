@@ -1,0 +1,14 @@
+{
+  "id": "4406CE4723BB441C7956E25C51CE8C1B",
+  "size": 50,
+  "state": "ACTIVE",
+  "description": "My block storage description",
+  "datacenter": {
+    "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+    "location": "USA",
+    "country_code": "US"
+  },
+  "name": "My block storage 3",
+  "creation_date": "2015-03-17T11:57:48+00:00",
+  "server": null
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "6AD2F180B7B666539EF75A02FE227084",
+    "size": 200,
+    "state": "ACTIVE",
+    "description": "My block storage for containers",
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "location": "USA",
+      "country_code": "US"
+    },
+    "name": "My block storage 1",
+    "creation_date": "2015-05-06T08:33:25+00:00",
+    "server":
+    {
+      "id": "638ED28205B1AFD7ADEF569C725DD85F",
+      "name": "My server 1"
+    }
+  },
+  {
+    "id": "4406CE4723BB441C7956E25C51CE8C1B",
+    "size": 50,
+    "state": "ACTIVE",
+    "description": "My block storage description",
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "location": "USA",
+      "country_code": "US"
+    },
+    "name": "My block storage 3",
+    "creation_date": "2015-03-17T11:57:48+00:00",
+    "server": null
+  },
+  {
+    "id": "1A5418172DD3BD39F8010A6633F1018A",
+    "size": 250,
+    "state": "ACTIVE",
+    "description": "",
+    "datacenter": {
+      "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+      "location": "USA",
+      "country_code": "US"
+    },
+    "name": "My block storage 2",
+    "creation_date": "2015-05-05T09:36:31+00:00",
+    "server":
+    {
+      "id": "748ED28205B1AFD7ADEF569C725DD85E",
+      "name": "My server 2"
+    }
+  }
+]
