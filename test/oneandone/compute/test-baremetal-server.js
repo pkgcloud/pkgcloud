@@ -79,7 +79,7 @@ describe('Server tests', function () {
         .reply(200, helpers.loadFixture('oneandone/getServer.json'));
     }
     client.getServer(server, function (err, srv1) {
-      server = srv1
+      server = srv1;
       should.not.exist(err);
       should.exist(srv1);
       srv1.should.be.instanceOf(Server);
