@@ -95,6 +95,7 @@ describe('Server tests', function () {
         .reply(200, helpers.loadFixture('oneandone/getServer.json'));
     }
     server.setWait({ status: server.STATUS.running }, 10000, function (err) {
+      should.not.exist(err);
       client.rebootServer(server, function (err, srv1) {
         server.setWait({ status: server.STATUS.running }, 10000, function (err) {
           should.not.exist(err);

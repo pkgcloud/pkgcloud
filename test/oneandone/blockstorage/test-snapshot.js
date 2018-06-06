@@ -60,8 +60,8 @@ describe('pkgcloud/oneandone/blockstorage/snapshots', function () {
           .reply(202, helpers.loadFixture('oneandone/getServer.json'))
           .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')
           .reply(202, helpers.loadFixture('oneandone/getServer.json'))
-          .post('/servers/39AA65F5D5B02FA02D58173094EBAF95/snapshots',"null")
-          .reply(202, helpers.loadFixture('oneandone/getServer.json'))
+          .post('/servers/39AA65F5D5B02FA02D58173094EBAF95/snapshots','null')
+          .reply(202, helpers.loadFixture('oneandone/getServer.json'));
 
       client.createServer(srvr_options, function (err, srv1) {
         should.not.exist(err);
@@ -114,7 +114,7 @@ describe('pkgcloud/oneandone/blockstorage/snapshots', function () {
     it('the updateSnapshot() method should restore a snapshot into a server', function (done) {
       if (mock) {
         hockInstance
-            .put('/servers/39AA65F5D5B02FA02D58173094EBAF95/snapshots/',"null")
+            .put('/servers/39AA65F5D5B02FA02D58173094EBAF95/snapshots/','null')
             .reply(202, helpers.loadFixture('oneandone/createSnapshot.json'))
             .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')
             .reply(202, helpers.loadFixture('oneandone/getServer.json'));
