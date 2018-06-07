@@ -23,7 +23,10 @@ Lists all servers available to your account.
 Callback returns `f(err, servers)` where `servers` is an `Array`
 
 #### client.createServer(options, callback)
-Creates a server with the options specified
+Creates a server with the options pecified
+
+When choosing a baremetal `server_type` you would need to filter images by the `server_type_compatibility` which is an
+array of supported server types i.e. 'cloud' or 'baremetal'.
 
 Options are as follows:
 
@@ -33,6 +36,7 @@ Options are as follows:
   flavor: 'falvor-id',
   image: 'image or imageId',
   location: 'datacenter id'
+  server_type: 'cloud or baremetal'
 }
 
 ```
