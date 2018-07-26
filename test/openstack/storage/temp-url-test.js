@@ -37,23 +37,6 @@ describe('pkgcloud/openstack/storage', function(){
 
     });
 
-    afterEach(function (done) {
-      client = null;
-      if (!mock) {
-        return done();
-      }
-
-      async.parallel([
-        function (next) {
-          server.close(next);
-        },
-        function (next) {
-          authServer.close(next);
-        }
-      ], done);
-
-    });
-
     it('the client.getTemporaryUrlKey() method should return the temporary url key', function(done){
       if(mock) {
         setupGetTemporaryUrlKeyMock(client, {
