@@ -87,7 +87,7 @@ client.getZone(12345678, function(err, zone) { ... });
 This call is functionally equivalent to:
 
 ```Javascript
-var myZone = new Zone({ id: 12345 });
+const myZone = new Zone({ id: 12345 });
 
 client.getZone(myZone, function(err, zone) { ... });
 ```
@@ -133,7 +133,77 @@ client.createZones([{
 ### Record APIs
 
 * [`client.getRecords(zone, function (err, records) { })`](#clientgetrecordszone-functionerr-records--)
-* [`client.getRecord(zone, function (err, records) { })`](#clientgetrecordzone-functionerr-record--)
-* [`client.createRecord(zone, function (err, records) { })`](#clientcreaterecordzone-functionerr-record--)
-* [`client.updateRecord(zone, function (err, records) { })`](#clientupdaterecordzone-functionerr-record--)
-* [`client.updateRecord(zone, function (err, records) { })`](#clientdeleterecordzone-functionerr-record--)
+* [`client.getRecord(zone, record, function (err, record) { })`](#clientgetrecordzone-functionerr-record--)
+* [`client.createRecord(zone, record, function (err, record) { })`](#clientcreaterecordzone-functionerr-record--)
+* [`client.updateRecord(zone, record, function (err, record) { })`](#clientupdaterecordzone-functionerr-record--)
+* [`client.deleteRecord(zone, record, function (err) { })`](#clientdeleterecordzone-functionerr-record--)
+
+### Record API Details
+
+For all of the record methods that require a zone or record, you can pass either an instance of a [`zone`](#zone-model)/[`record`](#record-model) or the zone/record id as `zone`/`record`. For example:
+
+```Javascript
+client.getRecord(12345678, 'NS-14336511' function(err, records) { ... });
+```
+
+This call is functionally equivalent to:
+
+```Javascript
+const myZone = new Zone({ id: 12345 });
+const myRecord = new Record({ id: 'NS-14336511' });
+
+client.getRecord(myZone, myRecord, function(err, record) { ... });
+```
+
+### client.getRecords(zone, function (err, records) { })
+
+Retrieves the records for a given zone and client instance as an array of [`record`](#record-model).
+
+### client.getRecord(zone, record, function (err, record) { })
+
+Retrives the specified [`record`](#record-model) from the specified zone and current client instance.
+
+### client.createRecord(zone, record, function(err, record) { })
+
+Creates a new [`record`](#record-model) with attributes from the argument of `record`:
+
+```javascript
+client.createRecord(
+  zone,
+  {
+    name: 'example.org', // required
+    type: 'example type', // required
+    data: '123.45.678.912', // required
+    ttl: 300 // optional
+  }, function(err, zone) {
+  // ...
+ })
+```
+
+### client.updateRecord(zone, record, function(err, record) { })
+
+Updates a new [`record`](#record-model) with attributes from the argument of `record`:
+
+```javascript
+client.updateRecord(
+  zone,
+  {
+    id: 'NS-14336511'
+    // updated record attributes
+  }, function(err, zone) {
+  // ...
+ })
+```
+
+### client.deleteRecord(zone, record, function(err, record) { })
+
+Deletes the specified [`record`](#record-model) from the specified zone and current client instance.
+
+```javascript
+client.deleteRecord(
+  zone,
+  record, 
+  function(err, zone) {
+  // ...
+ })
+```
