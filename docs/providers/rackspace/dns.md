@@ -135,8 +135,11 @@ client.createZones([{
 * [`client.getRecords(zone, function(err, records) { })`](#clientgetrecordszone-functionerr-records--)
 * [`client.getRecord(zone, record, function(err, record) { })`](#clientgetrecordzone-record-functionerr-record--)
 * [`client.createRecord(zone, record, function(err, record) { })`](#clientcreaterecordzone-record-functionerr-record--)
+* [`client.createRecords(zone, records, function(err, records) { })`](#clientcreaterecordszone-records-functionerr-records--)
 * [`client.updateRecord(zone, record, function(err, record) { })`](#clientupdaterecordzone-record-functionerr-record--)
+* [`client.updateRecords(zone, records, function(err, records) { })`](#clientupdaterecordszone-records-functionerr-records--)
 * [`client.deleteRecord(zone, record, function(err, record) { })`](#clientdeleterecordzone-record-functionerr-record--)
+* [`client.deleteRecords(zone, records, function(err, records) { })`](#clientdeleterecordszone-records-functionerr-records--)
 
 ### Record API Details
 
@@ -175,7 +178,24 @@ client.createRecord(
     type: 'example type', // required
     data: '123.45.678.912', // required
     ttl: 300 // optional
-  }, function(err, zone) {
+  }, function(err, record) {
+  // ...
+ })
+```
+
+#### client.createRecords(zone, records, function(err, records) { })
+
+Batch creates multiple [`records`](#record-model) from any array of `records`. Each record should have the same properties as referenced in `createRecord`.
+
+```javascript
+client.createRecords(
+  zone,
+  [{
+    name: 'example.org', // required
+    type: 'example type', // required
+    data: '123.45.678.912', // required
+    ttl: 300 // optional
+  }], function(err, records) {
   // ...
  })
 ```
@@ -190,7 +210,22 @@ client.updateRecord(
   {
     id: 'NS-14336511'
     // updated record attributes
-  }, function(err, zone) {
+  }, function(err, record) {
+  // ...
+ })
+```
+
+#### client.updateRecords(zone, records, function(err, records) { })
+
+Batch updates multiple [`records`](#record-model) from any array of `records`. Each record should have the same properties as referenced in `updateRecord`.
+
+```javascript
+client.updateRecords(
+  zone,
+  [{
+    id: 'NS-14336511'
+    // updated record attributes
+  }], function(err, records) {
   // ...
  })
 ```
@@ -203,7 +238,20 @@ Deletes the specified [`record`](#record-model) from the specified zone and curr
 client.deleteRecord(
   zone,
   record, 
-  function(err, zone) {
+  function(err, record) {
+  // ...
+ })
+```
+
+#### client.deleteRecords(zone, records, function(err, records) { })
+
+Batch deletes multiple [`records`](#record-model) from any array of `records`. Each record should have the same properties as referenced in `deleteRecord`.
+
+```javascript
+client.deleteRecords(
+  zone,
+  [record], 
+  function(err, records) {
   // ...
  })
 ```
