@@ -146,14 +146,14 @@ client.createZones([{
 For all of the record methods that require a zone or record, you can pass either an instance of a [`zone`](#zone-model)/[`record`](#record-model) or the zone/record id as `zone`/`record`. For example:
 
 ```Javascript
-client.getRecord(12345678, 'NS-14336511' function(err, records) { ... });
+client.getRecord(12345678, 'NS-12345678' function(err, records) { ... });
 ```
 
 This call is functionally equivalent to:
 
 ```Javascript
-const myZone = new Zone({ id: 12345 });
-const myRecord = new Record({ id: 'NS-14336511' });
+const myZone = new Zone({ id: 12345678 });
+const myRecord = new Record({ id: 'NS-12345678' });
 
 client.getRecord(myZone, myRecord, function(err, record) { ... });
 ```
@@ -202,13 +202,13 @@ client.createRecords(
 
 #### client.updateRecord(zone, record, function(err, record) { })
 
-Updates a new [`record`](#record-model) with attributes from the argument of `record`:
+Updates the specified [`record`](#record-model) with attributes from the argument of `record`:
 
 ```javascript
 client.updateRecord(
   zone,
   {
-    id: 'NS-14336511'
+    id: 'NS-12345678'
     // updated record attributes
   }, function(err, record) {
   // ...
@@ -223,7 +223,7 @@ Batch updates multiple [`records`](#record-model) from any array of `records`. E
 client.updateRecords(
   zone,
   [{
-    id: 'NS-14336511'
+    id: 'NS-12345678'
     // updated record attributes
   }], function(err, records) {
   // ...
