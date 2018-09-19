@@ -136,7 +136,7 @@ client.createZones([{
 * [`client.getRecord(zone, record, function (err, record) { })`](#clientgetrecordzone-functionerr-record--)
 * [`client.createRecord(zone, record, function (err, record) { })`](#clientcreaterecordzone-functionerr-record--)
 * [`client.updateRecord(zone, record, function (err, record) { })`](#clientupdaterecordzone-functionerr-record--)
-* [`client.deleteRecord(zone, record, function (err) { })`](#clientdeleterecordzone-functionerr-record--)
+* [`client.deleteRecord(zone, record, function (err, record) { })`](#clientdeleterecordzone-functionerr-record--)
 
 ### Record API Details
 
@@ -155,15 +155,15 @@ const myRecord = new Record({ id: 'NS-14336511' });
 client.getRecord(myZone, myRecord, function(err, record) { ... });
 ```
 
-### client.getRecords(zone, function (err, records) { })
+#### client.getRecords(zone, function (err, records) { })
 
 Retrieves the records for a given zone and client instance as an array of [`record`](#record-model).
 
-### client.getRecord(zone, record, function (err, record) { })
+#### client.getRecord(zone, record, function (err, record) { })
 
 Retrives the specified [`record`](#record-model) from the specified zone and current client instance.
 
-### client.createRecord(zone, record, function(err, record) { })
+#### client.createRecord(zone, record, function(err, record) { })
 
 Creates a new [`record`](#record-model) with attributes from the argument of `record`:
 
@@ -180,7 +180,7 @@ client.createRecord(
  })
 ```
 
-### client.updateRecord(zone, record, function(err, record) { })
+#### client.updateRecord(zone, record, function(err, record) { })
 
 Updates a new [`record`](#record-model) with attributes from the argument of `record`:
 
@@ -195,7 +195,7 @@ client.updateRecord(
  })
 ```
 
-### client.deleteRecord(zone, record, function(err, record) { })
+#### client.deleteRecord(zone, record, function(err, record) { })
 
 Deletes the specified [`record`](#record-model) from the specified zone and current client instance.
 
