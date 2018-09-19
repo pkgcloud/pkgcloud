@@ -132,11 +132,11 @@ client.createZones([{
 
 ### Record APIs
 
-* [`client.getRecords(zone, function (err, records) { })`](#clientgetrecordszone-functionerr-records--)
-* [`client.getRecord(zone, record, function (err, record) { })`](#clientgetrecordzone-functionerr-record--)
-* [`client.createRecord(zone, record, function (err, record) { })`](#clientcreaterecordzone-functionerr-record--)
-* [`client.updateRecord(zone, record, function (err, record) { })`](#clientupdaterecordzone-functionerr-record--)
-* [`client.deleteRecord(zone, record, function (err, record) { })`](#clientdeleterecordzone-functionerr-record--)
+* [`client.getRecords(zone, function(err, records) { })`](#clientgetrecordszone-functionerr-records--)
+* [`client.getRecord(zone, record, function(err, record) { })`](#clientgetrecordzone-record-functionerr-record--)
+* [`client.createRecord(zone, record, function(err, record) { })`](#clientcreaterecordzone-record-functionerr-record--)
+* [`client.updateRecord(zone, record, function(err, record) { })`](#clientupdaterecordzone-record-functionerr-record--)
+* [`client.deleteRecord(zone, record, function(err, record) { })`](#clientdeleterecordzone-record-functionerr-record--)
 
 ### Record API Details
 
@@ -155,11 +155,11 @@ const myRecord = new Record({ id: 'NS-14336511' });
 client.getRecord(myZone, myRecord, function(err, record) { ... });
 ```
 
-#### client.getRecords(zone, function (err, records) { })
+#### client.getRecords(zone, function(err, records) { })
 
 Retrieves the records for a given zone and client instance as an array of [`record`](#record-model).
 
-#### client.getRecord(zone, record, function (err, record) { })
+#### client.getRecord(zone, record, function(err, record) { })
 
 Retrives the specified [`record`](#record-model) from the specified zone and current client instance.
 
