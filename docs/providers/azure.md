@@ -142,7 +142,7 @@ client.createServer(options, function (err, server) {
 	* `protocol`: specifies the transport protocol for the endpoint.
 
 * `rdp.port`: (Optional. Windows servers only). The port to use for RDP on Windows servers.
-* `emulator`: (Optional) ignores location & account settings and uses [Azure Storage Emulator hardcoded settings](https://docs.microsoft.com/en-gb/azure/storage/common/storage-use-emulator#addressing-resources-in-the-storage-emulator).
+* `emulator`: (Optional) enables support for the Azure emulator [Azure Storage Emulator settings](https://docs.microsoft.com/en-gb/azure/storage/common/storage-use-emulator#addressing-resources-in-the-storage-emulator), you still need to configure the credentials to what is expected by the emulator, e.g. account `devstoreaccount1`.
 
 <br/>
 <a name="azure-manage-cert"></a>
