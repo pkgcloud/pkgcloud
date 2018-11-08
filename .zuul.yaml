@@ -1,7 +1,11 @@
 - project:
     check:
       jobs:
-        - noop
+        - name: nodejs-npm
+          vars:
+            - node_version: 8
+              npm_command: run travis
+
     gate:
       jobs:
         - noop
