@@ -30,16 +30,16 @@ azureApi._updateMinimumPollInterval(mock ? 10 : azureApi.MINIMUM_POLL_INTERVAL);
 
 providers.filter(function (provider) {
   return !!helpers.pkgcloud.providers[provider].compute;
-}).forEach(function(provider) {
+}).forEach(function (provider) {
   describe('pkgcloud/common/compute/base [' + provider + ']', function () {
 
     var client = helpers.createClient(provider, 'compute'),
-        context = {},
-        authServer, server,
-        authHockInstance,
-        hockInstance;
+      context = {},
+      authServer, server,
+      authHockInstance,
+      hockInstance;
 
-    before(function(done) {
+    before(function (done) {
 
       if (!mock) {
         return done();
@@ -55,7 +55,7 @@ providers.filter(function (provider) {
       authServer = http.createServer(authHockInstance.handler);
 
       async.parallel([
-        function(next) {
+        function (next) {
           server.listen(12345, next);
         },
         function (next) {
@@ -91,7 +91,7 @@ providers.filter(function (provider) {
       }
     });
 
-    it('the getFlavors() method should return a list of flavors', function(done) {
+    it('the getFlavors() method should return a list of flavors', function (done) {
       if (mock) {
         setupFlavorMock(client, provider, {
           authServer: authHockInstance,
@@ -200,7 +200,7 @@ providers.filter(function (provider) {
       });
     });
 
-    after(function(done) {
+    after(function (done) {
       if (!mock) {
         return done();
       }
@@ -234,7 +234,7 @@ setupVersionMock = function (client, provider, servers) {
       .reply(200, helpers.getRackspaceAuthResponse());
 
     servers.server
-      .get('/v2/', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2/', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
   }
   else if (provider === 'openstack') {
@@ -246,9 +246,9 @@ setupVersionMock = function (client, provider, servers) {
             password: 'MOCK-PASSWORD'
           }
         }
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(200, helpers._getOpenstackStandardResponse('../fixtures/openstack/initialToken.json'))
-      .get('/v2.0/tenants', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2.0/tenants', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/tenantId.json')
       .post('/v2.0/tokens', {
         auth: {
@@ -258,11 +258,11 @@ setupVersionMock = function (client, provider, servers) {
           },
           tenantId: '72e90ecb69c44d0296072ea39e537041'
         }
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(200, helpers.getOpenstackAuthResponse());
 
     servers.server
-      .get('/v2/', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2/', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/versions.json');
   }
   else if (provider === 'hp') {
@@ -274,9 +274,9 @@ setupVersionMock = function (client, provider, servers) {
             secretKey: 'MOCK-API-KEY'
           }
         }
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(200, helpers._getOpenstackStandardResponse('../fixtures/hp/initialToken.json'))
-      .get('/v2.0/tenants', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2.0/tenants', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/hp/tenantId.json')
       .post('/v2.0/tokens', {
         auth: {
@@ -286,17 +286,17 @@ setupVersionMock = function (client, provider, servers) {
           },
           tenantId: '5ACED3DC3AA740ABAA41711243CC6949'
         }
-      }, {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      }, { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(200, helpers.gethpAuthResponse());
 
     servers.server
-      .get('/v2/', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2/', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/hp/versions.json');
   }
   else if (provider === 'joyent') {
     servers.server
       .get('/' + client.account + '/datacenters',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(200, '', { 'x-api-version': '6.5.0' });
   }
 };
@@ -304,19 +304,19 @@ setupVersionMock = function (client, provider, servers) {
 setupFlavorMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v2/123456/flavors/detail', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/v2/123456/flavors/detail', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/flavors.json');
   }
   else if (provider === 'openstack') {
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/flavors.json');
   }
   else if (provider === 'joyent') {
     servers.server
       .get('/' + client.account + '/packages',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
   }
   else if (provider === 'digitalocean') {
@@ -327,8 +327,13 @@ setupFlavorMock = function (client, provider, servers) {
   else if (provider === 'hp') {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/flavors/detail',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/hp/flavors.json');
+  }
+  else if (provider === 'oneandone') {
+    servers.server
+      .get('/servers/fixed_instance_sizes')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listFlavors.json');
   }
 };
 
@@ -336,32 +341,32 @@ setupImagesMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .get('/v2/123456/images/detail',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/images.json');
   }
   else if (provider === 'openstack') {
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
   }
   else if (provider === 'joyent') {
     servers.server
       .get('/' + client.account + '/datasets',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/images.json');
   }
   else if (provider === 'amazon') {
     servers.server
       .filteringRequestBody(helpers.authFilter)
       .post('/', { Action: 'DescribeImages', 'Owner.1': 'self' },
-        {'User-Agent': client.userAgent })
+        { 'User-Agent': client.userAgent })
       .replyWithFile(200, __dirname + '/../../fixtures/amazon/images.xml');
   }
   else if (provider === 'azure') {
     servers.server
       .get('/azure-account-subscription-id/services/images',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/images.xml');
   }
   else if (provider === 'digitalocean') {
@@ -372,8 +377,13 @@ setupImagesMock = function (client, provider, servers) {
   else if (provider === 'hp') {
     servers.server
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/images/detail',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/hp/images.json');
+  }
+  else if (provider === 'oneandone') {
+    servers.server
+      .get('/server_appliances')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/listImages.json');
   }
 };
 
@@ -396,52 +406,53 @@ setupServerMock = function (client, provider, servers) {
   else if (provider === 'rackspace') {
     servers.server
       .post('/v2/123456/servers', {
-        server: {
-          name: 'create-test-setWait',
-          flavorRef: '2',
-          imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346'
-        }
-      },
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+          server: {
+            name: 'create-test-setWait',
+            flavorRef: '2',
+            imageRef: '9922a7c7-5a42-4a56-bc6a-93f857ae2346'
+          }
+        },
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(202, __dirname + '/../../fixtures/rackspace/setWaitResp1.json')
       .get('/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/rackspace/a0a5f183-b94e-4a41-a854-64cff53375bf.json');
   }
   else if (provider === 'openstack') {
     servers.server
       .post('/v2/72e90ecb69c44d0296072ea39e537041/servers', {
-        server: {
-          name: 'create-test-setWait',
-          flavorRef: '1',
-          imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'
-        }
-      },
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+          server: {
+            name: 'create-test-setWait',
+            flavorRef: '1',
+            imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'
+          }
+        },
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/creatingServer.json')
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated.json');
   }
   else if (provider === 'joyent') {
     servers.server
       .post('/' + client.account + '/machines',
-      { name: 'create-test-setWait',
-        'package': 'Small 1GB',
-        dataset: 'sdc:sdc:nodejitsu:1.0.0'
-      },
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        {
+          name: 'create-test-setWait',
+          'package': 'Small 1GB',
+          dataset: 'sdc:sdc:nodejitsu:1.0.0'
+        },
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/setWait.json')
       .get('/' + client.account +
         '/machines/534aa63a-104f-4d6d-a3b1-c0d341a20a53',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/joyent/setWaitResp1.json');
   }
   else if (provider === 'amazon') {
     servers.server
       .filteringRequestBody(helpers.authFilter)
       .post('/', {
-        'Action':'RunInstances',
+        'Action': 'RunInstances',
         'ImageId': 'ami-85db1cec',
         'InstanceType': 'm1.small',
         'MaxCount': '1',
@@ -488,54 +499,66 @@ setupServerMock = function (client, provider, servers) {
   else if (provider === 'azure') {
     servers.server
       .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(404, __dirname + '/../../fixtures/azure/hosted-service-404.xml')
-      .post('/azure-account-subscription-id/services/hostedservices', helpers.loadFixture('azure/create-hosted-service.xml'), {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .post('/azure-account-subscription-id/services/hostedservices', helpers.loadFixture('azure/create-hosted-service.xml'), { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(201, '', {
         location: 'https://management.core.windows.net/subscriptions/azure-account-subscription-id/compute/create-test-setWait',
-        'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+        'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'
+      })
       .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/operation-succeeded.xml')
-      .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .get('/azure-account-subscription-id/services/images/CANONICAL__Canonical-Ubuntu-12-04-amd64-server-20120528.1.3-en-us-30GB.vhd', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/image-1.xml')
-      .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/deployments', helpers.loadFixture('azure/create-deployment.xml'), {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .reply(202, '', {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+      .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/deployments', helpers.loadFixture('azure/create-deployment.xml'), { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
+      .reply(202, '', { 'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5' })
       .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/operation-inprogress.xml')
       .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/operation-succeeded.xml')
       // TODO: have to do this twice as setWait() does not check server status before calling server.refresh()?
       .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/running-server.xml')
       .get('/azure-account-subscription-id/services/hostedservices/create-test-setWait?embed-detail=true',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/running-server.xml')
       .filteringRequestBodyRegEx(/.*/, '*')
       .post('/azure-account-subscription-id/services/hostedservices/create-test-setWait/certificates', '*',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
-      .reply(202, '', {'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5'})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
+      .reply(202, '', { 'x-ms-request-id': 'b67cc525ecc546618fd6fb3e57d724f5' })
       .get('/azure-account-subscription-id/operations/b67cc525ecc546618fd6fb3e57d724f5',
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/azure/operation-succeeded.xml');
   }
   else if (provider === 'hp') {
     servers.server
       .post('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers', {
-        server: {
-          name: 'create-test-setWait',
-          flavorRef: '1',
-          imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'
-        }
-      },
-      {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+          server: {
+            name: 'create-test-setWait',
+            flavorRef: '1',
+            imageRef: '506d077e-66bf-44ff-907a-588c5c79fa66'
+          }
+        },
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(202, __dirname + '/../../fixtures/hp/creatingServer.json')
       .get('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/hp/serverCreated.json');
+  }
+  else if (provider === 'oneandone') {
+    servers.server
+      .post('/servers', {
+        name: 'create-test-setWait',
+        hardware: { fixed_instance_size_id: '8C626C1A7005D0D1F527143C413D461E' }
+        , appliance_id: 'A0FAA4587A7CB6BBAA1EA877C844977E'
+      })
+      .replyWithFile(202, __dirname + '/../../fixtures/oneandone/getWaitServer.json')
+      .get('/servers/39AA65F5D5B02FA02D58173094EBAF95')
+      .replyWithFile(200, __dirname + '/../../fixtures/oneandone/getWaitServer.json');
   }
 };
 
@@ -543,22 +566,27 @@ setupDestroyMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
       .delete('/v2/123456/servers/a0a5f183-b94e-4a41-a854-64cff53375bf',
-        {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(204);
   }
   else if (provider === 'openstack') {
     servers.server
-      .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .delete('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(204);
   }
   else if (provider === 'hp') {
     servers.server
-      .delete('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', {'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version)})
+      .delete('/v2/5ACED3DC3AA740ABAA41711243CC6949/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .reply(204);
   }
   else if (provider === 'digitalocean') {
     servers.server
       .delete('/v2/droplets/3164494')
       .replyWithFile(204);
+  }
+  else if (provider === 'oneandone') {
+    servers.server
+      .delete('/servers/39AA65F5D5B02FA02D58173094EBAF95?keep_ips=false')
+      .replyWithFile(202, __dirname + '/../../fixtures/oneandone/getWaitServer.json');
   }
 };
