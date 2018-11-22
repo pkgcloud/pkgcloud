@@ -14,6 +14,7 @@ var authenticate = function (hockInstance) {
         }
       }
     })
+    .many()
     .reply(200, {
       access: {
         token: {
