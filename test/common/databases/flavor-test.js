@@ -16,6 +16,24 @@ var should = require('should'),
 
 // Declaring variables for helper functions defined later
 var setupGetFlavorMock;
+function setupGetFlavorsMock(hockInstance, provider ){
+  if (provider === 'rackspace') {
+    hockInstance
+      .get('/v1.0/123456/flavors')
+      .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'));
+  }
+  else if (provider === 'openstack') {
+    hockInstance
+      .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors')
+      .reply(200, helpers.loadFixture('openstack/databaseFlavors.json'));
+
+  }
+  else if (provider === 'hp') {
+    hockInstance
+      .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors')
+      .reply(200, helpers.loadFixture('hp/databaseFlavors.json'));
+  }
+}
 
 providers.filter(function (provider) {
  return !!helpers.pkgcloud.providers[provider].database && provider !== 'azure';
@@ -122,25 +140,6 @@ providers.filter(function (provider) {
       });
     });
   });
-
-  function setupGetFlavorsMock(hockInstance, provider ){
-    if (provider === 'rackspace') {
-      hockInstance
-        .get('/v1.0/123456/flavors')
-        .reply(200, helpers.loadFixture('rackspace/databaseFlavors.json'));
-    }
-    else if (provider === 'openstack') {
-      hockInstance
-        .get('/v1.0/72e90ecb69c44d0296072ea39e537041/flavors')
-        .reply(200, helpers.loadFixture('openstack/databaseFlavors.json'));
-
-    }
-    else if (provider === 'hp') {
-      hockInstance
-        .get('/v1.0/5ACED3DC3AA740ABAA41711243CC6949/flavors')
-        .reply(200, helpers.loadFixture('hp/databaseFlavors.json'));
-    }
-  }
 });
 
 

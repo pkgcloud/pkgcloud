@@ -31,18 +31,18 @@ describe('pkgcloud/core/base/client', function () {
       };
       cli.failCodes = {};
       var stream = cli._request({ path: '/' });
-      stream.on('error', function () {
-        return handleResponse(true);
-      });
-      stream.on('end', function () {
-        return handleResponse(false);
-      });
 
       function handleResponse(err) {
         should.exist(err);
         done();
       }
 
+      stream.on('error', function () {
+        return handleResponse(true);
+      });
+      stream.on('end', function () {
+        return handleResponse(false);
+      });
     });
 
     it('the before filters throwing an error with a callback should return the error on the cb', function(done) {
@@ -72,6 +72,12 @@ describe('pkgcloud/core/base/client', function () {
       cli._getUrl = function () {
         return 'badurl';
       };
+      
+      function handleResponse(err) {
+        should.exist(err);
+        done();
+      }
+
       cli.failCodes = {};
       var stream = cli._request({ path: '/' });
       stream.on('error', function () {
@@ -80,11 +86,6 @@ describe('pkgcloud/core/base/client', function () {
       stream.on('end', function () {
         handleResponse(false);
       });
-
-      function handleResponse(err) {
-        should.exist(err);
-        done();
-      }
     });
   });
 });
