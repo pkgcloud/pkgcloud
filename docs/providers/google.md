@@ -22,3 +22,26 @@ var client = require('pkgcloud').storage.createClient({
    projectId: 'eco-channel-658' // project id
 });
 ```
+
+
+## Uploading a file
+```Javascript
+var readStream = fs.createReadStream(<filepath>);
+
+var writeStream = client.upload({
+  container: <CONTAINER_NAME>,
+  remote: <filename>,
+  contentType: 'application/pdf' // optional
+});
+
+writeStream.on('error', function (err) {
+  console.error(err);
+});
+
+writeStream.on('success', function (file) {
+  console.log("Success!");
+});
+
+readStream.pipe(writeStream);
+```
+

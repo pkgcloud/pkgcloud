@@ -1,7 +1,7 @@
 {
   "name": "pkgcloud",
   "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     {
@@ -55,28 +55,31 @@
     "helion"
   ],
   "dependencies": {
-    "async": "0.9.x",
+
+    "async": "^2.6.1",
     "aws-sdk": "^2.7.25",
-    "errs": "0.3.x",
-    "eventemitter2": "0.4.x",
+    "errs": "^0.3.2",
+    "eventemitter2": "^5.0.1",
     "fast-json-patch": "0.5.x",
-    "filed": "0.1.x",
+    "filed": "^0.1.0",
     "gcloud": "^0.10.0",
-    "ip": "0.3.x",
-    "lodash": "^3.10.1",
-    "mime": "1.2.x",
-    "qs": "1.2.x",
-    "request": "2.40.x",
+    "grpc": "^1.14.1",
+    "ip": "^1.1.5",
+    "liboneandone": "^1.2.0",
+    "lodash": "^4.17.10",
+    "mime": "1.4.1",
+    "qs": "^6.5.2",
+    "request": "^2.88.0",
     "through2": "0.6.x",
     "url-join": "0.0.x",
     "xml2js": "0.1.x"
   },
   "devDependencies": {
     "blanket": "1.1.9",
-    "coveralls": "^2.11.2",
+    "coveralls": "^3.0.2",
     "hock": "~1.2.0",
-    "jshint": "~2.7.0",
-    "mocha": "1.21.x",
+    "jshint": "^2.9.6",
+    "mocha": "^5.2.0",
     "mocha-lcov-reporter": "0.0.1",
     "should": "4.0.x"
   },

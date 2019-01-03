@@ -1,0 +1,79 @@
+{
+  "id": "92AA60BEC8333A21EDB9EAAA61852860",
+  "cloudpanel_id": "5061DE9",
+  "name": "My server",
+  "description": null,
+  "datacenter": {
+    "id": "D0F6D8C8ED29D3036F94C27BBB7BAD36",
+    "location": "USA",
+    "country_code": "US"
+  },
+  "creation_date": "2015-05-06T11:09:55+00:00",
+  "first_password": null,
+  "status": {
+    "state": "CONFIGURING",
+    "percent": null
+  },
+  "hardware": {
+    "fixed_instance_size_id": 0,
+    "vcore": 1,
+    "cores_per_processor": 1,
+    "ram": 1,
+    "hdds": [
+      {
+        "id": "77F5BC74C9B3532A37D31FEED070BE01",
+        "size": 40,
+        "is_main": true
+      }
+    ]
+  },
+  "image": {
+    "id": "07C170D67C8EC776933FCFF1C299C1C5",
+    "name": "w2012r2datacenter64min"
+  },
+  "dvd": {
+    "id": "05F2EF8C89A12782B7DBE445256BD7A5",
+    "name": "centos7-64iso"
+  },
+  "snapshot": {
+    "id": "D609F69D08EB0C77D8EADE22F70462B4",
+    "creation_date": "2015-05-07T10:47:23+00:00"
+  },
+  "ips": [
+    {
+      "id": "696469547988D3945B3FE59DFCB93C90",
+      "ip": "10.4.141.161",
+      "type": "IPV4",
+      "reverse_dns": null,
+      "firewall_policy": {
+        "id": "5DE607955050915229D602931F942F32",
+        "name": "Linux"
+      },
+      "load_balancers": []
+    }
+  ],
+  "alerts": {
+    "critical": [
+      {
+        "type": "agent",
+        "description": "MONITORING_AGENT_NOT_INSTALLED",
+        "date": "2015-05-07 10:47:23"
+      },
+      {
+        "type": "internal_ping",
+        "description": "CRITICAL - 10.4.141.161: rta nan, lost 100%",
+        "date": "2015-05-07 09:59:21"
+      }
+    ]
+  },
+  "monitoring_policy": {
+    "id": "5DF232A92E9635249B8A4EB31C5B14F4",
+    "name": "My Monitoring Policy 1"
+  },
+  "private_networks": [
+    {
+      "id": "6B7051F17199EF9EA994CD3E4AA450E6",
+      "name": "New private network 1"
+    }
+  ]
+}
