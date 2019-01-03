@@ -55,8 +55,9 @@
     "helion"
   ],
   "dependencies": {
+
     "async": "^2.6.1",
-    "aws-sdk": "^2.2.43",
+    "aws-sdk": "^2.7.25",
     "errs": "^0.3.2",
     "eventemitter2": "^5.0.1",
     "fast-json-patch": "0.5.x",
@@ -69,7 +70,6 @@
     "mime": "1.4.1",
     "qs": "^6.5.2",
     "request": "^2.88.0",
-    "s3-upload-stream": "~1.0.7",
     "through2": "0.6.x",
     "url-join": "0.0.x",
     "xml2js": "0.1.x"

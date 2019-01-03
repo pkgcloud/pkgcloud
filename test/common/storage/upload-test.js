@@ -152,7 +152,7 @@ setupUploadStreamError = function (provider, client, servers) {
   }
   else if (provider === 'amazon') {
     servers.server
-      .post('/test-file.txt?uploads')
+      .put('/test-file.txt', 'foo')
       .reply(400);
   }
   else if (provider === 'azure') {
