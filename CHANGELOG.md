@@ -1,7 +1,7 @@
 ## FUTURE
 
 * Amazon use native `aws-sdk` for `s3` uploads instead of `s3-upload-stream` module
-* Update the `aws-sdk` to `2.7.25`
+* Update the `aws-sdk` to `2.382.0`
 * Amazon storage client.upload - expose concurrency - `queueSize` and `partSize` configurability and add ability to abort an upload
 
 ## v1.3.0
