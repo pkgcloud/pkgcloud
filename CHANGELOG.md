@@ -1,3 +1,9 @@
+## FUTURE
+
+* Amazon use native `aws-sdk` for `s3` uploads instead of `s3-upload-stream` module
+* Update the `aws-sdk` to `2.382.0`
+* Amazon storage client.upload - expose concurrency - `queueSize` and `partSize` configurability and add ability to abort an upload
+
 ## v1.3.0
 * OpenStack identity v3 (keystone) support, Issue [#367](//github.com/pkgcloud/pkgcloud/issues/367), [#477](//github.com/pkgcloud/pkgcloud/issues/477), PR [#461](//github.com/pkgcloud/pkgcloud/pull/461)
 * OpenStack cancel client download, Issue [#379](//github.com/pkgcloud/pkgcloud/issues/379), PR [#416](//github.com/pkgcloud/pkgcloud/pull/416)
