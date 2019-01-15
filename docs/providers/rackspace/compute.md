@@ -1,4 +1,4 @@
-##Using the Rackspace Compute provider
+## Using the Rackspace Compute provider
 
 As of the `v0.8` release of `pkgcloud`, the Compute provider uses Next Generation Cloud Servers, meaning you'll need to use a version <=0.7.x to use First Generation Cloud Servers.
 
