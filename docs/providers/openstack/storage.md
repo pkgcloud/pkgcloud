@@ -1,4 +1,4 @@
-## Using the Openstack Storage provider
+## Using the OpenStack Storage provider
 
 * Container
   * [Model](#container-model)
@@ -20,11 +20,11 @@ Creating a client is straight-forward:
 
 **Note:** *Due to variances between OpenStack deployments, you may or may not need a `region` option.*
 
-Learn about [more options for creating clients](README.md) in the Openstack `storage` provider.
+Learn about [more options for creating clients](README.md) in the OpenStack `storage` provider.
 
 ### Container Model
 
-A Container for Openstack has following properties:
+A Container for OpenStack has following properties:
 
 ```Javascript
 {
@@ -39,7 +39,7 @@ A Container for Openstack has following properties:
 
 ### File Model
 
-A File for Openstack has the following properties:
+A File for OpenStack has the following properties:
 
 ```Javascript
 {

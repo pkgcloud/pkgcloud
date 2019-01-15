@@ -1,4 +1,4 @@
-##Using the Openstack Database provider
+## Using the OpenStack Database provider
 
 Creating a client is straight-forward:
 
@@ -15,7 +15,7 @@ Creating a client is straight-forward:
 
 ### Creating a MySQL Database
 
-The steps for provision a MySQL database from Openstack cloud databases are:
+The steps for provision a MySQL database from OpenStack cloud databases are:
 
 1. Choose a flavor (memory RAM size)
 2. Create an instance of a database server.

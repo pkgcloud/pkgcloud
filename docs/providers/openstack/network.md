@@ -1,4 +1,4 @@
-##Using the Openstack Network provider
+##Using the OpenStack Network provider
 
 Creating a client is straight-forward:
 
@@ -18,7 +18,7 @@ Creating a client is straight-forward:
 **Networks**
 
 #### client.getNetworks(callback)
-Lists all networks that are available to use on your Openstack account
+Lists all networks that are available to use on your OpenStack account
 
 Callback returns `f(err, networks)` where `networks` is an `Array`
 
@@ -67,7 +67,7 @@ Takes network or networkId as an argument  and returns the id of the destroyed n
 **Subnets**
 
 #### client.getSubnets(callback)
-Lists all subnets that are available to use on your Openstack account
+Lists all subnets that are available to use on your OpenStack account
 
 Callback returns `f(err, subnets)` where `subnets` is an `Array`
 
@@ -120,7 +120,7 @@ Takes subnet or subnetId as an argument  and returns the id of the destroyed sub
 **Ports**
 
 #### client.getPorts(callback)
-Lists all ports that are available to use on your Openstack account
+Lists all ports that are available to use on your OpenStack account
 
 Callback returns `f(err, ports)` where `ports` is an `Array`
 
@@ -177,7 +177,7 @@ Takes port or portId as an argument  and returns the id of the destroyed port in
 **Security Groups**
 
 #### client.getSecurityGroups(callback)
-Lists all security groups that are available to use on your Openstack account
+Lists all security groups that are available to use on your OpenStack account
 
 Callback returns `f(err, securityGroups)` where `securityGroups` is an `Array`
 
@@ -209,7 +209,7 @@ Takes securityGroup or securityGroupId as an argument  and returns the id of the
 **Security Group Rules**
 
 #### client.getSecurityGroupRules(callback)
-Lists all security group rules that are available to use on your Openstack account
+Lists all security group rules that are available to use on your OpenStack account
 
 Callback returns `f(err, securityGroupRules)` where `securityGroupRules` is an `Array`
 
@@ -247,7 +247,7 @@ Takes securityGroupRule or securityGroupRuleId as an argument  and returns the i
 **Security Groups**
 
 #### client.getSecurityGroups(callback)
-Lists all security groups that are available to use on your Openstack account
+Lists all security groups that are available to use on your OpenStack account
 
 Callback returns `f(err, securityGroups)` where `securityGroups` is an `Array`
 
@@ -279,7 +279,7 @@ Takes securityGroup or securityGroupId as an argument  and returns the id of the
 **Security Group Rules**
 
 #### client.getSecurityGroupRules(callback)
-Lists all security group rules that are available to use on your Openstack account
+Lists all security group rules that are available to use on your OpenStack account
 
 Callback returns `f(err, securityGroupRules)` where `securityGroupRules` is an `Array`
 

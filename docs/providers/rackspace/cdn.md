@@ -1,4 +1,4 @@
-##Using the Rackspace CDN provider
+## Using the Rackspace CDN provider
 
 Creating a client is straight-forward:
 
