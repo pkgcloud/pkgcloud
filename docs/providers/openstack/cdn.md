@@ -1,4 +1,4 @@
-##Using the Openstack CDN provider
+## Using the OpenStack CDN provider
 
 Creating a client is straight-forward:
 

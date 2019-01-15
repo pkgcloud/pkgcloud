@@ -1,4 +1,4 @@
-##Using the Openstack Block Storage provider
+## Using the OpenStack Block Storage provider
 
 #### BETA - This API may change as additional providers for block storage are added to pkgcloud
 
@@ -77,7 +77,7 @@ A VolumeType for BlockStorage has the following properties:
 ### Volume APIs
 
 #### client.getVolumes(options, callback)
-Lists all volumes that are available to use on your Openstack account
+Lists all volumes that are available to use on your OpenStack account
 
 Callback returns `f(err, volumes)` where `volumes` is an `Array`. `options` is an optional `boolean` which will return the full volume details if true.
 
@@ -116,7 +116,7 @@ Returns callback with a confirmation
 ### Snapshot APIs
 
 #### client.getSnapshots(options, callback)
-Lists all snapshots that are available to use on your Openstack account
+Lists all snapshots that are available to use on your OpenStack account
 
 Callback returns `f(err, snapshots)` where `snapshots` is an `Array`. `options` is an optional `boolean` which will return the full snapshot details if true.
 
@@ -156,7 +156,7 @@ Returns callback with a confirmation
 Volume types are used to define which kind of new volume to create.
 
 #### client.getVolumeTypes(callback)
-Lists all volumeTypes that are available to use on your Openstack account
+Lists all volumeTypes that are available to use on your OpenStack account
 
 Callback returns `f(err, volumeTypes)` where `volumeTypes` is an `Array`.
 

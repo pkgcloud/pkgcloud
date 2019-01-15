@@ -1,4 +1,4 @@
-##Using the Rackspace Orchestration provider
+## Using the Rackspace Orchestration provider
 
 Creating a client is straight-forward:
 

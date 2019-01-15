@@ -1,4 +1,4 @@
-##Using the Rackspace Database provider
+## Using the Rackspace Database provider
 
 Creating a client is straight-forward:
 

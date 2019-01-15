@@ -1,8 +1,8 @@
-# Getting started with pkgcloud & Openstack
+# Getting started with pkgcloud & OpenStack
 
-The Openstack node.js SDK is available as part of `pkgcloud`, a multi-provider cloud provisioning package
+The OpenStack node.js SDK is available as part of `pkgcloud`, a multi-provider cloud provisioning package
 
-Pkgcloud currently supports Openstack Nova (compute) and Openstack Swift (storage).
+Pkgcloud currently supports OpenStack Nova (compute) and OpenStack Swift (storage).
 
 To install `pkgcloud` from the command line:
 
@@ -14,7 +14,7 @@ Don't have `npm` or `node` yet? [Get it now](http://nodejs.org/download).
 
 ## Using pkgcloud
 
-In this example, we're going to create a Openstack compute client, create two servers, and then output their details to the command line.
+In this example, we're going to create a OpenStack compute client, create two servers, and then output their details to the command line.
 
 *Note: We're going to use [lodash.js](https://lodash.com) for some convenience functions.*
 *Note: For DevStack, change AuthUrl to http://<devstackIP>:5000*

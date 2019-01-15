@@ -20,7 +20,7 @@ Creating a client is straight-forward:
   });
 ```
 
-Learn about [more options for creating clients](README.md) in the Openstack `storage` provider. `region` parameter can be any [Rackspace Region](http://www.rackspace.com/about/datacenters/). 
+Learn about [more options for creating clients](README.md) in the OpenStack `storage` provider. `region` parameter can be any [Rackspace Region](http://www.rackspace.com/about/datacenters/). 
 
 ### Container Model
 
