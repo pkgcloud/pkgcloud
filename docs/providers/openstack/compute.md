@@ -1,4 +1,4 @@
-##Using the Openstack Compute provider
+## Using the Openstack Compute provider
 
 Creating a client is straight-forward:
 
@@ -51,7 +51,7 @@ Takes server or serverId as an argument and returns the server in the callback
 `f(err, server)`
 
 #### client.rebootServer(server, options, callback)
-Reboots the specifed server with options
+Reboots the specified server with options
 
 Options include:
 
@@ -63,7 +63,7 @@ Options include:
 Returns callback with a confirmation
 
 #### client.rebuildServer(server, options, callback)
-Rebuilds the specifed server with options
+Rebuilds the specified server with options
 
 Options include:
 
@@ -82,6 +82,21 @@ Returns callback with a confirmation
 
 **Note about backwards compatiblity:**
 For backwards compatibility, it is also possible to pass an image ID or instance of `pkgcloud.core.compute.Image` as the value of the `options` argument.
+
+#### client.shelveServer(server, callback)
+[Shelves](https://developer.openstack.org/api-ref/compute/#shelve-server-shelve-action) the specified server
+
+Takes server or serverId as an argument and returns a confirmation in the callback `f(err, confirmation)`
+
+#### client.offloadServer(server, callback)
+[Offloads](https://developer.openstack.org/api-ref/compute/#shelf-offload-remove-server-shelveoffload-action) the specified server
+
+Takes server or serverId as an argument and returns a confirmation in the callback `f(err, confirmation)`
+
+#### client.unshelveServer(server, callback)
+[Unshelves](https://developer.openstack.org/api-ref/compute/#unshelve-restore-shelved-server-unshelve-action) the specified server
+
+Takes server or serverId as an argument and returns a confirmation in the callback `f(err, confirmation)`
 
 #### client.getVersion(callback)
 

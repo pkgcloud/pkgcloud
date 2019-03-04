@@ -34,6 +34,9 @@ The following table outlines the methods that are available on the different com
 <tr><td>getLimits</td><td>N</td><td>N</td><td>N</td><td>Y</td><td>Y</td><td>N</td></tr>
 <tr><td>getDetails</td><td>Y</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
 <tr><td>stopServer</td><td>N</td><td>Y</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td>shelveServer</td><td>N</td><td>N</td><td>N</td><td>Y</td><td>N</td><td>N</td></tr>
+<tr><td>offloadServer</td><td>N</td><td>N</td><td>N</td><td>Y</td><td>N</td><td>N</td></tr>
+<tr><td>unshelveServer</td><td>N</td><td>N</td><td>N</td><td>Y</td><td>N</td><td>N</td></tr>
 <tr><td>createHostedService</td><td>N</td><td>Y</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
 <tr><td>resizeServer</td><td>N</td><td>N</td><td>N</td><td>Y</td><td>Y</td><td>N</td></tr>
 <tr><td>rebuildServer</td><td>N</td><td>N</td><td>N</td><td>Y</td><td>Y</td><td>N</td></tr>
