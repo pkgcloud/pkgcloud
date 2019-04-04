@@ -49,14 +49,13 @@
     "helion"
   ],
   "dependencies": {
+    "@google-cloud/storage": "^2.4.3",
     "async": "^2.6.1",
     "aws-sdk": "^2.382.0",
     "errs": "^0.3.2",
     "eventemitter2": "^5.0.1",
     "fast-json-patch": "^2.1.0",
     "filed": "^0.1.0",
-    "gcloud": "^0.10.0",
-    "grpc": "^1.14.1",
     "ip": "^1.1.5",
     "liboneandone": "^1.2.0",
     "lodash": "^4.17.10",
