@@ -59,28 +59,28 @@
     "aws-sdk": "^2.382.0",
     "errs": "^0.3.2",
     "eventemitter2": "^5.0.1",
-    "fast-json-patch": "0.5.x",
+    "fast-json-patch": "^2.1.0",
     "filed": "^0.1.0",
     "gcloud": "^0.10.0",
     "grpc": "^1.14.1",
     "ip": "^1.1.5",
     "liboneandone": "^1.2.0",
     "lodash": "^4.17.10",
-    "mime": "1.4.1",
+    "mime": "^2.4.1",
     "qs": "^6.5.2",
     "request": "^2.88.0",
-    "through2": "0.6.x",
-    "url-join": "0.0.x",
-    "xml2js": "0.1.x"
+    "through2": "^3.0.1",
+    "url-join": "^4.0.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "blanket": "1.1.9",
+    "blanket": "^1.1.9",
     "coveralls": "^3.0.2",
-    "hock": "~1.2.0",
+    "hock": "^1.2.0",
     "jshint": "^2.9.6",
-    "mocha": "^5.2.0",
-    "mocha-lcov-reporter": "0.0.1",
-    "should": "4.0.x"
+    "mocha": "^6.0.2",
+    "mocha-lcov-reporter": "^1.3.0",
+    "should": "^13.2.3"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
