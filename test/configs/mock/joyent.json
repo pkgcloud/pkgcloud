@@ -1,6 +1,0 @@
-{
-  "account"    : "MOCK-ACCOUNT",
-  "serversUrl" : "localhost:12345",
-  "protocol"   : "http://",
-  "identity" : "./test/fixtures/testkey"
-}

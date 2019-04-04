@@ -1,6 +1,0 @@
-{
-  "username": "nodejitsu",
-  "password": "MOCK-PASSWORD",
-  "protocol": "http://",
-  "databaseUrl": "localhost:12345/hosting_public"
-}
