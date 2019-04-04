@@ -11,3 +11,5 @@ pkgcloud.lcov*
 node-jscoverage
 .nyc_output
 test/*
+*.tgz
+*.tar.gz
