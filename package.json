@@ -1,29 +1,12 @@
 {
   "name": "pkgcloud",
-  "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
+  "description": "A provider agnostic cloud library for Node.js",
   "version": "1.7.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
-    {
-      "name": "Nuno Job",
-      "email": "nuno@nodejitsu.com"
-    },
-    {
-      "name": "Maciej Malecki",
-      "email": "me@mmalecki.com"
-    },
-    {
-      "name": "Daniel Aristizabal",
-      "email": "daniel@nodejitsu.com"
-    },
-    {
-      "name": "Ken Perkins",
-      "email": "ken.perkins@rackspace.com"
-    },
-    {
-      "name": "Ross Kukulinski",
-      "email": "ross@kukulinski.com"
-    }
+    "Ross Kukulinski <ross@kukulinski.com>",
+    "Jarrett Cruger <jcrugzz@gmail.com>",
+    "Ken Perkins <ken.perkins@rackspace.com>"
   ],
   "repository": {
     "type": "git",
@@ -67,26 +50,19 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "blanket": "^1.1.9",
     "coveralls": "^3.0.2",
     "hock": "^1.2.0",
     "jshint": "^2.9.6",
     "mocha": "^6.0.2",
-    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^13.3.0",
     "should": "^13.2.3"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
-    "test": "make test",
-    "cov": "make cov",
-    "travis": "make travis",
-    "lint": "make lint"
-  },
-  "config": {
-    "blanket": {
-      "pattern": "/lib/",
-      "data-cover-never": "node_modules"
-    }
+    "test": "nyc mocha -t 4000 test/*/*/*-test.js test/*/*/*/*-test.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "jshint --exclude-path .gitignore .",
+    "posttest": "npm run lint"
   },
   "engines": {
     "node": ">= 8.0.0"
