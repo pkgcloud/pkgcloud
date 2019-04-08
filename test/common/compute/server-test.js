@@ -154,6 +154,8 @@ providers.filter(function (provider) {
           srv.should.be.instanceOf(Server);
         });
 
+        context.servers = servers;
+
         authHockInstance && authHockInstance.done();
         hockInstance && hockInstance.done();
         done();
@@ -161,7 +163,7 @@ providers.filter(function (provider) {
       });
     });
 
-    it.skip('the getServer() method should get a server instance', function (done) {
+    it('the getServer() method should get a server instance', function (done) {
       if (mock) {
         setupGetServerMock(client, provider, {
           authServer: authHockInstance,
@@ -378,7 +380,7 @@ setupServerMock = function (client, provider, servers) {
         image: 119192817
       })
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server2.json')
-      .get('/v2/droplets/354526')
+      .get('/v2/droplets/12345')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active2.json');
   }
   else if (provider === 'rackspace') {
@@ -549,8 +551,8 @@ setupGetServersMock = function (client, provider, servers) {
 setupGetServerMock = function (client, provider, servers) {
   if (provider === 'rackspace') {
     servers.server
-      .get('/v1.0/537645/servers/20578901')
-      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/20578901.json');
+      .get('/v2/123456/servers/a0a5f183-b94e-4a41-a854-00aa00aa00aa')
+      .replyWithFile(200, __dirname + '/../../fixtures/rackspace/a0a5f183-b94e-4a41-a854-00aa00aa00aa.json');
   }
   else if (provider === 'openstack') {
     servers.server
@@ -571,17 +573,15 @@ setupGetServerMock = function (client, provider, servers) {
   else if (provider === 'azure') {
 
     var requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5';
-
+    
     servers.server
       .defaultReplyHeaders({'x-ms-request-id': requestId, 'Content-Type': 'application/xml'})
-      .get('/azure-account-subscription-id/services/hostedservices')
-      .reply(200, '<HostedServices xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><HostedService><Url>https://management.core.windows.net/azure-account-subscription-id/services/hostedservices/create-test-ids2</Url><ServiceName>create-test-ids2</ServiceName><HostedServiceProperties><Description>service created by pkgcloud</Description><Location>East US</Location><Label>Y3JlYXRlLXRlc3QtaWRzMg==</Label><Status>Created</Status><DateCreated>2012-11-11T18:13:55Z</DateCreated><DateLastModified>2012-11-11T18:14:37Z</DateLastModified><ExtendedProperties/></HostedServiceProperties></HostedService></HostedServices>')
       .get('/azure-account-subscription-id/services/hostedservices/create-test-ids2?embed-detail=true')
       .reply(200, serverStatusReply('create-test-ids2', 'ReadyRole'));
   }
   else if (provider === 'digitalocean') {
     servers.server
-      .get('/v2/droplets/3164494')
+      .get('/v2/droplets/3164444')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
   }
   else if (provider === 'hp') {

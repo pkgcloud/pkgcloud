@@ -16,7 +16,7 @@ var should = require('should'),
 // Declaring variables for helper functions defined later
 var setupAuthenticationMock, setupGetUsersMock;
 
-  describe.skip('pkgcloud/[rackspace]/databases/users/limits', function () {
+  describe('pkgcloud/[rackspace]/databases/users/limits', function () {
     var testContext = {},
       client, authHockInstance, hockInstance, authServer,
       server, err, list, offset;
@@ -40,16 +40,11 @@ var setupAuthenticationMock, setupGetUsersMock;
         function (next) {
           authServer.listen(12346, next);
         }
-      ], done);
+      ]);
 
       if (mock) {
         setupAuthenticationMock(authHockInstance);
         setupGetUsersMock(hockInstance);
-        hockInstance
-          .get('/v1.0/123456/instances')
-          .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-          .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
-          .reply(200, helpers.loadFixture('rackspace/databaseUsersLimit.json'));
       }
 
       helpers.selectInstance(client, function (instance) {
@@ -61,6 +56,11 @@ var setupAuthenticationMock, setupGetUsersMock;
           done();
         });
       });
+    });
+
+    after(function() {
+      server.close();
+      authServer.close();
     });
 
     it('with limit should respond with one element', function () {
@@ -133,8 +133,8 @@ setupGetUsersMock = function(hockInstance) {
   hockInstance
       .get('/v1.0/123456/instances')
       .reply(200, helpers.loadFixture('rackspace/databaseInstances.json'))
-      .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users')
-      .reply(200, helpers.loadFixture('rackspace/databaseUsers.json'));
+      .get('/v1.0/123456/instances/51a28a3e-2b7b-4b5a-a1ba-99b871af2c8f/users?limit=1')
+      .reply(200, helpers.loadFixture('rackspace/databaseUsersLimit.json'));
 };
 
 setupAuthenticationMock = function(authHockInstance)  {

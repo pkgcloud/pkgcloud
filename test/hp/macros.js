@@ -6,7 +6,7 @@
  */
 
 var fs = require('fs'),
-    filed = require('filed'),
+    filed = require('filed-mimefix'),
     assert = require('../helpers/assert');
 
 exports.shouldHaveCreds = function (client) {
