@@ -78,11 +78,6 @@ providers.filter(function (provider) {
     it('the createContainer() method should return newly created container', function(done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupCreateContainerMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -106,11 +101,6 @@ providers.filter(function (provider) {
     it('the getContainers() method should return newly created container', function (done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupGetContainersMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -136,11 +126,6 @@ providers.filter(function (provider) {
     it('the upload() method with container and filename should succeed', function (done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupUploadStreamMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -179,11 +164,6 @@ providers.filter(function (provider) {
     it('the download() method with container and filename should succeed', function (done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupDownloadStreamMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -211,11 +191,6 @@ providers.filter(function (provider) {
     it('the getFile() method with container and filename should succeed', function (done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupGetFileMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -237,11 +212,6 @@ providers.filter(function (provider) {
     it('the getFiles() method with container should succeed', function (done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupGetFilesMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -268,11 +238,6 @@ providers.filter(function (provider) {
     it('the removeFile() method with container and filename should succeed', function (done) {
 
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupRemoveFileMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -291,8 +256,8 @@ providers.filter(function (provider) {
     it('the upload() method with large file should succeed', function (done) {
 
       if (mock) {
-        //TODO make it work for google
-        //TODO make it work for azure - no idea why it fails on node 0.10 (it passes for node 6.8)
+        // TODO make it work for google
+        // TODO make it work for azure - no idea why it fails on node 0.10 (it passes for node 6.8)
         if (['google', 'azure'].indexOf(provider) !== -1) {
           return done();
         }
@@ -332,8 +297,8 @@ providers.filter(function (provider) {
     it('the download() method with large file should succeed', function (done) {
 
       if (mock) {
-        //TODO make it work for google
-        //TODO make it work for azure - no idea why it fails on node 0.10 (it passes for node 6.8)
+        // TODO make it work for google
+        // TODO make it work for azure - no idea why it fails on node 0.10 (it passes for node 6.8)
         if (['google', 'azure'].indexOf(provider) !== -1) {
           return done();
         }
@@ -376,13 +341,7 @@ providers.filter(function (provider) {
     });
 
     it('the destroyContainer() method with container should succeed', function (done) {
-
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupDestroyContainerMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -399,13 +358,7 @@ providers.filter(function (provider) {
     });
 
     it('the getContainers() method should succeed', function (done) {
-
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupGetContainers2Mock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
