@@ -17,7 +17,6 @@
     "cloud computing",
     "api",
     "rackspace",
-    "joyent",
     "aws",
     "amazon",
     "azure",
@@ -26,13 +25,8 @@
     "servers",
     "compute",
     "storage",
-    "databases",
     "client",
-    "mongolab",
-    "iriscouch",
-    "mongohq",
     "openstack",
-    "redistogo",
     "hpcloud",
     "hp",
     "helion"
@@ -65,7 +59,7 @@
   },
   "main": "./lib/pkgcloud",
   "scripts": {
-    "test": "MOCK=on nyc mocha -t 4000 test/*/*/*-test.js test/*/*/*/*-test.js",
+    "test": "MOCK=on nyc mocha -t 4000 test/*/*/*-test.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "jshint --exclude-path .gitignore .",
     "posttest": "npm run lint"

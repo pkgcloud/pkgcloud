@@ -54,13 +54,7 @@ providers.filter(function (provider) {
     });
 
     it('the client.upload stream should emit error', function (done) {
-
       if (mock) {
-        if (provider === 'joyent') {
-          // TODO figure out why joyent was disabled in vows based tests
-          return done();
-        }
-
         setupUploadStreamError(provider, client, {
           server: hockInstance,
           authServer: authHockInstance

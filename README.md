@@ -75,7 +75,7 @@ Services provided by `pkgcloud` are exposed in two ways:
 ``` js
   var client = require('pkgcloud').compute.createClient({
     //
-    // The name of the provider (e.g. "joyent")
+    // The name of the provider (e.g. "openstack")
     //
     provider: 'provider-name',
 
@@ -88,7 +88,7 @@ Services provided by `pkgcloud` are exposed in two ways:
 * **By provider name:** For example, if you knew the name of the provider you wished to communicate with you could do so directly:
 
 ``` js
-  var client = require('pkgcloud').providers.joyent.compute.createClient({
+  var client = require('pkgcloud').providers.openstack.compute.createClient({
     //
     // ... Provider specific credentials
     //
@@ -120,7 +120,6 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
   * [HP](docs/providers/hp/compute.md)
-  * [Joyent](docs/providers/joyent.md#using-compute)
   * [Openstack](docs/providers/openstack/compute.md)
   * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
@@ -131,11 +130,7 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Openstack](docs/providers/openstack/storage.md)
   * [Rackspace](docs/providers/rackspace/storage.md)
 * **[Database](#databases)**
-  * [IrisCouch](docs/providers/iriscouch.md)
-  * [MongoLab](docs/providers/mongolab.md)
   * [Rackspace](docs/providers/rackspace/database.md)
-  * [MongoHQ](docs/providers/mongohq.md)
-  * [RedisToGo](docs/providers/redistogo.md)
 * **[DNS](#dns----beta)** *(beta)*
   * [Rackspace](docs/providers/rackspace/dns.md)
 * **[Block Storage](#block-storage----beta)** *(beta)*
@@ -161,7 +156,7 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
 ``` js
   var client = require('pkgcloud').compute.createClient({
     //
-    // The name of the provider (e.g. "joyent")
+    // The name of the provider (e.g. "openstack")
     //
     provider: 'provider-name',
 
@@ -177,7 +172,6 @@ Each compute provider takes different credentials to authenticate; these details
 * [Azure](docs/providers/azure.md#using-compute)
 * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
 * [HP](docs/providers/hp/compute.md)
-* [Joyent](docs/providers/joyent.md#using-compute)
 * [Openstack](docs/providers/openstack/compute.md)
 * [Rackspace](docs/providers/rackspace/compute.md)
 
@@ -209,7 +203,7 @@ To get started with a `pkgcloud.storage` client just create one:
 ``` js
   var client = require('pkgcloud').storage.createClient({
     //
-    // The name of the provider (e.g. "joyent")
+    // The name of the provider (e.g. "openstack")
     //
     provider: 'provider-name',
 
@@ -291,7 +285,7 @@ To get started with a `pkgcloud.storage` client just create one:
 ``` js
   var client = require('pkgcloud').database.createClient({
     //
-    // The name of the provider (e.g. "joyent")
+    // The name of the provider (e.g. "openstack")
     //
     provider: 'provider-name',
 
@@ -303,14 +297,6 @@ To get started with a `pkgcloud.storage` client just create one:
 
 Each database provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* **CouchDB**
-  * [IrisCouch](docs/providers/iriscouch.md#couchdb)
-* **MongoDB**
-  * [MongoLab](docs/providers/mongolab.md)
-  * [MongoHQ](docs/providers/mongohq.md)
-* **Redis**
-  * [IrisCouch](docs/providers/iriscouch.md#redis)
-  * [RedisToGo](docs/providers/redistogo.md)
 * **MySQL**
   * [Rackspace](docs/providers/rackspace/databases.md)
 * **Azure Tables**
@@ -658,16 +644,16 @@ Even better, you can run the tests for some specific provider:
 
 ``` bash
 Linux/Mac - Mocha installed globally:
- $ MOCK=on mocha -R spec test/iriscouch/*/*-test.js
+ $ MOCK=on mocha -R spec test/openstack/*/*-test.js
 
 Linux/Mac - Mocha installed locally:
- $ MOCK=on ./node_modules/.bin/mocha -R spec test/iriscouch/*/*-test.js
+ $ MOCK=on ./node_modules/.bin/mocha -R spec test/openstack/*/*-test.js
 
 Windows - Mocha installed globally:
- $ set MOCK=on&mocha -R spec test/iriscouch/*/*-test.js
+ $ set MOCK=on&mocha -R spec test/openstack/*/*-test.js
 
 Windows - Mocha installed locally:
- $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/iriscouch/*/*-test.js
+ $ set MOCK=on&node_modules\.bin\mocha.cmd -R spec test/openstack/*/*-test.js
 
 ```
 

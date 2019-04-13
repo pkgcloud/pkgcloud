@@ -277,11 +277,6 @@ setupImagesMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
   }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/datasets')
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/images.json');
-  }
   else if (provider === 'amazon') {
     servers.server
       .filteringRequestBody(helpers.authFilter)
@@ -347,11 +342,6 @@ setupFlavorMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/flavors.json');
   }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/packages')
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
-  }
   else if (provider === 'digitalocean') {
     servers.server
       .get('/v2/sizes')
@@ -403,16 +393,6 @@ setupServerMock = function (client, provider, servers) {
       .replyWithFile(202, __dirname + '/../../fixtures/openstack/creatingServer.json')
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
-  }
-  else if (provider === 'joyent') {
-    servers.server
-      .post('/' + client.account + '/machines',
-        require(__dirname + '/../../fixtures/joyent/createServer.json'))
-      .replyWithFile(201, __dirname + '/../../fixtures/joyent/createdServer.json')
-      .get('/' + client.account +
-        '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-      .replyWithFile(200,
-      __dirname + '/../../fixtures/joyent/14186c17.json');
   }
   else if (provider === 'amazon') {
     servers.server
@@ -507,11 +487,6 @@ setupGetServersMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverList.json');
   }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/machines')
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/servers.json');
-  }
   else if (provider === 'amazon') {
     servers.server
       .filteringRequestBody(helpers.authFilter)
@@ -558,11 +533,6 @@ setupGetServerMock = function (client, provider, servers) {
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
-  }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/machines/14186c17-0fcd-4bb5-ab42-51b848bda7e9')
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/14186c17.json');
   }
   else if (provider === 'amazon') {
     servers.server

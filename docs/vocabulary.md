@@ -8,7 +8,6 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
   <tr>
     <th>pkgcloud</th>
     <th>OpenStack</th>
-    <th>Joyent</th>
     <th>Amazon</th>
     <th>Azure</th>
     <th>Rackspace</th>
