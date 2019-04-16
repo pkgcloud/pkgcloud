@@ -69,7 +69,7 @@ helpers.selectInstance = function selectInstance(client, callback) {
       return (instance.status == instance.STATUS.running);
     });
     if (ready.length === 0) {
-      console.log('ERROR:   Is necessary have Instances actived for this test.');
+      console.log('ERROR: No running instances found.');
     }
     return ready[0];
   }

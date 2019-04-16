@@ -175,7 +175,7 @@ providers.filter(function (provider) {
       });
     });
 
-    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
+    it('the destroyServer() method should destroy an existing server', function (done) {
       // TODO enable destroy tests for all providers
       if (provider === 'amazon' || provider === 'azure') {
         done();
@@ -380,9 +380,9 @@ setupServerMock = function (client, provider, servers) {
         image: 119192817
       })
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server.json')
-      .get('/v2/droplets/3164494')
+      .get('/v2/droplets/3164444')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/not-active.json')
-      .get('/v2/droplets/3164494')
+      .get('/v2/droplets/3164444')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
   }
   else if (provider === 'rackspace') {
@@ -548,8 +548,8 @@ setupDestroyMock = function (client, provider, servers) {
   }
   else if (provider === 'digitalocean') {
     servers.server
-      .delete('/v2/droplets/3164494')
-      .replyWithFile(204);
+      .delete('/v2/droplets/3164444')
+      .reply(204);
   }
   else if (provider === 'oneandone') {
     servers.server
