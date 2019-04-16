@@ -678,34 +678,21 @@ client.on('log::*', function(message, object) {
 The valid log events raised are `log::debug`, `log::verbose`, `log::info`, `log::warn`, and `log::error`. There is also a [more detailed logging example using pkgcloud with Winston](docs/logging-with-winston.md).
 
 ## Code Coverage
-You will need jscoverage installed in order to run code coverage.  There seems to be many forks of the jscoverage project, but the recommended one is [node-jscoverage](https://github.com/visionmedia/node-jscoverage), because we use [node-coveralls](https://github.com/cainus/node-coveralls) to report coverage to http://coveralls.io.  node-coveralls requires output from [mocha-lcov-reporter](https://github.com/StevenLooman/mocha-lcov-reporter), whose documentation mentions node-jscoverage.
-
-### Warning
-
-**Running coverage will mess with your lib folder.  It will make a backup lib-bak before running and restore it if the coverage task runs successfully.**
-
-In order to simplify cleanup if something goes wrong, it is recommended to have all all new files added and all changes committed before running coverage, so you'll be able to restore with these commands if something goes wrong:
-
-``` bash
-git clean -fd
-git checkout lib
-```
-
-### Coverage Pre-requisites
-
-Please make sure jscoverage has been installed following the instructions at [node-jscoverage](https://github.com/visionmedia/node-jscoverage).
-
-### Local Coverage
-
-<code>make test-cov</code>
 
 ### Run Coverage locally and send to coveralls.io
 
-Travis takes care of coveralls, so this shouldn't be necessary unless you're troubleshooting a problem with Travis/Coveralls.
-You'll need to have access to the coveralls repo_token, which should only be visible to pkgcloud/pkgcloud admins.
+Travis takes care of coveralls, so this shouldn't be necessary unless you're
+troubleshooting a problem with Travis / Coveralls. You'll need to have access
+to the coveralls `repo_token`, which should only be visible to
+`pkgcloud/pkgcloud` admins.
 
-1. Create a .coveralls.yml containing the repo_token from https://coveralls.io/r/pkgcloud/pkgcloud
-2. Run <code>make test-coveralls</code>
+1. Create a `.coveralls.yml` containing the `repo_token` from
+   https://coveralls.io/r/pkgcloud/pkgcloud
+2. Run the following:
+```
+npm test
+npm run coverage
+```
 
 <a name="contributing"></a>
 ## Contribute!
@@ -713,15 +700,6 @@ We welcome contribution to `pkgcloud` by any and all individuals or organization
 
 We are pretty flexible about these guidelines, but the closer you follow them the more likely we are to merge your pull-request.
 
-<a name="roadmap"></a>
-## Roadmap
-
-1. Backport latest fixes from `node-cloudfiles` and `node-cloudservers`
-2. Implement more providers for Block Storage, DNS, and Load Balancing
-3. Add more services: Monitoring, Queueing, Autoscale.
-4. Implement `fs` compatible file API.
-5. Support additional service providers.
-
-#### Author: [Nodejitsu Inc.](http://nodejitsu.com)
-#### Contributors: [Charlie Robbins](https://github.com/indexzero), [Nuno Job](https://github.com/dscape), [Daniel Aristizabal](https://github.com/cronopio), [Marak Squires](https://github.com/marak), [Dale Stammen](https://github.com/stammen), [Ken Perkins](https://github.com/kenperkins)
+#### Author: [Charlie Robbins](https://github.com/indexzero)
+#### Contributors: [Ross Kukulinski](https://github.com/rosskukulinski), [Jarrett Cruger](https://github.com/jcrugzz), [Ken Perkins](https://github.com/kenperkins)
 #### License: MIT

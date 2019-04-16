@@ -7,7 +7,6 @@ The following table outlines the methods that are available on the different com
 <th>API</th>
 <th>AWS</th>
 <th>Azure</th>
-<th>Joyent</th>
 <th>OpenStack</th>
 <th>RAX</th>
 <th>DigitalOcean</th>

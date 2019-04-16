@@ -13,3 +13,6 @@ coverage.html
 .coveralls.yml
 pkgcloud.lcov*
 node-jscoverage
+.nyc_output
+*.tgz
+*.tar.gz

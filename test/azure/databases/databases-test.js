@@ -29,7 +29,7 @@ describe('pkgcloud/azure/databases', function () {
       return urlJoin('http://localhost:12345/',
         (typeof options === 'string'
           ? options
-          : options.path));
+          : options.path || ''));
     };
 
     hockInstance = hock.createHock();

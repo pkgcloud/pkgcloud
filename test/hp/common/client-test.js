@@ -10,24 +10,24 @@ var pkgcloud = require('../../../lib/pkgcloud');
 describe('pkgcloud/hp/client', function () {
 
   describe('Region validation', function () {
-    it('User should specify region: compute client', function() {
+    it('User should specify authUrl: compute client', function() {
       (function () {
           pkgcloud.compute.createClient({
             provider: 'hp',
             username: 'username',
             password: 'password'
           });
-      }).should.throw(new Error('region are not valid. Available regions are region-a.geo-1 (US-West), region-b.geo-1(US-East)\');'));
+      }).should.throw(new Error('authUrl is invalid'));
     });
 
-    it('User should specify region: storage client', function() {
+    it('User should specify authUrl: storage client', function() {
       (function () {
           pkgcloud.storage.createClient({
             provider: 'hp',
             username: 'username',
             password: 'password'
           });
-      }).should.throw(new Error('region are not valid. Available regions are region-a.geo-1 (US-West), region-b.geo-1(US-East)\');'));
+      }).should.throw(new Error('authUrl is invalid'));
     });
 
 
