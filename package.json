@@ -38,7 +38,7 @@
     "errs": "^0.3.2",
     "eventemitter2": "^5.0.1",
     "fast-json-patch": "^2.1.0",
-    "filed": "^0.1.0",
+    "filed-mimefix": "^0.1.3",
     "ip": "^1.1.5",
     "liboneandone": "^1.2.0",
     "lodash": "^4.17.10",
@@ -59,7 +59,7 @@
   },
   "main": "./lib/pkgcloud",
   "scripts": {
-    "test": "MOCK=on nyc mocha -t 4000 test/*/*/*-test.js test/*/*/*/*-test.js",
+    "test": "MOCK=on nyc mocha -t 4000 test/*/*/*-test.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "jshint --exclude-path .gitignore .",
     "posttest": "npm run lint"
