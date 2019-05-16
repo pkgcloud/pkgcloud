@@ -341,7 +341,17 @@ setupUpdateServiceMock = function (client, servers) {
         op: 'replace',
         path: '/origins/0/origin',
         value: 'updated-origin.pkgcloud.com'
-      }
+      },
+      { op: 'remove', path: '/client' },
+      { op: 'remove', path: '/listenerTree' },
+      { op: 'remove', path: '/wildcard' },
+      { op: 'remove', path: '/_maxListeners' },
+      { op: 'remove', path: '/delimiter' },
+      { op: 'remove', path: '/_conf' },
+      { op: 'remove', path: '/verboseMemoryLeak' },
+      { op: 'remove', path: '/_removeListener' },
+      { op: 'remove', path: '/_newListener' },
+      { op: 'remove', path: '/_events' }
     ])
     .reply(202);
 };

@@ -1,29 +1,12 @@
 {
   "name": "pkgcloud",
-  "description": "An infrastructure-as-a-service agnostic cloud library for node.js",
-  "version": "1.7.0",
+  "description": "A provider agnostic cloud library for Node.js",
+  "version": "2.0.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
-    {
-      "name": "Nuno Job",
-      "email": "nuno@nodejitsu.com"
-    },
-    {
-      "name": "Maciej Malecki",
-      "email": "me@mmalecki.com"
-    },
-    {
-      "name": "Daniel Aristizabal",
-      "email": "daniel@nodejitsu.com"
-    },
-    {
-      "name": "Ken Perkins",
-      "email": "ken.perkins@rackspace.com"
-    },
-    {
-      "name": "Ross Kukulinski",
-      "email": "ross@kukulinski.com"
-    }
+    "Ross Kukulinski <ross@kukulinski.com>",
+    "Jarrett Cruger <jcrugzz@gmail.com>",
+    "Ken Perkins <ken.perkins@rackspace.com>"
   ],
   "repository": {
     "type": "git",
@@ -34,7 +17,6 @@
     "cloud computing",
     "api",
     "rackspace",
-    "joyent",
     "aws",
     "amazon",
     "azure",
@@ -43,59 +25,46 @@
     "servers",
     "compute",
     "storage",
-    "databases",
     "client",
-    "mongolab",
-    "iriscouch",
-    "mongohq",
     "openstack",
-    "redistogo",
     "hpcloud",
     "hp",
     "helion"
   ],
   "dependencies": {
+    "@google-cloud/storage": "^2.4.3",
     "async": "^2.6.1",
     "aws-sdk": "^2.382.0",
     "errs": "^0.3.2",
     "eventemitter2": "^5.0.1",
-    "fast-json-patch": "0.5.x",
-    "filed": "^0.1.0",
-    "gcloud": "^0.10.0",
-    "grpc": "^1.14.1",
+    "fast-json-patch": "^2.1.0",
+    "filed-mimefix": "^0.1.3",
     "ip": "^1.1.5",
     "liboneandone": "^1.2.0",
     "lodash": "^4.17.10",
-    "mime": "1.4.1",
+    "mime": "^2.4.1",
     "qs": "^6.5.2",
     "request": "^2.88.0",
-    "through2": "0.6.x",
-    "url-join": "0.0.x",
-    "xml2js": "0.1.x"
+    "through2": "^3.0.1",
+    "url-join": "^4.0.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "blanket": "1.1.9",
     "coveralls": "^3.0.2",
-    "hock": "~1.2.0",
+    "hock": "^1.2.0",
     "jshint": "^2.9.6",
-    "mocha": "^5.2.0",
-    "mocha-lcov-reporter": "0.0.1",
-    "should": "4.0.x"
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0",
+    "should": "^13.2.3"
   },
   "main": "./lib/pkgcloud",
   "scripts": {
-    "test": "make test",
-    "cov": "make cov",
-    "travis": "make travis",
-    "lint": "make lint"
-  },
-  "config": {
-    "blanket": {
-      "pattern": "/lib/",
-      "data-cover-never": "node_modules"
-    }
+    "test": "MOCK=on nyc mocha -t 4000 test/*/*/*-test.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "jshint --exclude-path .gitignore .",
+    "posttest": "npm run lint"
   },
   "engines": {
-    "node": ">=0.10.x"
+    "node": ">= 8.0.0"
   }
 }

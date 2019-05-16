@@ -1,6 +1,6 @@
 ![HP Helion icon](http://www8.hp.com/hpnext/sites/default/files/content/documents/HP%20Helion%20Logo_Cloud_Martin%20Fink_New%20Style%20of%20IT_Hewlett-Packard.PNG)
 
-##Using the HP  Helion Cloud Compute provider
+## Using the HP  Helion Cloud Compute provider
 
 Creating a client is straight-forward:
 
@@ -79,7 +79,7 @@ Returns a list of all possible server flavors available in the callback `f(err,
 flavors)`
 
 #### client.getFlavor(flavor, callback)
-Returns the specified HP flavor of Openstack Images by ID or flavor
+Returns the specified HP flavor of OpenStack Images by ID or flavor
 object in the callback `f(err, flavor)`
 
 **images**

@@ -1,6 +1,6 @@
 ![HP Helion icon](http://www8.hp.com/hpnext/sites/default/files/content/documents/HP%20Helion%20Logo_Cloud_Martin%20Fink_New%20Style%20of%20IT_Hewlett-Packard.PNG)
 
-##Using the HP Cloud Network provider
+## Using the HP Cloud Network provider
 
 Creating a client is straight-forward:
 
@@ -177,7 +177,7 @@ Takes port or portId as an argument  and returns the id of the destroyed port in
 **Security Groups**
 
 #### client.getSecurityGroups(callback)
-Lists all security groups that are available to use on your Openstack account
+Lists all security groups that are available to use on your OpenStack account
 
 Callback returns `f(err, securityGroups)` where `securityGroups` is an `Array`
 
@@ -209,7 +209,7 @@ Takes securityGroup or securityGroupId as an argument  and returns the id of the
 **Security Group Rules**
 
 #### client.getSecurityGroupRules(callback)
-Lists all security group rules that are available to use on your Openstack account
+Lists all security group rules that are available to use on your OpenStack account
 
 Callback returns `f(err, securityGroupRules)` where `securityGroupRules` is an `Array`
 

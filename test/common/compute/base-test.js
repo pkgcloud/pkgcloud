@@ -175,9 +175,9 @@ providers.filter(function (provider) {
       });
     });
 
-    it('the setWait() method waiting for a server to be operational should return a running server', function (done) {
+    it('the destroyServer() method should destroy an existing server', function (done) {
       // TODO enable destroy tests for all providers
-      if (provider === 'joyent' || provider === 'amazon' || provider === 'azure') {
+      if (provider === 'amazon' || provider === 'azure') {
         done();
         return;
       }
@@ -293,12 +293,6 @@ setupVersionMock = function (client, provider, servers) {
       .get('/v2/', { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/hp/versions.json');
   }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/datacenters',
-        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
-      .reply(200, '', { 'x-api-version': '6.5.0' });
-  }
 };
 
 setupFlavorMock = function (client, provider, servers) {
@@ -312,12 +306,6 @@ setupFlavorMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/flavors/detail',
         { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/flavors.json');
-  }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/packages',
-        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/flavors.json');
   }
   else if (provider === 'digitalocean') {
     servers.server
@@ -349,12 +337,6 @@ setupImagesMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail',
         { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
-  }
-  else if (provider === 'joyent') {
-    servers.server
-      .get('/' + client.account + '/datasets',
-        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/images.json');
   }
   else if (provider === 'amazon') {
     servers.server
@@ -398,9 +380,9 @@ setupServerMock = function (client, provider, servers) {
         image: 119192817
       })
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/create-server.json')
-      .get('/v2/droplets/3164494')
+      .get('/v2/droplets/3164444')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/not-active.json')
-      .get('/v2/droplets/3164494')
+      .get('/v2/droplets/3164444')
       .replyWithFile(200, __dirname + '/../../fixtures/digitalocean/active.json');
   }
   else if (provider === 'rackspace') {
@@ -432,21 +414,6 @@ setupServerMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07',
         { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated.json');
-  }
-  else if (provider === 'joyent') {
-    servers.server
-      .post('/' + client.account + '/machines',
-        {
-          name: 'create-test-setWait',
-          'package': 'Small 1GB',
-          dataset: 'sdc:sdc:nodejitsu:1.0.0'
-        },
-        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/setWait.json')
-      .get('/' + client.account +
-        '/machines/534aa63a-104f-4d6d-a3b1-c0d341a20a53',
-        { 'User-Agent': util.format('nodejs-pkgcloud/%s', pkgcloud.version) })
-      .replyWithFile(200, __dirname + '/../../fixtures/joyent/setWaitResp1.json');
   }
   else if (provider === 'amazon') {
     servers.server
@@ -581,8 +548,8 @@ setupDestroyMock = function (client, provider, servers) {
   }
   else if (provider === 'digitalocean') {
     servers.server
-      .delete('/v2/droplets/3164494')
-      .replyWithFile(204);
+      .delete('/v2/droplets/3164444')
+      .reply(204);
   }
   else if (provider === 'oneandone') {
     servers.server

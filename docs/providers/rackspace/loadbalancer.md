@@ -1,4 +1,4 @@
-##Using the Rackspace Load Balancer provider
+## Using the Rackspace Load Balancer provider
 
 #### BETA - This API may change as additional providers for load balancers are added to pkgcloud
 

@@ -19,7 +19,6 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Azure](providers/azure.md#using-compute)
   * [DigitalOcean](providers/digitalocean.md#using-compute)
   * [HP](providers/hp/compute.md)
-  * [Joyent](providers/joyent.md#using-compute)
   * [Openstack](providers/openstack/compute.md)
   * [Rackspace](providers/rackspace/compute.md)
   * [1&1 Oneandone](providers/oneandone/compute.md)
@@ -30,13 +29,9 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Openstack](providers/openstack/storage.md)
   * [Rackspace](providers/rackspace/storage.md)
 * **Databases**
-  * [HP](providers/hp/database.md)
-  * [IrisCouch](providers/iriscouch.md)
-  * [MongoLab](providers/mongolab.md)
-  * [Openstack](providers/openstack/database.md)
-  * [Rackspace](providers/rackspace/database.md)
-  * [MongoHQ](providers/mongohq.md)
-  * [RedisToGo](providers/redistogo.md)
+  * [HP](providers/hp/databases.md)
+  * [Openstack](providers/openstack/databases.md)
+  * [Rackspace](providers/rackspace/databases.md)
 * **DNS** *(beta)*
   * [Rackspace](providers/rackspace/dns.md)
 * **Block Storage** *(beta)*

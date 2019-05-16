@@ -1,4 +1,4 @@
-##Using the Rackspace Block Storage provider
+## Using the Rackspace Block Storage provider
 
 #### BETA - This API may change as additional providers for block storage are added to pkgcloud
 

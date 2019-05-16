@@ -1,4 +1,4 @@
-## Using the Openstack provider in pkgcloud
+## Using the OpenStack provider in pkgcloud
 
 The OpenStack provider in pkgcloud supports the following services:
 
@@ -16,7 +16,7 @@ We've provided a [simple compute example](getting-started-compute.md) where it c
 
 ### Authentication
 
-For all of the Openstack services, you create a client with the same options:
+For all of the OpenStack services, you create a client with the same options:
 
 ```javascript
   var openstack = pkgcloud.storage.createClient({
@@ -32,7 +32,7 @@ For all of the Openstack services, you create a client with the same options:
 
 ### Authentication Endpoints and Regions
 
-All of the Openstack `createClient` calls have a few options that can be provided:
+All of the OpenStack `createClient` calls have a few options that can be provided:
 
 #### region
 
@@ -52,4 +52,4 @@ var client = require('pkgcloud').compute.createClient({
 
 #### Tokens and Expiration
 
-When you make your first call to a Openstack provider, your client is authenticated transparent to your API call. Openstack will issue you a token, with an expiration. When that token expires, the client will automatically re-authenticate and retrieve a new token. The caller shouldn't have to worry about this happening.
+When you make your first call to a OpenStack provider, your client is authenticated transparent to your API call. OpenStack will issue you a token, with an expiration. When that token expires, the client will automatically re-authenticate and retrieve a new token. The caller shouldn't have to worry about this happening.

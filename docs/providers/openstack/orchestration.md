@@ -1,4 +1,4 @@
-##Using the Openstack Orchestration provider
+##Using the OpenStack Orchestration provider
 
 Creating a client is straight-forward:
 
@@ -20,7 +20,7 @@ Creating a client is straight-forward:
 ## Stacks
 
 #### client.getStacks([options], callback)
-Lists all stacks that are available to use on your Openstack account
+Lists all stacks that are available to use on your OpenStack account
 
 Callback returns `f(err, stacks)` where `stacks` is an `Array`
 

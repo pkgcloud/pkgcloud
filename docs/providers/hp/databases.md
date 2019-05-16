@@ -1,4 +1,4 @@
-##Using the HP Helion Database provider
+## Using the HP Helion Database provider
 
 Creating a client is straight-forward:
 

@@ -7,8 +7,7 @@ The following table outlines the methods that are available on the different com
 <th>API</th>
 <th>AWS</th>
 <th>Azure</th>
-<th>Joyent</th>
-<th>Openstack</th>
+<th>OpenStack</th>
 <th>RAX</th>
 <th>DigitalOcean</th>
 </tr>
@@ -44,4 +43,4 @@ The following table outlines the methods that are available on the different com
 </tbody>
 </table>
 
-*Note: There are a few I haven't listed yet that I know exist on Rackspace/Openstack, but I lack the awareness of the other providers.*
+*Note: There are a few I haven't listed yet that I know exist on Rackspace/OpenStack, but I lack the awareness of the other providers.*

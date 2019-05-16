@@ -1,4 +1,4 @@
-##Using the Openstack Compute provider
+##Using the OpenStack Compute provider
 
 Creating a client is straight-forward:
 
@@ -20,7 +20,7 @@ Creating a client is straight-forward:
 **Servers**
 
 #### client.getServers(callback)
-Lists all servers that are available to use on your Openstack account
+Lists all servers that are available to use on your OpenStack account
 
 Callback returns `f(err, servers)` where `servers` is an `Array`
 
@@ -99,7 +99,7 @@ Returns a list of all possible server flavors available in the callback `f(err,
 flavors)`
 
 #### client.getFlavor(flavor, callback)
-Returns the specified flavor of Openstack Images by ID or flavor
+Returns the specified flavor of OpenStack Images by ID or flavor
 object in the callback `f(err, flavor)`
 
 **images**
