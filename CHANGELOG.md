@@ -1,8 +1,47 @@
-## FUTURE
+## CHANGELOG
+
+## v2.1.0
+
+- Add content encoding option for s3 upload
+
+## v2.0.0
+
+- [BREAKING] Drop all legacy providers.
+- Update dependencies.
+- Documentation fixes.
+   - Fix broken links to databases.md
+   - Replace Openstack with OpenStack
+   - Fix page title markdown formatting
+- `this.protocol` from client instance is used as the URL protocol
+  as it should be. Fixes [#526].
+
+## v1.7.0
 
 * Amazon use native `aws-sdk` for `s3` uploads instead of `s3-upload-stream` module
 * Update the `aws-sdk` to `2.382.0`
 * Amazon storage client.upload - expose concurrency - `queueSize` and `partSize` configurability and add ability to abort an upload
+
+## v1.6.0
+
+- Equivalent to `v1.5.0`.
+
+## v1.5.0
+
+- Added 1&1 support with tests.
+- Set Content-Type with Google storage. Fixes [#635]. 
+- Attempt to restrict to `node@6` and `node@8`.
+- [fix] Patched RegEx DoS vuln & Remote Memory Exposure vuln. 
+  This addresses two major security issues:
+   - https://nodesecurity.io/advisories/309
+   - https://nodesecurity.io/advisories/535
+- Fix typo in OpenStack `createSecurityGroupRule`. Fixes [#556].
+- Fix typo in `createSecurityGroup`. Fixes [#454].
+- Fix breaking test due to expired auth token.
+
+## v1.4.0
+
+- Pass in other aws options that allow an s3 like API to be configured correctly
+- Fixing broken merge from replacing underscore with lodash
 
 ## v1.3.0
 * OpenStack identity v3 (keystone) support, Issue [#367](//github.com/pkgcloud/pkgcloud/issues/367), [#477](//github.com/pkgcloud/pkgcloud/issues/477), PR [#461](//github.com/pkgcloud/pkgcloud/pull/461)
