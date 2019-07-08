@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+## v2.1.1
+
+- [#666], [@guischdi] Fix GCS upload. 
+
 ## v2.1.0
 
 - Add content encoding option for s3 upload
