@@ -1,8 +1,12 @@
 ## CHANGELOG
 
+## v2.2.0
+
+- [#678] [@jcrugzz] support more aws auth scenarios via credentials object or sessionToken.
+
 ## v2.1.1
 
-- [#666], [@guischdi] Fix GCS upload. 
+- [#666], [@guischdi] Fix GCS upload.
 
 ## v2.1.0
 
@@ -32,9 +36,9 @@
 ## v1.5.0
 
 - Added 1&1 support with tests.
-- Set Content-Type with Google storage. Fixes [#635]. 
+- Set Content-Type with Google storage. Fixes [#635].
 - Attempt to restrict to `node@6` and `node@8`.
-- [fix] Patched RegEx DoS vuln & Remote Memory Exposure vuln. 
+- [fix] Patched RegEx DoS vuln & Remote Memory Exposure vuln.
   This addresses two major security issues:
    - https://nodesecurity.io/advisories/309
    - https://nodesecurity.io/advisories/535
