@@ -87,7 +87,7 @@ client.getZone(12345678, function(err, zone) { ... });
 This call is functionally equivalent to:
 
 ```Javascript
-var myZone = new Zone({ id: 12345 });
+const myZone = new Zone({ id: 12345 });
 
 client.getZone(myZone, function(err, zone) { ... });
 ```
@@ -130,196 +130,128 @@ client.createZones([{
  })
 ```
 
-#### client.destroyContainer(container, function(err, result) { })
+### Record APIs
 
-Removes the [`container`](#container-model) from the storage account. If there are any files within the `container`, they will be deleted before removing the `container` on the client. `result` will be `true` on success.
+* [`client.getRecords(zone, function(err, records) { })`](#clientgetrecordszone-functionerr-records--)
+* [`client.getRecord(zone, record, function(err, record) { })`](#clientgetrecordzone-record-functionerr-record--)
+* [`client.createRecord(zone, record, function(err, record) { })`](#clientcreaterecordzone-record-functionerr-record--)
+* [`client.createRecords(zone, records, function(err, records) { })`](#clientcreaterecordszone-records-functionerr-records--)
+* [`client.updateRecord(zone, record, function(err, record) { })`](#clientupdaterecordzone-record-functionerr-record--)
+* [`client.updateRecords(zone, records, function(err, records) { })`](#clientupdaterecordszone-records-functionerr-records--)
+* [`client.deleteRecord(zone, record, function(err, record) { })`](#clientdeleterecordzone-record-functionerr-record--)
+* [`client.deleteRecords(zone, records, function(err, records) { })`](#clientdeleterecordszone-records-functionerr-records--)
 
-#### client.updateContainerMetadata(container, function(err, container) { })
+### Record API Details
 
-Updates the metadata on the provided [`container`](#container-model) . Currently, the `updateContainer` method only adds new metadata fields. If you need to remove specific metadata properties, you should call `client.removeContainerMetadata(...)`.
-
-```javascript
-container.metadata.color = 'red';
-client.updateContainerMetadata(container, function(err, container) {
-  // ...
-})
-```
-
-#### client.removeContainerMetadata(container, metadataToRemove, function(err, container) { })
-
-Removes the keys in the `metadataToRemove` object from the stored [`container`](#container-model) metadata.
+For all of the record methods that require a zone or record, you can pass either an instance of a [`zone`](#zone-model)/[`record`](#record-model) or the zone/record id as `zone`/`record`. For example:
 
 ```Javascript
-client.removeContainerMetadata(container, { year: false }, function(err, c) {
-  // ...
-});
-```
-
-### File APIs
-
-* [`client.upload(options, function(err, result) { })`](#clientuploadoptions-functionerr-result--)
-* [`client.download(options, function(err, file) { })`](#clientdownloadoptions-functionerr-file--)
-* [`client.getFile(container, file, function(err, file) { })`](#clientgetfilecontainer-file-functionerr-file--)
-* [`client.getFiles(container, function(err, file) { })`](#clientgetfilescontainer-functionerr-file--)
-* [`client.removeFile(container, file, function(err, result) { })`](#clientremovefilecontainer-file-functionerr-result--)
-* [`client.updateFileMetadata(container, file, function(err, file) { })`](#clientupdatefilemetadatacontainer-file-functionerr-file--)
-
-### File API Details
-
-For all of the file methods, you can pass either an instance of [`container`](#container-model) or the container name as `container`. For example:
-
-```Javascript
-client.getFile('my-container', 'my-file', function(err, file) { ... });
+client.getRecord(12345678, 'NS-12345678' function(err, records) { ... });
 ```
 
 This call is functionally equivalent to:
 
 ```Javascript
-var myContainer = new Container({ name: 'my-container' });
+const myZone = new Zone({ id: 12345678 });
+const myRecord = new Record({ id: 'NS-12345678' });
 
-client.getFile(myContainer, 'my-file', function(err, file) { ... });
+client.getRecord(myZone, myRecord, function(err, record) { ... });
 ```
 
-#### client.upload(options, function(err, result) { })
+#### client.getRecords(zone, function(err, records) { })
 
-Returns a writeable stream. Upload a new file to a [`container`](#container-model). `result` will be `true` on success.
+Retrieves the records for a given zone and client instance as an array of [`record`](#record-model).
 
-To upload a file, you need to provide an `options` argument:
+#### client.getRecord(zone, record, function(err, record) { })
 
-```Javascript
-var options = {
-    // required options
-    container: 'my-container', // this can be either the name or an instance of container
-    remote: 'my-file', // name of the new file
+Retrives the specified [`record`](#record-model) from the specified zone and current client instance.
 
-    // optional, either stream or local
-    stream: myStream, // any instance of a readable stream
-    local: '/path/to/local/file' // a path to any local file
+#### client.createRecord(zone, record, function(err, record) { })
 
-    // Other optional values
-    metadata: { // provide any number of property/values for metadata
-      campaign: '2012 magazine'
-    },
-    headers: { // optionally provide raw headers to send to cloud files
-      'content-type': 'application/json'
-    }
-};
-```
+Creates a new [`record`](#record-model) with attributes from the argument of `record`:
 
-You need not provide either `stream` or `local`. `client.upload` returns a writeable stream, so you can simply pipe directly into it from your stream. For example:
-
-```Javascript
-var fs = require('fs'),
-    pkgcloud = require('pkgcloud');
-
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
-
-var myFile = fs.createReadStream('/my/local/file');
-
-myFile.pipe(client.upload({
-    container: 'my-container',
-    remote: 'my-file'
-}, function(err, result) {
-    // handle the upload result
-}));
-```
-
-You could also upload a local file via the `local` property on `options`:
-
-```Javascript
-var pkgcloud = require('pkgcloud');
-
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
-
-client.upload({
-    container: 'my-container',
-    remote: 'my-file',
-    local: '/path/to/my/file'
-}, function(err, result) {
-    // handle the upload result
-});
-```
-
-This is functionally equivalent to piping from an `fs.createReadStream`, but has a simplified calling convention.
-
-#### client.download(options, function(err, file) { })
-
-Returns a readable stream. Download a [`file`](#file-model) from a [`container`](#container-model).
-
-To download a file, you need to provide an `options` argument:
-
-```Javascript
-var options = {
-    // required options
-    container: 'my-container', // this can be either the name or an instance of container
-    remote: 'my-file', // name of the new file
-
-    // optional, either stream or local
-    stream: myStream, // any instance of a writeable stream
-    local: '/path/to/local/file' // the path to a local file to write to
-};
-```
-
-You need not provide either `stream` or `local`. `client.download` returns a readable stream, so you can simply pipe it into your writeable stream. For example:
-
-```Javascript
-var fs = require('fs'),
-    pkgcloud = require('pkgcloud');
-
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
-
-var myFile = fs.createWriteStream('/my/local/file');
-
-client.download({
-    container: 'my-container',
-    remote: 'my-file'
-}, function(err, result) {
-    // handle the download result
-})).pipe(myFile);
-```
-
-You could also download to a local file via the `local` property on `options`:
-
-```Javascript
-var pkgcloud = require('pkgcloud');
-
-var client = pkgcloud.providers.rackspace.storage.createClient({ ... });
-
-client.download({
-    container: 'my-container',
-    remote: 'my-file',
-    local: '/path/to/my/file'
-}, function(err, result) {
-    // handle the download result
-});
-```
-
-This is functionally equivalent to piping from an `fs.createWriteStream`, but has a simplified calling convention.
-
-#### client.getFile(container, file, function(err, file) { })
-
-Retrieves the specified [`file`](#file-model) details in the specified [`container`](#container-model) from the current client instance.
-
-#### client.getFiles(container, function(err, files) { })
-
-Retreives an array of [`file`](#file-model) for the provided [`container`](#container-model).
-
-#### client.removeFile(container, file, function(err, result) { })
-
-Removes the provided [`file`](#file-model) from the provided [`container`](#container-model).
-
-#### client.updateFileMetadata(container, file, function(err, file) { })
-
-Updates the [`file`](#file-model) metadata in the the provided [`container`](#container-model).
-
-File metadata is completely replaced with each callt o updateFileMetadata. This is different than container metadata. To delete a property, just remove it from the metadata attribute on the `File` and call `updateFileMetadata`.
 ```javascript
-file.metadata = {
- campaign = '2011 website'
-};
-
-client.updateFileMetadata(file.container, file, function(err, file) {
+client.createRecord(
+  zone,
+  {
+    name: 'example.org', // required
+    type: 'example type', // required
+    data: '123.45.678.912', // required
+    ttl: 300 // optional
+  }, function(err, record) {
   // ...
-});
+ })
 ```
 
+#### client.createRecords(zone, records, function(err, records) { })
+
+Batch creates multiple [`records`](#record-model) from any array of `records`. Each record should have the same properties as referenced in `createRecord`.
+
+```javascript
+client.createRecords(
+  zone,
+  [{
+    name: 'example.org', // required
+    type: 'example type', // required
+    data: '123.45.678.912', // required
+    ttl: 300 // optional
+  }], function(err, records) {
+  // ...
+ })
+```
+
+#### client.updateRecord(zone, record, function(err, record) { })
+
+Updates the specified [`record`](#record-model) with attributes from the argument of `record`:
+
+```javascript
+client.updateRecord(
+  zone,
+  {
+    id: 'NS-12345678'
+    // updated record attributes
+  }, function(err, record) {
+  // ...
+ })
+```
+
+#### client.updateRecords(zone, records, function(err, records) { })
+
+Batch updates multiple [`records`](#record-model) from any array of `records`. Each record should have the same properties as referenced in `updateRecord`.
+
+```javascript
+client.updateRecords(
+  zone,
+  [{
+    id: 'NS-12345678'
+    // updated record attributes
+  }], function(err, records) {
+  // ...
+ })
+```
+
+#### client.deleteRecord(zone, record, function(err, record) { })
+
+Deletes the specified [`record`](#record-model) from the specified zone and current client instance.
+
+```javascript
+client.deleteRecord(
+  zone,
+  record, 
+  function(err, record) {
+  // ...
+ })
+```
+
+#### client.deleteRecords(zone, records, function(err, records) { })
+
+Batch deletes multiple [`records`](#record-model) from any array of `records`. Each record should have the same properties as referenced in `deleteRecord`.
+
+```javascript
+client.deleteRecords(
+  zone,
+  [record], 
+  function(err, records) {
+  // ...
+ })
+```
