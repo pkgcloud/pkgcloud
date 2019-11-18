@@ -41,6 +41,12 @@
                             <groupName>default</groupName>
                         </item>
                     </groupSet>
+                    <tagSet>
+                        <item>
+                            <key>Name</key>
+                            <value>create-test-setWait</value>
+                        </item>
+                    </tagSet>
                     <architecture>x86_64</architecture>
                     <rootDeviceType>ebs</rootDeviceType>
                     <rootDeviceName>/dev/sda1</rootDeviceName>

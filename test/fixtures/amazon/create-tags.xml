@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreateTagsResponse xmlns="http://ec2.amazonaws.com/doc/2016-04-01/">
+    <requestId>3c8f8749-2d92-4fe7-bb62-d1edefd22583</requestId>
+    <return>true</return>
+</CreateTagsResponse>
