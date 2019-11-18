@@ -24,6 +24,7 @@ var client = require('pkgcloud').storage.createClient({
    keyId: 'your-access-key-id', // access key id
    key: 'your-secret-key-id', // secret key
    region: 'us-west-2' // region
+   forcePathBucket: false // use the sub-domain configuration by default, reflected as s3ForcePathStyle
 });
 ```
 ### File upload
