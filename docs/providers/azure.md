@@ -109,6 +109,14 @@ client.createServer(options, function (err, server) {
   });
 ```
 
+``` js
+  var azure = pkgcloud.storage.createClient({
+    provider: 'azure',
+    storageAccount: "test-storage-account",			// Name of your storage account
+    sasToken: 'shared access signature' // Shared Access Signature for storage account
+  });
+```
+
 <a name="storage-prerequisites"></a>
 ### Storage Prerequisites
 
@@ -124,6 +132,7 @@ client.createServer(options, function (err, server) {
 
 * `storageAccount`: Azure storage account must already exist. Storage account must be in same Azure location as compute servers (East US, West US, etc.). storageAccount name is obtained from the Storage section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
 * `storageAccessKey`: Azure storage account access key. storageAccessKey is obtained from the Storage section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/StorageExtension/storage).
+* `sasToken`: Azure storage account shared access signature. For more information read [Delegating Access with a Shared Access Signature](https://docs.microsoft.com/en-us/rest/api/storageservices/delegating-access-with-a-shared-access-signature).
 * `key`: The key file for the Azure management certificate. See [Azure Management Certificates](#azure-manage-cert).
 * `cert`: The certificate .pem file for the Azure Management Certificate. See [Azure Management Certificates](#azure-manage-cert).
 * `subscriptionId`: The subscription ID of your Azure account obtained from the Administrators section of the [Azure Portal](https://manage.windowsazure.com/#Workspace/AdminTasks/ListUsers).
