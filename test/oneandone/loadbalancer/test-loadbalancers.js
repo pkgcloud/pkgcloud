@@ -10,7 +10,7 @@ var should = require('should'),
   hock = require('hock'),
   http = require('http'),
   mock = !!process.env.MOCK,
-  oneandone = require('liboneandone'),
+  oneandone = require('liboneandone-2'),
   LoadBalancer = require('../../../lib/pkgcloud/oneandone/loadbalancer/loadbalancer').LoadBalancer,
   Node = require('../../../lib/pkgcloud/oneandone/loadbalancer/node').Node;
 
